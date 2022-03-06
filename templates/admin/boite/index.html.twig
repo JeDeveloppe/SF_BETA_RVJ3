@@ -1,0 +1,57 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Liste des boites{% endblock %}
+
+{% block body %}
+    <h1 class="col-12 text-center my-5">Liste des boites</h1>
+
+    <div class="col-11 mb-4">
+        <a class="btn btn-info" href="{{ path('admin_boite_new') }}">Créer une nouvelle boite +</a>
+    </div>
+
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Editeur</th>
+                <th>Annee</th>
+                <th>Imageblob</th>
+                <th>Slug</th>
+                <th>IsLivrable</th>
+                <th>IsComplet</th>
+                <th>IsOnLine</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for boite in boites %}
+            <tr>
+                <td>{{ boite.id }}</td>
+                <td>{{ boite.nom }}</td>
+                <td>{{ boite.editeur }}</td>
+                <td>{{ boite.annee }}</td>
+                <td>{{ boite.imageblob }}</td>
+                <td>{{ boite.slug }}</td>
+                <td>{{ boite.isLivrable ? 'Yes' : 'No' }}</td>
+                <td>{{ boite.isComplet ? 'Yes' : 'No' }}</td>
+                <td>{{ boite.isOnLine ? 'Yes' : 'No' }}</td>
+                <td>{{ boite.createdAt ? boite.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('admin_boite_show', {'id': boite.id}) }}">show</a>
+                    <a href="{{ path('admin_boite_edit', {'id': boite.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="18">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if boites | length > 0 %}
+        {{ knp_pagination_render(boites, 'admin/pagination.html.twig') }}
+    {% endif %}
+{% endblock %}

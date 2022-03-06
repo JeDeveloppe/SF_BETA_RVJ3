@@ -1,0 +1,12 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Édition d'une boite{% endblock %}
+
+{% block body %}
+    <h1>Edit Boite</h1>
+
+    {{ include('admin/boite/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('admin_boite_index') }}">back to list</a>
+
+{% endblock %}

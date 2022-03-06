@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+<title>New Boite</title>
+
+{% block body %}
+    <h1>Create new Boite</h1>
+
+    {{ include('boite/_form.html.twig') }}
+
+    <a href="{{ path('app_boite_index') }}">back to list</a>
+{% endblock %}
