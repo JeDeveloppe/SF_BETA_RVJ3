@@ -9,38 +9,33 @@
         <a class="btn btn-info" href="{{ path('admin_boite_new') }}">Créer une nouvelle boite +</a>
     </div>
 
-    <table class="table table-responsive">
+    <table class="table table-responsive text-center align-middle">
         <thead>
             <tr>
-                <th>#</th>
+                <th>Image</th>
                 <th>Nom</th>
                 <th>Editeur</th>
                 <th>Annee</th>
-                <th>Imageblob</th>
-                <th>Slug</th>
-                <th>IsLivrable</th>
-                <th>IsComplet</th>
-                <th>IsOnLine</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
+                <th>Livrable</th>
+                <th>Jeu complet</th>
+                <th>En ligne</th>
+                <th>Date de création</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for boite in boites %}
+        {% for key,boite in boites %}
             <tr>
-                <td>{{ boite.id }}</td>
+                <td><img class="img-admin-liste" src="data:image/png;base64,{{ images[key] }}"/></td>
                 <td>{{ boite.nom }}</td>
                 <td>{{ boite.editeur }}</td>
                 <td>{{ boite.annee }}</td>
-                <td>{{ boite.imageblob }}</td>
-                <td>{{ boite.slug }}</td>
-                <td>{{ boite.isLivrable ? 'Yes' : 'No' }}</td>
-                <td>{{ boite.isComplet ? 'Yes' : 'No' }}</td>
-                <td>{{ boite.isOnLine ? 'Yes' : 'No' }}</td>
+                <td>{{ boite.isLivrable ? '<i class="fa-solid fa-truck text-success"></i>' : '<i class="fa-solid fa-truck text-danger"></i>' }}</td>
+                <td>{{ boite.isComplet ? '<i class="fa-solid fa-square-full text-success"></i>' : '<i class="fa-solid fa-square-full text-danger"></i>' }}</td>
+                <td>{{ boite.isOnLine ? '<i class="fa-solid fa-earth-europe text-success"></i>' : '<i class="fa-solid fa-earth-europe text-danger"></i>' }}</td>
                 <td>{{ boite.createdAt ? boite.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('admin_boite_show', {'id': boite.id}) }}">show</a>
-                    <a href="{{ path('admin_boite_edit', {'id': boite.id}) }}">edit</a>
+                    <a class="btn btn-warning" href="{{ path('admin_boite_edit', {'id': boite.id}) }}">Édition</a>
                 </td>
             </tr>
         {% else %}
@@ -52,6 +47,10 @@
     </table>
 
     {% if boites | length > 0 %}
-        {{ knp_pagination_render(boites, 'admin/pagination.html.twig') }}
+       <div class="row my-5">
+            <div class="col-12 d-flex justify-content-center">
+                {{ knp_pagination_render(boites, 'admin/pagination.html.twig') }}
+            </div>
+        </div>
     {% endif %}
 {% endblock %}

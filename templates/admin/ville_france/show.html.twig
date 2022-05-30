@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<title>VilleFrance</title>
+
+{% block body %}
+    <h1>VilleFrance</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ville_france.id }}</td>
+            </tr>
+            <tr>
+                <th>VilleCodePostal</th>
+                <td>{{ ville_france.villeCodePostal }}</td>
+            </tr>
+            <tr>
+                <th>VilleNom</th>
+                <td>{{ ville_france.villeNom }}</td>
+            </tr>
+            <tr>
+                <th>VilleDepartement</th>
+                <td>{{ ville_france.villeDepartement }}</td>
+            </tr>
+            <tr>
+                <th>Lng</th>
+                <td>{{ ville_france.lng }}</td>
+            </tr>
+            <tr>
+                <th>Lat</th>
+                <td>{{ ville_france.lat }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ville_france_index') }}">back to list</a>
+
+    <a href="{{ path('app_ville_france_edit', {'id': ville_france.id}) }}">edit</a>
+
+    {{ include('ville_france/_delete_form.html.twig') }}
+{% endblock %}

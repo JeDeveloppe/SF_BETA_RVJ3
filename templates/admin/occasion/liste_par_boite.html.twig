@@ -1,0 +1,63 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Liste des occasions{% endblock %}
+
+
+{% block body %}
+    <h1 class="col-12 my-5 text-center">Liste des occasions pour: <br/> {{ boite.nom }} <br/><img class="img-admin-liste" src="data:image/png;base64,{{ image }}"/></h1>
+
+    <div class="col-11 mx-auto mb-5">
+        <a class="btn btn-info" href="{{ path('admin_occasion_index') }}">Retour à la liste des boites d'occasion</a>
+    </div>
+    <table class="table table-responsive text-center align-middle">
+        <thead>
+            <tr>
+                <th>Référence</th>
+                <th>Prix de vente Ht</th>
+                <th>Ancien prix si promo</th>
+                <th>Information</th>
+                <th>Comme neuf</th>
+                <th>État de la boite</th>
+                <th>État du materiel</th>
+                <th>Règle du jeu</th>
+                <th>En ligne</th>
+                <th>Donner / vendu</th>
+                {# <th>actions</th> #}
+            </tr>
+        </thead>
+        <tbody>
+        {% for occasion in occasions %}
+            <tr>
+                <td>{{ occasion.reference }}</td>
+                <td>{{ occasion.priceHt }}</td>
+                <td>{{ occasion.oldPriceHt }}</td>
+                <td>{{ occasion.information }}</td>
+                <td>{{ occasion.isNeuf ? 'OUI' : 'NON' }}</td>
+                <td>{{ occasion.etatBoite }}</td>
+                <td>{{ occasion.etatMateriel }}</td>
+                <td>{{ occasion.regleJeu }}</td>
+                <td>{{ occasion.isOnLine ? '<i class="fa-solid fa-earth-europe text-success"></i>' : '<i class="fa-solid fa-earth-europe text-danger"></i>' }}</td>
+                <td>
+                    {% if occasion.donation is not null %}
+                        Donner le {{ occasion.donation|date("d-m-Y") }}.
+                    {% endif %}
+                    {% if occasion.sale is not null %}
+                        {% set donnees = occasion.sale| split("|") %}
+                        Vendu en {{ donnees[0] }} le {{ donnees[1]|date("d-m-Y") }}
+                    {% endif %}
+                </td>
+                {# <td>
+                    <a href="{{ path('admin_occasion_show', {'id': occasion.id}) }}">show</a>
+                    <a href="{{ path('admin_occasion_edit', {'id': occasion.id}) }}">edit</a>
+                </td> #}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">Aucun pour le moment...</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin_occasion_new', {'boite': boite.id}) }}">Create new</a>
+{% endblock %}

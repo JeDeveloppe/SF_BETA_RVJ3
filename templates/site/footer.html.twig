@@ -1,4 +1,18 @@
+<footer class="col-11 mx-auto mb-5 navbar navbar-dark bg-dark">
+    <ul class="mt-2 col-11 mx-auto col-sm-9 d-flex flex-column flex-md-row justify-content-around align-items-center list-unstyled">
+        <li><a class="text-white text-decoration-none" href="/">Accueil</a></li>
+        <li><a class="text-white text-decoration-none" href="{{ path('mentions-legales') }}">Mentions légales et CGU</a></li>
+        <li><a class="text-white text-decoration-none" href="{{ path('cgv') }}">CGV</a></li>
+        <li><a class="text-white text-decoration-none" href="#">Contact</a></li>
+        <li><a class="text-white text-decoration-none" href="#">Nous suivre sur Facebook</a></li>
+    </ul>
+    <div class="col-12 text-center">
+        <a class="text-warning text-decoration-none" href="">Sité créé par: Je-Développe</a><br/>
+        <small>Version 3.00</small>
+    </div>
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous" defer></script>
 {% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
+	{{ encore_entry_script_tags('app') }}
 {% endblock %}

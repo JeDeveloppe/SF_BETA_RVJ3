@@ -1,0 +1,57 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Informations légales{% endblock %}
+
+{% block body %}
+    <h1 class="col-12 text-center my-5">Informations légales</h1>
+
+
+        {% for informations_legale in informations_legales %}
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Nom de la socièté: </td><td>{{ informations_legale.nomSociete }}</td>
+                    </tr>
+                    <tr>
+                        <td>Adresse de la sociète: </td><td>{{ informations_legale.adresseSociete }}</td>
+                    </tr>
+                    <tr>
+                        <td>Siret: </td><td>{{ informations_legale.siretSociete }}</td>
+                    </tr>
+                    <tr>
+                        <td>Adresse email: </td><td>{{ informations_legale.adresseMailSite }}</td>
+                    </tr>
+                    <tr>
+                        <td>Url du site: </td><td>{{ informations_legale.siteUrl }}</td>
+                    </tr>
+                    <tr>
+                        <td>Socièté Webmaster: </td><td>{{ informations_legale.societeWebmaster }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nom du webmaster: </td><td>{{ informations_legale.nomWebmaster }}</td>
+                    </tr>
+                    <tr>
+                        <td>Adresse / Téléphone de l'hébergeur: </td><td>{{ informations_legale.hebergeurSite }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a class="btn btn-warning" href="{{ path('admin_informations_legales_edit', {'id': informations_legale.id}) }}">Éditer</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        {% else %}
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td colspan="2">no records found</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+   
+
+    {% if informations_legales | length < 1 %}
+        <a class="btn btn-info" href="{{ path('admin_informations_legales_new') }}">Renseigner les informations</a>
+    {% endif %}
+{% endblock %}

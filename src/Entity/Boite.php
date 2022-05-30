@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -109,7 +111,7 @@ class Boite
     /**
      * @var string
      *
-     * @ORM\Column(name="contenu", type="text", length=65535, nullable=false)
+     * @ORM\Column(name="contenu", type="text", length=65535, nullable=true)
      */
     private $contenu;
 
@@ -133,6 +135,16 @@ class Boite
      * @ORM\Column(name="created_at", type="datetime_immutable", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
      */
     private $createdAt = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @ORM\OneToMany(targetEntity=Occasion::class, mappedBy="boite", orphanRemoval=true)
+     */
+    private $occasions;
+
+    public function __construct()
+    {
+        $this->occasions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -185,6 +197,7 @@ class Boite
         $this->imageblob = $imageblob;
 
         return $this;
+        
     }
 
     public function getSlug(): ?string
@@ -331,5 +344,33 @@ class Boite
         return $this;
     }
 
+    /**
+     * @return Collection<int, Occasion>
+     */
+    public function getOccasions(): Collection
+    {
+        return $this->occasions;
+    }
 
+    public function addOccasion(Occasion $occasion): self
+    {
+        if (!$this->occasions->contains($occasion)) {
+            $this->occasions[] = $occasion;
+            $occasion->setBoite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOccasion(Occasion $occasion): self
+    {
+        if ($this->occasions->removeElement($occasion)) {
+            // set the owning side to null (unless already changed)
+            if ($occasion->getBoite() === $this) {
+                $occasion->setBoite(null);
+            }
+        }
+
+        return $this;
+    }
 }

@@ -1,0 +1,11 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Informations légales{% endblock %}
+
+{% block body %}
+    <h1>Create new InformationsLegales</h1>
+
+    {{ include('admin/informations_legales/_form.html.twig') }}
+
+    <a href="{{ path('admin_informations_legales_index') }}">back to list</a>
+{% endblock %}

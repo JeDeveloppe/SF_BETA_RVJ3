@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit VilleBelgique</title>
+
+{% block body %}
+    <h1>Edit VilleBelgique</h1>
+
+    {{ include('ville_belgique/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_ville_belgique_index') }}">back to list</a>
+
+    {{ include('ville_belgique/_delete_form.html.twig') }}
+{% endblock %}

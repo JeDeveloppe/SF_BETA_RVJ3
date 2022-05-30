@@ -3,10 +3,10 @@
 {% block title %}Édition d'une boite{% endblock %}
 
 {% block body %}
-    <h1>Edit Boite</h1>
+    <h1 class="col-12 text-center my-5">Édition d'une boite</h1>
 
-    {{ include('admin/boite/_form.html.twig', {'button_label': 'Update'}) }}
+    <a class="btn btn-primary mb-5" href="{{ path('admin_boite_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('admin_boite_index') }}">back to list</a>
+    {{ include('admin/boite/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
 {% endblock %}

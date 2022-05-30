@@ -24,15 +24,21 @@ class BoiteController extends AbstractController
         $donnees = $entityManager
             ->getRepository(Boite::class)
             ->findBy([], ['nom' => "ASC"]);
-        
+
         $boites = $paginator->paginate(
             $donnees, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
             25 /*limit per page*/
         );
+        //on va stocker les images
+        $images = [];
+        foreach ($boites as $key => $boite) {
+            $images[$key] = stream_get_contents($boite->getImageBlob());
+        }
 
         return $this->render('admin/boite/index.html.twig', [
             'boites' => $boites,
+            'images' => $images
         ]);
     }
 

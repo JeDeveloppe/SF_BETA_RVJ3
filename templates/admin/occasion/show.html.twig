@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<title>Occasion</title>
+
+{% block body %}
+    <h1>Occasion</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ occasion.id }}</td>
+            </tr>
+            <tr>
+                <th>Reference</th>
+                <td>{{ occasion.reference }}</td>
+            </tr>
+            <tr>
+                <th>PriceHt</th>
+                <td>{{ occasion.priceHt }}</td>
+            </tr>
+            <tr>
+                <th>OldPriceHt</th>
+                <td>{{ occasion.oldPriceHt }}</td>
+            </tr>
+            <tr>
+                <th>Information</th>
+                <td>{{ occasion.information }}</td>
+            </tr>
+            <tr>
+                <th>IsNeuf</th>
+                <td>{{ occasion.isNeuf ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>EtatBoite</th>
+                <td>{{ occasion.etatBoite }}</td>
+            </tr>
+            <tr>
+                <th>EtatMateriel</th>
+                <td>{{ occasion.etatMateriel }}</td>
+            </tr>
+            <tr>
+                <th>RegleJeu</th>
+                <td>{{ occasion.regleJeu }}</td>
+            </tr>
+            <tr>
+                <th>IsOnLine</th>
+                <td>{{ occasion.isOnLine ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_occasion_index') }}">back to list</a>
+
+    <a href="{{ path('app_occasion_edit', {'id': occasion.id}) }}">edit</a>
+
+    {{ include('occasion/_delete_form.html.twig') }}
+{% endblock %}

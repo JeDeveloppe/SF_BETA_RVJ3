@@ -1,0 +1,95 @@
+body {
+  background-image: url(/images/design/back1.jpg);
+  background-size: cover;
+  background-position: 50% 70%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+#precision {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  margin-top: 5px;
+}
+
+.image-upload > input {
+  display: none;
+}
+
+.divImgPresentation .zoom {
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+  width: 300px;
+  height: 280px;
+  cursor: move;
+}
+
+.divImgPresentation .zoom > div {
+  height: 33.33%;
+  width: 33.333%;
+  z-index: 1;
+  float: left;
+  display: inline-block;
+  position: relative;
+}
+
+.divImgPresentation .zoom__top.zoom__left:hover ~ .zoom__image {
+  -webkit-transform: translate(20%, 20%) scale(1.5);
+          transform: translate(20%, 20%) scale(1.5);
+}
+
+.divImgPresentation .zoom__top.zoom__centre:hover ~ .zoom__image {
+  -webkit-transform: translate(0%, 20%) scale(1.5);
+          transform: translate(0%, 20%) scale(1.5);
+}
+
+.divImgPresentation .zoom__top.zoom__right:hover ~ .zoom__image {
+  -webkit-transform: translate(-20%, 20%) scale(1.5);
+          transform: translate(-20%, 20%) scale(1.5);
+}
+
+.divImgPresentation .zoom__middle.zoom__left:hover ~ .zoom__image {
+  -webkit-transform: translate(20%, 0) scale(1.5);
+          transform: translate(20%, 0) scale(1.5);
+}
+
+.divImgPresentation .zoom__middle.zoom__centre:hover ~ .zoom__image {
+  -webkit-transform: translate(0, 0) scale(1.5);
+          transform: translate(0, 0) scale(1.5);
+}
+
+.divImgPresentation .zoom__middle.zoom__right:hover ~ .zoom__image {
+  -webkit-transform: translate(-20%, 0) scale(1.5);
+          transform: translate(-20%, 0) scale(1.5);
+}
+
+.divImgPresentation .zoom__bottom.zoom__left:hover ~ .zoom__image {
+  -webkit-transform: translate(20%, -20%) scale(1.5);
+          transform: translate(20%, -20%) scale(1.5);
+}
+
+.divImgPresentation .zoom__bottom.zoom__centre:hover ~ .zoom__image {
+  -webkit-transform: translate(0, -20%) scale(1.5);
+          transform: translate(0, -20%) scale(1.5);
+}
+
+.divImgPresentation .zoom__bottom.zoom__right:hover ~ .zoom__image {
+  -webkit-transform: translate(-20%, -20%) scale(1.5);
+          transform: translate(-20%, -20%) scale(1.5);
+}
+
+.divImgPresentation .zoom__image {
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  display: block;
+  max-width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+/*# sourceMappingURL=design.css.map */

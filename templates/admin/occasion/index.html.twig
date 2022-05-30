@@ -1,0 +1,48 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Liste des boites d'occasion{% endblock %}
+
+{% block body %}
+    <h1 class="col-12 text-center my-5">Liste des boites d'occasion</h1>
+
+    <table class="table table-responsive text-center align-middle">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Editeur</th>
+                <th>Annee</th>
+                <th>Image</th>
+                <th>Livrable</th>
+                <th>Nbr de jeux</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for key,boite in boites %}
+            <tr>
+                <td>{{ boite.nom }}</td>
+                <td>{{ boite.editeur }}</td>
+                <td>{{ boite.annee }}</td>
+                <td><img class="img-admin-liste" src="data:image/png;base64,{{ images[key] }}"/></td>
+                <td>{{ boite.isLivrable ? '<i class="fa-solid fa-truck text-success"></i>' : '<i class="fa-solid fa-truck text-danger"></i>' }}</td>
+                <td>{{ boite.occasions | length }}</td>
+                <td>
+                    <a class="btn btn-warning" href="{{ path('admin_occasion_liste', {'id': boite.id, 'slug': boite.nom | lower | slug }) }}">Voir les jeux</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="18">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if boites | length > 0 %}
+        <div class="row my-5">
+            <div class="col-12 d-flex justify-content-center">
+                {{ knp_pagination_render(boites, 'admin/pagination.html.twig') }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
