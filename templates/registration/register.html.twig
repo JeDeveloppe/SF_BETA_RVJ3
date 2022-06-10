@@ -1,17 +1,96 @@
 {% extends 'site/base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <h1 class="h3 my-5 col-12 text-center">Inscription au service</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-5 mx-auto text-center">
+            {{ form_start(registrationForm) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+                <div class="row">
+                    <div class="col-8 mx-auto">{{ form_row(registrationForm.email) }}</div>
+                    <div class="col-8 mx-auto">{{ form_row(registrationForm.phone) }}</div>
+                    <div class="col-8 col-sm-5 mx-auto">  {{ form_row(registrationForm.plainPassword, {label: 'Mot de passe:'}) }}</div>
+                    <div class="col-8 col-sm-5 mx-auto">  {{ form_row(registrationForm.plainPassword2, {label: 'Vérification du mot de passe:'}) }}</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-8 col-sm-6 mx-auto">{{ form_row(registrationForm.country,{'attr': {'id': 'country'}}) }}</div>
+                    <div class="col-8 col-sm-6 mx-auto">{{ form_row(registrationForm.department, {'attr': {'id': 'department'}} ) }}</div>
+                </div>
+              
+                <div class="row mt-2">
+                    <div class="form-check text-start">
+                        {{ form_widget(registrationForm.agreeTerms) }}
+                        {{ form_label(registrationForm.agreeTerms, null) }}
+                        <label for="{{ registrationForm.agreeTerms.vars.id }}">J'ai lu et j'accepte les <a target="_blank" href="{{ path('cgv') }}">conditions générales d'utilisation.</a>(1).</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-lg btn-primary mt-5">Inscription</button>
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    // var $sport = document.getElementById('registration_form_country');
+    // var $department = document.getElementById('registration_form_department');
+    // // When sport gets selected ...
+    // $sport.addEventListener('change', function() {
+    //     console.log($sport.value);
+    // // ... retrieve the corresponding form.
+    // var $form = $(this).closest('registrationForm');
+    // // Simulate form data, but only include the selected sport value.
+    // var data = {};
+    // data[$sport.attr('name')] = $sport.val();
+    // // Submit data via AJAX to the form's action path.
+    // $.ajax({
+    //     url : $form.attr('action'),
+    //     type: $form.attr('method'),
+    //     data : data,
+    //     complete: function(html) {
+    //     // Replace current position field ...
+    //     $department.replaceWith(
+    //         // ... with the returned one from the AJAX response.
+    //         $(html.responseText).find('#registration_form_department')
+    //     );
+    //     // Position field now displays the appropriate positions.
+    //     }
+    // });
+    // });
+
+    window.onload = () => {
+        let pays = document.querySelector("#registration_form_country");
+      
+        pays.addEventListener("change", function(){
+            let form = this.closest("form");
+            console.log(form);
+            let data = this.name + "=" + this.value;
+            console.log("DATA= "+data);
+
+            fetch(form.action,{
+                method: form.getAttribute("method"),
+                body: data,
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded; charset:utf-8"
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                let content = document.createElement("html");
+                content.innerHTML = html;
+                let nouveauSelect = content.querySelector("#registration_form_department");
+                document.querySelector("#registration_form_department").replaceWith(nouveauSelect)
+            })
+        } )
+    }
+            
+           
+//         })
+// </script>
 {% endblock %}

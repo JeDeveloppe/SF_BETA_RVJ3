@@ -3,29 +3,33 @@
 namespace App\Controller\Site;
 
 use App\Entity\User;
+use DateTimeImmutable;
 use App\Form\RegistrationFormType;
-use App\Security\UserAuthentificatorAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Security\UserAuthentificatorAuthenticator;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
     /**
-     * @Route("/register", name="app_register")
+     * @Route("/inscription-au-service", name="app_register")
      */
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthentificatorAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+   
+      
+        $form = $this->createForm(RegistrationFormType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if($form->isSubmitted() && $form->isValid() && $form['plainPassword']->getData() == $form['plainPassword2']->getData()) {
+            
+            $user = new User();
+
             // encode the plain password
             $user->setPassword(
             $userPasswordHasher->hashPassword(
@@ -33,6 +37,11 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            $user->setCreatedAt(new DateTimeImmutable('now'))
+                ->setEmail($form['email']->getData())
+                ->setPhone($form['phone']->getData())
+                ->setCountry($form['country']->getData()->getIsoCode())
+                ->setDepartment($form['department']->getData()->getVilleDepartement());
 
             $entityManager->persist($user);
             $entityManager->flush();

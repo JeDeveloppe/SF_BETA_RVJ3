@@ -2,30 +2,30 @@
 
 namespace App\Repository;
 
-use App\Entity\VilleFrance;
+use App\Entity\Pays;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method VilleFrance|null find($id, $lockMode = null, $lockVersion = null)
- * @method VilleFrance|null findOneBy(array $criteria, array $orderBy = null)
- * @method VilleFrance[]    findAll()
- * @method VilleFrance[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Pays|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Pays|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Pays[]    findAll()
+ * @method Pays[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class VilleFranceRepository extends ServiceEntityRepository
+class PaysRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, VilleFrance::class);
+        parent::__construct($registry, Pays::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(VilleFrance $entity, bool $flush = true): void
+    public function add(Pays $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -37,7 +37,7 @@ class VilleFranceRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(VilleFrance $entity, bool $flush = true): void
+    public function remove(Pays $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -46,15 +46,15 @@ class VilleFranceRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return VilleFrance[] Returns an array of VilleFrance objects
+    //  * @return Pays[] Returns an array of Pays objects
     //  */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('v')
-            ->andWhere('v.exampleField = :val')
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('v.id', 'ASC')
+            ->orderBy('p.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -63,10 +63,10 @@ class VilleFranceRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?VilleFrance
+    public function findOneBySomeField($value): ?Pays
     {
-        return $this->createQueryBuilder('v')
-            ->andWhere('v.exampleField = :val')
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()

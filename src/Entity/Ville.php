@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\VilleFranceRepository;
+use App\Repository\VilleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=VilleFranceRepository::class)
+ * @ORM\Entity(repositoryClass=VilleRepository::class)
  */
-class VilleFrance
+class Ville
 {
     /**
      * @ORM\Id
@@ -41,6 +41,11 @@ class VilleFrance
      * @ORM\Column(type="string", length=255)
      */
     private $lat;
+
+    /**
+     * @ORM\Column(type="string", length=5)
+     */
+    private $pays;
 
     public function getId(): ?int
     {
@@ -103,6 +108,18 @@ class VilleFrance
     public function setLat(string $lat): self
     {
         $this->lat = $lat;
+
+        return $this;
+    }
+
+    public function getPays(): ?string
+    {
+        return $this->pays;
+    }
+
+    public function setPays(string $pays): self
+    {
+        $this->pays = $pays;
 
         return $this;
     }

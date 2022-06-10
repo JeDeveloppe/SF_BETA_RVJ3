@@ -1,0 +1,38 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Liste des pays dans la base{% endblock %}
+
+{% block body %}
+    <h1 class="col-12 text-center my-5">Liste des pays dans la base</h1>
+
+    <table class="table table-responsive text-center align-middle">
+
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>IsoCode</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pay in pays %}
+            <tr>
+                <td>{{ pay.id }}</td>
+                <td>{{ pay.name }}</td>
+                <td>{{ pay.isoCode }}</td>
+                <td>
+                    <a href="{{ path('app_pays_show', {'id': pay.id}) }}">show</a>
+                    <a href="{{ path('app_pays_edit', {'id': pay.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pays_new') }}">Create new</a>
+{% endblock %}

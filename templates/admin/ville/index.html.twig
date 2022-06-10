@@ -3,14 +3,14 @@
 {% block title %}Villes de France{% endblock %}
 
 {% block body %}
-    <h1 class="col-12 text-center my-5">Villes de France</h1>
+    <h1 class="col-12 text-center my-5">Liste des villes</h1>
 
     <table class="table table-responsive text-center align-middle">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>VilleCodePostal</th>
+                <th>Pays</th>
                 <th>VilleNom</th>
+                <th>VilleCodePostal</th>
                 <th>VilleDepartement</th>
                 <th>Lng</th>
                 <th>Lat</th>
@@ -19,17 +19,17 @@
             </tr>
         </thead>
         <tbody>
-        {% for ville_france in ville_frances %}
+        {% for ville_france in villes %}
             <tr>
-                <td>{{ ville_france.id }}</td>
-                <td>{{ ville_france.villeCodePostal }}</td>
+                <td>{{ ville_france.pays }}</td>
                 <td>{{ ville_france.villeNom }}</td>
+                <td>{{ ville_france.villeCodePostal }}</td>
                 <td>{{ ville_france.villeDepartement }}</td>
                 <td>{{ ville_france.lng }}</td>
                 <td>{{ ville_france.lat }}</td>
                 <td>
-                    <a href="{{ path('app_ville_france_show', {'id': ville_france.id}) }}">show</a>
-                    <a href="{{ path('app_ville_france_edit', {'id': ville_france.id}) }}">edit</a>
+                    <a href="{{ path('app_ville_show', {'id': ville_france.id}) }}">show</a>
+                    <a href="{{ path('app_ville_edit', {'id': ville_france.id}) }}">edit</a>
                 </td>
                 <td>
                     <a href="https://www.google.fr/maps/place/{{ville_france.villeCodePostal}}+{{ville_france.villeNom}}" target="_blank">Google Maps</a>
@@ -43,13 +43,13 @@
         </tbody>
     </table>
 
-    {% if ville_frances | length > 0 %}
+    {% if villes | length > 0 %}
         <div class="row my-5">
             <div class="col-12 d-flex justify-content-center">
-                {{ knp_pagination_render(ville_frances, 'admin/pagination.html.twig') }}
+                {{ knp_pagination_render(villes, 'admin/pagination.html.twig') }}
             </div>
         </div>
     {% endif %}
 
-    <a href="{{ path('app_ville_france_new') }}">Create new</a>
+    <a href="{{ path('app_ville_new') }}">Create new</a>
 {% endblock %}
