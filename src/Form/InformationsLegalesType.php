@@ -20,6 +20,7 @@ class InformationsLegalesType extends AbstractType
             ->add('societeWebmaster')
             ->add('nomWebmaster')
             ->add('hebergeurSite')
+            ->add('tauxTva')
         ;
     }
 

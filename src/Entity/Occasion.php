@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OccasionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -77,6 +79,16 @@ class Occasion
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $sale;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Panier::class, mappedBy="occasion")
+     */
+    private $paniers;
+
+    public function __construct()
+    {
+        $this->paniers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -223,6 +235,36 @@ class Occasion
     public function setSale(?string $sale): self
     {
         $this->sale = $sale;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Panier>
+     */
+    public function getPaniers(): Collection
+    {
+        return $this->paniers;
+    }
+
+    public function addPanier(Panier $panier): self
+    {
+        if (!$this->paniers->contains($panier)) {
+            $this->paniers[] = $panier;
+            $panier->setOccasion($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanier(Panier $panier): self
+    {
+        if ($this->paniers->removeElement($panier)) {
+            // set the owning side to null (unless already changed)
+            if ($panier->getOccasion() === $this) {
+                $panier->setOccasion(null);
+            }
+        }
 
         return $this;
     }

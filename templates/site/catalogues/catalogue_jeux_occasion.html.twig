@@ -20,8 +20,11 @@
                         <p class="d-flex justify-content-center align-items-center">
                             <img src="data:image/png;base64,{{ images[key] }}"/>
                         </p>
-                        <p>Prix TTC: {{ occasion.priceHt }}</p>
+                        <p>Prix TTC: {{ (occasion.priceHt * tva) | number_format(2, '.', ',') }}</p>
               
+                    </div>
+                    <div class="col-12 text-center">
+                        <a href="{{ path('catalogue_jeux_occasion_details',  {'id': occasion.id, 'slug':occasion.boite.nom | lower | slug, 'editeur': occasion.boite.editeur | lower | slug }) }}">Voir</a>
                     </div>
                 </div>
             </div>

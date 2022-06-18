@@ -10,12 +10,23 @@
 
 {% block body %}
 
-	<h1 class="col-12 text-center my-5">{{ boites[0].nom }} - {{ boites[0].editeur }} - {{ boites[0].annee }}</h1>
+	<h1 class="col-12 text-center mt-5 mb-3">{{ boites[0].nom }} - {{ boites[0].editeur }} - {{ boites[0].annee }}</h1>
 
 	{% for key, boite in boites %}
+
+		<div class="row mb-3">
+			<div class="col-12 col-md-6">
+				{% if app.request.headers.get('referer') is null %}
+					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catlaogue général</a>
+				{% else %}
+					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catlaogue</a>
+				{% endif %}
+			</div>
+		</div>
 		<!-- BLOC PRESENTATION DU JEU  -->
-		<div class="row my-5" id="">
+		<div class="row mb-5" id="">
 			<div class="card col-11 mx-auto col-md-12 p-0 border shadow">
+
 				<div class="card-body d-flex flex-wrap">
 					<!-- image de la boite -->
 					<div class="col-12 col-md-6 text-center p-0">
@@ -71,9 +82,9 @@
 					</div>
 
 					<!-- formulaire de demande -->
-					<form class="col-12 p-0 d-flex flex-wrap" method="post" class="border-primary pt-3" action="/catalogue/ctrl/ctrl-FormContactJeu.php" name="formulaire" enctype="multipart/form-data">
+					<form class="col-12 p-0 d-flex flex-wrap" method="post" class="border-primary pt-3" action="{{ path('panier-ajout-pieces-detachees') }}" name="formulaireDemandePiece" enctype="multipart/form-data">
 						<div class="form-group col-12 col-md-6 p-0">
-							<textarea class="form-control mt-3" rows="3" name="content" onkeyup="limiteur();" placeholder="Bonjour, avez vous cette pièce ?..." minlength="15" maxlenght="300" required></textarea>
+							<textarea class="form-control mt-3" rows="3" name="message" onkeyup="limiteur();" placeholder="Bonjour, avez vous cette pièce ?..." minlength="15" maxlenght="300" required></textarea>
 							<span id="precision" class="jumbotron bg-primary text-light p-2">
 								<i class="fas fa-lightbulb text-info"></i>
 								N’oubliez pas d’être précis dans votre demande :
@@ -113,6 +124,16 @@
 						</div>
 					</form>
 				</div>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-12 col-md-6">
+				{% if app.request.headers.get('referer') is null %}
+					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catlaogue général</a>
+				{% else %}
+					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catlaogue</a>
+				{% endif %}
 			</div>
 		</div>
 	{% endfor %}

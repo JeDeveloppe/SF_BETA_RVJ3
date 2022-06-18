@@ -15,7 +15,7 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
-    <body>
+    <body class="d-flex flex-column justify-content-between h-100">
         {% include "site/nav.html.twig" %}
 
         <div class="container d-flex flex-column justify-content-between h-100">
@@ -23,5 +23,11 @@
         </div>
 
         {% include "site/footer.html.twig" %}
+
+    <script>
+        $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+        })
+     </script>
     </body>
 </html>

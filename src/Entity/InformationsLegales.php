@@ -57,6 +57,11 @@ class InformationsLegales
      */
     private $hebergeurSite;
 
+    /**
+     * @ORM\Column(type="decimal", precision=3, scale=2)
+     */
+    private $tauxTva;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -154,6 +159,18 @@ class InformationsLegales
     public function setHebergeurSite(string $hebergeurSite): self
     {
         $this->hebergeurSite = $hebergeurSite;
+
+        return $this;
+    }
+
+    public function getTauxTva(): ?string
+    {
+        return $this->tauxTva;
+    }
+
+    public function setTauxTva(string $tauxTva): self
+    {
+        $this->tauxTva = $tauxTva;
 
         return $this;
     }

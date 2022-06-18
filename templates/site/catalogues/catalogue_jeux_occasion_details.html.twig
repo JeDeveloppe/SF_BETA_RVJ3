@@ -1,0 +1,153 @@
+{% extends 'site/base.html.twig' %}
+
+{% block title %}
+	{{ occasions[0].boite.nom }}
+	-
+	{{ occasions[0].boite.editeur }}
+	-
+	{{ occasions[0].boite.annee }}
+{% endblock %}
+
+{% block body %}
+
+	<h1 class="col-12 text-center mt-5 mb-3">{{ occasions[0].boite.nom }} - {{ occasions[0].boite.editeur }} - {{ occasions[0].boite.annee }}</h1>
+
+	{% for key, occasion in occasions %}
+
+		<div class="row mb-3">
+			<div class="col-12 col-md-6">
+				{% if app.request.headers.get('referer') is null %}
+					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catlaogue général</a>
+				{% else %}
+					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catlaogue</a>
+				{% endif %}
+			</div>
+		</div>
+		<!-- BLOC PRESENTATION DU JEU  -->
+		<div class="row mb-5" id="">
+			<div class="card col-11 mx-auto col-md-12 p-0 border shadow">
+
+				<div class="card-body d-flex flex-wrap">
+					<!-- image de la boite -->
+					<div class="col-12 col-md-6 text-center p-0">
+						<div class="divImgPresentation mt-4">
+							<div class="zoom">
+								<div class="zoom__top zoom__left"></div>
+								<div class="zoom__top zoom__centre"></div>
+								<div class="zoom__top zoom__right"></div>
+								<div class="zoom__middle zoom__left"></div>
+								<div class="zoom__middle zoom__centre"></div>
+								<div class="zoom__middle zoom__right"></div>
+								<div class="zoom__bottom zoom__left"></div>
+								<div class="zoom__bottom zoom__centre"></div>
+								<div class="zoom__bottom zoom__right"></div>
+								<img class="zoom__image" src="data:image/png;base64,{{ images[key] }}"/>
+							</div>
+						</div>
+						<span class="col-12 col-md-6 lead text-muted small text-center">
+							Photo non contractuelle
+						</span>
+					</div>
+
+					<div class="col-12 col-md-6 mt-4 mt-md-0">
+						<p>État de la boite: {{ occasion.etatBoite }}</p>
+						<p>État du matériel: {{ occasion.etatMateriel }}</p>
+						<p>Règle du jeu: {{ occasion.regleJeu }}</p>
+						{% if occasion.information is not null  %}
+							<p><em>Informations:</em></p><p class="ml-5">{{ occasion.information }}</p>
+						{% endif %}
+
+						<p>Prix TTC: {{ occasion.priceHt }} </p>
+						<div class="position-relative">
+						    {% if app.user %}
+								{% if app.user.department != 14 %}
+									<span id="precisionIdentificationDetails" class="col-11 col-sm-10 mx-auto col-md-9 bg-vos p-2">
+										<i class="fas fa-lightbulb text-info"></i> Réservé au bassin de Caen pour le moment...
+									</span>
+								{% else %}
+									<form class="text-center" method="POST" action="{{ path('panier-ajout-jeu-occasion') }}">
+										<input type="hidden" name="rvjc" value="{{ occasion.id }}">
+										<button class="btn btn-info pl-3" type="submit">Ajouter au panier</button>
+									</form>
+								{% endif %}
+							{% else %}
+								<span id="precisionIdentificationDetails" class="col-11 col-sm-10 mx-auto col-md-9 bg-vos pt-3 pb-4">
+									<i class="fas fa-lightbulb text-info"></i> Vous devez être identifié(e) pour continuer...
+									<div class="text-center">
+										<div class="btn-group mt-2" role="group" aria-label="Basic example">
+											<a href="/connexion/" class="btn btn-secondary">Connexion</a>
+											<a href="/inscription/" class="btn btn-secondary">Inscription</a>
+										</div>
+									</div>
+								</span>
+							{% endif %}
+						</div>
+					</div> 
+					</div>
+
+
+
+
+
+
+				</div>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-12 col-md-6">
+				{% if app.request.headers.get('referer') is null %}
+					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catlaogue général</a>
+				{% else %}
+					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catlaogue</a>
+				{% endif %}
+			</div>
+		</div>
+	{% endfor %}
+
+
+	<script>
+		function limiteur() {
+maximum = 300;
+champ = document.formulaire.content;
+indic = document.formulaire.indicateur;
+
+if (champ.value.length > maximum) {
+champ.value = champ.value.substring(0, maximum);
+} else {
+document.getElementById("caracteresRestantFormulaireContenuJeu").innerHTML = maximum - champ.value.length + " caractères restant...";
+document.getElementById("precision").style.display = "block";
+}
+if (champ.value.length == 0) {
+document.getElementById("precision").style.display = "none";
+} else { // Init a timeout variable to be used below
+let timeout = null;
+// Listen for keystroke events
+champ.addEventListener('keyup', function (e) {
+// Clear the timeout if it has already been set.
+// This will prevent the previous task from executing
+// if it has been less than <MILLISECONDS>
+clearTimeout(timeout);
+// Make a new timeout set to go off in 1000ms (1 second)
+timeout = setTimeout(function () {
+document.getElementById("precision").style.display = "none";
+}, 4000);
+});
+}
+}
+var resultatInput = document.getElementById('resultatInput');
+resultatInput.innerHTML = "Aucune image !";
+
+function getFileInfo() {
+var countFiles = document.getElementById('file-input').files.length;
+
+if (countFiles > 1) {
+resultatInput.innerHTML = "2 images séléctionnées";
+} else {
+var name = document.getElementById('file-input').files[0].name;
+resultatInput.innerHTML = "Image séléctionnée:<br/>" + name;
+}
+}
+	</script>
+
+{% endblock %}

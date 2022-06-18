@@ -4,6 +4,8 @@ namespace App\Controller\Site;
 
 use App\Entity\Boite;
 use App\Entity\Occasion;
+use App\Form\CatalogueFiltersType;
+use App\Repository\InformationsLegalesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,9 +21,22 @@ class CataloguesController extends AbstractController
     public function cataloguePiecesDetachees(EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
     {
 
+        $form = $this->createForm(CatalogueFiltersType::class);
+        $form->handleRequest($request);
+
+        $filter = $request->query->get('tri');
+        $filters = array("nom", "editeur", "annee", "ajout");
+        if(in_array($filter, $filters)) {
+            $tri = [$filter => 'DESC'];
+        }else{
+            $tri = ['id' => 'DESC'];
+        }
+
+
+
         $donnees = $entityManager
         ->getRepository(Boite::class)
-        ->findBy(['isOnLine' => true], ['id' => "DESC"]);
+        ->findBy(['isOnLine' => true], $tri);
 
         $boites = $paginator->paginate(
             $donnees, /* query NOT result */
@@ -36,7 +51,8 @@ class CataloguesController extends AbstractController
 
         return $this->render('site/catalogues/catalogue_pieces_detachees.html.twig', [
             'boites' => $boites,
-            'images' => $images
+            'images' => $images,
+            'catalogueFiltersForm' => $form->createView(),
         ]);
     }
 
@@ -71,8 +87,11 @@ class CataloguesController extends AbstractController
     /**
      * @Route("/catalogue-jeux-occasion/", name="catalogue_jeux_occasion")
      */
-    public function catalogueJeuxOccasion(EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
+    public function catalogueJeuxOccasion(InformationsLegalesRepository $informationsLegalesRepository, EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
     {
+
+        $informationsLegales = $informationsLegalesRepository->findAll();
+        $tva = $informationsLegales[0]->getTauxTva();
 
         $donnees = $entityManager
         ->getRepository(Occasion::class)
@@ -96,7 +115,41 @@ class CataloguesController extends AbstractController
         
         return $this->render('site/catalogues/catalogue_jeux_occasion.html.twig', [
             'occasions' => $occasions,
-            'images' => $images
+            'images' => $images,
+            'tva' => $tva
         ]);
+    }
+
+    /**
+     * @Route("/catalogue-jeux-occasion/{id}/{slug}/{editeur}", name="catalogue_jeux_occasion_details")
+     */
+    public function catalogueJeuxOccasionDetails(InformationsLegalesRepository $informationsLegalesRepository, EntityManagerInterface $entityManager, $id): Response
+    {
+
+        $informationsLegales = $informationsLegalesRepository->findAll();
+        $tva = $informationsLegales[0]->getTauxTva();
+
+        $occasion = $entityManager
+        ->getRepository(Occasion::class)
+        ->findBy(['id' => $id, 'isOnLine' => true ]);
+
+        if(empty($occasion)){
+            return $this->redirectToRoute('catalogue_jeux_occasion');
+        }else{
+
+
+    
+            $images = [];
+            foreach ($occasion as $key => $occ) {
+                $images[$key] = stream_get_contents($occ->getBoite()->getImageBlob());
+            }
+            
+
+            return $this->render('site/catalogues/catalogue_jeux_occasion_details.html.twig', [
+                'occasions' => $occasion,
+                'images' => $images,
+                'tva' => $tva
+            ]);
+        }
     }
 }

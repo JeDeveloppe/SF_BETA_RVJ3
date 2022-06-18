@@ -6,26 +6,37 @@
 
     <h1 class="col-12 text-center my-5">Catalogue des pièces détachées</h1>
 
+    <div class="row">
+            {{ form_start(catalogueFiltersForm) }}
+                <div class="col-8 col-sm-6 col-md-4 mx-auto d-flex justify-content-center">{{ form_row(catalogueFiltersForm.filters) }}</div>
+            {{ form_end(catalogueFiltersForm) }}
+    </div>
     <div class="row justify-content-start">
+
         {% for key,boite in boites %}
             
-            <div class="col-11 mx-auto col-md-6 col-lg-4 col-xl-3 m-1">
-                <div class="card col-12 p-0 h-100">
-                    <div class="card-header text-center">
-                        {{ boite.nom }} <br/>
-                        {{ boite.editeur }} - {{ boite.annee }}
+            <div class="col-11 mx-auto col-md-6 col-lg-4 col-xl-3 m-2">
+                <div class="card col-12 p-0 h-100 border-0">
+                        {% if boite.nom | length > 20 %}
+                            <div class="card-header text-center bg-secondary text-white" data-html="true" data-toggle="tooltip" data-placement="top" title="{{ boite.nom }}">
+                            {{ boite.nom | slice(0, 20) ~ '...' }} <br />
+                        {% else %}
+                            <div class="card-header text-center bg-secondary text-white">
+                            {{ boite.nom }} <br/>
+                        {% endif %}
+                            {{ boite.editeur }} - {{ boite.annee }}
                     </div>
-                    <div class="card-body d-flex flex-column justify-content-between align-items-center">
-                        <p class="d-flex justify-content-center align-items-center">
+                    <div class="card-body card-body-catalogue d-flex flex-column align-items-center justify-content-between">
+                        <p class="d-flex justify-content-center align-items-center h-100">
                             <img src="data:image/png;base64,{{ images[key] }}"/>
                         </p>
                         {% if is_granted('ROLE_ADMIN') %}
-                            <p class="card-text my-3">
+                            <p class="card-text">
                                 <a class="btn btn-primary mr-3" href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.nom | lower | slug, 'editeur': boite.editeur | lower | slug }) }}">Faire une demande de pièces</a>
                                 <a href="{{ path('admin_boite_edit', {'id': boite.id }) }}"><i class="fa-solid fa-gear"></i></a>
                             </p>
                         {% else %}
-                            <p class="card-text my-3">
+                            <p class="card-text">
                                 <a class="btn btn-primary" href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.nom | lower | slug, 'editeur': boite.editeur | lower | slug }) }}">Faire une demande de pièces</a>
                             </p>
                         {% endif %}
@@ -44,5 +55,18 @@
         </div>
     {% endif %}
 
+<script>
+    let filters = document.getElementById("catalogue_filters_filters");
+
+    filters.addEventListener('change', function(){
+        let filter = this.selectedIndex;
+        let link ="/catalogue-pieces-detachees/?tri="+this.options[filter].value;
+        window.location.href = link;
+    })
+
+
+
+
+</script>
 
 {% endblock %}
