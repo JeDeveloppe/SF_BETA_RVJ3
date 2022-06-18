@@ -65,10 +65,12 @@ class PanierController extends AbstractController
             $occasion->setIsOnLine(false);
             $em->merge($occasion);
             $em->flush();
+
+            //on signal le changement
+            $this->addFlash('success', 'Occasion mis dans votre panier!');
         }else{
-
-
-            dd("ARTICLE HORS LIGNE");
+            //on signal le changement
+            $this->addFlash('danger', 'Occasion réservé à l\'instant par un autre utilisateur!');
         }
 
         return $this->redirectToRoute('catalogue_jeux_occasion');
@@ -85,6 +87,8 @@ class PanierController extends AbstractController
         $panier_boites = $panierRepository->findByUserAndNotNullColumn('boite', $user);
 
         if(count($panier_boites) < 1 && count($panier_occasions) < 1){
+            //on signal le changement
+            $this->addFlash('warning', 'Votre panier semble vide!');
             return $this->redirectToRoute('accueil');
         }else{
 
@@ -124,6 +128,9 @@ class PanierController extends AbstractController
 
         //dans tous les cas on supprime la ligne du panier
         $panierRepository->remove($lignePanier);
+
+        //on signal le changement
+        $this->addFlash('success', 'Ligne supprimée du panier!');
 
         //on retourne au panier
         return $this->redirectToRoute('app_panier');

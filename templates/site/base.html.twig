@@ -16,7 +16,9 @@
         {% endblock %}
     </head>
     <body class="d-flex flex-column justify-content-between h-100">
+        {% include "commun/flash_message.html.twig" %}
         {% include "site/nav.html.twig" %}
+
 
         <div class="container d-flex flex-column justify-content-between h-100">
             {% block body %}{% endblock %}

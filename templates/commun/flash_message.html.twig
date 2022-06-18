@@ -1,0 +1,11 @@
+{# read and display all flash messages #}
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="row justify-content-center">
+                <div class="text-center alertDiv bg-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
