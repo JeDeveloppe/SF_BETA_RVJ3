@@ -25,9 +25,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mon compte</a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Historique</a>
-              <a class="dropdown-item" href="#">Gérer mes adresses</a>
-              <a class="dropdown-item" href="#">Gérer mon compte</a>
+              <a class="dropdown-item" href="{{ path('app_member') }}">Mon espace</a>
               {% if is_granted('ROLE_ADMIN') %}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ path('admin_accueil') }}">Administration</a>

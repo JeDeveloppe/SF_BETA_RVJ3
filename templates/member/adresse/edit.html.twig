@@ -1,0 +1,11 @@
+{% extends 'member/base.html.twig' %}
+
+{% block member %}
+    <h1>Edit Adresse</h1>
+
+    {{ include('member/adresse/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_adresse_index') }}">back to list</a>
+
+    {{ include('member/adresse/_delete_form.html.twig') }}
+{% endblock %}
