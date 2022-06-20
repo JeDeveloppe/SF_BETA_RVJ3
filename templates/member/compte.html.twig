@@ -1,0 +1,16 @@
+{% extends 'member/base.html.twig' %}
+
+{% block member %}
+
+    <div class="row my-5">
+    <h3>Compte:</h3>
+
+   {{ form_start(form) }}
+      {{ form_widget(form) }}
+      <div class="col-12 text-center">
+         <button class="btn btn-success my-3">{{ button_label|default('Enregistrer') }}</button>
+      </div>
+   {{ form_end(form) }}
+
+    </div>
+{% endblock %}

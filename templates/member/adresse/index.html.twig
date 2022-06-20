@@ -36,7 +36,7 @@
         {% if facturation_adresses | length < 2 %}
             <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'facturation'}) }}">Créer une nouvelle adresse (maximum 2)</a>
         {% else %}
-            <p>Supprimer une adresse pour pouvoir en créer une nouvelle.</p>
+            <p>Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
         {% endif %}
     </div>
 
@@ -75,7 +75,7 @@
         {% if livraison_adresses | length < 2 %}
             <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'livraison'}) }}">Créer une nouvelle adresse (maximum 2)</a>
         {% else %}
-            <p class="p-2 text-center h5">Supprimer une adresse pour pouvoir en créer une nouvelle.</p>
+            <p class="p-2 text-center h5">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
         {% endif %}
     </div>
 

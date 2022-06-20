@@ -2,11 +2,15 @@
 
 namespace App\Controller\Member;
 
+use App\Entity\User;
+use App\Form\UserType;
+use App\Repository\UserRepository;
 use App\Repository\AdresseRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MemberController extends AbstractController
 {
@@ -27,6 +31,27 @@ class MemberController extends AbstractController
     {
         return $this->render('member/historique.html.twig', [
             'controller_name' => 'MemberController',
+        ]);
+    }
+
+    /**
+     * @Route("/membre/mon-compte", name="app_member_compte")
+     */
+    public function membreCompte(Request $request, UserRepository $userRepository, Security $security): Response
+    {
+        $user = $security->getUser();
+
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userRepository->add($user);
+            return $this->redirectToRoute('app_member_compte', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('member/compte.html.twig', [
+            'controller_name' => 'MemberController',
+            'form' => $form->createView()
         ]);
     }
 }

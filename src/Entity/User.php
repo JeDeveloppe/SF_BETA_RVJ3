@@ -47,11 +47,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $country;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $department;
 
     /**
@@ -68,6 +63,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="user")
      */
     private $adresses;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Pays::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $country;
 
     public function __construct()
     {
@@ -176,18 +177,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(string $country): self
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
     public function getDepartment(): ?string
     {
         return $this->department;
@@ -268,6 +257,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $adress->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCountry(): ?Pays
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Pays $country): self
+    {
+        $this->country = $country;
 
         return $this;
     }

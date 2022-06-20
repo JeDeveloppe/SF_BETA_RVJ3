@@ -40,7 +40,7 @@ class RegistrationController extends AbstractController
             $user->setCreatedAt(new DateTimeImmutable('now'))
                 ->setEmail($form['email']->getData())
                 ->setPhone($form['phone']->getData())
-                ->setCountry($form['country']->getData()->getIsoCode())
+                ->setCountry($form['country']->getData())
                 ->setDepartment($form['department']->getData()->getVilleDepartement());
 
             $entityManager->persist($user);

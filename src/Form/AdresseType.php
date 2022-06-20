@@ -25,11 +25,18 @@ class AdresseType extends AbstractType
         $this->department = $options['department'];
 
         $builder
-            ->add('lastName')
-            ->add('firstName')
-            ->add('adresse')
+            ->add('lastName', TextType::class, [
+                'label' => 'Nom:'
+            ])
+            ->add('firstName', TextType::class, [
+                'label' => 'Prénom:'
+            ])
+            ->add('adresse', TextType::class, [
+                'label' => 'Adresse:'
+            ])
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
+                'label' => "Code postal et ville:",
                 'placeholder' => "Choisissez une ville dans la liste...",
                 'choice_label' => function (Ville $ville) {
                     return $ville->getVilleCodePostal() . ' ' . $ville->getVilleNom();
