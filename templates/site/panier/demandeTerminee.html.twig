@@ -1,0 +1,23 @@
+{% extends 'site/base.html.twig' %}
+
+{% block title %}Demande de devis{% endblock %}
+
+
+{% block body %}
+
+    <div class="row justify-content-center my-5">
+
+        <div class="jumbotron col-11 col-md-6">
+        <h1 class="display-4">Demande de devis envoyée!</h1>
+        <p class="lead">Votre demande de devis est bien arrivé chez Antoine qui traitera votre demande bientôt...</p>
+        <hr class="my-4">
+        <p>Merci de participé au développement de ce projet.</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="{{ path('nous-soutenir') }}" role="button">Nous soutenir</a>
+        </p>
+        </div>
+
+    </div>
+
+
+{% endblock %}

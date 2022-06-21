@@ -49,6 +49,8 @@ class PanierRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->where('p.'.$columnName.' IS NOT NULL')
+            ->andWhere('p.etat = :etat')
+            ->setParameter('etat', 'panier')
             ->andWhere('p.user = '.$user->getId())
             ->getQuery()
             ->getResult()

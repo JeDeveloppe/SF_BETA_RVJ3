@@ -40,4 +40,15 @@ class SiteController extends AbstractController
             'informationsLegales' =>  $informationsLegalesRepository->findAll()
         ]);
     }
+
+     /**
+     * @Route("/nous-soutenir", name="nous-soutenir")
+     */
+    public function nousSoutenir(InformationsLegalesRepository $informationsLegalesRepository): Response
+    {
+
+        return $this->render('site/informations/nous_soutenir.html.twig', [
+            'informationsLegales' =>  $informationsLegalesRepository->findAll()
+        ]);
+    }
 }

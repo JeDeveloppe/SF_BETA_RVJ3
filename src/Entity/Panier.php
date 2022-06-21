@@ -48,6 +48,21 @@ class Panier
      */
     private $imageBlob;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $etat;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $facturation;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $livraison;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +136,42 @@ class Panier
     public function setImageBlob($imageBlob): self
     {
         $this->imageBlob = $imageBlob;
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(string $etat): self
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getFacturation(): ?string
+    {
+        return $this->facturation;
+    }
+
+    public function setFacturation(?string $facturation): self
+    {
+        $this->facturation = $facturation;
+
+        return $this;
+    }
+
+    public function getLivraison(): ?string
+    {
+        return $this->livraison;
+    }
+
+    public function setLivraison(?string $livraison): self
+    {
+        $this->livraison = $livraison;
 
         return $this;
     }

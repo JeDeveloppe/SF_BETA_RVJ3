@@ -2,18 +2,19 @@
 
 namespace App\Controller\Site;
 
-use App\Entity\InformationsLegales;
 use App\Entity\Panier;
-use App\Repository\BoiteRepository;
-use App\Repository\InformationsLegalesRepository;
-use App\Repository\OccasionRepository;
-use App\Repository\PanierRepository;
 use DateTimeImmutable;
+use App\Entity\InformationsLegales;
+use App\Repository\BoiteRepository;
+use App\Repository\PanierRepository;
+use App\Repository\AdresseRepository;
+use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\InformationsLegalesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PanierController extends AbstractController
@@ -31,12 +32,14 @@ class PanierController extends AbstractController
         $panier->setMessage($request->request->get('message'))
                 ->setUser($security->getUser())
                 ->setCreatedAt( new DateTimeImmutable('now'))
-                ->setBoite($boiteRepository->find(['id' => $idBoite]));
+                ->setBoite($boiteRepository->find(['id' => $idBoite]))
+                ->setEtat("panier");
 
         $em->persist($panier);
         $em->flush($panier);
 
-
+         //on signal le changement
+         $this->addFlash('success', 'Demande ajoutée au panier!');
         return $this->redirectToRoute('catalogue_pieces_detachees');
     }
 
@@ -56,7 +59,8 @@ class PanierController extends AbstractController
             //ici on ajoute les differentes infos
             $panier->setUser($security->getUser())
             ->setCreatedAt( new DateTimeImmutable('now'))
-            ->setOccasion($occasionRepository->find(['id' => $idOccasion]));
+            ->setOccasion($occasionRepository->find(['id' => $idOccasion]))
+            ->setEtat("panier");
 
             $em->persist($panier);
             $em->flush($panier);
@@ -79,12 +83,19 @@ class PanierController extends AbstractController
     /**
      * @Route("/panier", name="app_panier")
      */
-    public function index(PanierRepository $panierRepository, Security $security, InformationsLegalesRepository $informationsLegalesRepository): Response
+    public function index(
+        PanierRepository $panierRepository,
+        Security $security, 
+        AdresseRepository $adresseRepository,
+        InformationsLegalesRepository $informationsLegalesRepository): Response
     {
 
         $user = $security->getUser();
         $panier_occasions = $panierRepository->findByUserAndNotNullColumn('occasion',$user);
         $panier_boites = $panierRepository->findByUserAndNotNullColumn('boite', $user);
+
+        $livraison_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
+        $facturation_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
 
         if(count($panier_boites) < 1 && count($panier_occasions) < 1){
             //on signal le changement
@@ -98,7 +109,9 @@ class PanierController extends AbstractController
             return $this->render('site/panier/index.html.twig', [
                 'panier_occasions' => $panier_occasions,
                 'panier_boites' => $panier_boites,
-                'tva' => $tva
+                'tva' => $tva,
+                'livraison_adresses' => $livraison_adresses,
+                'facturation_adresses' => $facturation_adresses
             ]);
         }
     }
@@ -135,5 +148,39 @@ class PanierController extends AbstractController
         //on retourne au panier
         return $this->redirectToRoute('app_panier');
         
+    }
+
+
+   /**
+     * @Route("/panier/demande-de-devis/", name="panier-mise-en-devis")
+     */
+    public function panierMiseEnDevis(Request $request, PanierRepository $panierRepository, Security $security, EntityManagerInterface $em): Response
+    {
+
+        $paniers = $panierRepository->findBy(['user' => $security->getUser(), 'etat' => 'panier']);
+
+        $facturation = $request->request->get('adresseFacturation');
+        $livraison = $request->request->get('adresseLivraison');
+
+        $lastEntryArray = end($paniers)->getId();
+
+        foreach($paniers as $panier){
+            $panier->setEtat('demandeDevis'.$lastEntryArray)
+                   ->setLivraison(preg_replace('/\s\s+/', ' ', $livraison))
+                   ->setFacturation(preg_replace('/\s\s+/', ' ', $facturation));
+            $em->merge($panier);
+        }
+        
+        $em->flush();
+
+        return $this->redirectToRoute('panier-soumis');
+    }
+
+    /**
+     * @Route("/panier/demande-de-devis/fin", name="panier-soumis")
+     */
+    public function panierDemandeDevisEnd(): Response
+    {
+        return $this->render('site/panier/demandeTerminee.html.twig');
     }
 }
