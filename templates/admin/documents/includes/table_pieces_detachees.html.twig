@@ -1,0 +1,16 @@
+<div class="row justify-content-center mb-5">
+    <h3 class="col-12 text-start">Pièces détachée(s):</h3>
+
+        {% for boite in panier_boites %}
+            <div class="col-11 mb-4">
+                <div class="card p-0">
+                    <div class="card-header">{{ boite.boite.nom }} {{ boite.boite.editeur }} {{ boite.boite.annee }}</div>
+                        <div class="card-body bg-secondary">
+                            <div class="card-text my-2">{{ boite.message }}</div>
+                            <div class="card-text"><input class="col-12" name="reponse[]" type="text" maxlength="80" required /></div>
+                        </div>
+                    <div class="card-footer text-center">Prix de vente:  <input class="text-center" name="prix[]" type="text" pattern="^\d+(?:[.]\d{2})$" size="6" placeholder="0.00" onkeyup="calculDevis()" required></div>
+                </div>
+            </div>
+        {% endfor %}
+</div>

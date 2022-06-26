@@ -7,6 +7,7 @@ use App\Entity\Document;
 use App\Entity\MethodeEnvoi;
 use App\Entity\DocumentLignes;
 use App\Form\MethodeEnvoiType;
+use App\Repository\DocumentRepository;
 use App\Service\DocumentService;
 use App\Repository\UserRepository;
 use App\Repository\PanierRepository;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
+use App\Repository\MethodeEnvoiRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DocumentsController extends AbstractController
@@ -26,9 +28,6 @@ class DocumentsController extends AbstractController
     {
 
         $paniers = $panierRepository->findBy(['etat' => $slug]);
-
-        $methodeEnvoi = new MethodeEnvoi();
-        $form = $this->createForm(MethodeEnvoiType::class, $methodeEnvoi);
 
         if($paniers == null){
             //on signal le changement
@@ -53,7 +52,6 @@ class DocumentsController extends AbstractController
             'panier_occasions' => $panier_occasions,
             'panier_boites' => $panier_boites,
             'tva' => $tva,
-            'form' => $form->createView(),
             'totalOccasions' => $totalOccasions
         ]);
     }
@@ -66,77 +64,26 @@ class DocumentsController extends AbstractController
         $user,
         Request $request,
         PanierRepository $panierRepository,
-        InformationsLegalesRepository $informationsLegalesRepository,
-        UserRepository $userRepository,
-        DocumentService $documentService,
-        EntityManagerInterface $em
+        DocumentService $documentService
         ): Response
     {
-
-
+        //on cherche si y a bien quelque chose dans la table panier en fonction du bouton choisi
         $paniers = $panierRepository->findBy(['user' => $user, 'etat' => $demande]);
 
         if($paniers == null){
-            //on signal le changement
+            //si y a rien
             $this->addFlash('warning', 'Demande inconnue!');
             return $this->redirectToRoute('admin_accueil');
         }else{
-            $informationsLegales = $informationsLegalesRepository->findAll();
-            $tva = $informationsLegales[0]->getTauxTva();
 
-            //il faudra trouver le dernier document de la base et incrementer de 1 pour le devis
+            //on sauvegarde dans la base
+            $documentService->saveDevisInDataBase($user, $request, $paniers, $demande);
 
-            //puis on met dans la base
-            $document = new Document();
+            //on supprime les entree du panier
+            // $documentService->deletePanierFromUser($paniers);
 
-            $document->setUser($userRepository->find($user))
-                    ->setCreatedAt(new DateTimeImmutable())
-                    ->setTotalTTC($request->request->get('totalGeneralTTC') * 100)
-                    ->setTotalHT($request->request->get('totalGeneralHT') * 100)
-                    ->setTauxTva($tva * 100 -100)
-                    ->setTotalLivraison($request->request->get('totalLivraison') * 100)
-                    ->setIsRelanceDevis(false)
-                    ->setAdresseFacturation($paniers[0]->getFacturation())
-                    ->setAdresseLivraison($paniers[0]->getLivraison())
-                    ->setToken($documentService->generateRandomString())
-                    ->setNumeroDevis(1);
-
-            $em->persist($document);
-            $em->flush();
-
-            $lignesDemandeBoite = $request->request->get('prixLigne');
-
-            $panier_occasions = $panierRepository->findBy(['etat' => $demande,'user' => $user, 'boite' => null]);
-            $panier_boites = $panierRepository->findBy(['etat' => $demande,'user' => $user, 'occasion' => null]);
-
-            foreach($panier_boites as $key=>$panier){
-                $documentLigne = new DocumentLignes();
-
-                $documentLigne->setBoite($panier->getBoite())
-                              ->setDocument($document)
-                              ->setMessage($panier->getMessage())
-                              ->setPrixVente($lignesDemandeBoite[$key] * 100);
-                $em->persist($documentLigne);
-            }
-
-            foreach($panier_occasions as $panier){
-                $documentLigne = new DocumentLignes();
-
-                $documentLigne->setBoite($panier->getBoite())
-                                ->setDocument($document)
-                                ->setOccasion($panier->getOccasion())
-                                ->setPrixVente($panier->getOccasion()->getPriceHt() * 100);
-                $em->persist($documentLigne);
-            }
-
-            //on met en BDD les differentes lignes
-            $em->flush();
-
-            dd("FAIRE LA SUITE, SUPPRIMER PANIER");
-
+            return $this->redirectToRoute('devis');
         }
-
-        return $this->redirectToRoute('devis');
 
     }
 }

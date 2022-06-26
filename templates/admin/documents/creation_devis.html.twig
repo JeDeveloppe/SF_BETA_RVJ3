@@ -7,54 +7,19 @@
 
     <h3 class="col-12 text-center mb-5">Création d'un nouveau devis</h3>
 
-    {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
-    {% if panier_occasions | length > 0 %}
-        {% set totalOccasions = 0 %}
-        <div class="row mb-4">
-            <h3>Occasion(s):</h3>
-            <table class="table table-striped text-center">
-                <thead>
-                    <th>Nom / Éditeur / Année</th>
-                    <th>Référence</th>
-                    <th>Quantité</th>
-                    <th>Prix de vente TTC</th>
-                </thead>
-                <tbody>
-                    {% for occasion in panier_occasions %}
-                        <td>{{ occasion.occasion.boite.nom }} - {{ occasion.occasion.boite.editeur }} - {{ occasion.occasion.boite.annee }}</td>
-                        <td>{{ occasion.occasion.reference }}</td>
-                        <td>1</td>
-                        <td>{{ (occasion.occasion.priceHt * tva) | number_format(2, '.', ',') }}</td>
-                        {% set totalOccasions = totalOccasions + occasion.occasion.priceHt %}
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="col-12 text-center h3 mt-3">Total des occasions: {{ (totalOccasions * tva) | number_format(2, '.', ',') }}</div>
-        </div>
-    {% endif %}
-
-    {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
-    {% if panier_boites | length > 0 %}
     <form action="{{ path('document_creation_devis', {'demande': paniers[0].etat,'user': paniers[0].user.id }) }}" method="POST">
-        <div class="row justify-content-center mb-5">
-            <h3 class="col-12 text-start">Pièces détachée(s):</h3>
 
-                {% for boite in panier_boites %}
-                    <div class="col-11 mb-4">
-                        <div class="card p-0">
-                            <div class="card-header">{{ boite.boite.nom }} {{ boite.boite.editeur }} {{ boite.boite.annee }}</div>
-                                <div class="card-body bg-secondary">
-                                    <div class="card-text my-2">{{ boite.message }}</div>
-                                    <div class="card-text"><input class="col-12" name="reponse[]" type="text" maxlength="80" required /></div>
-                                </div>
-                            <div class="card-footer text-center">Prix de vente:  <input class="text-center" name="prix[]" type="text" pattern="^\d+(?:[.]\d{2})$" size="6" placeholder="0.00" onkeyup="calculDevis()" required></div>
-                        </div>
-                    </div>
-                {% endfor %}
-        </div>
-    {% endif %}
+        {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
+        {% if panier_occasions | length > 0 %}
+            {% include "admin/documents/includes/table_occasions.html.twig" %}
+        {% endif %}
 
-    {# PARITE LIVRAISON #}
+        {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
+        {% if panier_boites | length > 0 %}
+            {% include "admin/documents/includes/table_pieces_detachees.html.twig" %}
+        {% endif %}
+
+        {# PARITE LIVRAISON #}
         <div class="row justify-content-center my-5">
             <h3>Livraison / retrait:</h3>
             <div class="card p-0">
@@ -66,21 +31,24 @@
                         {% endfor %}
                     </div>
                     <div class="my-3 card-text d-flex justify-content-around">
-                        <div class="col-5">{{ form(form) }}</div>
-                        <div class="col-5"><input class="form-control" type="text" name="livraison" placeholder="Prix TTC... 0.00" id="selectLivraison" onkeyup="calculDevis()" required /></div>
+                        <div class="col-5">
+                            <select name="envoi" required>
+                                <option value="">Choisissez un mode d'envoi / retrait...</option>
+                                <option value="1">Envoi par la poste</option>
+                                <option value="2">Envoi par Colissimo</option>
+                                <option value="3">Retrait à la COOP 5 pour 100 à Caen</option>
+                            </select>
+                        
+                        </div>
+                        <div class="col-5"><input class="form-control" type="text" name="livraison" placeholder="Prix TTC... 0.00" pattern="^\d+(?:[.]\d{2})$" id="selectLivraison" onkeyup="calculDevis()" required /></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-6 bg-secondary">
-            <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Créer le devis</button>
-            <input type="hidden" name="user" value="{{ paniers[0].user.id }}">
-            <input type="hidden" name="demande" value="{{ paniers[0].etat }}">
-        </div>
-    </form>
 
-    <div class="row justify-content-center my-5">
-        <h3>Totaux et boutons:</h3>
+
+        <div class="row justify-content-center my-5">
+            <h3>Totaux et boutons:</h3>
 
             <div class="col-12 d-flex">
                 {# PARTIE TOTAUX #}
@@ -118,17 +86,18 @@
                 </div>
 
                 {# PARTIE BOUTONS #}
- 
+                <div class="col-6 bg-secondary">
+                    <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Créer le devis</button>
+                    <input type="hidden" name="user" value="{{ paniers[0].user.id }}">
+                    <input type="hidden" name="demande" value="{{ paniers[0].etat }}">
+                </div>
             </div>
-
-        </form>
-    </div>
+        </div>
+    </form>
 
 <script>
     let tva = {{ tva }};
     let totalOccasions = {{ totalOccasions * tva }};
-
-    let buttonCreer = document.getElementById('buttonCreer');
 
     let divTotalOccasions = document.getElementById('totalOccasions');
     let divTotalPiecesDetachees = document.getElementById('totalPiecesDetachees');
@@ -142,7 +111,7 @@
     let divHiddenValues = document.getElementById('hiddenValues');
 
     if(totalOccasions > 0){
-        divTotalOccasions.innerHTML = '<input type="text" class="form-control" name="totalOccasions value="'+totalOccasions.toFixed(2)+'" class="text-right" size="5" readonly>';
+        divTotalOccasions.innerHTML = '<input type="text" class="form-control" name="totalOccasions" value="'+totalOccasions.toFixed(2)+'" class="text-right" size="5" readonly>';
         hiddenOccasion = '<input type="hidden" name="totalOccasionsTTC" id="hiddenInputOccasion" value="'+totalOccasions.toFixed(2)+'">';
     }else{
         divTotalOccasions.innerHTML = '<input type="text" class="form-control" name="totaOccasions" value="0.00" class="text-right" size="5" readonly>';
@@ -206,10 +175,6 @@
 
         divTotalGeneralTTC.innerHTML = '<input type="text" class="form-control" name="totalGeneralTTC" value="'+totalGeneralTTC.toFixed(2)+'" class="text-right" size="5" readonly>';
 
-
-        //GESTION DES BOUTONS
-
-        
         divHiddenValues.innerHTML = hiddenValues.join("");
     }
 
