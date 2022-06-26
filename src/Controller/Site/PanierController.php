@@ -4,8 +4,11 @@ namespace App\Controller\Site;
 
 use App\Entity\Panier;
 use DateTimeImmutable;
+use App\Entity\Adresse;
+use App\Form\AdresseLivraisonType;
 use App\Entity\InformationsLegales;
 use App\Repository\BoiteRepository;
+use App\Form\AdresseFacturationType;
 use App\Repository\PanierRepository;
 use App\Repository\AdresseRepository;
 use App\Repository\OccasionRepository;
@@ -97,6 +100,8 @@ class PanierController extends AbstractController
         $livraison_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
         $facturation_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
 
+        $adresseRetrait = $adresseRepository->findBy(['user' => 2, 'isFacturation' => null]);
+
         if(count($panier_boites) < 1 && count($panier_occasions) < 1){
             //on signal le changement
             $this->addFlash('warning', 'Votre panier semble vide!');
@@ -111,7 +116,8 @@ class PanierController extends AbstractController
                 'panier_boites' => $panier_boites,
                 'tva' => $tva,
                 'livraison_adresses' => $livraison_adresses,
-                'facturation_adresses' => $facturation_adresses
+                'facturation_adresses' => $facturation_adresses,
+                'adresseRetrait' => $adresseRetrait
             ]);
         }
     }
@@ -154,23 +160,31 @@ class PanierController extends AbstractController
    /**
      * @Route("/panier/demande-de-devis/", name="panier-mise-en-devis")
      */
-    public function panierMiseEnDevis(Request $request, PanierRepository $panierRepository, Security $security, EntityManagerInterface $em): Response
+    public function panierMiseEnDevis(
+        Request $request,
+        PanierRepository $panierRepository,
+        Security $security,
+        AdresseRepository $adresseRepository,
+        EntityManagerInterface $em): Response
     {
 
         $paniers = $panierRepository->findBy(['user' => $security->getUser(), 'etat' => 'panier']);
 
-        $facturation = $request->request->get('adresseFacturation');
-        $livraison = $request->request->get('adresseLivraison');
+        $facturation = $adresseRepository->find($request->request->get('adresse_facturation'));
+
+        $livraison = $adresseRepository->find($request->request->get('adresse_livraison'));
 
         $lastEntryArray = end($paniers)->getId();
 
         foreach($paniers as $panier){
             $panier->setEtat('demandeDevis'.$lastEntryArray)
-                   ->setLivraison(preg_replace('/\s\s+/', ' ', $livraison))
-                   ->setFacturation(preg_replace('/\s\s+/', ' ', $facturation));
+                   ->setLivraison($livraison->getFirstName().' '.$livraison->getLastName().'<br/>'.$livraison->getAdresse().'<br/>'.$livraison->getVille()->getVilleCodePostal().' '.$livraison->getVille()->getVilleNom())
+                   ->setFacturation($facturation->getFirstName().' '.$facturation->getLastName().'<br/>'.$facturation->getAdresse().'<br/>'.$facturation->getVille()->getVilleCodePostal().' '.$facturation->getVille()->getVilleNom());
             $em->merge($panier);
         }
         
+
+
         $em->flush();
 
         return $this->redirectToRoute('panier-soumis');

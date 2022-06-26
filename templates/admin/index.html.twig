@@ -1,20 +1,19 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Accueil, les demandes{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h3 class="col-12 text-center mb-5">Les demandes de devis</h3>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/Users/RENE/SITES/SYMFONY/RVJ3/src/Controller/AdminController.php'|file_link(0) }}">src/Controller/AdminController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/Users/RENE/SITES/SYMFONY/RVJ3/templates/admin/index.html.twig'|file_link(0) }}">templates/admin/index.html.twig</a></code></li>
-    </ul>
-</div>
+    {% for demande in demandes %}
+        <div class="card my-2">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>#{{ demande.user.id }} / {{ demande.user.email }} - {{ demande.user.phone }}</div>
+                <a class="btn btn-primary" href="{{ path('document_demande', {'slug': demande.etat }) }}">Commencer le devis</a>
+            </div>
+        </div>
+    {% endfor %}
+
+
 {% endblock %}

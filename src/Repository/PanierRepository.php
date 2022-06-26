@@ -57,6 +57,13 @@ class PanierRepository extends ServiceEntityRepository
         ;
     }
     
+    public function findDemandesGroupeBy(){
+        return $this->createQueryBuilder('p')
+            ->groupBy('p.etat')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     // /**
     //  * @return Panier[] Returns an array of Panier objects
     //  */

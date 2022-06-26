@@ -1,0 +1,226 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Accueil, les demandes{% endblock %}
+
+{% block body %}
+    {% set tva = tva %}
+
+    <h3 class="col-12 text-center mb-5">Création d'un nouveau devis</h3>
+
+    {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
+    {% if panier_occasions | length > 0 %}
+        {% set totalOccasions = 0 %}
+        <div class="row mb-4">
+            <h3>Occasion(s):</h3>
+            <table class="table table-striped text-center">
+                <thead>
+                    <th>Nom / Éditeur / Année</th>
+                    <th>Référence</th>
+                    <th>Quantité</th>
+                    <th>Prix de vente TTC</th>
+                </thead>
+                <tbody>
+                    {% for occasion in panier_occasions %}
+                        <td>{{ occasion.occasion.boite.nom }} - {{ occasion.occasion.boite.editeur }} - {{ occasion.occasion.boite.annee }}</td>
+                        <td>{{ occasion.occasion.reference }}</td>
+                        <td>1</td>
+                        <td>{{ (occasion.occasion.priceHt * tva) | number_format(2, '.', ',') }}</td>
+                        {% set totalOccasions = totalOccasions + occasion.occasion.priceHt %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="col-12 text-center h3 mt-3">Total des occasions: {{ (totalOccasions * tva) | number_format(2, '.', ',') }}</div>
+        </div>
+    {% endif %}
+
+    {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
+    {% if panier_boites | length > 0 %}
+    <form action="{{ path('document_creation_devis', {'demande': paniers[0].etat,'user': paniers[0].user.id }) }}" method="POST">
+        <div class="row justify-content-center mb-5">
+            <h3 class="col-12 text-start">Pièces détachée(s):</h3>
+
+                {% for boite in panier_boites %}
+                    <div class="col-11 mb-4">
+                        <div class="card p-0">
+                            <div class="card-header">{{ boite.boite.nom }} {{ boite.boite.editeur }} {{ boite.boite.annee }}</div>
+                                <div class="card-body bg-secondary">
+                                    <div class="card-text my-2">{{ boite.message }}</div>
+                                    <div class="card-text"><input class="col-12" name="reponse[]" type="text" maxlength="80" required /></div>
+                                </div>
+                            <div class="card-footer text-center">Prix de vente:  <input class="text-center" name="prix[]" type="text" pattern="^\d+(?:[.]\d{2})$" size="6" placeholder="0.00" onkeyup="calculDevis()" required></div>
+                        </div>
+                    </div>
+                {% endfor %}
+        </div>
+    {% endif %}
+
+    {# PARITE LIVRAISON #}
+        <div class="row justify-content-center my-5">
+            <h3>Livraison / retrait:</h3>
+            <div class="card p-0">
+                <div class="card-header">
+                    <div class="card-text text-center">
+                        {% set adresseLivraisons = paniers[0].livraison | split('<br/>') %}
+                        {% for adresse in adresseLivraisons %}
+                            {{ adresse }}
+                        {% endfor %}
+                    </div>
+                    <div class="my-3 card-text d-flex justify-content-around">
+                        <div class="col-5">{{ form(form) }}</div>
+                        <div class="col-5"><input class="form-control" type="text" name="livraison" placeholder="Prix TTC... 0.00" id="selectLivraison" onkeyup="calculDevis()" required /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 bg-secondary">
+            <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Créer le devis</button>
+            <input type="hidden" name="user" value="{{ paniers[0].user.id }}">
+            <input type="hidden" name="demande" value="{{ paniers[0].etat }}">
+        </div>
+    </form>
+
+    <div class="row justify-content-center my-5">
+        <h3>Totaux et boutons:</h3>
+
+            <div class="col-12 d-flex">
+                {# PARTIE TOTAUX #}
+                <div class="col-6 d-flex flex-column">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Total occasions:</span>
+                        </div>
+                        <div id="totalOccasions"></div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Total détachées:</span>
+                        </div>
+                        <div id="totalPiecesDetachees"></div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Total livraison:</span>
+                        </div>
+                        <div id="totalLivraison"></div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Total général HT:</span>
+                        </div>
+                        <div id="totalGeneralHT"></div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Total général TTC:</span>
+                        </div>
+                        <div id="totalGeneralTTC"></div>
+                    </div>
+                </div>
+
+                {# PARTIE BOUTONS #}
+ 
+            </div>
+
+        </form>
+    </div>
+
+<script>
+    let tva = {{ tva }};
+    let totalOccasions = {{ totalOccasions * tva }};
+
+    let buttonCreer = document.getElementById('buttonCreer');
+
+    let divTotalOccasions = document.getElementById('totalOccasions');
+    let divTotalPiecesDetachees = document.getElementById('totalPiecesDetachees');
+    let divTotalLivraison = document.getElementById('totalLivraison');
+    let divTotalGeneralTTC = document.getElementById('totalGeneralTTC');
+    let divTotalGeneralHT = document.getElementById('totalGeneralHT');
+    let selectLivraison = document.getElementById('selectLivraison');
+    let totalLignesPiecesDetachees = 0;
+
+    let hiddenValues = [];
+    let divHiddenValues = document.getElementById('hiddenValues');
+
+    if(totalOccasions > 0){
+        divTotalOccasions.innerHTML = '<input type="text" class="form-control" name="totalOccasions value="'+totalOccasions.toFixed(2)+'" class="text-right" size="5" readonly>';
+        hiddenOccasion = '<input type="hidden" name="totalOccasionsTTC" id="hiddenInputOccasion" value="'+totalOccasions.toFixed(2)+'">';
+    }else{
+        divTotalOccasions.innerHTML = '<input type="text" class="form-control" name="totaOccasions" value="0.00" class="text-right" size="5" readonly>';
+        hiddenOccasion = '<input type="hidden" name="totalOccasionsTTC" id="hiddenInputOccasion" value="0.00">';
+    }
+
+    function notNull(str){
+        if(str === ""){
+            str = "0";
+        }
+        return str;
+    }
+
+
+    function calculDevis(){
+
+        //clear innerHTML
+        hiddenValues = [];
+        hiddenValues.push(hiddenOccasion);
+
+        let elts = document.getElementsByName('prix[]');
+        totalLignesPiecesDetachees = 0;
+
+        elts.forEach(element => {
+                totalLignesPiecesDetachees += +element.value;
+
+                if(element.value > 0){
+                    let hiddenLignePieceDetachee = '<input type="hidden" name="prixLigne[]" value="'+element.value+'">';
+                    hiddenValues.push(hiddenLignePieceDetachee);
+                }
+
+                divTotalPiecesDetachees.innerHTML = '<input type="text" class="form-control" name="totalPiecesDetacheesTTC" value="'+totalLignesPiecesDetachees.toFixed(2)+'" class="text-right" size="5" readonly>';
+                
+                if(totalLignesPiecesDetachees > 0){
+                    hiddenPieceDetachees = '<input type="hidden" name="totalPiecesDetacheesTTC" id="hiddenInputTotalPiecesDetachees" value="'+totalLignesPiecesDetachees.toFixed(2)+'">';
+                    hiddenValues.push(hiddenPieceDetachees);
+                }
+        });
+
+
+        if(selectLivraison.value === "" || selectLivraison.value == 0){
+            totalLivraison = 0;
+            divTotalLivraison.innerHTML = '<input type="text" class="form-control" name="totalLivraisonTTC" value="0.00" class="text-right" size="5" readonly>';
+        }else{
+            totalLivraison = Number(selectLivraison.value);
+            hiddenLivraison = '<input type="hidden" name="totalLivraison" id="hiddenInputTotalLivraison" value="'+totalLivraison.toFixed(2)+'">';
+            hiddenValues.push(hiddenLivraison);
+            divTotalLivraison.innerHTML = '<input type="text" class="form-control" name="totalLivraisonTTC" value="'+totalLivraison.toFixed(2)+'" class="text-right" size="5" readonly>';
+        }
+
+
+        totalGeneralTTC = notNull(totalOccasions) + notNull(totalLignesPiecesDetachees) + notNull(totalLivraison);
+        totalGeneralHT = totalGeneralTTC / tva;
+
+        divTotalGeneralHT.innerHTML = '<input type="text" class="form-control" name="totalGeneralHT" value="'+totalGeneralHT.toFixed(2)+'" class="text-right" size="5" readonly>';
+        hiddenTotalHT = '<input type="hidden" name="totalGeneralHT" value="'+totalGeneralHT.toFixed(2)+'">';
+        hiddenValues.push(hiddenTotalHT);
+
+        hiddenTotalTTC = '<input type="hidden" name="totalGeneralTTC" value="'+totalGeneralTTC.toFixed(2)+'">';
+        hiddenValues.push(hiddenTotalTTC);
+
+        divTotalGeneralTTC.innerHTML = '<input type="text" class="form-control" name="totalGeneralTTC" value="'+totalGeneralTTC.toFixed(2)+'" class="text-right" size="5" readonly>';
+
+
+        //GESTION DES BOUTONS
+
+        
+        divHiddenValues.innerHTML = hiddenValues.join("");
+    }
+
+    let totalLivraison = 0;
+    let totalGeneralTTC = notNull(totalOccasions) + notNull(totalLignesPiecesDetachees) + notNull(totalLivraison);
+    let totalGeneralHT = totalGeneralTTC / tva;
+
+    divTotalPiecesDetachees.innerHTML = '<input type="text" class="form-control" name="totalPiecesDetachees" value="0.00" class="text-right" size="5" readonly>';
+    divTotalLivraison.innerHTML = '<input type="text" class="form-control" name="totalLivraison" value="0.00" class="text-right" size="5" readonly>';
+    divTotalGeneralHT.innerHTML = '<input type="text" class="form-control" name="totalGeneralHT" value="'+totalGeneralHT.toFixed(2)+'" class="text-right" size="5" readonly>';
+    divTotalGeneralTTC.innerHTML = '<input type="text" class="form-control" name="totalGeneralTTC" value="'+totalGeneralTTC.toFixed(2)+'" class="text-right" size="5" readonly>';
+</script>
+
+{% endblock %}

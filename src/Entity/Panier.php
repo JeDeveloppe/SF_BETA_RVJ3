@@ -63,6 +63,11 @@ class Panier
      */
     private $livraison;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=MethodeEnvoi::class)
+     */
+    private $methodeEnvoi;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -172,6 +177,18 @@ class Panier
     public function setLivraison(?string $livraison): self
     {
         $this->livraison = $livraison;
+
+        return $this;
+    }
+
+    public function getMethodeEnvoi(): ?MethodeEnvoi
+    {
+        return $this->methodeEnvoi;
+    }
+
+    public function setMethodeEnvoi(?MethodeEnvoi $methodeEnvoi): self
+    {
+        $this->methodeEnvoi = $methodeEnvoi;
 
         return $this;
     }

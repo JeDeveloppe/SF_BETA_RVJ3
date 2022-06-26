@@ -146,10 +146,16 @@ class Boite
      */
     private $paniers;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DocumentLignes::class, mappedBy="boite")
+     */
+    private $documentLignes;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
         $this->paniers = new ArrayCollection();
+        $this->documentLignes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -404,6 +410,36 @@ class Boite
             // set the owning side to null (unless already changed)
             if ($panier->getBoite() === $this) {
                 $panier->setBoite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DocumentLignes>
+     */
+    public function getDocumentLignes(): Collection
+    {
+        return $this->documentLignes;
+    }
+
+    public function addDocumentLigne(DocumentLignes $documentLigne): self
+    {
+        if (!$this->documentLignes->contains($documentLigne)) {
+            $this->documentLignes[] = $documentLigne;
+            $documentLigne->setBoite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentLigne(DocumentLignes $documentLigne): self
+    {
+        if ($this->documentLignes->removeElement($documentLigne)) {
+            // set the owning side to null (unless already changed)
+            if ($documentLigne->getBoite() === $this) {
+                $documentLigne->setBoite(null);
             }
         }
 

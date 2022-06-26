@@ -80,63 +80,40 @@
         {% set formAction = "PAYER" %}
     {% endif %}
 
-    <form class="row justify-content-around mb-5" method="post" action="{{ formAction }}">
-        <div class="col-5 d-flex flex-wrap border border-primary bg-secondary py-2">
-            <h3 class="col-12 text-center">Facturation:</h3>
+    <form method="post" action="{{ formAction }}">
+  
+    <div class="row justify-content-around">
+
+        <div class="col-11 col-md-4 bg-secondary card p-2">
             {% if facturation_adresses | length > 0 %}
-                {% for adresse in facturation_adresses %}
-                    <div class="form-check col-6">
-                        <input class="form-check-input" type="radio" name="adresseFacturation" id="adresseFacturation" required 
-                        value="{{ adresse.lastName }} {{ adresse.firstName }}<br/>
-                            {{ adresse.adresse }}<br/>
-                            {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}">
-                        <label class="form-check-label" for="adresseFacturation">
-                            {{ adresse.lastName }} {{ adresse.firstName }}<br/>
-                            {{ adresse.adresse }}<br/>
-                            {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}
-                        </label>
-                    </div>
-                {% endfor %}
+                    <select class="form-control" name="adresse_facturation" id="" required>
+                        <option value="">Choisir une adresse de facturation...</option>
+                        {% for adresse in facturation_adresses %}
+                            <option value="{{ adresse.id }} ">{{ adresse.lastName }} {{ adresse.firstName }} - {{ adresse.adresse }} - {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</option>
+                        {% endfor %}
+                    </select>
                 {% if facturation_adresses | length < 2 %}
-                    <div class="col-12 text-center">
+                    <div class="col-12 py-2 text-center">
                         <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'facturation'}) }}">Créer une adresse de facturation...</a>
                     </div>
                 {% endif %}
             {% else %}
-                <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'facturation'}) }}">Créer une adresse de facturation...</a>
+                <div class="col-12 py-2">
+                    <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'facturation'}) }}">Créer une adresse de facturation...</a>
+                </div>
             {% endif %}
         </div>
 
-        <div class="col-5 d-flex flex-wrap border border-primary bg-secondary py-2">
-            {% if panier_occasions | length > 0 %}
-                <h3 class="col-12 text-center">Retrait:</h3>
-                    <div class="form-check col-6">
-                        <input class="form-check-input" type="radio" name="adresseLivraison" id="adresseLivraison" checked required
-                        value="COOP 5 POUR 100<br/>
-                            33 Rte de Trouville<br/>
-                            14 000 CAEN">
-                        <label class="form-check-label" for="adresseLivraison">
-                            COOP 5 pour 100<br/>
-                            33 Rte de Trouville<br/>
-                            14 000 CAEN
-                        </label>
-                    </div>
-            {% else %}
-                <h3 class="col-12 text-center">Livraison:</h3>
+        <div class="col-11 col-md-4 bg-secondary card p-2 mt-2 mt-md-0">
+            {% if panier_occasions | length < 1 %}
                 {% if livraison_adresses | length > 0 %}
-                    {% for adresse in livraison_adresses %}
-                        <div class="form-check col-6">
-                            <input class="form-check-input" type="radio" name="adresseLivraison" id="adresseLivraison" required
-                            value="{{ adresse.lastName }} {{ adresse.firstName }}<br/>
-                            {{ adresse.adresse }}<br/>
-                            {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}">
-                            <label class="form-check-label" for="adresseLivraison">
-                                {{ adresse.lastName }} {{ adresse.firstName }}<br/>
-                                {{ adresse.adresse }}<br/>
-                                {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}
-                            </label>
-                        </div>
-                    {% endfor %}
+                    <select class="form-control" name="adresse_livraison" id="" required>
+                        <option value="">Choisir une adresse de livraison / retrait...</option>
+                        {% for adresse in livraison_adresses %}
+                            <option value="{{ adresse.id }} ">{{ adresse.lastName }} {{ adresse.firstName }} - {{ adresse.adresse }} - {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</option>
+                        {% endfor %}
+                        <option value="{{ adresseRetrait[0].id }}" selected >Retrait à: {{ adresseRetrait[0].lastName }} {{ adresseRetrait[0].firstName }} - {{ adresseRetrait[0].adresse }} - {{ adresseRetrait[0].ville.villeCodePostal }} {{ adresseRetrait[0].ville.villeNom }}</option>
+                    </select>
                     {% if livraison_adresses | length < 2 %}
                         <div class="col-12 text-center">
                             <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'livraison'}) }}">Créer une adresse de livraison...</a>
@@ -145,18 +122,25 @@
                 {% else %}
                     <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'livraison'}) }}">Créer une adresse de livraison...</a>
                 {% endif %}
-            {% endif %}      
-        </div>
+            {% else %}
+                <select name="adresse_livraison" id="" class="form-control">
+                    <option value="{{ adresseRetrait[0].id }}" selected >Retrait à: {{ adresseRetrait[0].lastName }} {{ adresseRetrait[0].firstName }} - {{ adresseRetrait[0].adresse }} - {{ adresseRetrait[0].ville.villeCodePostal }} {{ adresseRetrait[0].ville.villeNom }}</option>
+                </select>
+            {% endif %}  
+        </div>    
 
+        {# AFFICHAGE DU BOUTON #}
         {% if panier_boites | length > 0 %}
-            <div class="col-10 mx-auto my-5">
-                <input class="col-12" type="submit" value="Demander un devis">
+            <div class="col-10 col-md-6 mx-auto my-5">
+                <input class="col-12 btn btn-primary btn-outline-secondary text-light" type="submit" value="Demander un devis">
             </div>
         {% else %}
-            <div class="col-10 mx-auto my-5">
-                <input class="col-12" type="submit" value="Payer">
+            <div class="col-10 col-md-6 mx-auto my-5">
+                <input class="col-12 btn btn-primary btn-outline-secondary text-light" type="submit" value="Payer">
             </div>
         {% endif %}
+    </div>
+
     </form>
 
 {% endblock %}
