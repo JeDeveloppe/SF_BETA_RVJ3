@@ -50,23 +50,22 @@ class DocumentService
 
     public function generateNewNumberOf($column){
 
-        $dateTimeImmutable = new DateTimeImmutable('now');
-        $year = $dateTimeImmutable->format('Y');
-        
+        $year = new DateTimeImmutable('now');
+        // $year = $dateTimeImmutable->format('Y');
+
         //il faudra trouver le dernier document de la base et incrementer de 1 pour le devis
         $lastDocument = $this->documentRepository->findLastEntryFromThisYear($column, $year);
-
         dd($lastDocument);
-        if($lastDocument == null){
+        if(count($lastDocument) == 0){
             //nouvelle annee
             $numero = 1;
+            return $this->incrementation($numero,$year);
+
         }else{
-            
-            dd("on cherche le dernier numero");
+            //dernier entree on recupere le numero de devis
+            return $numero = $lastDocument[0]->getNumeroDevis() + 1;
         }
-        
-        return $this->incrementation($numero,$year);
-   
+       
     }
 
     public function incrementation($numero,$year){
@@ -147,5 +146,8 @@ class DocumentService
 
         //on met en BDD les differentes lignes
         $this->em->flush();
+
+        //et on return le numero du devis
+        return $newNumero;
     }
 }

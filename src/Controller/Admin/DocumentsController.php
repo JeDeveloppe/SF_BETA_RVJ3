@@ -45,15 +45,15 @@ class DocumentsController extends AbstractController
             foreach($panier_occasions as $panier_occasion){
                 $totalOccasions = $totalOccasions + $panier_occasion->getOccasion()->getPriceHt();
             }
-        }
 
-        return $this->render('admin/documents/creation_devis.html.twig', [
-            'paniers' => $paniers,
-            'panier_occasions' => $panier_occasions,
-            'panier_boites' => $panier_boites,
-            'tva' => $tva,
-            'totalOccasions' => $totalOccasions
-        ]);
+            return $this->render('admin/documents/creation_devis.html.twig', [
+                'paniers' => $paniers,
+                'panier_occasions' => $panier_occasions,
+                'panier_boites' => $panier_boites,
+                'tva' => $tva,
+                'totalOccasions' => $totalOccasions,
+            ]);
+        }
     }
 
      /**
@@ -77,13 +77,36 @@ class DocumentsController extends AbstractController
         }else{
 
             //on sauvegarde dans la base
-            $documentService->saveDevisInDataBase($user, $request, $paniers, $demande);
+            $newNumero = $documentService->saveDevisInDataBase($user, $request, $paniers, $demande);
 
             //on supprime les entree du panier
             // $documentService->deletePanierFromUser($paniers);
 
-            return $this->redirectToRoute('devis');
+            return $this->redirectToRoute('document_lecture_devis', [
+                'devis' => $newNumero
+            ]);
         }
 
+    }
+
+      /**
+     * @Route("/admin/document/lecture-devis/{numeroDevis}", name="document_lecture_devis")
+     */
+    public function lectureDevis($numeroDevis, DocumentRepository $documentRepository): Response
+    {
+
+        $devis = $documentRepository->findOneBy(['numeroDevis' => $numeroDevis]);
+
+        if($devis == null){
+            //on signal le changement
+            $this->addFlash('warning', 'Devis inconnu!');
+            return $this->redirectToRoute('admin_accueil');
+        }else{
+
+
+            return $this->render('admin/documents/lecture_devis.html.twig', [
+                'devis' => $devis,
+            ]);
+        }
     }
 }

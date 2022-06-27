@@ -1,13 +1,14 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Accueil, les demandes{% endblock %}
+{% block title %}Devis{% endblock %}
 
 {% block body %}
-    {% set tva = tva %}
+    {% set tva = devis.tauxTva + 100 / 100 %}
 
-    <h3 class="col-12 text-center mb-5">Création d'un nouveau devis</h3>
+{{ dump(devis) }}
+    <h3 class="col-12 text-center mb-5">Devis numéro {{ devis.numeroDevis }}</h3>
 
-    <form action="{{ path('document_creation_devis', {'demande': paniers[0].etat,'user': paniers[0].user.id }) }}" method="POST">
+    <form action="" method="POST">
 
         {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
         {% if panier_occasions | length > 0 %}
