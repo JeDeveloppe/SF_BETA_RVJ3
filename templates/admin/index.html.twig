@@ -6,14 +6,21 @@
 
     <h3 class="col-12 text-center mb-5">Les demandes de devis</h3>
 
-    {% for demande in demandes %}
-        <div class="card my-2">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <div>#{{ demande.user.id }} / {{ demande.user.email }} - {{ demande.user.phone }}</div>
-                <a class="btn btn-primary" href="{{ path('document_demande', {'slug': demande.etat }) }}">Commencer le devis</a>
+    <div class="row justify-content-center">
+        {% if demandes | length > 0 %}
+            {% for demande in demandes %}
+                <div class="card col-9 my-2 p-0">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>#{{ demande.user.id }} / {{ demande.user.email }} - {{ demande.user.phone }}</div>
+                        <a class="btn btn-primary" href="{{ path('document_demande', {'slug': demande.etat }) }}">Commencer le devis</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-9 card bg-secondary text-center p-0">
+                Aucunes demandes !
             </div>
-        </div>
-    {% endfor %}
-
+        {% endif %}
+    </div>
 
 {% endblock %}
