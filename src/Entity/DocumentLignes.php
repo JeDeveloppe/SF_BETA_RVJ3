@@ -43,6 +43,11 @@ class DocumentLignes
      */
     private $document;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $reponse;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,4 +112,17 @@ class DocumentLignes
 
         return $this;
     }
+
+    public function getReponse(): ?string
+    {
+        return $this->reponse;
+    }
+
+    public function setReponse(?string $reponse): self
+    {
+        $this->reponse = $reponse;
+
+        return $this;
+    }
+
 }

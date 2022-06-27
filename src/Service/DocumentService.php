@@ -50,16 +50,17 @@ class DocumentService
 
     public function generateNewNumberOf($column){
 
-        $year = new DateTimeImmutable('now');
-        // $year = $dateTimeImmutable->format('Y');
+        $dateTimeImmutable = new DateTimeImmutable('now');
+        $year = $dateTimeImmutable->format('Y');
+        $month = $dateTimeImmutable->format('m');
 
         //il faudra trouver le dernier document de la base et incrementer de 1 pour le devis
         $lastDocument = $this->documentRepository->findLastEntryFromThisYear($column, $year);
-        dd($lastDocument);
+  
         if(count($lastDocument) == 0){
             //nouvelle annee
             $numero = 1;
-            return $this->incrementation($numero,$year);
+            return $this->incrementation($numero,$year,$month);
 
         }else{
             //dernier entree on recupere le numero de devis
@@ -68,19 +69,19 @@ class DocumentService
        
     }
 
-    public function incrementation($numero,$year){
+    public function incrementation($numero,$year,$month){
         $numeroCreer = "";
         //on verifie la longueur de id
         $longueur = strlen($numero); //longueur du numero
 
         if($longueur < 2){                        //moins de 10
-                $numeroCreer = $year."000".$numero;
+                $numeroCreer = $year.$month."000".$numero;
         }else if($longueur == 2){                 //de 10 à 99
-                $numeroCreer = $year."00".$numero;
+                $numeroCreer = $year.$month."00".$numero;
         }else if($longueur == 3){                 //de 100 à 999
-                $numeroCreer = $year."0".$numero;
+                $numeroCreer = $year.$month."0".$numero;
         }else if($longueur == 4){                 //de 1000 à 9999
-                $numeroCreer = $year.$numero;
+                $numeroCreer = $year.$month.$numero;
         }
 
         return $numeroCreer;
@@ -119,7 +120,8 @@ class DocumentService
         $this->em->persist($document);
         $this->em->flush();
 
-        $lignesDemandeBoite = $request->request->get('prix');
+        $lignesDemandeBoitePrix = $request->request->get('prix');
+        $lignesDemandeBoiteReponse = $request->request->get('reponse');
 
         $panier_occasions = $this->panierRepository->findBy(['etat' => $demande,'user' => $user, 'boite' => null]);
         $panier_boites = $this->panierRepository->findBy(['etat' => $demande,'user' => $user, 'occasion' => null]);
@@ -130,7 +132,8 @@ class DocumentService
             $documentLigne->setBoite($panier->getBoite())
                           ->setDocument($document)
                           ->setMessage($panier->getMessage())
-                          ->setPrixVente($lignesDemandeBoite[$key] * 100);
+                          ->setPrixVente($lignesDemandeBoitePrix[$key] * 100)
+                          ->setReponse($lignesDemandeBoiteReponse[$key]);
             $this->em->persist($documentLigne);
         }
 

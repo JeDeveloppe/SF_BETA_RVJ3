@@ -10,7 +10,7 @@
             <th>Prix de vente TTC</th>
         </thead>
         <tbody>
-            {% for occasion in panier_occasions %}
+            {% for occasion in occasions %}
                 <td>{{ occasion.occasion.boite.nom }} - {{ occasion.occasion.boite.editeur }} - {{ occasion.occasion.boite.annee }}</td>
                 <td>{{ occasion.occasion.reference }}</td>
                 <td>1</td>

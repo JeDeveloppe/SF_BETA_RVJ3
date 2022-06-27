@@ -10,12 +10,12 @@
     <form action="{{ path('document_creation_devis', {'demande': paniers[0].etat,'user': paniers[0].user.id }) }}" method="POST">
 
         {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
-        {% if panier_occasions | length > 0 %}
+        {% if occasions | length > 0 %}
             {% include "admin/documents/includes/table_occasions.html.twig" %}
         {% endif %}
 
         {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
-        {% if panier_boites | length > 0 %}
+        {% if boites | length > 0 %}
             {% include "admin/documents/includes/table_pieces_detachees.html.twig" %}
         {% endif %}
 

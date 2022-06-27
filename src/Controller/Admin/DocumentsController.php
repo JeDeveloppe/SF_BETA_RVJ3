@@ -2,21 +2,15 @@
 
 namespace App\Controller\Admin;
 
-use DateTimeImmutable;
-use App\Entity\Document;
-use App\Entity\MethodeEnvoi;
-use App\Entity\DocumentLignes;
-use App\Form\MethodeEnvoiType;
-use App\Repository\DocumentRepository;
+use App\Repository\DocumentLigneRepository;
 use App\Service\DocumentService;
-use App\Repository\UserRepository;
 use App\Repository\PanierRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\DocumentRepository;
+use App\Repository\DocumentLignesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
-use App\Repository\MethodeEnvoiRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DocumentsController extends AbstractController
@@ -37,27 +31,28 @@ class DocumentsController extends AbstractController
             $informationsLegales = $informationsLegalesRepository->findAll();
             $tva = $informationsLegales[0]->getTauxTva();
 
-            $panier_occasions = $panierRepository->findBy(['etat' => $slug, 'boite' => null]);
-            $panier_boites = $panierRepository->findBy(['etat' => $slug, 'occasion' => null]);
+            $occasions = $panierRepository->findBy(['etat' => $slug, 'boite' => null]);
+            $boites = $panierRepository->findBy(['etat' => $slug, 'occasion' => null]);
 
             //ON FAIT LE TOTAL DES OCCASIONS
             $totalOccasions = 0;
-            foreach($panier_occasions as $panier_occasion){
-                $totalOccasions = $totalOccasions + $panier_occasion->getOccasion()->getPriceHt();
+            foreach($occasions as $occasion){
+                $totalOccasions = $totalOccasions + $occasion->getOccasion()->getPriceHt();
             }
 
-            return $this->render('admin/documents/creation_devis.html.twig', [
+
+            return $this->render('admin/documents/demandes/lecture_demande.html.twig', [
                 'paniers' => $paniers,
-                'panier_occasions' => $panier_occasions,
-                'panier_boites' => $panier_boites,
+                'occasions' => $occasions,
+                'boites' => $boites,
                 'tva' => $tva,
-                'totalOccasions' => $totalOccasions,
+                'totalOccasions' => $totalOccasions
             ]);
         }
     }
 
      /**
-     * @Route("/admin/document/creation-devis/{demande}/{user}", name="document_creation_devis")
+     * @Route("/admin/document/demande/{demande}/{user}", name="document_creation_devis")
      */
     public function creationDevis(
         $demande,
@@ -80,7 +75,7 @@ class DocumentsController extends AbstractController
             $newNumero = $documentService->saveDevisInDataBase($user, $request, $paniers, $demande);
 
             //on supprime les entree du panier
-            // $documentService->deletePanierFromUser($paniers);
+            $documentService->deletePanierFromUser($paniers);
 
             return $this->redirectToRoute('document_lecture_devis', [
                 'devis' => $newNumero
@@ -90,9 +85,13 @@ class DocumentsController extends AbstractController
     }
 
       /**
-     * @Route("/admin/document/lecture-devis/{numeroDevis}", name="document_lecture_devis")
+     * @Route("/admin/document/devis/lecture-devis/{numeroDevis}", name="document_lecture_devis")
      */
-    public function lectureDevis($numeroDevis, DocumentRepository $documentRepository): Response
+    public function lectureDevis(
+        $numeroDevis,
+        DocumentRepository $documentRepository,
+        DocumentLignesRepository $documentLignesRepository
+        ): Response
     {
 
         $devis = $documentRepository->findOneBy(['numeroDevis' => $numeroDevis]);
@@ -103,9 +102,27 @@ class DocumentsController extends AbstractController
             return $this->redirectToRoute('admin_accueil');
         }else{
 
+            $occasions = $documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
+            $boites = $documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
 
-            return $this->render('admin/documents/lecture_devis.html.twig', [
+            //ON FAIT LE TOTAL DES OCCASIONS
+            $totalOccasions = 0;
+            foreach($occasions as $occasion){
+                $totalOccasions = $totalOccasions + $occasion->getOccasion()->getPriceHt();
+            }
+
+            //ON FAIT LE TOTAL DES PIECES DETACHEES
+            $totalDetachees = 0;
+            foreach($boites as $boite){
+                $totalDetachees = $totalDetachees + $boite->getPrixVente();
+            }
+
+            return $this->render('admin/documents/devis/lecture_devis.html.twig', [
                 'devis' => $devis,
+                'occasions' => $occasions,
+                'boites' => $boites,
+                'totalOccasions' => $totalOccasions,
+                'totalDetachees' => $totalDetachees / 100
             ]);
         }
     }

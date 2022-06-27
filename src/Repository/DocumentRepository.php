@@ -49,7 +49,7 @@ class DocumentRepository extends ServiceEntityRepository
     {
 
         return $this->createQueryBuilder('d')
-            ->where('d.createdAt = YEAR(:year)')
+            ->where('YEAR(d.createdAt) = :year')
             ->andWhere('d.'.$column.' IS NOT NULL')
             ->setParameter('year', $year)
             ->orderBy('d.id', 'DESC')

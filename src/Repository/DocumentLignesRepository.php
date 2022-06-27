@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method DocumentLignes[]    findAll()
  * @method DocumentLignes[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DocumentLigneRepository extends ServiceEntityRepository
+class DocumentLignesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

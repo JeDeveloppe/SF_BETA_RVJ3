@@ -4,19 +4,19 @@
 
 {% block body %}
     {% set tva = devis.tauxTva + 100 / 100 %}
+    {% set totalDetachees = totalDetachees %}
 
-{{ dump(devis) }}
     <h3 class="col-12 text-center mb-5">Devis numéro {{ devis.numeroDevis }}</h3>
 
     <form action="" method="POST">
 
         {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
-        {% if panier_occasions | length > 0 %}
+        {% if occasions | length > 0 %}
             {% include "admin/documents/includes/table_occasions.html.twig" %}
         {% endif %}
 
         {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
-        {% if panier_boites | length > 0 %}
+        {% if boites | length > 0 %}
             {% include "admin/documents/includes/table_pieces_detachees.html.twig" %}
         {% endif %}
 
@@ -26,7 +26,7 @@
             <div class="card p-0">
                 <div class="card-header">
                     <div class="card-text text-center">
-                        {% set adresseLivraisons = paniers[0].livraison | split('<br/>') %}
+                        {% set adresseLivraisons = devis.adresseLivraison | split('<br/>') %}
                         {% for adresse in adresseLivraisons %}
                             {{ adresse }}
                         {% endfor %}
@@ -41,14 +41,14 @@
                             </select>
                         
                         </div>
-                        <div class="col-5"><input class="form-control" type="text" name="livraison" placeholder="Prix TTC... 0.00" pattern="^\d+(?:[.]\d{2})$" id="selectLivraison" onkeyup="calculDevis()" required /></div>
+                        <div class="col-5"><input value="{% if devis.totalLivraison is defined %}{{ (devis.totalLivraison / 100) |number_format(2, '.', ',') }}{% endif %}" class="form-control" type="text" name="livraison" placeholder="Prix TTC... 0.00" pattern="^\d+(?:[.]\d{2})$" id="selectLivraison" onkeyup="calculDevis()" required /></div>
                     </div>
                 </div>
             </div>
         </div>
 
 
-        <div class="row justify-content-center my-5">
+    <div class="row justify-content-center my-5">
             <h3>Totaux et boutons:</h3>
 
             <div class="col-12 d-flex">
@@ -88,18 +88,20 @@
 
                 {# PARTIE BOUTONS #}
                 <div class="col-6">
-                    <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Créer le devis</button>
-                    <input type="hidden" name="user" value="{{ paniers[0].user.id }}">
-                    <input type="hidden" name="demande" value="{{ paniers[0].etat }}">
-                    <a class="btn btn-lg btn-outline-warning" href="">Envoyer mail pas de pièces</a>
+                    <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Sauvegarder</button>
+                    <input type="hidden" name="user" value="{{ devis.user.id }}">
+                    <input type="hidden" name="demande" value="{{ devis.numeroDevis }}">
+                    <a class="btn btn-lg btn-outline-warning" href="">Supprimer</a>
                 </div>
             </div>
         </div>
     </form>
 
+
 <script>
     let tva = {{ tva }};
     let totalOccasions = {{ totalOccasions * tva }};
+    let totalDetachees = {{ totalDetachees }};
 
     let divTotalOccasions = document.getElementById('totalOccasions');
     let divTotalPiecesDetachees = document.getElementById('totalPiecesDetachees');
@@ -184,7 +186,7 @@
     let totalGeneralTTC = notNull(totalOccasions) + notNull(totalLignesPiecesDetachees) + notNull(totalLivraison);
     let totalGeneralHT = totalGeneralTTC / tva;
 
-    divTotalPiecesDetachees.innerHTML = '<input type="text" class="form-control" name="totalPiecesDetachees" value="0.00" class="text-right" size="5" readonly>';
+    divTotalPiecesDetachees.innerHTML = '<input type="text" class="form-control" name="totalPiecesDetachees" value="'+totalDetachees.toFixed(2)+'" class="text-right" size="5" readonly>';
     divTotalLivraison.innerHTML = '<input type="text" class="form-control" name="totalLivraison" value="0.00" class="text-right" size="5" readonly>';
     divTotalGeneralHT.innerHTML = '<input type="text" class="form-control" name="totalGeneralHT" value="'+totalGeneralHT.toFixed(2)+'" class="text-right" size="5" readonly>';
     divTotalGeneralTTC.innerHTML = '<input type="text" class="form-control" name="totalGeneralTTC" value="'+totalGeneralTTC.toFixed(2)+'" class="text-right" size="5" readonly>';
