@@ -75,7 +75,7 @@ class DocumentsController extends AbstractController
             $newNumero = $documentService->saveDevisInDataBase($user, $request, $paniers, $demande);
 
             //on supprime les entree du panier
-            $documentService->deletePanierFromUser($paniers);
+            //$documentService->deletePanierFromUser($paniers);
 
             return $this->redirectToRoute('document_lecture_devis', [
                 'devis' => $newNumero

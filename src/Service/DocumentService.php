@@ -52,38 +52,45 @@ class DocumentService
 
         $dateTimeImmutable = new DateTimeImmutable('now');
         $year = $dateTimeImmutable->format('Y');
+        $month = $dateTimeImmutable->format('m');
 
-        //il faudra trouver le dernier document de la base et incrementer de 1 pour le devis
-        $lastDocument = $this->documentRepository->findLastEntryFromThisYear($column, $year);
+        //il faudra trouver le dernier document de la base et incrementer de 1 pour le document
+        $lastDocumentByYear = $this->documentRepository->findLastEntryFromThisYear($column, $year);
   
-        if(count($lastDocument) == 0){
-            //nouvelle annee
+        //si pas d'entree alors nouvelle annee
+        if(count($lastDocumentByYear) == 0){
+            
             $numero = 1;
-            return $this->incrementation($numero,$year);
+            return $this->numberConstruction($numero,$year,$month);
 
         }else{
+
             //dernier entree on recupere le numero de devis
-            return $numero = $lastDocument[0]->getNumeroDevis() + 1;
+            $numero = substr($lastDocumentByYear[0]->getNumeroDevis(), -4) + 1; //2022010001 reste 0001 + 1
+
+            return $this->numberConstruction($numero,$year,$month);
         }
        
     }
 
-    public function incrementation($numero,$year){
-        $numeroCreer = "";
-        //on verifie la longueur de id
-        $longueur = strlen($numero); //longueur du numero
+    public function numberConstruction($numero,$year,$month){
+        
+        if($numero == 1){
+            return $year.$month.'0001';
+        }else{
+            $longueur = strlen($numero); //dernier enregistrement
 
-        if($longueur < 2){                        //moins de 10
-                $numeroCreer = $year."000".$numero;
-        }else if($longueur == 2){                 //de 10 à 99
-                $numeroCreer = $year."00".$numero;
-        }else if($longueur == 3){                 //de 100 à 999
-                $numeroCreer = $year."0".$numero;
-        }else if($longueur == 4){                 //de 1000 à 9999
-                $numeroCreer = $year.$numero;
+            if($longueur < 2){                        //moins de 10
+                    $numeroCreer = $year.$month."000".$numero;
+            }else if($longueur == 2){                 //de 10 à 99
+                    $numeroCreer = $year.$month."00".$numero;
+            }else if($longueur == 3){                 //de 100 à 999
+                    $numeroCreer = $year.$month."0".$numero;
+            }else if($longueur == 4){                 //de 1000 à 9999
+                    $numeroCreer = $year.$month.$numero;
+            }
+            return $numeroCreer;
         }
-
-        return $numeroCreer;
     }
 
     public function deletePanierFromUser($paniers){
