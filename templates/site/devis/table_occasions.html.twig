@@ -1,0 +1,22 @@
+{% set totalOccasions = 0 %}
+
+<div class="row mb-4">
+    <h3>Occasion(s):</h3>
+    <table class="table table-striped text-center">
+        <thead>
+            <th>Nom / Éditeur / Année</th>
+            <th>Référence</th>
+            <th>Quantité</th>
+            <th>Prix de vente TTC</th>
+        </thead>
+        <tbody>
+            {% for occasion in occasions %}
+                <td>{{ occasion.occasion.boite.nom }} - {{ occasion.occasion.boite.editeur }} - {{ occasion.occasion.boite.annee }}</td>
+                <td>{{ occasion.occasion.reference }}</td>
+                <td>1</td>
+                <td>{{ (occasion.occasion.priceHt * tva) | number_format(2, '.', ',') }}</td>
+                {% set totalOccasions = totalOccasions + occasion.occasion.priceHt %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

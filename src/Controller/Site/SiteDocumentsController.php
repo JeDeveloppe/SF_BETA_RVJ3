@@ -51,7 +51,7 @@ class SiteDocumentsController extends AbstractController
                 $totalDetachees = $totalDetachees + $boite->getPrixVente();
             }
 
-            return $this->render('admin/documents/devis/lecture_devis.html.twig', [
+            return $this->render('site/devis/lecture_devis.html.twig', [
                 'devis' => $devis,
                 'occasions' => $occasions,
                 'boites' => $boites,

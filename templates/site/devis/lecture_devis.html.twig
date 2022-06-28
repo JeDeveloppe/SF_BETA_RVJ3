@@ -1,0 +1,92 @@
+{% extends 'site/base.html.twig' %}
+
+{% block title %}Devis{% endblock %}
+
+{% block body %}
+    {% set tva = devis.tauxTva + 100 / 100 %}
+    {% set totalDetachees = totalDetachees %}
+    {% set disabled = "disabled" %}
+
+    <h3 class="col-12 text-center my-5">
+        Devis numéro {{ devis.numeroDevis }} <br>
+        du {{ devis.createdAt|date('d-m-Y') }}
+    </h3>
+
+    <div class="col-12 text-end">
+        {% include "site/devis/_delete_form.html.twig" %}
+    </div>
+
+        {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
+        {% if occasions | length > 0 %}
+            {% include "site/devis/table_occasions.html.twig" %}
+        {% endif %}
+
+        {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
+        {% if boites | length > 0 %}
+            {% include "site/devis/table_pieces_detachees.html.twig" %}
+        {% endif %}
+
+        {# PARITE LIVRAISON #}
+        <div class="row justify-content-center my-5">
+            <h3 class="col-12 text-start">Facturation / Livraison / Retrait:</h3>
+
+            <div class="col-11">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>Facturation:</td>
+                        <td>Livraison / retrait:</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% set facturations = devis.adresseFacturation|split('<br/>') %}
+                            {% for facturation in facturations %}
+                                {{ facturation }}<br/>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% set livraisons = devis.adresseLivraison|split('<br/>') %}
+                            {% for livraison in livraisons %}
+                                {{ livraison }}<br/>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+
+    <div class="row justify-content-center my-5">
+        <h3 class="col-12 text-start">Totaux:</h3>
+
+        <div class="col-11">
+            <table class="table table-bordered">
+                <tr>
+                    <td>Livraison:</td>
+                    <td>{{ (devis.totalLivraison / 100) |number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr>
+                    <td>Total HT:</td>
+                    <td>{{ (devis.totalHt / 100) |number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr>
+                    <td>Total TTC:</td>
+                    <td>{{ (devis.totalTtc / 100) |number_format(2, '.', ',')}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    {# PARTIE BOUTONS #}
+    <div class="row my-5">
+        <div class="col-6 text-center">
+            <a href="" class="btn btn-lg btn-outline-success" >Payer</a>
+        </div>
+        <div class="col-6 text-center">
+            <a href="" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
+        </div>
+    </div>
+
+
+
+{% endblock %}
