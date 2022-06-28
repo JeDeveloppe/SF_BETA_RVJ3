@@ -5,8 +5,13 @@
 {% block body %}
     {% set tva = devis.tauxTva + 100 / 100 %}
     {% set totalDetachees = totalDetachees %}
+    {% set disabled = "disabled" %}
 
     <h3 class="col-12 text-center mb-5">Devis numéro {{ devis.numeroDevis }}</h3>
+
+    <div class="col-12 text-end">
+        {% include "admin/documents/devis/_delete_form.html.twig" %}
+    </div>
 
     <form action="" method="POST">
 
@@ -49,7 +54,7 @@
 
 
     <div class="row justify-content-center my-5">
-            <h3>Totaux et boutons:</h3>
+            <h3>Totaux:</h3>
 
             <div class="col-12 d-flex">
                 {# PARTIE TOTAUX #}
@@ -91,7 +96,6 @@
                     <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Sauvegarder</button>
                     <input type="hidden" name="user" value="{{ devis.user.id }}">
                     <input type="hidden" name="demande" value="{{ devis.numeroDevis }}">
-                    <a class="btn btn-lg btn-outline-warning" href="">Supprimer</a>
                 </div>
             </div>
         </div>

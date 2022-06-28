@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Repository\DocumentLigneRepository;
 use App\Service\DocumentService;
 use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
@@ -11,9 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class DocumentsController extends AbstractController
+class AdminDocumentsController extends AbstractController
 {
     /**
      * @Route("/admin/document/lecture-demande/{slug}", name="document_demande")
@@ -75,17 +75,17 @@ class DocumentsController extends AbstractController
             $newNumero = $documentService->saveDevisInDataBase($user, $request, $paniers, $demande);
 
             //on supprime les entree du panier
-            //$documentService->deletePanierFromUser($paniers);
+            $documentService->deletePanierFromUser($paniers);
 
-            return $this->redirectToRoute('document_lecture_devis', [
-                'devis' => $newNumero
+            return $this->redirectToRoute('lecture_devis', [
+                'numeroDevis' => $newNumero
             ]);
         }
 
     }
 
-      /**
-     * @Route("/admin/document/devis/lecture-devis/{numeroDevis}", name="document_lecture_devis")
+    /**
+     * @Route("/admin/document/devis/lecture-devis/{numeroDevis}", name="lecture_devis")
      */
     public function lectureDevis(
         $numeroDevis,
@@ -101,6 +101,14 @@ class DocumentsController extends AbstractController
             $this->addFlash('warning', 'Devis inconnu!');
             return $this->redirectToRoute('admin_accueil');
         }else{
+
+            $moreRecentDevis = $documentRepository->findAMoreRecentDevis($numeroDevis);
+
+            if(count($moreRecentDevis) == 1){
+                $suppressionDevis = true;
+            }else{
+                $suppressionDevis = false;
+            }
 
             $occasions = $documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
             $boites = $documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
@@ -122,8 +130,58 @@ class DocumentsController extends AbstractController
                 'occasions' => $occasions,
                 'boites' => $boites,
                 'totalOccasions' => $totalOccasions,
-                'totalDetachees' => $totalDetachees / 100
+                'totalDetachees' => $totalDetachees / 100,
+                'suppressionDevis' => $suppressionDevis
             ]);
+        }
+    }
+
+    /**
+     * @Route("/admin/document/devis/delete-devis/{numeroDevis}", name="delete_devis")
+     */
+    public function deleteDevis(
+        $numeroDevis,
+        DocumentRepository $documentRepository,
+        DocumentLignesRepository $documentLignesRepository,
+        EntityManagerInterface $em
+        ): Response
+    {
+
+        $devis = $documentRepository->findOneBy(['numeroDevis' => $numeroDevis]);
+
+        if($devis == null){
+            //on signal le changement
+            $this->addFlash('warning', 'Devis inconnu!');
+            return $this->redirectToRoute('admin_accueil');
+        }else{
+
+            $occasions = $documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
+            $boites = $documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
+
+ 
+            //on supprime les demandes de piece
+            foreach($boites as $boite){
+                $documentLignesRepository->remove($boite);
+            }
+
+            foreach($occasions as $Loccasion){
+                //on recupere la boite et on met en ligne
+                $occasion = $Loccasion->getOccasion();
+                $occasion->setIsOnLine(true);
+                $em->merge($occasion);
+                //on supprime la ligne
+                $documentLignesRepository->remove($Loccasion);
+            }
+
+            //finalement on supprime le document qui est en devis
+            $documentRepository->remove($devis);
+
+            $em->flush();
+
+            //on signal le changement
+            $this->addFlash('success', 'Devis supprimer!');
+            //on retourne à l'accueil
+            return $this->redirectToRoute('admin_accueil');
         }
     }
 }

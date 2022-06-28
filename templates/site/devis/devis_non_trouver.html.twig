@@ -1,0 +1,23 @@
+{% extends 'site/base.html.twig' %}
+
+{% block title %}Devis non trouver{% endblock %}
+
+
+{% block body %}
+
+    <div class="row justify-content-center my-5">
+
+        <div class="jumbotron col-11 col-md-6">
+        <h1 class="display-4">Devis non trouvé !</h1>
+        <p class="lead">La consultation de ce devis est impossible!</p>
+        <hr class="my-4">
+        <p>Devis inconnu ou supprimer !</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="{{ path('accueil') }}" role="button">Retour à l'accueil...</a>
+        </p>
+        </div>
+
+    </div>
+
+
+{% endblock %}

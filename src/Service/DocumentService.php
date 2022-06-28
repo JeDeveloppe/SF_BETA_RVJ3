@@ -48,7 +48,7 @@ class DocumentService
         return $randomString;
     }
 
-    public function generateNewNumberOf($column){
+    public function generateNewNumberOf($column, $methode){
 
         $dateTimeImmutable = new DateTimeImmutable('now');
         $year = $dateTimeImmutable->format('Y');
@@ -66,7 +66,7 @@ class DocumentService
         }else{
 
             //dernier entree on recupere le numero de devis
-            $numero = substr($lastDocumentByYear[0]->getNumeroDevis(), -4) + 1; //2022010001 reste 0001 + 1
+            $numero = substr($lastDocumentByYear[0]->$methode(), -4) + 1; //2022010001 reste 0001 + 1
 
             return $this->numberConstruction($numero,$year,$month);
         }
@@ -75,7 +75,7 @@ class DocumentService
 
     public function numberConstruction($numero,$year,$month){
         
-        if($numero == 1){
+        if($numero == 1){ //premier enregistrement de l'annee
             return $year.$month.'0001';
         }else{
             $longueur = strlen($numero); //dernier enregistrement
@@ -105,7 +105,8 @@ class DocumentService
         $informationsLegales = $this->informationsLegalesRepository->findAll();
         $tva = $informationsLegales[0]->getTauxTva();
 
-        $newNumero = $this->generateNewNumberOf("numeroDevis");
+        //ON genere un nouveau numero
+        $newNumero = $this->generateNewNumberOf("numeroDevis", "getNumeroDevis");
 
         //puis on met dans la base
         $document = new Document();

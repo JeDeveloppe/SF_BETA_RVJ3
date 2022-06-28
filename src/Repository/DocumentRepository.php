@@ -59,7 +59,16 @@ class DocumentRepository extends ServiceEntityRepository
         ;
     }
 
-
+    public function findAMoreRecentDevis($numberDevis)
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.numeroDevis > :numero')
+            ->setParameter('numero', $numberDevis)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     /*
     public function findOneBySomeField($value): ?Document
     {
