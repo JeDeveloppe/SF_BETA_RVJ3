@@ -184,4 +184,18 @@ class AdminDocumentsController extends AbstractController
             return $this->redirectToRoute('admin_accueil');
         }
     }
+
+    /**
+     * @Route("/admin/document/recherche", name="document_recherche")
+     */
+    public function rechercheDocument(Request $request): Response
+    {
+
+      
+
+
+        return $this->render('admin/documents/demandes/lecture_demande.html.twig', [
+            'form' => $form
+        ]);
+    }
 }

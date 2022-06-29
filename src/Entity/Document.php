@@ -100,6 +100,11 @@ class Document
      * @ORM\JoinColumn(nullable=false)
      */
     private $envoi;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isDeleteByUser;
     
     public function __construct()
     {
@@ -317,6 +322,18 @@ class Document
     public function setEnvoi(?MethodeEnvoi $envoi): self
     {
         $this->envoi = $envoi;
+
+        return $this;
+    }
+
+    public function getIsDeleteByUser(): ?bool
+    {
+        return $this->isDeleteByUser;
+    }
+
+    public function setIsDeleteByUser(?bool $isDeleteByUser): self
+    {
+        $this->isDeleteByUser = $isDeleteByUser;
 
         return $this;
     }

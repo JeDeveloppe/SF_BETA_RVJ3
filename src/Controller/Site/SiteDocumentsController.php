@@ -13,13 +13,38 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SiteDocumentsController extends AbstractController
 {
     /**
-     * @Route("/devis-inconnu", name="devis_non_trouver")
+     * @Route("/devis/suppression-par-utilisateur/{token}", name="suppression_devis_par_utilisateur")
      */
-    public function devisNonTrouver(): Response
+    public function deleteByUser($token, DocumentRepository $documentRepository, EntityManagerInterface $em): Response
     {
-        return $this->render('site/devis/devis_non_trouver.html.twig');
+       //on cherche le devis par le token et s'il n'est pas deja annuler par l'utilisateur
+        $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => null]);
+
+        if($devis == null){
+
+            $tableau = [
+                'h1' => 'Devis non trouvé !',
+                'p1' => 'La consultation de ce devis est impossible!',
+                'p2' => 'Devis inconnu ou supprimer !'
+            ];
+
+        }else{
+            //on met a jour la base
+            $devis->setIsDeleteByUser(true);
+            $em->merge($devis);
+            $em->flush();
+
+            $tableau = [
+                'h1' => 'Opération terminée !',
+                'p1' => 'La consultation de ce devis est devenue impossible!',
+                'p2' => 'Devis supprimé par vous même !'
+            ]; 
+        }
+        
+        return $this->render('site/devis/devis_end.html.twig', ['tableau' => $tableau]);
+
     }
-    
+
     /**
      * @Route("/devis/{token}", name="lecture_devis_avant_paiement")
      */
@@ -30,10 +55,19 @@ class SiteDocumentsController extends AbstractController
         ): Response
     {
 
-        $devis = $documentRepository->findOneBy(['token' => $token]);
+        //on cherche le devis par le token et s'il n'est pas deja annuler par l'utilisateur
+        $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => null]);
 
         if($devis == null){
-            return $this->redirectToRoute('devis_non_trouver');
+
+            $tableau = [
+                'h1' => 'Devis non trouvé !',
+                'p1' => 'La consultation de ce devis est impossible!',
+                'p2' => 'Devis inconnu ou supprimer !'
+            ];
+
+            return $this->render('site/devis/devis_end.html.twig', ['tableau' => $tableau]);
+
         }else{
 
             $occasions = $documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);

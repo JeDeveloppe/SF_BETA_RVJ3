@@ -9,6 +9,16 @@
 
     <form action="{{ path('document_creation_devis', {'demande': paniers[0].etat,'user': paniers[0].user.id }) }}" method="POST">
 
+        {# INFORMATION CLIENT #}
+        <div class="row justify-content-center my-5">
+            <h3>Utilisateur:</h3>
+            <div class="card p-0 col-11">
+                <div class="card-header text-center">
+                    {{ paniers[0].user.email }} - {{ paniers[0].user.phone }} - Pays: {{ paniers[0].user.country.name }} - Département: {{ paniers[0].user.department }}
+                </div>
+            </div>
+        </div>
+
         {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
         {% if occasions | length > 0 %}
             {% include "admin/documents/includes/table_occasions.html.twig" %}
@@ -24,14 +34,14 @@
             <h3>Livraison / retrait:</h3>
             <div class="card p-0">
                 <div class="card-header">
-                    <div class="card-text text-center">
+                    <div class="col-12 text-center">
                         {% set adresseLivraisons = paniers[0].livraison | split('<br/>') %}
                         {% for adresse in adresseLivraisons %}
                             {{ adresse }}
                         {% endfor %}
                     </div>
-                    <div class="my-3 card-text d-flex justify-content-around">
-                        <div class="col-5">
+                    <div class="my-3 col-12 d-flex justify-content-around align-items-center">
+                        <div class="col-6 text-center">
                             <select name="envoi" required>
                                 <option value="">Choisissez un mode d'envoi / retrait...</option>
                                 <option value="1">Envoi par la poste</option>
@@ -40,7 +50,7 @@
                             </select>
                         
                         </div>
-                        <div class="col-5"><input class="form-control" type="text" name="livraison" placeholder="Prix TTC... 0.00" pattern="^\d+(?:[.]\d{2})$" id="selectLivraison" onkeyup="calculDevis()" required /></div>
+                        <div class="col-6 text-center"><input class="form-control" type="text" name="livraison" placeholder="Prix TTC... 0.00" pattern="^\d+(?:[.]\d{2})$" id="selectLivraison" onkeyup="calculDevis()" required /></div>
                     </div>
                 </div>
             </div>

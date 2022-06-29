@@ -12,10 +12,6 @@
         du {{ devis.createdAt|date('d-m-Y') }}
     </h3>
 
-    <div class="col-12 text-end">
-        {% include "site/devis/_delete_form.html.twig" %}
-    </div>
-
         {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
         {% if occasions | length > 0 %}
             {% include "site/devis/table_occasions.html.twig" %}
@@ -83,7 +79,7 @@
             <a href="" class="btn btn-lg btn-outline-success" >Payer</a>
         </div>
         <div class="col-6 text-center">
-            <a href="" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
+            <a href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
         </div>
     </div>
 

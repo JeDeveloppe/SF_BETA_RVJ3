@@ -30,17 +30,17 @@ class PaysController extends AbstractController
      */
     public function new(Request $request, PaysRepository $paysRepository): Response
     {
-        $pay = new Pays();
-        $form = $this->createForm(PaysType::class, $pay);
+        $pays = new Pays();
+        $form = $this->createForm(PaysType::class, $pays);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $paysRepository->add($pay);
+            $paysRepository->add($pays);
             return $this->redirectToRoute('app_pays_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('admin/pays/new.html.twig', [
-            'pay' => $pay,
+            'pay' => $pays,
             'form' => $form,
         ]);
     }
