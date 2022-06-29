@@ -1,0 +1,52 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Recherche de documents{% endblock %}
+
+{% block body %}
+
+    <h3 class="col-12 text-center mb-5">Recherche de document</h3>
+
+    {{ form(form) }}
+
+    {% if datas is defined %} 
+        {% if datas | length > 0 %}
+            <table class="table table-striped text-center align-middle my-5">
+                <thead>
+                    {% if form.vars.value.document == "numeroDevis" %}
+                        <th>Devis</th>
+                    {% else %}
+                        <th>Facture</th>
+                    {% endif %}
+                    <th>Facturation</th>
+                    <th>Livraison</th>
+                    <th>Total TTC</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    {% for data in datas %}
+                        <tr>
+                            {% if form.vars.value.document == "numeroDevis" %}
+                                <td>{{ data.numeroDevis }}<br/><span class="small">({{ data.createdAt | date('d-m-Y') }})</span></td>
+                            {% else %}
+                                <td>{{ data.numeroFacture ? data.numeroFacture : 'NON' }}</td>
+                            {% endif %}
+                            <td>{{ data.adresseFacturation | raw }}</td>
+                            <td>{{ data.adresseLivraison | raw }}</td>
+                            <td>{{ (data.totalTtc / 100) |number_format(2, '.', ',') }}</td>
+                            <td>
+                                <a class="btn btn-primary" href="{{ path('visualisation_document', {'token': data.token }) }}">Voir</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            Aucun résultat...
+        {% endif %}
+        
+    {% else %}
+        Aucune recherche...
+    {% endif %}
+
+
+{% endblock %}

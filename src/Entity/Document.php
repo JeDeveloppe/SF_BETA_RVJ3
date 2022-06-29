@@ -105,6 +105,11 @@ class Document
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isDeleteByUser;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Paiement::class, mappedBy="document", cascade={"persist", "remove"})
+     */
+    private $paiement;
     
     public function __construct()
     {
@@ -334,6 +339,23 @@ class Document
     public function setIsDeleteByUser(?bool $isDeleteByUser): self
     {
         $this->isDeleteByUser = $isDeleteByUser;
+
+        return $this;
+    }
+
+    public function getPaiement(): ?Paiement
+    {
+        return $this->paiement;
+    }
+
+    public function setPaiement(Paiement $paiement): self
+    {
+        // set the owning side of the relation if necessary
+        if ($paiement->getDocument() !== $this) {
+            $paiement->setDocument($this);
+        }
+
+        $this->paiement = $paiement;
 
         return $this;
     }

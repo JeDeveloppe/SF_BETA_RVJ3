@@ -69,6 +69,16 @@ class DocumentRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findByDocumentAndNumber($column, $number){
+        return $this->createQueryBuilder('d')
+        ->where('d.'.$column.' LIKE :numero')
+        ->setParameter('numero','%'.$number.'%')
+        ->orderBy('d.createdAt', 'DESC')
+        ->getQuery()
+        ->getResult()
+    ;
+    }
     /*
     public function findOneBySomeField($value): ?Document
     {

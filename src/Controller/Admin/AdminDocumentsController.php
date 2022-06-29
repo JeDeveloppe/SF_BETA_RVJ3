@@ -2,15 +2,16 @@
 
 namespace App\Controller\Admin;
 
+use App\Form\SearchDocumentType;
 use App\Service\DocumentService;
 use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DocumentLignesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminDocumentsController extends AbstractController
@@ -186,16 +187,69 @@ class AdminDocumentsController extends AbstractController
     }
 
     /**
-     * @Route("/admin/document/recherche", name="document_recherche")
+     * @Route("/admin/document/recherche", name="documents_recherche")
      */
-    public function rechercheDocument(Request $request): Response
+    public function rechercheDocument(Request $request, DocumentRepository $documentRepository): Response
+    {
+        $form = $this->createForm(SearchDocumentType::class);
+        $form->handleRequest($request);
+      
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $column = $form->get('document')->getData();
+            $number = $form->get('numero')->getData();
+
+            $datas = $documentRepository->findByDocumentAndNumber($column, $number);
+        
+
+            return $this->renderForm('admin/documents/search.html.twig', [
+                'form' => $form,
+                'datas' => $datas
+            ]);
+        }
+
+
+        return $this->renderForm('admin/documents/search.html.twig', [
+            'form' => $form
+        ]);
+    }
+
+    /**
+     * @Route("/admin/document/visualisation/{token}", name="visualisation_document")
+     */
+    public function visualisationDocument(
+        $token,
+        DocumentRepository $documentRepository,
+        DocumentLignesRepository $documentLignesRepository
+        ): Response
     {
 
-      
+        //on cherche le devis par le token
+        $devis = $documentRepository->findOneBy(['token' => $token]);
+        $numeroFacture = $devis->getNumeroFacture();
 
+        $occasions = $documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
+        $boites = $documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
 
-        return $this->render('admin/documents/demandes/lecture_demande.html.twig', [
-            'form' => $form
+        //ON FAIT LE TOTAL DES OCCASIONS
+        $totalOccasions = 0;
+        foreach($occasions as $occasion){
+            $totalOccasions = $totalOccasions + $occasion->getOccasion()->getPriceHt();
+        }
+
+        //ON FAIT LE TOTAL DES PIECES DETACHEES
+        $totalDetachees = 0;
+        foreach($boites as $boite){
+            $totalDetachees = $totalDetachees + $boite->getPrixVente();
+        }
+
+        return $this->render('admin/documents/visualisation_document.html.twig', [
+            'devis' => $devis,
+            'occasions' => $occasions,
+            'boites' => $boites,
+            'totalOccasions' => $totalOccasions,
+            'totalDetachees' => $totalDetachees,
+            'toDelete' => $numeroFacture ? $numeroFacture : null
         ]);
     }
 }
