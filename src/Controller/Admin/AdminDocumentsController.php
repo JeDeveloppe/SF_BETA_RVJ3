@@ -261,11 +261,12 @@ class AdminDocumentsController extends AbstractController
             $paiement = new Paiement();
             $paiement->setTimeTransaction($immutable)
                      ->setMoyenPaiement($form->get('moyenPaiement')->getData())
-                     ->setTokenTransaction("SAISIE MANUELLE")
-                     ->setDocument($devis);
+                     ->setTokenTransaction("SAISIE MANUELLE");
                      
             $em->persist($paiement);
             $em->flush();
+
+
 
             //on signal le changement
             $this->addFlash('success', 'Paiement enregistré');
@@ -273,7 +274,8 @@ class AdminDocumentsController extends AbstractController
             //on genere le numero de facture
             $newNumero = $documentService->generateNewNumberOf('numeroFacture', 'getNumeroFacture');
             //on enregistre dans la BDD
-            $devis->setNumeroFacture($newNumero);
+            $devis->setNumeroFacture($newNumero)
+                  ->setPaiement($paiement);
             $em->merge($devis);
             $em->flush();
 

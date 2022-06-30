@@ -5,7 +5,13 @@
 {% block body %}
     {% set tva = devis.tauxTva + 100 / 100 %}
     {% set totalDetachees = totalDetachees %}
-{{ dump(devis) }}
+
+    {% if devis.paiement is not null %}
+        {% set disabled = "disabled" %}
+    {% else %}
+        {% set disabled = "" %}
+    {% endif %}
+
     <h3 class="col-12 text-center my-5">Visualisation d'un document</h3>
 
         <div class="row justify-content-center my-5">
@@ -25,18 +31,18 @@
                             </td>
                             <td>
                                 {% if devis.isDeleteByUser == true %}
-                                    <a class="btn btn-success" href="{{ path('changement_disponibilite_en_ligne', {'value': 0, 'token': devis.token }) }}"> OUI</a>
+                                    <a class="btn btn-success {{disabled}}" href="{{ path('changement_disponibilite_en_ligne', {'value': 0, 'token': devis.token }) }}"> OUI</a>
                                 {% else %}
-                                    <a class="btn btn-danger" href="{{ path('changement_disponibilite_en_ligne', {'value': 1, 'token': devis.token }) }}"> NON</a>
+                                    <a class="btn btn-danger {{disabled}}" href="{{ path('changement_disponibilite_en_ligne', {'value': 1, 'token': devis.token }) }}"> NON</a>
                                 {% endif %}
                             </td>
                             <td>{{ devis.numeroFacture ? devis.numeroFacture : "PAS DE PAIEMENT" }}</td>
                             <td>
-                                {# {% if devis.paiement.timeTransaction is not null %}
-                                    {{ devis.paiement.timeTransaction|date('d-m-Y') }} par {{ devis.paiement.moyenPaiement }}
+                                {% if devis.paiement is not null %}
+                                    {{ devis.paiement.timeTransaction|date('d-m-Y') }} <br/>par {{ devis.paiement.moyenPaiement }}
                                 {% else %}
                                     AUCUN
-                                {% endif %} #}
+                                {% endif %}
                             </td>
                         </tr>
                     </tbody>
@@ -117,7 +123,7 @@
     <div class="row my-5">
         <div class="col-6 text-center">
             {% if devis.numeroFacture  %}
-                <span class="btn btn-lg btn-success">DÉJA FACTURÉ</span>
+                <span class="btn btn-lg btn-success disabled">DÉJA FACTURÉ</span>
             {% else %}
                 {{ form(form) }}
             {% endif %}

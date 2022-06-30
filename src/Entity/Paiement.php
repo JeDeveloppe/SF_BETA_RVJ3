@@ -33,8 +33,7 @@ class Paiement
     private $moyenPaiement;
 
     /**
-     * @ORM\OneToOne(targetEntity=Document::class, inversedBy="paiement", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity=Document::class, mappedBy="paiement", cascade={"persist", "remove"})
      */
     private $document;
 
@@ -84,10 +83,23 @@ class Paiement
         return $this->document;
     }
 
-    public function setDocument(Document $document): self
+    public function setDocument(?Document $document): self
     {
+        // unset the owning side of the relation if necessary
+        if ($document === null && $this->document !== null) {
+            $this->document->setPaiement(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($document !== null && $document->getPaiement() !== $this) {
+            $document->setPaiement($this);
+        }
+
         $this->document = $document;
 
         return $this;
     }
+
+
+
 }
