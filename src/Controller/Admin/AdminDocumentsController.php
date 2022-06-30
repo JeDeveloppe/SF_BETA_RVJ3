@@ -2,8 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use DateTimeImmutable;
+use App\Entity\Paiement;
 use App\Form\SearchDocumentType;
 use App\Service\DocumentService;
+use App\Form\DocumentPaiementType;
 use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -220,7 +223,10 @@ class AdminDocumentsController extends AbstractController
     public function visualisationDocument(
         $token,
         DocumentRepository $documentRepository,
-        DocumentLignesRepository $documentLignesRepository
+        DocumentLignesRepository $documentLignesRepository,
+        Request $request,
+        EntityManagerInterface $em,
+        DocumentService $documentService
         ): Response
     {
 
@@ -243,13 +249,73 @@ class AdminDocumentsController extends AbstractController
             $totalDetachees = $totalDetachees + $boite->getPrixVente();
         }
 
-        return $this->render('admin/documents/visualisation_document.html.twig', [
+        $form = $this->createForm(DocumentPaiementType::class);
+        $form->handleRequest($request);
+      
+        if($form->isSubmitted() && $form->isValid()) {
+            
+            $date =$form->get('date')->getData();
+
+            $immutable = DateTimeImmutable::createFromMutable($date);
+
+            $paiement = new Paiement();
+            $paiement->setTimeTransaction($immutable)
+                     ->setMoyenPaiement($form->get('moyenPaiement')->getData())
+                     ->setTokenTransaction("SAISIE MANUELLE")
+                     ->setDocument($devis);
+                     
+            $em->persist($paiement);
+            $em->flush();
+
+            //on signal le changement
+            $this->addFlash('success', 'Paiement enregistré');
+
+            //on genere le numero de facture
+            $newNumero = $documentService->generateNewNumberOf('numeroFacture', 'getNumeroFacture');
+            //on enregistre dans la BDD
+            $devis->setNumeroFacture($newNumero);
+            $em->merge($devis);
+            $em->flush();
+
+        }
+
+        return $this->renderForm('admin/documents/visualisation_document.html.twig', [
             'devis' => $devis,
             'occasions' => $occasions,
             'boites' => $boites,
             'totalOccasions' => $totalOccasions,
             'totalDetachees' => $totalDetachees,
-            'toDelete' => $numeroFacture ? $numeroFacture : null
+            'toDelete' => $numeroFacture ? $numeroFacture : null,
+            'form' => $form
         ]);
+    }
+
+    /**
+     * @Route("/admin/document/changement-disponibilite-en-ligne/{value?}/{token}", name="changement_disponibilite_en_ligne")
+     */
+    public function rendreDisponibleOuIndisponibleAlUtilisateur(
+        $token,
+        $value,
+        DocumentRepository $documentRepository,
+        EntityManagerInterface $em,
+        Request $request
+        ): Response
+    {
+
+        if($value == 0){
+            $value = null;
+        }
+
+        //on cherche le devis par le token
+        $devis = $documentRepository->findOneBy(['token' => $token]);
+
+        $devis->setIsDeleteByUser($value);
+
+        $em->merge($devis);
+        $em->flush();
+       
+        //on signal le changement
+        $this->addFlash('success', 'État du document mis à jour!');
+        return $this->redirect($request->headers->get('referer'));
     }
 }

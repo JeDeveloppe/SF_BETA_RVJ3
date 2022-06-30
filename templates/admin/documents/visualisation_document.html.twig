@@ -5,7 +5,7 @@
 {% block body %}
     {% set tva = devis.tauxTva + 100 / 100 %}
     {% set totalDetachees = totalDetachees %}
-
+{{ dump(devis) }}
     <h3 class="col-12 text-center my-5">Visualisation d'un document</h3>
 
         <div class="row justify-content-center my-5">
@@ -23,9 +23,21 @@
                                 {{ devis.numeroDevis }} <br>
                                 {{ devis.createdAt|date('d-m-Y') }}
                             </td>
-                            <td>{{ devis.isDeleteByUser ? "OUI" : "NON" }}</td>
-                            <td>{{ devis.numeroFacture ? devis.numeroFacture : "NON" }}</td>
-                            <td>{{ devis.paiement ? devis.paiement.timeTransaction|date('d-m-Y') ~' par '~ devis.paiement.moyenPaiement : "AUCUN" }}</td>
+                            <td>
+                                {% if devis.isDeleteByUser == true %}
+                                    <a class="btn btn-success" href="{{ path('changement_disponibilite_en_ligne', {'value': 0, 'token': devis.token }) }}"> OUI</a>
+                                {% else %}
+                                    <a class="btn btn-danger" href="{{ path('changement_disponibilite_en_ligne', {'value': 1, 'token': devis.token }) }}"> NON</a>
+                                {% endif %}
+                            </td>
+                            <td>{{ devis.numeroFacture ? devis.numeroFacture : "PAS DE PAIEMENT" }}</td>
+                            <td>
+                                {# {% if devis.paiement.timeTransaction is not null %}
+                                    {{ devis.paiement.timeTransaction|date('d-m-Y') }} par {{ devis.paiement.moyenPaiement }}
+                                {% else %}
+                                    AUCUN
+                                {% endif %} #}
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -104,7 +116,11 @@
     {# PARTIE BOUTONS #}
     <div class="row my-5">
         <div class="col-6 text-center">
-            METTRE FORMULAIRE DE PAIEMENT CD, ESPECE, CHEQUE, VIREMENT
+            {% if devis.numeroFacture  %}
+                <span class="btn btn-lg btn-success">DÉJA FACTURÉ</span>
+            {% else %}
+                {{ form(form) }}
+            {% endif %}
         </div>
         <div class="col-6 text-center">
             {% if toDelete is null %}
