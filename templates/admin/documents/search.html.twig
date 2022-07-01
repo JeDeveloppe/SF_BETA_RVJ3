@@ -6,7 +6,9 @@
 
     <h3 class="col-12 text-center mb-5">Recherche de document</h3>
 
-    {{ form(form) }}
+    <div class="col-3 my-5 mx-auto">
+        {{ form(form) }}
+    </div>
 
     {% if datas is defined %} 
         {% if datas | length > 0 %}

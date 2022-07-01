@@ -47,7 +47,6 @@ class DocumentRepository extends ServiceEntityRepository
 
     public function findLastEntryFromThisYear($column, $year)
     {
-
         return $this->createQueryBuilder('d')
             ->where('YEAR(d.createdAt) = :year')
             ->andWhere('d.'.$column.' IS NOT NULL')
@@ -72,12 +71,24 @@ class DocumentRepository extends ServiceEntityRepository
 
     public function findByDocumentAndNumber($column, $number){
         return $this->createQueryBuilder('d')
-        ->where('d.'.$column.' LIKE :numero')
-        ->setParameter('numero','%'.$number.'%')
-        ->orderBy('d.createdAt', 'DESC')
-        ->getQuery()
-        ->getResult()
-    ;
+            ->where('d.'.$column.' LIKE :numero')
+            ->setParameter('numero','%'.$number.'%')
+            ->orderBy('d.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findDocumentsFromUser($user)
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('d.isDeleteByUser IS NULL')
+            ->orderBy('d.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
     /*
     public function findOneBySomeField($value): ?Document

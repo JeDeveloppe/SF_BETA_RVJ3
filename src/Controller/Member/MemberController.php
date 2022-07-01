@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Repository\AdresseRepository;
+use App\Repository\DocumentRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,10 +28,15 @@ class MemberController extends AbstractController
     /**
      * @Route("/membre/historique", name="app_member_historique")
      */
-    public function membreHistorique(): Response
+    public function membreHistorique(Security $security, DocumentRepository $documentRepository): Response
     {
+        $user = $security->getUser();
+
+        $documents = $documentRepository->findDocumentsFromUser($user);
+
         return $this->render('member/historique.html.twig', [
-            'controller_name' => 'MemberController',
+            'user' => $user,
+            'documents' => $documents
         ]);
     }
 
