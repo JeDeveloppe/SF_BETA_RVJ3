@@ -25,6 +25,10 @@ class AdresseType extends AbstractType
         $this->department = $options['department'];
 
         $builder
+            ->add('organisation', TextType::class, [
+                'label' => 'Organisation:',
+                'required' => false
+            ])
             ->add('lastName', TextType::class, [
                 'label' => 'Nom:'
             ])

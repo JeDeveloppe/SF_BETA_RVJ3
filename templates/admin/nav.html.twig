@@ -38,14 +38,15 @@
           </div>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">BDD</a>
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">BDD/SITE</a>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{{ path('app_pays_index') }}">Liste des pays</a>
             <a class="dropdown-item" href="{{ path('app_ville_index') }}">Liste des villes</a>
             <a class="dropdown-item" href="#">Another action</a>
             <a class="dropdown-item" href="#">Something else here</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Separated link</a>
+            <a class="dropdown-item" href="{{ path('admin_informations_legales_index') }}">Informations Légales</a>
+            <a class="dropdown-item" href="{{ path('app_configuration_index') }}">Configuration</a>
           </div>
         </li>
       </ul>

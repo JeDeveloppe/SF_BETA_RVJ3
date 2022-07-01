@@ -3,23 +3,18 @@
 {% block member %}
 
     <div class="row my-5" id="facturation">
-        <h3>Les adresses de facturation:</h3>
         <div class="col-11 mx-auto">
-            <table class="table">
+            <table class="table align-middle">
                 <thead>
                     <tr>
-                        <th>LastName</th>
-                        <th>FirstName</th>
-                        <th>Adresse</th>
+                        <th>Les adresses de facturation</th>
                         <th>Modifier</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for adresse in facturation_adresses %}
                     <tr>
-                        <td>{{ adresse.lastName }}</td>
-                        <td>{{ adresse.firstName }}</td>
-                        <td>{{ adresse.adresse }} - {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
+                        <td>{{ adresse.organisation }} {{ adresse.lastName }} {{ adresse.firstName }}, {{ adresse.adresse }} - {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
                         <td>
                             <a class="btn btn-warning" href="{{ path('app_adresse_edit', {'id': adresse.id}) }}">Éditer</a>
                             {{ include('member/adresse/_delete_form.html.twig') }}
@@ -36,28 +31,23 @@
         {% if facturation_adresses | length < 2 %}
             <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'facturation'}) }}">Créer une nouvelle adresse (maximum 2)</a>
         {% else %}
-            <p>Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
+            <p class="p-2 text-center h5">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
         {% endif %}
     </div>
 
     <div class="row my-5" id="livraison">
-        <h3>Les adresses de livraison:</h3>
         <div class="col-11 mx-auto">
-            <table class="table">
+            <table class="table align-middle">
                 <thead>
                     <tr>
-                        <th>LastName</th>
-                        <th>FirstName</th>
-                        <th>Adresse</th>
+                        <th>Les adresses de livraison</th>
                         <th>Modifier</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for adresse in livraison_adresses %}
                     <tr>
-                        <td>{{ adresse.lastName }}</td>
-                        <td>{{ adresse.firstName }}</td>
-                        <td>{{ adresse.adresse }} {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
+                        <td>{{ adresse.organisation }} {{ adresse.lastName }} {{ adresse.firstName }}, {{ adresse.adresse }} {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
                         <td>
                             <a class="btn btn-warning" href="{{ path('app_adresse_edit', {'id': adresse.id}) }}">Éditer</a>
                             {{ include('member/adresse/_delete_form.html.twig') }}

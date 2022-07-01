@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use DateInterval;
 use DateTimeImmutable;
 use App\Entity\Paiement;
 use App\Form\SearchDocumentType;
@@ -10,6 +11,7 @@ use App\Form\DocumentPaiementType;
 use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ConfigurationRepository;
 use App\Repository\DocumentLignesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -228,7 +230,7 @@ class AdminDocumentsController extends AbstractController
         EntityManagerInterface $em,
         DocumentService $documentService
         ): Response
-    {
+        {
 
         //on cherche le devis par le token
         $devis = $documentRepository->findOneBy(['token' => $token]);
@@ -302,7 +304,7 @@ class AdminDocumentsController extends AbstractController
         EntityManagerInterface $em,
         Request $request
         ): Response
-    {
+        {
 
         if($value == 0){
             $value = null;
@@ -318,6 +320,43 @@ class AdminDocumentsController extends AbstractController
        
         //on signal le changement
         $this->addFlash('success', 'État du document mis à jour!');
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @Route("/admin/document/devis-relance/{token}/", name="relance_devis")
+     */
+    public function relanceDevisDeXJours(
+        $token,
+        DocumentRepository $documentRepository,
+        EntityManagerInterface $em,
+        Request $request,
+        ConfigurationRepository $configurationRepository
+        ): Response
+        {
+
+        $configurations = $configurationRepository->findAll();
+
+        if(count($configurations) < 1){
+            $delaiDevis = 2; //on relance de 2 jours minimum par defaut
+        }else{
+            $delaiDevis = $configurations[0]->getDevisDelayBeforeDelete();
+        }
+
+        //on cherche le devis par le token
+        $devis = $documentRepository->findOneBy(['token' => $token]);
+
+        //on recupere la date du jour et on ajoute X jours
+        $now = new DateTimeImmutable();
+        $endDevis = $now->add(new DateInterval('P'.$delaiDevis.'D'));
+        
+        $devis->setEndValidationDevis($endDevis);
+
+        $em->merge($devis);
+        $em->flush();
+       
+        //on signal le changement
+        $this->addFlash('success', 'Devis relancer de '.$delaiDevis.' jours!');
         return $this->redirect($request->headers->get('referer'));
     }
 }

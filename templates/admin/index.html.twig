@@ -25,6 +25,29 @@
     </div>
 
     <div class="row justify-content-center mb-5">
+        <h3 class="col-12 text-center mb-5">Les devis à relancer et / ou supprimer</h3>
+
+        {% if relances | length > 0 %}
+            {% for relance in relances %}
+                <div class="card col-9 my-2 p-0">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>#{{ relance.user.id }} / {{ relance.user.email }} - {{ relance.user.phone }}</div>
+                        {% if relance.isRelanceDevis == false %}
+                            <a class="btn btn-secondary" href="{{ path('relance_devis', {'token': relance.token }) }}">Relancer l'utilisateur (+ {{ delaiDevis }} jours)</a>
+                        {% else %}
+                            <a class="btn btn-danger" href="{{ path('lecture_devis', {'numeroDevis': relance.numeroDevis }) }}">Voir et Supprimer</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-9 card bg-secondary text-center p-0">
+                Aucune devis à relancer ou à supprimer !
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row justify-content-center mb-5">
         <h3 class="col-12 text-center mb-5">Les devis supprimer par les utilisateurs</h3>
 
         {% if devisSupprimerParUtilisateurs | length > 0 %}
@@ -32,7 +55,7 @@
                 <div class="card col-9 my-2 p-0">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <div>#{{ devisSupprimerParUtilisateur.user.id }} / {{ devisSupprimerParUtilisateur.user.email }} - {{ devisSupprimerParUtilisateur.user.phone }}</div>
-                        <a class="btn btn-primary" href="{{ path('lecture_devis', {'numeroDevis': devisSupprimerParUtilisateur.numeroDevis }) }}">Voir le devis</a>
+                        <a class="btn btn-danger" href="{{ path('lecture_devis', {'numeroDevis': devisSupprimerParUtilisateur.numeroDevis }) }}">Voir et supprimer</a>
                     </div>
                 </div>
             {% endfor %}

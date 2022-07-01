@@ -90,6 +90,16 @@ class DocumentRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findDevisEndDelay($now){
+            return $this->createQueryBuilder('d')
+            ->where('d.endValidationDevis < :now')
+            ->setParameter('now', $now)
+            ->orderBy('d.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;  
+    }
     /*
     public function findOneBySomeField($value): ?Document
     {

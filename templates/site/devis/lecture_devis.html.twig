@@ -9,7 +9,8 @@
 
     <h3 class="col-12 text-center my-5">
         Devis numéro {{ devis.numeroDevis }} <br>
-        du {{ devis.createdAt|date('d-m-Y') }}
+        du {{ devis.createdAt|date('d-m-Y') }} <br/>
+        <span class="small">(valable jusqu'au {{ devis.endValidationDevis|date('d-m-Y') }})</span>
     </h3>
 
         {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}

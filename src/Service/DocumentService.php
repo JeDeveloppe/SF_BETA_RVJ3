@@ -2,16 +2,17 @@
 
 namespace App\Service;
 
-use App\Controller\Admin\InformationsLegalesController;
+use DateInterval;
 use DateTimeImmutable;
 use App\Entity\Document;
 use App\Entity\DocumentLignes;
-use App\Repository\DocumentRepository;
-use App\Repository\InformationsLegalesRepository;
-use App\Repository\MethodeEnvoiRepository;
-use App\Repository\PanierRepository;
 use App\Repository\UserRepository;
+use App\Repository\PanierRepository;
+use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\MethodeEnvoiRepository;
+use App\Repository\InformationsLegalesRepository;
+use App\Controller\Admin\InformationsLegalesController;
 
 class DocumentService
 {
@@ -110,9 +111,11 @@ class DocumentService
 
         //puis on met dans la base
         $document = new Document();
+        $now = new DateTimeImmutable();
+        $endDevis = $now->add(new DateInterval('P1D'));
 
         $document->setUser($this->userRepository->find($user))
-                ->setCreatedAt(new DateTimeImmutable())
+                ->setCreatedAt($now)
                 ->setTotalTTC($request->request->get('totalGeneralTTC') * 100)
                 ->setTotalHT($request->request->get('totalGeneralHT') * 100)
                 ->setTauxTva($tva * 100 -100)
@@ -122,6 +125,7 @@ class DocumentService
                 ->setAdresseLivraison($paniers[0]->getLivraison())
                 ->setToken($this->generateRandomString())
                 ->setNumeroDevis($newNumero)
+                ->setEndValidationDevis($endDevis)
                 ->setEnvoi($this->methodeEnvoiRepository->find($request->request->get('envoi')));
 
         $this->em->persist($document);

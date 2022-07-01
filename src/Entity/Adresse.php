@@ -49,6 +49,11 @@ class Adresse
      */
     private $isFacturation;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $organisation;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -122,6 +127,18 @@ class Adresse
     public function setIsFacturation(?bool $isFacturation): self
     {
         $this->isFacturation = $isFacturation;
+
+        return $this;
+    }
+
+    public function getOrganisation(): ?string
+    {
+        return $this->organisation;
+    }
+
+    public function setOrganisation(?string $organisation): self
+    {
+        $this->organisation = $organisation;
 
         return $this;
     }

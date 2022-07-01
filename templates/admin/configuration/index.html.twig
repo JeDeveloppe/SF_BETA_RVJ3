@@ -1,0 +1,44 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Configuration du site{% endblock %}
+
+{% block body %}
+    <h1 class="col-12 text-center my-5">Configuration du site</h1>
+
+        {% for configuration in configurations %}
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Delai avant suppression du devis:</td>
+                        <td>{{ configuration.DevisDelayBeforeDelete }} jours</td>
+                    </tr>
+                    <tr>
+                        <td>Préfixe des factures:</td>
+                        <td>{{ configuration.prefixeFacture }}</td>
+                    </tr>
+                    <tr>
+                        <td>Préfixe des devis:</td>
+                        <td>{{ configuration.prefixeDevis }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a class="btn btn-warning" href="{{ path('app_configuration_edit', {'id': configuration.id}) }}">Éditer</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        {% else %}
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td colspan="2">Aucunes informations pour le moment...</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+   
+
+    {% if configurations | length < 1 %}
+        <a class="btn btn-info" href="{{ path('app_configuration_new') }}">Renseigner la configuration</a>
+    {% endif %}
+{% endblock %}
