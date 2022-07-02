@@ -1,0 +1,22 @@
+<div class="row justify-content-center mb-5">
+    <table class="table table-striped align-middle">
+        <thead>
+            <th>Pièce détachée(s)</th>
+            <th class="text-center">Qté</th>
+            <th class="text-center">Prix HT</th>
+        </thead>
+        <tbody>
+            {% for boite in boites %}
+                <tr>
+                    <td>
+                        Boite: {{ boite.boite.nom }} - {{ boite.boite.editeur }} - {{ boite.boite.annee }}<br/>
+                        Demande: {{ boite.message }}
+                    </td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">{{ (boite.prixVente / 100) |number_format(2, '.', ',') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
