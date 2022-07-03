@@ -56,14 +56,14 @@ class SiteDocumentsController extends AbstractController
     {
 
         //on cherche le devis par le token et s'il n'est pas deja annuler par l'utilisateur
-        $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => null]);
+        $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => null, 'numeroFacture' => null]);
 
         if($devis == null){
 
             $tableau = [
                 'h1' => 'Devis non trouvé !',
                 'p1' => 'La consultation de ce devis est impossible!',
-                'p2' => 'Devis inconnu ou supprimer !'
+                'p2' => 'Devis inconnu, supprimer ou déjà facturé !'
             ];
 
             return $this->render('site/devis/devis_end.html.twig', ['tableau' => $tableau]);

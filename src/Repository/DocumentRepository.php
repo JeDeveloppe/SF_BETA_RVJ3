@@ -69,9 +69,22 @@ class DocumentRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByDocumentAndNumber($column, $number){
+    public function findOnlyDevis($number){
+
         return $this->createQueryBuilder('d')
-            ->where('d.'.$column.' LIKE :numero')
+            ->where('d.numeroDevis LIKE :numero')
+            ->andWhere('d.numeroFacture IS NULL')
+            ->setParameter('numero','%'.$number.'%')
+            ->orderBy('d.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findOnlyFactures($number){
+
+        return $this->createQueryBuilder('d')
+            ->where('d.numeroFacture LIKE :numero')
             ->setParameter('numero','%'.$number.'%')
             ->orderBy('d.createdAt', 'DESC')
             ->getQuery()

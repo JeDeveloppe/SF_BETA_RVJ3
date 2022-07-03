@@ -9,14 +9,28 @@ use App\Repository\AdresseRepository;
 use App\Repository\ConfigurationRepository;
 use App\Repository\DocumentLignesRepository;
 use App\Repository\DocumentRepository;
+use App\Service\DocumentService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Dompdf\Dompdf as Dompdf;
+use Dompdf\Options;
 
 class MemberController extends AbstractController
 {
+
+    private $documentRepository;
+    private $documentLignesRepository;
+
+    public function __construct(DocumentRepository $documentRepository, DocumentLignesRepository $documentLignesRepository)
+    {
+        $this->documentLignesRepository = $documentLignesRepository;
+        $this->documentRepository = $documentRepository;
+    }
+
+
     /**
      * @Route("/membre", name="app_member")
      */
@@ -73,32 +87,10 @@ class MemberController extends AbstractController
     /**
      * @Route("/membre/download/facture/{token}", name="app_member_facture_download")
      */
-    public function factureDownload($token, DocumentRepository $documentRepository, DocumentLignesRepository $documentLignesRepository): Response
+    public function factureDownload($token, DocumentService $documentService)
     {
-        //on cherche le devis par le token
-        $devis = $documentRepository->findOneBy(['token' => $token]);
+        $documentService->factureToPdf($token);
 
-        $occasions = $documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
-        $boites = $documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
-
-        //ON FAIT LE TOTAL DES OCCASIONS
-        $totalOccasions = 0;
-        foreach($occasions as $occasion){
-            $totalOccasions = $totalOccasions + $occasion->getOccasion()->getPriceHt();
-        }
-
-        //ON FAIT LE TOTAL DES PIECES DETACHEES
-        $totalDetachees = 0;
-        foreach($boites as $boite){
-            $totalDetachees = $totalDetachees + $boite->getPrixVente();
-        }
-
-        return $this->render('member/download/download_facture.html.twig', [
-            'devis' => $devis,
-            'occasions' => $occasions,
-            'boites' => $boites,
-            'totalOccasion' => $totalOccasions,
-            'totalDetachee' => $totalDetachees
-        ]);
+        return new Response();
     }
 }

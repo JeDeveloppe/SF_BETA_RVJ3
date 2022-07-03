@@ -3,7 +3,7 @@
 {% block title %}Devis{% endblock %}
 
 {% block body %}
-    {% set tva = devis.tauxTva + 100 / 100 %}
+    {% set tva = (devis.tauxTva + 100 ) / 100 %}
     {% set totalDetachees = totalDetachees %}
     {% set disabled = "disabled" %}
 

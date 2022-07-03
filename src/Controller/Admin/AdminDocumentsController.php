@@ -204,7 +204,11 @@ class AdminDocumentsController extends AbstractController
             $column = $form->get('document')->getData();
             $number = $form->get('numero')->getData();
 
-            $datas = $documentRepository->findByDocumentAndNumber($column, $number);
+            if($column == 'numeroDevis'){
+                $datas = $documentRepository->findOnlyDevis($number);
+            }else{
+                $datas = $documentRepository->findOnlyFactures($number);
+            }
         
 
             return $this->renderForm('admin/documents/search.html.twig', [
@@ -358,5 +362,15 @@ class AdminDocumentsController extends AbstractController
         //on signal le changement
         $this->addFlash('success', 'Devis relancer de '.$delaiDevis.' jours!');
         return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @Route("/admin/download/facture/{token}", name="admin_facture_download")
+     */
+    public function factureDownload($token, DocumentService $documentService)
+    {
+        $documentService->factureToPdf($token);
+
+        return new Response();
     }
 }

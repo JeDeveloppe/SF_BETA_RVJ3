@@ -14,7 +14,8 @@
                 <td>{{ occasion.occasion.boite.nom }} - {{ occasion.occasion.boite.editeur }} - {{ occasion.occasion.boite.annee }}</td>
                 <td>{{ occasion.occasion.reference }}</td>
                 <td>1</td>
-                <td>{{ (occasion.occasion.priceHt * tva) | number_format(2, '.', ',') }}</td>
+                <td>{{ (occasion.occasion.priceHt * tva) | number_format(2, '.', ',')  }}</td>
+                
                 {% set totalOccasions = totalOccasions + occasion.occasion.priceHt %}
             {% endfor %}
         </tbody>

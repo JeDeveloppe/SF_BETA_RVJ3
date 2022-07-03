@@ -16,6 +16,7 @@
                 <thead>
                     {% if form.vars.value.document == "numeroDevis" %}
                         <th>Devis</th>
+                        <th>Fin de validitée</th>
                     {% else %}
                         <th>Facture</th>
                     {% endif %}
@@ -29,6 +30,7 @@
                         <tr>
                             {% if form.vars.value.document == "numeroDevis" %}
                                 <td>{{ data.numeroDevis }}<br/><span class="small">({{ data.createdAt | date('d-m-Y') }})</span></td>
+                                <td>({{ data.endValidationDevis | date('d-m-Y') }})</td>
                             {% else %}
                                 <td>{{ data.numeroFacture ? data.numeroFacture : 'NON' }}</td>
                             {% endif %}
@@ -37,6 +39,7 @@
                             <td>{{ (data.totalTtc / 100) |number_format(2, '.', ',') }}</td>
                             <td>
                                 <a class="btn btn-primary" href="{{ path('visualisation_document', {'token': data.token }) }}">Voir</a>
+                                <a class="btn btn-secondary" href="{{ path('admin_facture_download', {'token': data.token }) }}" target="_blank">Imprimer</a>
                             </td>
                         </tr>
                     {% endfor %}
