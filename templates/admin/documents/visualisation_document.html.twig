@@ -128,12 +128,16 @@
                 {{ form(form) }}
             {% endif %}
         </div>
-        <div class="col-6 text-center">
-            {% if toDelete is null %}
-                <a href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}" class="btn btn-lg btn-outline-danger" >Supprimer définitivement le devis</a>
+        <div class="col-6 d-flex flex-column justify-content-around align-items-center">
+            {% if devis.numeroFacture is null %}
+                <a class="btn btn-lg btn-outline-danger col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}" >Supprimer définitivement le devis</a>
             {% else %}
-                <a href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}" class="btn btn-lg btn-outline-danger disabled" >Facturé: suppression impossible</a>
+                <a class="btn btn-lg btn-outline-danger disabled col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}">Facturé: suppression impossible</a>
             {% endif %}
+            {% if devis.isDeleteByUser is null %}
+                <a class="btn btn-primary col-8 mx-auto" href="{{ path('admin_prevenir_devis_terminer', {'token': devis.token, 'destinataire': devis.user.email }) }}">Envoyer par email</a>                
+            {% endif %}
+
         </div>
     </div>
 

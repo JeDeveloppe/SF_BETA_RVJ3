@@ -16,7 +16,7 @@ class DocumentPaiementType extends AbstractType
     {
         $builder
             ->add('date', DateTimeType::class, [
-                'label' => false,
+                'label' => 'Saisir un paiement manuellement:',
                 'required' => true,
                 'date_widget' => 'single_text',
             ])
