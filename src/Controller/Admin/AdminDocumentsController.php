@@ -5,21 +5,23 @@ namespace App\Controller\Admin;
 use DateInterval;
 use DateTimeImmutable;
 use App\Entity\Paiement;
+use App\Service\MailService;
 use App\Form\SearchDocumentType;
 use App\Service\DocumentService;
 use App\Form\DocumentPaiementType;
+use App\Repository\UserRepository;
 use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ConfigurationRepository;
 use App\Repository\DocumentLignesRepository;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
-use App\Repository\UserRepository;
-use App\Service\MailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mime\DraftEmail;
 
 class AdminDocumentsController extends AbstractController
 {
@@ -330,61 +332,6 @@ class AdminDocumentsController extends AbstractController
     }
 
     /**
-     * @Route("/admin/document/devis-relance/{token}/", name="relance_devis")
-     */
-    public function relanceDevisDeXJours(
-        $token,
-        DocumentRepository $documentRepository,
-        EntityManagerInterface $em,
-        Request $request,
-        ConfigurationRepository $configurationRepository,
-        MailService $mailService
-        ): Response
-        {
-
-        $configurations = $configurationRepository->findAll();
-
-        if(count($configurations) < 1){
-            $delaiDevis = 2; //on relance de 2 jours minimum par defaut
-        }else{
-            $delaiDevis = $configurations[0]->getDevisDelayBeforeDelete();
-        }
-
-        //on cherche le devis par le token
-        $devis = $documentRepository->findOneBy(['token' => $token]);
-
-        //on recupere la date du jour et on ajoute X jours
-        $now = new DateTimeImmutable();
-        $endDevis = $now->add(new DateInterval('P'.$delaiDevis.'D'));
-        
-        $devis->setEndValidationDevis($endDevis);
-
-        $em->merge($devis);
-        $em->flush();
-       
-        //on relance un email
-        $host = $request->getSchemeAndHttpHost();
-        $url = $this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);
-
-        $html ="Bonjour,<p>Un petit email de rappel pour vous signaler que le devis demandé à dépassé sa date limite !</p>";
-
-        $html .="<p>Il peut s'agir d'un oublie c'est pour cela que le service à décidé de le prolonger jusqu'au ".$devis->getEndValidationDevis()->format('d-m-Y')."</p>";
-
-        $html .='<p><a href="'.$host.$url.'">Vous pouvez le consulter en cliquand sur ce lien...</a></p>';
-
-        $html .='<p>Ou en collant ce lien dans votre navigateur si la redirection ne se fait pas:<br/><br/>'.$host.$url.'</p>';
-
-        $mailService->sendEmailWithPhpMailer($devis->getUser()->getEmail(), "Dernier rappel, devis disponible...", $html);
-
-
-        $this->addFlash('success', 'Mail envoyé pour prévenir de la mise à disposition du devis!');
-
-        //on signal le changement
-        $this->addFlash('success', 'Devis relancer de '.$delaiDevis.' jours!');
-        return $this->redirect($request->headers->get('referer'));
-    }
-
-    /**
      * @Route("/admin/download/facture/{token}", name="admin_facture_download")
      */
     public function factureDownload($token, DocumentService $documentService)
@@ -394,34 +341,33 @@ class AdminDocumentsController extends AbstractController
         return new Response();
     }
 
-    /**
-     * @Route("/admin/envoi-de-mail-devis-terminer/{token}/{destinataire}/", name="admin_prevenir_devis_terminer")
-     */
-    public function adminPrevenirDevisTerminer(
-        $token,
-        $destinataire,
-        Request $request,
-        MailService $mailService,
-        DocumentRepository $documentRepository
-        )
-    {
+    // /**
+    //  * @Route("/admin/envoi-de-mail-devis-terminer/{token}/{destinataire}/", name="admin_prevenir_devis_terminer")
+    //  */
+    // public function adminPrevenirDevisTerminer(
+    //     $token,
+    //     $destinataire,
+    //     Request $request,
+    //     MailService $mailService,
+    //     DocumentRepository $documentRepository
+    //     )
+    // {
 
-        $devis = $documentRepository->findOneBy(['token' => $token]);
+    //     $devis = $documentRepository->findOneBy(['token' => $token]);
 
-        $host = $request->getSchemeAndHttpHost();
-        $url = $this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);
+    //     $link = $request->getSchemeAndHttpHost().$this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);
+  
+    //     // $body = (new TemplatedEmail());
 
-        $html ="Bonjour,<p>Un nouveau devis est disponible sur votre espace membre !</p>";
+    //     // $body->htmlTemplate('email/devis_disponible.html.twig', [
+    //     //     'link' => $devis->getToken()
+    //     // ]);
 
-        $html .='<p><a href="'.$host.$url.'">Vous pouvez le consulter en cliquand sur ce lien...</a></p>';
-
-        $html .='<p>Ou en collant ce lien dans votre navigateur si la redirection ne se fait pas:<br/><br/>'.$host.$url.'</p>';
-
-        $mailService->sendEmailWithPhpMailer($destinataire, "Devis disponible jusqu'au ".$devis->getEndValidationDevis()->format('d-m-Y')."!", $html);
+    //     $mailService->sendEmailWithMailer($devis,"first_devis",$link);
 
 
-        $this->addFlash('success', 'Mail envoyé pour prévenir de la mise à disposition du devis!');
-        return $this->redirect($request->headers->get('referer'));
+    //     $this->addFlash('success', 'Mail envoyé pour prévenir de la mise à disposition du devis!');
+    //     return $this->redirect($request->headers->get('referer'));
 
-    }
+    // }
 }

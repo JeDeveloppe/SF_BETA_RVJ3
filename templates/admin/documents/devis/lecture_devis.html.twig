@@ -96,7 +96,7 @@
                     <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Sauvegarder</button>
                     <input type="hidden" name="user" value="{{ devis.user.id }}">
                     <input type="hidden" name="demande" value="{{ devis.numeroDevis }}">
-                    <a class="btn btn-success" href="{{ path('admin_prevenir_devis_terminer', {'destinataire': data.user.email }) }}" target="_blank">Envoyer par email</a>
+                    <a class="btn btn-success" href="{{ path('mailer_send_mise_a_disposition_devis', {'token': data.token }) }}" target="_blank">Envoyer par email</a>
                 </div>
             </div>
         </div>

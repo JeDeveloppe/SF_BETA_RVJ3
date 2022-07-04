@@ -108,6 +108,7 @@ class DocumentRepository extends ServiceEntityRepository
             return $this->createQueryBuilder('d')
             ->where('d.endValidationDevis < :now')
             ->setParameter('now', $now)
+            ->andWhere('d.numeroFacture IS NULL')
             ->orderBy('d.id', 'DESC')
             ->getQuery()
             ->getResult()

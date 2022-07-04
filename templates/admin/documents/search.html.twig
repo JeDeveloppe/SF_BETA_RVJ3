@@ -39,7 +39,7 @@
                             <td>{{ (data.totalTtc / 100) |number_format(2, '.', ',') }}</td>
                             <td>
                                 <a class="btn btn-primary" href="{{ path('visualisation_document', {'token': data.token }) }}">Voir</a>
-                                <a class="btn btn-secondary" href="{{ path('admin_facture_download', {'token': data.token }) }}" target="_blank">Imprimer</a>
+                                <a class="btn btn-secondary" href="{{ path('mailer_send_mise_a_disposition_devis', {'token': data.token }) }}" target="_blank">Imprimer</a>
                             </td>
                         </tr>
                     {% endfor %}

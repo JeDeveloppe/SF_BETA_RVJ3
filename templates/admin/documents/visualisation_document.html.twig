@@ -135,7 +135,7 @@
                 <a class="btn btn-lg btn-outline-danger disabled col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}">Facturé: suppression impossible</a>
             {% endif %}
             {% if devis.isDeleteByUser is null %}
-                <a class="btn btn-primary col-8 mx-auto" href="{{ path('admin_prevenir_devis_terminer', {'token': devis.token, 'destinataire': devis.user.email }) }}">Envoyer par email</a>                
+                <a class="btn btn-primary col-8 mx-auto" href="{{ path('mailer_send_mise_a_disposition_devis', {'token': devis.token }) }}">Envoyer par email</a>                
             {% endif %}
 
         </div>
