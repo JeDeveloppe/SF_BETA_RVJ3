@@ -15,17 +15,19 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
-    <body class="d-flex flex-column justify-content-between h-100">
-        {% include "commun/flash_message.html.twig" %}
-        {% include "site/nav.html.twig" %}
+    <body class="vh-100 p-1 p-md-5">
+        <section class="card">
+            {% include "commun/flash_message.html.twig" %}
+            
+            {% include "site/nav.html.twig" %}
 
 
-        <div class="container d-flex flex-column justify-content-between h-100">
-            {% block body %}{% endblock %}
-        </div>
+            <div class="container d-flex flex-column justify-content-between h-100">
+                {% block body %}{% endblock %}
+            </div>
 
-        {% include "site/footer.html.twig" %}
-
+            {% include "site/footer.html.twig" %}
+        </section>
     <script>
         $(function () {
         $('[data-toggle="tooltip"]').tooltip()

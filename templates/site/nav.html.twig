@@ -1,20 +1,14 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mt-4 col-11 mx-auto">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="/">
+      <img src="{{ asset('images/design/logoRVJ3.png') }}" width="80" height="80" class="d-inline-block img-thumbnail border border-primary" alt="">
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarColor02">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Home
-            <span class="visually-hidden">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
+      <ul class="navbar-nav mx-auto">
         <li class="nav-item">
           <a class="nav-link" href="{{ path('catalogue_pieces_detachees') }}">Pièces détachées</a>
         </li>

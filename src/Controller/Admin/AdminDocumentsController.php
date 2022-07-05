@@ -20,6 +20,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
+use App\Service\MailerService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mime\DraftEmail;
 
@@ -341,33 +343,94 @@ class AdminDocumentsController extends AbstractController
         return new Response();
     }
 
-    // /**
-    //  * @Route("/admin/envoi-de-mail-devis-terminer/{token}/{destinataire}/", name="admin_prevenir_devis_terminer")
-    //  */
-    // public function adminPrevenirDevisTerminer(
-    //     $token,
-    //     $destinataire,
-    //     Request $request,
-    //     MailService $mailService,
-    //     DocumentRepository $documentRepository
-    //     )
-    // {
+    /**
+     * @Route("/admin/email/devis-terminer/{token}/", name="admin_prevenir_devis_disponible")
+     */
+    public function adminPrevenirDevisDisponible(
+        $token,
+        Request $request,
+        MailerService $mailerService,
+        DocumentRepository $documentRepository,
+        ConfigurationRepository $configurationRepository
+        )
+    {
 
-    //     $devis = $documentRepository->findOneBy(['token' => $token]);
+        $compteSmtp = $this->getParameter('COMPTESMTP');
+        $configurations = $configurationRepository->findAll();
 
-    //     $link = $request->getSchemeAndHttpHost().$this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);
-  
-    //     // $body = (new TemplatedEmail());
+        $devis = $documentRepository->findOneBy(['token' => $token]);
 
-    //     // $body->htmlTemplate('email/devis_disponible.html.twig', [
-    //     //     'link' => $devis->getToken()
-    //     // ]);
-
-    //     $mailService->sendEmailWithMailer($devis,"first_devis",$link);
+        $host = $request->getSchemeAndHttpHost();
+        $link = $request->getSchemeAndHttpHost().$this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);
 
 
-    //     $this->addFlash('success', 'Mail envoyé pour prévenir de la mise à disposition du devis!');
-    //     return $this->redirect($request->headers->get('referer'));
+            $mailerService->sendEmailWithTemplate(
+                $devis->getUser()->getEmail(),
+                $compteSmtp,
+                "Devis ".$configurations[0]->getPrefixeDevis().$devis->getNumeroDevis()." disponible jusqu'au ".$devis->getEndValidationDevis()->format('d-m-Y'),
+                'email/devis_disponible.html.twig',
+                [
+                    'link' => $link,
+                    'document' => $devis,
+                    'host' => $host
+                ]
+            );
 
-    // }
+        $this->addFlash('success', 'Mail envoyé pour prévenir de la mise à disposition du devis!');
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+     /**
+     * @Route("admin/email/relance-devis/{token}/", name="admin_relance_devis")
+     */
+    public function relanceDevisDeXJours(
+        $token,
+        DocumentRepository $documentRepository,
+        EntityManagerInterface $em,
+        Request $request,
+        ConfigurationRepository $configurationRepository,
+        MailerService $mailerService
+        ): Response
+        {
+
+            $compteSmtp = $this->getParameter('COMPTESMTP');
+            $configurations = $configurationRepository->findAll();
+
+            if(count($configurations) < 1){
+                $delaiDevis = 2; //on relance de 2 jours minimum par defaut
+            }else{
+                $delaiDevis = $configurations[0]->getDevisDelayBeforeDelete();
+            }
+
+            //on cherche le devis par le token
+            $devis = $documentRepository->findOneBy(['token' => $token]);
+
+            //on recupere la date du jour et on ajoute X jours
+            $now = new DateTimeImmutable();
+            $endDevis = $now->add(new DateInterval('P'.$delaiDevis.'D'));
+            
+            $devis->setEndValidationDevis($endDevis);
+
+            $em->merge($devis);
+            $em->flush();
+        
+            $host = $request->getSchemeAndHttpHost();
+            $link = $request->getSchemeAndHttpHost().$this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);
+    
+        $mailerService->sendEmailWithTemplate(
+            $devis->getUser()->getEmail(),
+            $compteSmtp,
+            "Rappel devis ".$configurations[0]->getPrefixeDevis().$devis->getNumeroDevis()." disponible jusqu'au ".$devis->getEndValidationDevis()->format('d-m-Y'),
+            'email/relance_devis.html.twig',
+            [
+                'link' => $link,
+                'document' => $devis,
+                'host' => $host
+            ]
+        );
+
+        //on signal le changement
+        $this->addFlash('success', 'Devis relancer de '.$delaiDevis.' jours!');
+        return $this->redirect($request->headers->get('referer'));
+    }
 }
