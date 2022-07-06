@@ -15,12 +15,21 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
-    <body class="vh-100 p-1 p-md-5">
-        <section class="card">
-            {% include "commun/flash_message.html.twig" %}
-            
-            {% include "site/nav.html.twig" %}
+    <body class="pt-4 p-1 pt-md-4 p-md-3 pt-lg-4 p-lg-5">
+        {% include "commun/flash_message.html.twig" %}
 
+        <section class="card d-flex flex-column justify-content-around h-100">
+            <div class="row">
+                <a class="col-6" href="/">
+                    <img src="{{ asset('images/design/logoRVJ3.png') }}" class="position-absolute logoTop img-thumbnail border border-primary" alt="Logo Refaitesvosjeux.fr">
+                </a>
+                <div class="col-6">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">{% include "site/nav.html.twig" %}</div>
+            </div>
+            
 
             <div class="container d-flex flex-column justify-content-between h-100">
                 {% block body %}{% endblock %}

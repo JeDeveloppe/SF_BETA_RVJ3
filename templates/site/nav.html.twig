@@ -1,20 +1,19 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mt-4 col-11 mx-auto">
+<nav class="navbar-expand navbar-dark bg-dark col-12 py-2 border-bottom border-primary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">
-      <img src="{{ asset('images/design/logoRVJ3.png') }}" width="80" height="80" class="d-inline-block img-thumbnail border border-primary" alt="">
-    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarColor02">
-      <ul class="navbar-nav mx-auto">
+    <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarColor02">
+      <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" href="{{ path('catalogue_pieces_detachees') }}">Pièces détachées</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ path('catalogue_jeux_occasion') }}">Jeux d'occasion</a>
         </li>
+      </ul>
+      <ul class="navbar-nav">
         {% if app.user %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mon compte</a>
