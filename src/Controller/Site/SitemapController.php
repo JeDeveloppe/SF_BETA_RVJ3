@@ -39,6 +39,11 @@ class SitemapController extends AbstractController
                 'priority'   => 0.8
                 ];
         $urls[] = [
+            'loc'        => $this->generateUrl('app_panier'),
+            'changefreq' => "monthly", //monthly,daily
+            'priority'   => 0.8
+            ];
+        $urls[] = [
             'loc'        => $this->generateUrl('cgv'),
             'changefreq' => "monthly", //monthly,daily
             'priority'   => 0.8
