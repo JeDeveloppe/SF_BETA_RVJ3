@@ -99,29 +99,17 @@ class RegistrationFormType extends AbstractType
         ;
 
         $isCountryModifier = function (FormInterface $form, Pays $pays = null) {
-
                 $isoCode = (null === $pays) ? [] : $pays->getIsoCode();
-                
-                if($isoCode == "FR"){
-                    $departments = $this->villeRepository->findDepartmentsByPays();
-                    $form
-                        ->add('department', EntityType::class,  [
-                            'class' => Ville::class,
-                            'choice_label' => 'villeDepartement',
-                            'choices' => $departments,
-                            'placeholder' => 'Choisissez un département...',
-                            'constraints' => new NotBlank(['message' => 'Choisissez un département'])
-                        ]);
-                }else if($isoCode == "BE"){
-                    $departments = $this->villeBelgiqueRepository->findDepartmentsByPays();
-                        $form->add('department', EntityType::class,  [
-                            'class' => VilleBelgique::class,
-                            'choice_label' => 'villeProvince',
-                            'choices' => $departments,
-                            'placeholder' => 'Choisissez une province...',
-                            'constraints' => new NotBlank(['message' =>'Choisissez une province...' ])
-                        ]);
-                }
+               
+                $departments = $this->villeRepository->findDepartmentsByPays($isoCode);
+                $form
+                    ->add('department', EntityType::class,  [
+                        'class' => Ville::class,
+                        'choice_label' => 'villeDepartement',
+                        'choices' => $departments,
+                        'placeholder' => 'Choisissez un département...',
+                        'constraints' => new NotBlank(['message' => 'Choisissez un département'])
+                    ]);
         };
 
         $builder->addEventListener(

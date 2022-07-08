@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<title>Partenaire</title>
+
+{% block body %}
+    <h1>Partenaire</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ partenaire.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ partenaire.name }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ partenaire.description }}</td>
+            </tr>
+            <tr>
+                <th>Collecte</th>
+                <td>{{ partenaire.collecte }}</td>
+            </tr>
+            <tr>
+                <th>Vend</th>
+                <td>{{ partenaire.vend }}</td>
+            </tr>
+            <tr>
+                <th>IsDon</th>
+                <td>{{ partenaire.isDon ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ partenaire.url }}</td>
+            </tr>
+            <tr>
+                <th>ImageBlob</th>
+                <td>{{ partenaire.imageBlob }}</td>
+            </tr>
+            <tr>
+                <th>IsDetachee</th>
+                <td>{{ partenaire.isDetachee ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>IsComplet</th>
+                <td>{{ partenaire.isComplet ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>IsEcommerce</th>
+                <td>{{ partenaire.isEcommerce ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>IsOnLine</th>
+                <td>{{ partenaire.isOnLine ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_partenaire_index') }}">back to list</a>
+
+    <a href="{{ path('app_admin_partenaire_edit', {'id': partenaire.id}) }}">edit</a>
+
+    {{ include('admin_partenaire/_delete_form.html.twig') }}
+{% endblock %}

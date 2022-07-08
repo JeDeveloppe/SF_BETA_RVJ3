@@ -30,6 +30,7 @@ class BoiteController extends AbstractController
             $request->query->getInt('page', 1), /*page number*/
             25 /*limit per page*/
         );
+        
         //on va stocker les images
         $images = [];
         foreach ($boites as $key => $boite) {

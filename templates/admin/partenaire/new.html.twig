@@ -1,0 +1,15 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Partenaires{% endblock %}
+
+{% block body %}
+    <h1 class="col-12 text-center my-5">Création d'un nouveau partenaire</h1>
+
+    <div class="col-2 text-center my-5">
+        <a class="btn btn-warning" href="{{ path('app_admin_partenaire_index') }}">< Retour</a>
+    </div>
+
+    {{ include('admin/partenaire/_form.html.twig') }}
+
+
+{% endblock %}

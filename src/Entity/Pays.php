@@ -34,9 +34,17 @@ class Pays
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Partenaire::class, mappedBy="country", orphanRemoval=true)
+     */
+    private $partenaires;
+
+
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->partenaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,6 +100,36 @@ class Pays
             // set the owning side to null (unless already changed)
             if ($user->getCountry() === $this) {
                 $user->setCountry(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Partenaire>
+     */
+    public function getPartenaires(): Collection
+    {
+        return $this->partenaires;
+    }
+
+    public function addPartenaire(Partenaire $partenaire): self
+    {
+        if (!$this->partenaires->contains($partenaire)) {
+            $this->partenaires[] = $partenaire;
+            $partenaire->setCountry($this);
+        }
+
+        return $this;
+    }
+
+    public function removePartenaire(Partenaire $partenaire): self
+    {
+        if ($this->partenaires->removeElement($partenaire)) {
+            // set the owning side to null (unless already changed)
+            if ($partenaire->getCountry() === $this) {
+                $partenaire->setCountry(null);
             }
         }
 

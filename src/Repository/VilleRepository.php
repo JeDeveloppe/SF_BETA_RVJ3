@@ -50,11 +50,13 @@ class VilleRepository extends ServiceEntityRepository
     //  * @return Ville[] Returns an array of Ville objects
     //  */
 
-    public function findDepartmentsByPays()
+    public function findDepartmentsByPays($isoCode)
     {
-        return $this->createQueryBuilder('vf')
-            ->groupBy('vf.villeDepartement')
-            ->orderBy('vf.villeDepartement', 'ASC')
+        return $this->createQueryBuilder('v')
+            ->groupBy('v.villeDepartement')
+            ->orderBy('v.villeDepartement', 'ASC')
+            ->where('v.pays = :pays')
+            ->setParameter('pays', $isoCode)
             ->getQuery()
             ->getResult()
         ;

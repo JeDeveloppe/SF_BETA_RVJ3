@@ -53,6 +53,7 @@ class CataloguesController extends AbstractController
             'boites' => $boites,
             'images' => $images,
             'catalogueFiltersForm' => $form->createView(),
+            'tri' => $tri
         ]);
     }
 

@@ -1,0 +1,49 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Liste des partenaires{% endblock %}
+
+{% block body %}
+    <h1 class="col-12 text-center my-5">Liste des partenaires</h1>
+
+    <table class="table table-responsive text-center align-middle">
+        <thead>
+            <tr>
+                <th>ImageBlob</th>
+                <th>Name</th>
+                <th>Url</th>
+                <th>IsDon</th>
+                <th>IsDetachee</th>
+                <th>IsComplet</th>
+                <th>IsEcommerce</th>
+                <th>IsOnLine</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for key,partenaire in partenaires %}
+            <tr>
+                <td><img class="img-admin-liste" src="data:image/png;base64,{{ images[key] }}"/></td>
+                <td>{{ partenaire.name }}</td>
+                <td>{{ partenaire.url }}</td>
+                <td>{{ partenaire.isDon ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
+                <td>{{ partenaire.isDetachee ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
+                <td>{{ partenaire.isComplet ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
+                <td>{{ partenaire.isEcommerce ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
+                <td>{{ partenaire.isOnLine ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('app_admin_partenaire_edit', {'id': partenaire.id}) }}">Voir / Éditer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="13">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    <div class="col-3 text-center my-5">
+        <a class="btn btn-primary" href="{{ path('app_admin_partenaire_new') }}">Créer un nouveau partenaire +</a>
+    </div>
+{% endblock %}
