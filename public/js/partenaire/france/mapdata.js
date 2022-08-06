@@ -366,4 +366,6 @@ var simplemaps_countrymap_mapdata={
   },
   regions: {},
 };
-simplemaps_countrymap_mapdata.locations = locations;
+
+// simplemaps_countrymap_mapdata.locations =  JSON.parse(depots.replace(/&quot;/g,'"'));
+simplemaps_countrymap_mapdata.locations =  depots;

@@ -6,6 +6,13 @@ body {
   background-attachment: fixed;
 }
 
+.img-liste {
+  width: 75px;
+  height: 75px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
 .logoTop {
   top: 0%;
   left: 50%;
@@ -89,7 +96,6 @@ body {
     transform: translate(-20%, -20%);
     width: 14%;
   }
-
   .navbar-expand {
     margin-top: 0;
   }

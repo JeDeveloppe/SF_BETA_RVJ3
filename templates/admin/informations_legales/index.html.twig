@@ -37,6 +37,9 @@
                         <td>Taux de TVA (1,20 = 20%): </td><td>{{ informations_legale.tauxTva }}</td>
                     </tr>
                     <tr>
+                        <td>Pays: </td><td>{{ informations_legale.country.name }}</td>
+                    </tr>
+                    <tr>
                         <td>
                             <a class="btn btn-warning" href="{{ path('admin_informations_legales_edit', {'id': informations_legale.id}) }}">Éditer</a>
                         </td>

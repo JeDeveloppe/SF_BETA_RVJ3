@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PartenaireRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PartenaireRepository::class)
@@ -77,6 +78,12 @@ class Partenaire
      * @ORM\JoinColumn(nullable=false)
      */
     private $country;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Ville::class, inversedBy="partenaires")
+     * @Assert\NotBlank
+     */
+    private $ville;
 
     public function getId(): ?int
     {
@@ -223,6 +230,18 @@ class Partenaire
     public function setCountry(?Pays $country): self
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function getVille(): ?Ville
+    {
+        return $this->ville;
+    }
+
+    public function setVille(?Ville $ville): self
+    {
+        $this->ville = $ville;
 
         return $this;
     }

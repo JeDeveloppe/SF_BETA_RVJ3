@@ -39,12 +39,18 @@ class Pays
      */
     private $partenaires;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Departement::class, mappedBy="pays")
+     */
+    private $departements;
+
 
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->partenaires = new ArrayCollection();
+        $this->departements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,6 +136,36 @@ class Pays
             // set the owning side to null (unless already changed)
             if ($partenaire->getCountry() === $this) {
                 $partenaire->setCountry(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Departement>
+     */
+    public function getDepartements(): Collection
+    {
+        return $this->departements;
+    }
+
+    public function addDepartement(Departement $departement): self
+    {
+        if (!$this->departements->contains($departement)) {
+            $this->departements[] = $departement;
+            $departement->setPays($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDepartement(Departement $departement): self
+    {
+        if ($this->departements->removeElement($departement)) {
+            // set the owning side to null (unless already changed)
+            if ($departement->getPays() === $this) {
+                $departement->setPays(null);
             }
         }
 

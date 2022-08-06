@@ -2,6 +2,7 @@
 
 namespace App\Controller\Site;
 
+use App\Entity\InformationsLegales;
 use App\Form\ContactType;
 use App\Service\MailerService;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,10 +16,11 @@ class SiteController extends AbstractController
     /**
      * @Route("/", name="accueil")
      */
-    public function index(): Response
+    public function index(InformationsLegalesRepository $informationsLegalesRepository): Response
     {
         return $this->render('site/index.html.twig', [
             'controller_name' => 'SiteController',
+            'informationsLegales' =>  $informationsLegalesRepository->findAll()
         ]);
     }
 

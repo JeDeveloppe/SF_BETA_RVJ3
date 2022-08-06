@@ -62,6 +62,12 @@ class InformationsLegales
      */
     private $tauxTva;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Pays::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $country;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -171,6 +177,18 @@ class InformationsLegales
     public function setTauxTva(string $tauxTva): self
     {
         $this->tauxTva = $tauxTva;
+
+        return $this;
+    }
+
+    public function getCountry(): ?Pays
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Pays $country): self
+    {
+        $this->country = $country;
 
         return $this;
     }

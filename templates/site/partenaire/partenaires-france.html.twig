@@ -1,0 +1,46 @@
+{% extends 'site/base.html.twig' %}
+
+{% block title %}Partenaires
+{% endblock %}
+
+{% block body %}
+
+	<div class="container-fluid">
+		<h1 class="col-12 text-center my-5">Nos partenaires en
+			{{ country.name}}
+		</h1>
+
+		<div class="row mt-3 justify-content-start">
+			{% for key, partenaire in partenaires |sort((a, b) => a.ville.villeDepartement <=> b.ville.villeDepartement)  %}
+				<div class="col-8 mx-auto m-3">
+					<div class="card p-0">
+						<div class="card-body d-flex flex-wrap">
+							<div class="col-4 p-2">
+								<img class="card-img-top" src="data:image/png;base64,{{ images[key] }}" alt="Logo de {{ partenaire.name }}">
+							</div>
+							<div class="col-8 p-2">
+								<h5 class="card-title">{{ partenaire.name }}</h5>
+								<p class="card-text">{{ partenaire.description }}</p>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">{{ partenaire.isDon ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</li>
+									<li class="list-group-item">{{ partenaire.isDetachee ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</li>
+									<li class="list-group-item">{{ partenaire.isComplet ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</li>
+									<li class="list-group-item">{{ partenaire.isEcommerce ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</li>
+								</ul>
+						
+								<a href="{{ partenaire.url }}" class="card-link">{{ partenaire.url }}</a>
+							</div>
+						</div>
+					</div>
+				</div>	
+			{% endfor %}
+		</div>
+
+		<div class="row my-5">
+			<div class="col-11 col-md-9 col-lg-6 mx-auto text-center p-0">
+				<a class="h5" href="{{ path('contact') }}">Vous avez envie de figurer sur cette liste ?<br/>Prenez contact avec nous !</a>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

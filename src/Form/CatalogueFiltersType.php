@@ -5,6 +5,7 @@ namespace App\Form;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -14,6 +15,7 @@ class CatalogueFiltersType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        dump($options['tri']);
         $builder
             ->add('filters', ChoiceType::class, [
                 'label' => false,
@@ -22,7 +24,8 @@ class CatalogueFiltersType extends AbstractType
                     "Affichage par nom"     => "nom",
                     "Affichage par éditeur" => "editeur",
                     "Affichage par année"   => "annee"
-                ]
+                ],
+                'data' => $options['tri']
             ])
         ;
     }
@@ -31,6 +34,7 @@ class CatalogueFiltersType extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
+            'tri' => []
         ]);
     }
 }

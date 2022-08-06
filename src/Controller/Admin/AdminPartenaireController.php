@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Partenaire;
 use App\Form\PartenaireType;
+use App\Repository\DepartementRepository;
 use App\Repository\PartenaireRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,6 +47,8 @@ class AdminPartenaireController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $imageSend = $form->get('imageBlob')->getData();
+            $country = $form->get('ville')->getData()->getDepartement()->getPays();
+
 
             if($imageSend == null){
                 $this->addFlash('danger', 'Image obligatoire!');
@@ -55,7 +58,8 @@ class AdminPartenaireController extends AbstractController
                 $partenaire->setImageBlob($imageBase64);
             }
 
-            $partenaire->setImageBlob($imageBase64);
+            $partenaire->setImageBlob($imageBase64)
+                        ->setCountry($country);
 
             $partenaireRepository->add($partenaire);
             return $this->redirectToRoute('app_admin_partenaire_index', [], Response::HTTP_SEE_OTHER);
@@ -88,12 +92,14 @@ class AdminPartenaireController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $imageSend = $form->get('imageBlob')->getData();
+            $country = $form->get('ville')->getData()->getDepartement()->getPays();
 
             if($imageSend != null){
                 $imageBase64 = base64_encode(file_get_contents($imageSend));
                 $partenaire->setImageBlob($imageBase64);
             }
-
+            
+            $partenaire->setCountry($country);
             $partenaireRepository->add($partenaire);
             return $this->redirectToRoute('app_admin_partenaire_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -101,7 +107,7 @@ class AdminPartenaireController extends AbstractController
         return $this->renderForm('admin/partenaire/edit.html.twig', [
             'partenaire' => $partenaire,
             'form' => $form,
-            'image' => stream_get_contents($partenaire->getImageBlob())
+            'image' => stream_get_contents($partenaire->getImageBlob()),
         ]);
     }
 

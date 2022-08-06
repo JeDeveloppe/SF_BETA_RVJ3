@@ -11,5 +11,8 @@
 
     {{ include('admin/partenaire/_form.html.twig', {'button_label': 'Enregistrer'}) }}
 
+{% endblock %}
 
+{% block javascripts %}
+    <script src="{{ asset('js/partenaire/script.js') }}"></script>
 {% endblock %}

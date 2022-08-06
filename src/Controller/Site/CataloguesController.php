@@ -18,19 +18,29 @@ class CataloguesController extends AbstractController
     /**
      * @Route("/catalogue-pieces-detachees/", name="catalogue_pieces_detachees")
      */
-    public function cataloguePiecesDetachees(EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
+    public function cataloguePiecesDetachees(
+        EntityManagerInterface $entityManager,
+        Request $request,
+        PaginatorInterface $paginator,
+        InformationsLegalesRepository $informationsLegalesRepository
+        ): Response
     {
 
-        $form = $this->createForm(CatalogueFiltersType::class);
-        $form->handleRequest($request);
-
+       
         $filter = $request->query->get('tri');
         $filters = array("nom", "editeur", "annee", "ajout");
         if(in_array($filter, $filters)) {
-            $tri = [$filter => 'DESC'];
+            if($filter == "ajout"){
+                $tri = ['id' => 'DESC'];
+            }else{
+                $tri = [$filter => 'DESC'];
+            }
         }else{
             $tri = ['id' => 'DESC'];
         }
+
+        $form = $this->createForm(CatalogueFiltersType::class, null, ['tri' => $filter]);
+        $form->handleRequest($request);
 
 
 
@@ -53,14 +63,20 @@ class CataloguesController extends AbstractController
             'boites' => $boites,
             'images' => $images,
             'catalogueFiltersForm' => $form->createView(),
-            'tri' => $tri
+            'tri' => $tri,
+            'informationsLegales' =>  $informationsLegalesRepository->findAll(),
+            'form' => $form->createView()
         ]);
     }
 
     /**
      * @Route("/catalogue-pieces-detachees/demande/{id}/{slug}/{editeur}", name="catalogue_pieces_detachees_demande")
      */
-    public function cataloguePiecesDetacheesDemande(EntityManagerInterface $entityManager, $id): Response
+    public function cataloguePiecesDetacheesDemande(
+        EntityManagerInterface $entityManager,
+        $id,
+        InformationsLegalesRepository $informationsLegalesRepository
+        ): Response
     {
 
         $boites = $entityManager
@@ -80,7 +96,8 @@ class CataloguesController extends AbstractController
 
             return $this->render('site/catalogues/catalogue_pieces_detachees_demande.html.twig', [
                 'boites' => $boites,
-                'images' => $images
+                'images' => $images,
+                'informationsLegales' =>  $informationsLegalesRepository->findAll()
             ]);
         }
     }
@@ -88,7 +105,12 @@ class CataloguesController extends AbstractController
     /**
      * @Route("/catalogue-jeux-occasion/", name="catalogue_jeux_occasion")
      */
-    public function catalogueJeuxOccasion(InformationsLegalesRepository $informationsLegalesRepository, EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
+    public function catalogueJeuxOccasion(
+        InformationsLegalesRepository $informationsLegalesRepository,
+        EntityManagerInterface $entityManager,
+        Request $request,
+        PaginatorInterface $paginator
+        ): Response
     {
 
         $informationsLegales = $informationsLegalesRepository->findAll();
@@ -117,7 +139,8 @@ class CataloguesController extends AbstractController
         return $this->render('site/catalogues/catalogue_jeux_occasion.html.twig', [
             'occasions' => $occasions,
             'images' => $images,
-            'tva' => $tva
+            'tva' => $tva,
+            'informationsLegales' =>  $informationsLegalesRepository->findAll()
         ]);
     }
 
@@ -149,7 +172,8 @@ class CataloguesController extends AbstractController
             return $this->render('site/catalogues/catalogue_jeux_occasion_details.html.twig', [
                 'occasions' => $occasion,
                 'images' => $images,
-                'tva' => $tva
+                'tva' => $tva,
+                'informationsLegales' =>  $informationsLegalesRepository->findAll()
             ]);
         }
     }

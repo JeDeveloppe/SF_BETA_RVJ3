@@ -2,20 +2,42 @@
 
 namespace App\Form;
 
+use App\Entity\Departement;
 use App\Entity\Pays;
+use App\Entity\Ville;
 use App\Entity\Partenaire;
+use App\Repository\DepartementRepository;
+use App\Repository\PaysRepository;
+use Doctrine\ORM\EntityRepository;
+use App\Repository\VilleRepository;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PartenaireType extends AbstractType
 {
+
+    private $villeRepository;
+    private $paysRepository;
+
+    public function __construct(VilleRepository $villeRepository, PaysRepository $paysRepository, DepartementRepository $departementRepository)
+    {
+        $this->villeRepository = $villeRepository;
+        $this->paysRepository = $paysRepository;
+        $this->departementRepository = $departementRepository;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -34,17 +56,13 @@ class PartenaireType extends AbstractType
             ->add('url', UrlType::class, [
                 'label' => 'Adresse du site internet:'
             ])
-            ->add('country', EntityType::class, [
-                'class' => Pays::class,
-                'choice_label' => 'name',
-                'label' => 'Pays:'
-            ])
             ->add('imageBlob', FileType::class, [
                 'label' => 'Image:',
                 'data_class' => null,
                 'required' => false,
                 'mapped' => false
             ])
+            ->add('ville', VilleAutocompleteField::class)
             ->add('isDon', CheckboxType::class, [
                 'label' => 'Accepte les dons',
                 'required' => false
@@ -69,8 +87,93 @@ class PartenaireType extends AbstractType
                 'required' => false
             ])
 
-        ;
+            // ->add('country', EntityType::class, [
+            //     'placeholder' => 'Choisir un pays...',
+            //     'class' => Pays::class,
+            //     'choice_label' => 'name',
+            //     'label' => 'Pays:',
+            //     'query_builder' => function(EntityRepository $er){
+            //         return $er->createQueryBuilder('p')
+            //                 ->orderBy('p.name', 'ASC');
+            //     }
+            // ])
+
+            // $builder->get('country')->addEventListener(
+            //     FormEvents::POST_SUBMIT,
+            //     function (FormEvent $event){
+            //         $form = $event->getForm();
+            //         $this->addVilleField($form->getParent(), $event->getForm()->getData());
+            //     }
+            // );
+
+            // $builder->get('country')->addEventListener(
+            //     FormEvents::POST_SUBMIT,
+            //     function (FormEvent $event){
+            //         $form = $event->getForm();
+            //         $this->addDepartementField($form->getParent(), $event->getForm()->getData());
+            //     }
+            // );
+
+            // $builder->addEventListener(
+            //     FormEvents::POST_SET_DATA,
+            //     function (FormEvent $event){
+            //         $data = $event->getData();
+            //         $ville = $data->getVille();
+            //         $form = $event->getForm();
+            //         if($ville){
+            //             $country = $ville->getDepartement()->getPays();
+            //             // $departement = $ville->getDepartement();
+            //             // $this->addDepartementField($form, $country);
+            //             $this->addVilleField($form, $country->getIsoCode());
+            //             // $form->get('departement')->setData($departement);
+            //             $form->get('ville')->setData($ville);
+            //         }else{
+            //             // $this->addDepartementField($form, null);
+            //             $this->addVilleField($form, null);
+            //         }
+            //     }
+            // );
+            ;
     }
+
+    // private function addDepartementField(FormInterface $form, $country){
+
+    //         $builder = $form->getConfig()->getFormFactory()->createNamedBuilder(
+    //             'departement',
+    //             EntityType::class,
+    //             null,
+    //             [
+    //                 'class' => Departement::class,
+    //                 'placeholder' => $country ? 'Choisir un département ou région...' : 'En attente du pays...',
+    //                 'choice_label' => 'name',
+    //                 'choices' => $country ? $country->getDepartements() : [],
+    //                 'auto_initialize' => false,
+    //                 'mapped' => false,
+    //                 'required' => false,
+    //                 'label' => 'Département ou province:'
+    //             ]
+    //         );
+    
+    //         $builder->addEventListener(FormEvents::POST_SUBMIT,
+    //         function(FormEvent $event){
+    //                 $form = $event->getForm();
+    //                 $this->addVilleField($form->getParent(), $form->getData());
+    //         });
+            
+    //         $form->add($builder->getForm());       
+    // }
+
+    // private function addVilleField(FormInterface $form, $isoCode){
+
+    //         // $form->add('ville', EntityType::class, [
+    //         //     'class' => Ville::class,
+    //         //     'choice_label' => 'ville_nom',
+    //         //     'placeholder' => $departement ? 'Choisissez une ville...' : 'En attente du département...',
+    //         //     'choices' => $departement ? $this->villeRepository->findVillesFromDepartementOrderByASC($departement) : [],
+    //         //     'label' => 'Ville:'
+    //         // ]);
+    //         $form->add('ville', VilleAutocompleteField::class);
+    // }
 
     public function configureOptions(OptionsResolver $resolver): void
     {

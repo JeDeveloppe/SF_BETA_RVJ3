@@ -62,7 +62,24 @@ class VilleRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findVillesFromDepartementOrderByASC($departement)
+    {
+        return $this->createQueryBuilder('v')
+            ->groupBy('v.villeNom')
+            ->orderBy('v.villeNom', 'ASC')
+            ->where('v.departement = :departement')
+            ->setParameter('departement', $departement)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
+    public function findVillesByNamePostalCodeAndCountry(){
+        return $this->createQueryBuilder('v')
+            ->groupBy('v.villeNom')
+            ->orderBy('v.villeNom', 'ASC')
+            ;
+    }
     /*
     public function findOneBySomeField($value): ?Ville
     {

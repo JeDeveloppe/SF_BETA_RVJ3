@@ -5,6 +5,7 @@ namespace App\Controller\Site;
 use App\Entity\User;
 use DateTimeImmutable;
 use App\Form\RegistrationFormType;
+use App\Repository\InformationsLegalesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,14 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/inscription-au-service", name="app_register")
      */
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthentificatorAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function register(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        UserAuthenticatorInterface $userAuthenticator,
+        UserAuthentificatorAuthenticator $authenticator,
+        EntityManagerInterface $entityManager,
+        InformationsLegalesRepository $informationsLegalesRepository
+        ): Response
     {
    
       
@@ -56,6 +64,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
+            'informationsLegales' =>  $informationsLegalesRepository->findAll()
         ]);
     }
 }

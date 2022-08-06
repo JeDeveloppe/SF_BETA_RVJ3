@@ -1,0 +1,42 @@
+{% extends 'site/base.html.twig' %}
+
+{% block title %}Partenaires{% endblock %}
+
+{% block body %}
+
+{% set depots = depots %}
+
+<div class="container-fluid">
+    <h1 class="col-12 text-center my-5">Nos partenaires</h1>
+
+  <div class="row mt-3">
+    <div class="col-11 col-md-9 col-lg-6 mx-auto">
+      <div id="map"></div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12 text-center small">
+      🙏 <a href="https://simplemaps.com/" target="_blank">Simplemap.com</a> ❤️
+    </div>
+  </div>
+  <div class="row my-5">
+    <div class="col-11 col-md-9 col-lg-6 mx-auto text-center p-0">
+      <a class="h5" href="{{ path('contact') }}">Vous avez envie de figurer sur cette carte ?<br/>Prenez contact avec nous !</a>
+    </div>
+  </div>
+</div>
+
+
+
+<script type="text/javascript">
+   let depots = '{{ depots|raw }}';
+
+   depots = JSON.parse(depots);
+   console.log(depots)
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="{{ asset('js/partenaire/france/mapdata.js') }}"></script>		
+<script  type="text/javascript" src="{{ asset('js/partenaire/france/countrymap.js') }}"></script>
+
+{% endblock %}

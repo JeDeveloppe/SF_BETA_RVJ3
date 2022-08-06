@@ -4,7 +4,7 @@
         <li><a class="text-white text-decoration-none" href="{{ path('mentions-legales') }}">Mentions légales et CGU</a></li>
         <li><a class="text-white text-decoration-none" href="{{ path('cgv') }}">CGV</a></li>
         <li><a class="text-white text-decoration-none" href="{{ path('contact') }}">Contact</a></li>
-        <li><a class="text-white text-decoration-none" href="#">Partenaires</a></li>
+        <li><a class="text-white text-decoration-none" href="{{ path('carte_partenaires', {'pays': informationsLegales[0].country.name }) }}">Partenaires</a></li>
         <li><a class="text-white text-decoration-none" href="https://www.facebook.com/refaitesvosjeux" target="_blank">Nous suivre sur Facebook</a></li>
     </ul>
     <div class="col-12 text-center">

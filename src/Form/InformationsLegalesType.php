@@ -2,9 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Pays;
 use App\Entity\InformationsLegales;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class InformationsLegalesType extends AbstractType
@@ -21,6 +23,10 @@ class InformationsLegalesType extends AbstractType
             ->add('nomWebmaster')
             ->add('hebergeurSite')
             ->add('tauxTva')
+            ->add('country', EntityType::class, [
+                'class' => Pays::class,
+                'choice_label' => 'name'
+            ])
         ;
     }
 

@@ -54,9 +54,21 @@ class Ville
      */
     private $adresses;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Partenaire::class, mappedBy="ville")
+     */
+    private $partenaires;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Departement::class, inversedBy="villes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $departement;
+
     public function __construct()
     {
         $this->adresses = new ArrayCollection();
+        $this->partenaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,6 +174,48 @@ class Ville
                 $adress->setVille(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Partenaire>
+     */
+    public function getPartenaires(): Collection
+    {
+        return $this->partenaires;
+    }
+
+    public function addPartenaire(Partenaire $partenaire): self
+    {
+        if (!$this->partenaires->contains($partenaire)) {
+            $this->partenaires[] = $partenaire;
+            $partenaire->setVille($this);
+        }
+
+        return $this;
+    }
+
+    public function removePartenaire(Partenaire $partenaire): self
+    {
+        if ($this->partenaires->removeElement($partenaire)) {
+            // set the owning side to null (unless already changed)
+            if ($partenaire->getVille() === $this) {
+                $partenaire->setVille(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDepartement(): ?Departement
+    {
+        return $this->departement;
+    }
+
+    public function setDepartement(?Departement $departement): self
+    {
+        $this->departement = $departement;
 
         return $this;
     }
