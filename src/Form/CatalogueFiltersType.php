@@ -15,7 +15,6 @@ class CatalogueFiltersType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        dump($options['tri']);
         $builder
             ->add('filters', ChoiceType::class, [
                 'label' => false,

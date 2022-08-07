@@ -134,7 +134,6 @@ class CataloguesController extends AbstractController
             $images[$key] = stream_get_contents($occasion->getBoite()->getImageBlob());
         }
 
-
         
         return $this->render('site/catalogues/catalogue_jeux_occasion.html.twig', [
             'occasions' => $occasions,

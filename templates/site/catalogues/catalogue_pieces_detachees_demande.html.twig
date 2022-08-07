@@ -25,8 +25,7 @@
 		</div>
 		<!-- BLOC PRESENTATION DU JEU  -->
 		<div class="row mb-5" id="">
-			<div class="card col-11 mx-auto col-md-12 p-0 border shadow">
-
+			<div class="card col-11 mx-auto col-md-10 p-0 border shadow">
 				<div class="card-body d-flex flex-wrap">
 					<!-- image de la boite -->
 					<div class="col-12 col-md-6 text-center p-0">
@@ -89,7 +88,7 @@
 					<!-- formulaire de demande -->
 					<form class="col-12 p-0 d-flex flex-wrap" method="post" class="border-primary pt-3" action="{{ path('panier-ajout-pieces-detachees') }}" name="formulaireDemandePiece" enctype="multipart/form-data">
 						<div class="form-group col-12 col-md-6 p-0">
-							<textarea class="form-control mt-3" rows="3" name="message" onkeyup="limiteur();" placeholder="Bonjour, avez vous cette pièce ?..." minlength="15" maxlenght="300" required></textarea>
+							<textarea class="form-control mt-3" rows="3" id="message" name="message" onkeyup="limiteur();" placeholder="Bonjour, avez vous cette pièce ?..." minlength="15" maxlenght="300" required></textarea>
 							<span id="precision" class="jumbotron bg-primary text-light p-2">
 								<i class="fas fa-lightbulb text-info"></i>
 								N’oubliez pas d’être précis dans votre demande :
@@ -135,7 +134,7 @@
 		<div class="row mb-3">
 			<div class="col-12 col-md-6">
 				{% if app.request.headers.get('referer') is null %}
-					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catlaogue général</a>
+					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catalogue général</a>
 				{% else %}
 					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catlaogue</a>
 				{% endif %}
@@ -147,46 +146,46 @@
 	<script>
 		function limiteur() {
 			maximum = 300;
-			champ = document.formulaire.content;
-			indic = document.formulaire.indicateur;
+			champ = document.getElementById("message");
+			indic = document.getElementById("message").indicateur;
 
 			if (champ.value.length > maximum) {
-			champ.value = champ.value.substring(0, maximum);
+				champ.value = champ.value.substring(0, maximum);
 			} else {
-			document.getElementById("caracteresRestantFormulaireContenuJeu").innerHTML = maximum - champ.value.length + " caractères restant...";
-			document.getElementById("precision").style.display = "block";
+				document.getElementById("caracteresRestantFormulaireContenuJeu").innerHTML = maximum - champ.value.length + " caractères restant...";
+				document.getElementById("precision").style.display = "block";
 			}
 			if (champ.value.length == 0) {
-			document.getElementById("precision").style.display = "none";
+				document.getElementById("precision").style.display = "none";
 			} else { // Init a timeout variable to be used below
-			let timeout = null;
-			// Listen for keystroke events
-			champ.addEventListener('keyup', function (e) {
-			// Clear the timeout if it has already been set.
-			// This will prevent the previous task from executing
-			// if it has been less than <MILLISECONDS>
-			clearTimeout(timeout);
-			// Make a new timeout set to go off in 1000ms (1 second)
-			timeout = setTimeout(function () {
-			document.getElementById("precision").style.display = "none";
-			}, 4000);
-			});
+				let timeout = null;
+				// Listen for keystroke events
+				champ.addEventListener('keyup', function (e) {
+					// Clear the timeout if it has already been set.
+					// This will prevent the previous task from executing
+					// if it has been less than <MILLISECONDS>
+					clearTimeout(timeout);
+					// Make a new timeout set to go off in 1000ms (1 second)
+					timeout = setTimeout(function () {
+						document.getElementById("precision").style.display = "none";
+					}, 4000);
+				});
 			}
 		}
-		
-var resultatInput = document.getElementById('resultatInput');
-resultatInput.innerHTML = "Aucune image !";
 
-function getFileInfo() {
-var countFiles = document.getElementById('file-input').files.length;
+		var resultatInput = document.getElementById('resultatInput');
+		resultatInput.innerHTML = "Aucune image !";
 
-if (countFiles > 1) {
-resultatInput.innerHTML = "2 images séléctionnées";
-} else {
-var name = document.getElementById('file-input').files[0].name;
-resultatInput.innerHTML = "Image séléctionnée:<br/>" + name;
-}
-}
+		function getFileInfo() {
+			var countFiles = document.getElementById('file-input').files.length;
+
+			if (countFiles > 1) {
+			resultatInput.innerHTML = "2 images séléctionnées";
+			} else {
+			var name = document.getElementById('file-input').files[0].name;
+			resultatInput.innerHTML = "Image séléctionnée:<br/>" + name;
+			}
+		}
 	</script>
 
 {% endblock %}

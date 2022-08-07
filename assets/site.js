@@ -9,9 +9,5 @@
 import './styles/site/style.scss';
 import './styles/site/template_bootstrap.css';
 
-import './styles/admin/style.scss';
-import './styles/admin/template_bootstrap.css';
-
-
 // start the Stimulus application
 import './bootstrap';

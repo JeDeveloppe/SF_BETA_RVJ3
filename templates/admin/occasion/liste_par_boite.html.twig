@@ -36,7 +36,13 @@
                 <td>{{ occasion.etatBoite }}</td>
                 <td>{{ occasion.etatMateriel }}</td>
                 <td>{{ occasion.regleJeu }}</td>
-                <td>{{ occasion.isOnLine ? '<i class="fa-solid fa-earth-europe text-success"></i>' : '<i class="fa-solid fa-earth-europe text-danger"></i>' }}</td>
+                <td>
+                    {% if occasion.isOnLine == true %}
+                        <i class="fa-solid fa-earth-europe text-success"></i>
+                    {% else %}
+                        <i class="fa-solid fa-earth-europe text-danger"></i>
+                    {% endif %}
+                </td>
                 <td>
                     {% if occasion.donation is not null %}
                         Donner le {{ occasion.donation|date("d-m-Y") }}.

@@ -6,11 +6,18 @@
 
     <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarColor02">
       <ul class="navbar-nav">
-        <li class="nav-item">
+        <li class="nav-item d-none d-sm-block">
           <a class="nav-link" href="{{ path('catalogue_pieces_detachees') }}">Pièces détachées</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item d-none d-sm-block">
           <a class="nav-link" href="{{ path('catalogue_jeux_occasion') }}">Jeux d'occasion</a>
+        </li>
+        <li class="nav-item dropdown d-sm-none">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Catalogues</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{{ path('catalogue_pieces_detachees') }}">Pièces détachées</a>
+            <a class="dropdown-item" href="{{ path('catalogue_jeux_occasion') }}">Jeux d'occasion</a>
+          </div>
         </li>
       </ul>
       <ul class="navbar-nav">

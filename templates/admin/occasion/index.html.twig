@@ -24,7 +24,13 @@
                 <td>{{ boite.editeur }}</td>
                 <td>{{ boite.annee }}</td>
                 <td><img class="img-admin-liste" src="data:image/png;base64,{{ images[key] }}"/></td>
-                <td>{{ boite.isLivrable ? '<i class="fa-solid fa-truck text-success"></i>' : '<i class="fa-solid fa-truck text-danger"></i>' }}</td>
+                <td>
+                    {% if boite.isLivrable == true %}
+                        <i class="fa-solid fa-truck text-success"></i>
+                    {% else %}
+                        <i class="fa-solid fa-truck text-danger"></i>
+                    {% endif %}
+                </td>
                 <td>{{ boite.occasions | length }}</td>
                 <td>
                     <a class="btn btn-warning" href="{{ path('admin_occasion_liste', {'id': boite.id, 'slug': boite.nom | lower | slug }) }}">Voir les jeux</a>
