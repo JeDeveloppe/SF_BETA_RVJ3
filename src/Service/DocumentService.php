@@ -233,7 +233,7 @@ class DocumentService
         $pdf->SetTextColor(0);
 
         //HEADER
-        $pdf->Image('images/design/logoRVJ3.png',10,6,30);
+        $pdf->Image('build/images/design/logoRVJ3.png',10,6,30);
         // Police Arial gras 15
         $pdf->SetFont('Arial','B',15);
         // Décalage à droite

@@ -5,6 +5,7 @@ namespace App\Controller\Site;
 
 use App\Repository\DocumentRepository;
 use App\Repository\DocumentLignesRepository;
+use App\Repository\InformationsLegalesRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,7 +52,8 @@ class SiteDocumentsController extends AbstractController
     public function lectureDevis(
         $token,
         DocumentRepository $documentRepository,
-        DocumentLignesRepository $documentLignesRepository
+        DocumentLignesRepository $documentLignesRepository,
+        InformationsLegalesRepository $informationsLegalesRepository
         ): Response
     {
 
@@ -91,6 +93,7 @@ class SiteDocumentsController extends AbstractController
                 'boites' => $boites,
                 'totalOccasions' => $totalOccasions,
                 'totalDetachees' => $totalDetachees / 100,
+                'informationsLegales' =>  $informationsLegalesRepository->findAll()
             ]);
         }
     }

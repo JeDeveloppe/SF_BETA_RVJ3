@@ -9,6 +9,7 @@ use App\Repository\AdresseRepository;
 use App\Repository\ConfigurationRepository;
 use App\Repository\DocumentLignesRepository;
 use App\Repository\DocumentRepository;
+use App\Repository\InformationsLegalesRepository;
 use App\Service\DocumentService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -34,10 +35,11 @@ class MemberController extends AbstractController
     /**
      * @Route("/membre", name="app_member")
      */
-    public function index(): Response
+    public function index(InformationsLegalesRepository $informationsLegalesRepository ): Response
     {
         return $this->render('member/index.html.twig', [
             'controller_name' => 'MemberController',
+            'informationsLegales' =>  $informationsLegalesRepository->findAll()
         ]);
     }
 
@@ -47,7 +49,8 @@ class MemberController extends AbstractController
     public function membreHistorique(
         Security $security,
         DocumentRepository $documentRepository,
-        ConfigurationRepository $configurationRepository): Response
+        ConfigurationRepository $configurationRepository,
+        InformationsLegalesRepository $informationsLegalesRepository): Response
     {
         $user = $security->getUser();
 
@@ -59,14 +62,19 @@ class MemberController extends AbstractController
         return $this->render('member/historique.html.twig', [
             'user' => $user,
             'documents' => $documents,
-            'configurations' => $configuration
+            'configurations' => $configuration,
+            'informationsLegales' =>  $informationsLegalesRepository->findAll()
         ]);
     }
 
     /**
      * @Route("/membre/mon-compte", name="app_member_compte")
      */
-    public function membreCompte(Request $request, UserRepository $userRepository, Security $security): Response
+    public function membreCompte(
+        Request $request,
+        UserRepository $userRepository,
+        Security $security,
+        InformationsLegalesRepository $informationsLegalesRepository): Response
     {
         $user = $security->getUser();
 
@@ -80,7 +88,8 @@ class MemberController extends AbstractController
 
         return $this->render('member/compte.html.twig', [
             'controller_name' => 'MemberController',
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'informationsLegales' =>  $informationsLegalesRepository->findAll()
         ]);
     }
 
