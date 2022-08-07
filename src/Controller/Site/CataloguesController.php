@@ -33,7 +33,7 @@ class CataloguesController extends AbstractController
             if($filter == "ajout"){
                 $tri = ['id' => 'DESC'];
             }else{
-                $tri = [$filter => 'DESC'];
+                $tri = [$filter => 'ASC'];
             }
         }else{
             $tri = ['id' => 'DESC'];

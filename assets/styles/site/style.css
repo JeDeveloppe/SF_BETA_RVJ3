@@ -1,5 +1,4 @@
 body {
-  background-image: url(/images/design/back1.jpg);
   background-size: cover;
   background-position: 50% 70%;
   background-repeat: no-repeat;
@@ -8,7 +7,7 @@ body {
 
 .img-liste {
   width: 75px;
-  height: 75px;
+  height: 45px;
   -o-object-fit: cover;
      object-fit: cover;
 }
@@ -121,4 +120,4 @@ body {
   .logoTop {
     width: 8%;
   }
-}/*# sourceMappingURL=design.css.map */
+}/*# sourceMappingURL=style.css.map */
