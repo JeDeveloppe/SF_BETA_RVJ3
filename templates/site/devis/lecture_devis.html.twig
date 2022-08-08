@@ -3,14 +3,15 @@
 {% block title %}Devis{% endblock %}
 
 {% block body %}
-    {% set tva = (devis.tauxTva + 100 ) / 100 %}
+
+    {% set tva = (devis[0].tauxTva + 100 ) / 100 %}
     {% set totalDetachees = totalDetachees %}
     {% set disabled = "disabled" %}
 
     <h3 class="col-12 text-center my-5">
-        Devis numéro {{ devis.numeroDevis }} <br>
-        du {{ devis.createdAt|date('d-m-Y') }} <br/>
-        <span class="small">(valable jusqu'au {{ devis.endValidationDevis|date('d-m-Y') }})</span>
+        Devis numéro {{ devis[0].numeroDevis }} <br>
+        du {{ devis[0].createdAt|date('d-m-Y') }} <br/>
+        <span class="small">(valable jusqu'au {{ devis[0].endValidationDevis|date('d-m-Y') }})</span>
     </h3>
 
         {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
@@ -35,13 +36,13 @@
                     </tr>
                     <tr>
                         <td>
-                            {% set facturations = devis.adresseFacturation|split('<br/>') %}
+                            {% set facturations = devis[0].adresseFacturation|split('<br/>') %}
                             {% for facturation in facturations %}
                                 {{ facturation }}<br/>
                             {% endfor %}
                         </td>
                         <td>
-                            {% set livraisons = devis.adresseLivraison|split('<br/>') %}
+                            {% set livraisons = devis[0].adresseLivraison|split('<br/>') %}
                             {% for livraison in livraisons %}
                                 {{ livraison }}<br/>
                             {% endfor %}
@@ -59,15 +60,15 @@
             <table class="table table-bordered">
                 <tr>
                     <td>Livraison:</td>
-                    <td>{{ (devis.totalLivraison / 100) |number_format(2, '.', ',') }}</td>
+                    <td>{{ (devis[0].totalLivraison / 100) |number_format(2, '.', ',') }}</td>
                 </tr>
                 <tr>
                     <td>Total HT:</td>
-                    <td>{{ (devis.totalHt / 100) |number_format(2, '.', ',') }}</td>
+                    <td>{{ (devis[0].totalHt / 100) |number_format(2, '.', ',') }}</td>
                 </tr>
                 <tr>
                     <td>Total TTC:</td>
-                    <td>{{ (devis.totalTtc / 100) |number_format(2, '.', ',')}}</td>
+                    <td>{{ (devis[0].totalTtc / 100) |number_format(2, '.', ',')}}</td>
                 </tr>
             </table>
         </div>
@@ -80,7 +81,7 @@
             <a href="" class="btn btn-lg btn-outline-success" >Payer</a>
         </div>
         <div class="col-6 text-center">
-            <a href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
+            <a href="{{ path('suppression_devis_par_utilisateur', {'token': devis[0].token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
         </div>
     </div>
 

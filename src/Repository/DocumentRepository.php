@@ -104,6 +104,7 @@ class DocumentRepository extends ServiceEntityRepository
         ;
     }
 
+    //[ADMIN] cherche les devis qui ont plus de X jours pour les relancer
     public function findDevisEndDelay($now){
             return $this->createQueryBuilder('d')
             ->where('d.endValidationDevis < :now')
@@ -114,6 +115,19 @@ class DocumentRepository extends ServiceEntityRepository
             ->getResult()
         ;  
     }
+
+    public function findActiveDevis($token){
+        return $this->createQueryBuilder('d')
+        ->where('d.endValidationDevis > :now ')
+        ->setParameter('now', new \DateTimeImmutable('now'))
+        ->andWhere('d.token = :token')
+        ->setParameter('token', $token)
+        ->andWhere('d.numeroFacture IS NULL')
+        ->andWhere('d.isDeleteByUser IS NULL')
+        ->getQuery()
+        ->getResult()
+    ;  
+}
     /*
     public function findOneBySomeField($value): ?Document
     {

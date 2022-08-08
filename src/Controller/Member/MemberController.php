@@ -44,6 +44,29 @@ class MemberController extends AbstractController
     }
 
     /**
+     * @Route("/membre/adresses", name="app_member_adresses", methods={"GET"})
+     */
+    public function membreAdresses(
+        Security $security,
+        AdresseRepository $adresseRepository,
+        InformationsLegalesRepository $informationsLegalesRepository
+        ): Response
+    {
+
+        $user = $security->getUser();
+
+        $livraison_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
+        $facturation_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
+
+        return $this->render('member/adresse/index.html.twig', [
+            'livraison_adresses' => $livraison_adresses,
+            'facturation_adresses' => $facturation_adresses,
+            'informationsLegales' =>  $informationsLegalesRepository->findAll()
+        ]);
+
+    }
+
+    /**
      * @Route("/membre/historique", name="app_member_historique")
      */
     public function membreHistorique(

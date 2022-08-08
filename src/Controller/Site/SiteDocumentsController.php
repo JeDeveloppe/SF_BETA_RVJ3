@@ -6,6 +6,7 @@ namespace App\Controller\Site;
 use App\Repository\DocumentRepository;
 use App\Repository\DocumentLignesRepository;
 use App\Repository\InformationsLegalesRepository;
+use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
@@ -58,7 +59,9 @@ class SiteDocumentsController extends AbstractController
     {
 
         //on cherche le devis par le token et s'il n'est pas deja annuler par l'utilisateur
-        $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => null, 'numeroFacture' => null]);
+        // $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => null, 'numeroFacture' => null]);
+
+        $devis = $documentRepository->findActiveDevis($token);
 
         if($devis == null){
 
@@ -68,7 +71,10 @@ class SiteDocumentsController extends AbstractController
                 'p2' => 'Devis inconnu, supprimer ou déjà facturé !'
             ];
 
-            return $this->render('site/devis/devis_end.html.twig', ['tableau' => $tableau]);
+            return $this->render('site/devis/devis_end.html.twig', [
+                'tableau' => $tableau,
+                'informationsLegales' =>  $informationsLegalesRepository->findAll()
+            ]);
 
         }else{
 

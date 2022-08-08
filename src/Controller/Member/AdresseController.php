@@ -16,23 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class AdresseController extends AbstractController
 {
-    /**
-     * @Route("/", name="app_adresse_index", methods={"GET"})
-     */
-    public function index(Security $security,AdresseRepository $adresseRepository): Response
-    {
 
-        $user = $security->getUser();
-
-        $livraison_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
-        $facturation_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
-
-        return $this->render('member/adresse/index.html.twig', [
-            'livraison_adresses' => $livraison_adresses,
-            'facturation_adresses' => $facturation_adresses,
-        ]);
-
-    }
 
     /**
      * @Route("/new/{slug}/", name="app_adresse_new", methods={"GET", "POST"})

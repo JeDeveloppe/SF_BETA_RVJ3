@@ -409,7 +409,8 @@ class AdminDocumentsController extends AbstractController
             $now = new DateTimeImmutable();
             $endDevis = $now->add(new DateInterval('P'.$delaiDevis.'D'));
             
-            $devis->setEndValidationDevis($endDevis);
+            $devis->setEndValidationDevis($endDevis)
+                ->setIsRelanceDevis(1);
 
             $em->merge($devis);
             $em->flush();
