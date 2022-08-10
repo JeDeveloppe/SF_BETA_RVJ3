@@ -17,7 +17,12 @@ class SiteDocumentsController extends AbstractController
     /**
      * @Route("/devis/suppression-par-utilisateur/{token}", name="suppression_devis_par_utilisateur")
      */
-    public function deleteByUser($token, DocumentRepository $documentRepository, EntityManagerInterface $em): Response
+    public function deleteByUser(
+        $token,
+        DocumentRepository $documentRepository,
+        EntityManagerInterface $em,
+        InformationsLegalesRepository $informationsLegalesRepository
+        ): Response
     {
        //on cherche le devis par le token et s'il n'est pas deja annuler par l'utilisateur
         $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => null]);
@@ -43,7 +48,10 @@ class SiteDocumentsController extends AbstractController
             ]; 
         }
         
-        return $this->render('site/devis/devis_end.html.twig', ['tableau' => $tableau]);
+        return $this->render('site/devis/devis_end.html.twig', [
+            'tableau' => $tableau,
+            'informationsLegales' =>  $informationsLegalesRepository->findAll()
+        ]);
 
     }
 

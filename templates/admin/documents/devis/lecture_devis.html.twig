@@ -92,12 +92,15 @@
                 </div>
 
                 {# PARTIE BOUTONS #}
-                <div class="col-6">
-                    <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Sauvegarder</button>
-                    <input type="hidden" name="user" value="{{ devis.user.id }}">
-                    <input type="hidden" name="demande" value="{{ devis.numeroDevis }}">
-                    <a class="btn btn-success" href="{{ path('mailer_send_mise_a_disposition_devis', {'token': data.token }) }}" target="_blank">Envoyer par email</a>
-                </div>
+                {# si le devis n'est pas echu on affiche les boutons #}
+                {% if devis.endValidationDevis|date("m/d/Y") > "now"|date("m/d/Y") and devis.isDeleteByUser is null %}
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Sauvegarder</button>
+                        <input type="hidden" name="user" value="{{ devis.user.id }}">
+                        <input type="hidden" name="demande" value="{{ devis.numeroDevis }}">
+                        <a class="btn btn-success" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token }) }}">Envoyer par email</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </form>

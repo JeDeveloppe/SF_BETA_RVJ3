@@ -6,7 +6,7 @@
    
    {% if documents | length > 0 %}
       <div class="col-11">
-         <p class="col-12 text-center text-white"><i class="fas fa-info-circle"></i> Les devis de plus de {{ configurations.DevisDelayBeforeDelete }} jours sont automatiquement supprimés.</p>
+         <p class="col-12 text-center text-white"><i class="fas fa-info-circle"></i> Les devis de plus de {{ configurations.DevisDelayBeforeDelete * 2 }} jours sont automatiquement supprimés.</p>
          <table class="table text-center align-middle">
             <thead>
                <th>Numéro de devis</th>

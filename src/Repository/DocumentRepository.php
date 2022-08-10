@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Document;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -92,11 +93,24 @@ class DocumentRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findDocumentsFromUser($user)
+    public function findFacturesFromUser($user)
     {
         return $this->createQueryBuilder('d')
             ->where('d.user = :user')
             ->setParameter('user', $user)
+            ->andWhere('d.numeroFacture IS NOT NULL')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    public function findDevisFromUser($user)
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('d.numeroFacture IS NULL')
+            ->andWhere('d.endValidationDevis > :now')
+            ->setParameter('now', new DateTimeImmutable('now'))
             ->andWhere('d.isDeleteByUser IS NULL')
             ->orderBy('d.id', 'DESC')
             ->getQuery()

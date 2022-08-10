@@ -77,7 +77,15 @@ class MemberController extends AbstractController
     {
         $user = $security->getUser();
 
-        $documents = $documentRepository->findDocumentsFromUser($user);
+        //on cherche les devis
+        $devis = $documentRepository->findDevisFromUser($user);
+        //on cherche les factures
+        $factures = $documentRepository->findFacturesFromUser($user);
+
+        //on met tout dans le meme tableau...
+        $documents = array_merge($devis,$factures);
+        //...que l'on tri par ordre décroissant d'id
+        rsort($documents);
 
         $configurations = $configurationRepository->findAll();
         $configuration = $configurations[0];

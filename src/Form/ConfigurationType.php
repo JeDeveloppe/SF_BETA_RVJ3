@@ -15,7 +15,7 @@ class ConfigurationType extends AbstractType
     {
         $builder
             ->add('DevisDelayBeforeDelete', NumberType::class, [
-                'label' => 'Nombre de jour avant suppression d\'un devis:'
+                'label' => 'Nombre de jours avant relance d\'un devis (x2 avant suppression):'
             ])
             ->add('prefixeFacture', TextType::class, [
                 'label' => 'Préfixe des factures:'
