@@ -17,12 +17,9 @@ body{
 .logoTop {
   top: 0%;
   left: 50%;
-  transform: translate(-60%, 10%);
+  transform: translate(-70%, 10%);
   z-index: 2;
-  width: 11%;
-}
-.navbar-expand{
-  margin-top: 12%;
+  width: 14%;
 }
 
 #precision {
@@ -114,9 +111,6 @@ body{
   .logoTop {
     transform: translate(-20%, 5%);
     width: 10%;
-  }
-  .navbar-expand{
-    margin-top: 0;
   }
 }
 
