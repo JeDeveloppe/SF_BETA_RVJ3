@@ -137,6 +137,7 @@ class CataloguesController extends AbstractController
             'images' => $images,
             'tva' => $tva,
             'informationsLegales' =>  $informationsLegalesRepository->findAll()
+            
         ]);
     }
 
