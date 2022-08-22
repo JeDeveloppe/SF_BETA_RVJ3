@@ -45,6 +45,17 @@ class BoiteRepository extends ServiceEntityRepository
         }
     }
 
+    public function findBoiteInDatabase($recherche)
+    {
+        return $this->createQueryBuilder('b')
+            ->where('b.nom LIKE :val')
+            ->setParameter('val', '%'.$recherche.'%')
+            ->orderBy('b.nom', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Boite[] Returns an array of Boite objects
     //  */

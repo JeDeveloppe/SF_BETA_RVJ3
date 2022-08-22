@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+{% extends 'admin/base.html.twig' %}
 
-<title>New Boite</title>
+{% block title %}Créer une nouvelle boite{% endblock %}
 
 {% block body %}
-    <h1>Create new Boite</h1>
+    <h1 class="col-12 text-center my-5">Créer une nouvelle boite</h1>
+
+    <a class="btn btn-primary mb-5" href="{{ path('admin_boite_index') }}">Retour à la liste</a>
 
     {{ include('admin/boite/_form.html.twig') }}
 
-    <a href="{{ path('admin_boite_index') }}">back to list</a>
 {% endblock %}

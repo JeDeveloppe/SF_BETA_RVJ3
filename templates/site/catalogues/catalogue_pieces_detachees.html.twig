@@ -28,7 +28,8 @@
                     </div>
                     <div class="card-body card-body-catalogue d-flex flex-column align-items-center justify-content-between">
                         <p class="d-flex justify-content-center align-items-center h-100">
-                            <img src="data:image/png;base64,{{ images[key] }}"/>
+                            {# <img src="data:image/png;base64,{{ images[key] }}"/> #}
+                            <img src="data:image/png;base64,{{ boite.imageblob }}"/>
                         </p>
                         {% if is_granted('ROLE_ADMIN') %}
                             <p class="card-text">

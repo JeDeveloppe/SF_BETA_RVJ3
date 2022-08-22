@@ -55,9 +55,9 @@ class CataloguesController extends AbstractController
         );
         //on va stocker les images
         $images = [];
-        foreach ($boites as $key => $boite) {
-            $images[$key] = stream_get_contents($boite->getImageBlob());
-        }
+        // foreach ($boites as $key => $boite) {
+        //     $images[$key] = stream_get_contents($boite->getImageBlob());
+        // }
 
         return $this->render('site/catalogues/catalogue_pieces_detachees.html.twig', [
             'boites' => $boites,
@@ -89,9 +89,11 @@ class CataloguesController extends AbstractController
 
 
             $images = [];
-            foreach ($boites as $key => $boite) {
-                $images[$key] = stream_get_contents($boite->getImageBlob());
-            }
+            // foreach ($boites as $key => $boite) {
+            //     $images[$key] = stream_get_contents($boite->getImageBlob());
+            // }
+
+           
     
 
             return $this->render('site/catalogues/catalogue_pieces_detachees_demande.html.twig', [
@@ -128,16 +130,16 @@ class CataloguesController extends AbstractController
 
         //on va stocker les images
         $images = [];
-        foreach($occasions as $key => $occasion) {
-            $images[$key] = stream_get_contents($occasion->getBoite()->getImageBlob());
-        }
-        
+        // foreach($occasions as $key => $occasion) {
+        //     $images[$key] = stream_get_contents($occasion->getBoite()->getImageBlob());
+        // }
+
+
         return $this->render('site/catalogues/catalogue_jeux_occasion.html.twig', [
             'occasions' => $occasions,
             'images' => $images,
             'tva' => $tva,
             'informationsLegales' =>  $informationsLegalesRepository->findAll()
-            
         ]);
     }
 
@@ -161,9 +163,9 @@ class CataloguesController extends AbstractController
 
     
             $images = [];
-            foreach ($occasion as $key => $occ) {
-                $images[$key] = stream_get_contents($occ->getBoite()->getImageBlob());
-            }
+            // foreach ($occasion as $key => $occ) {
+            //     $images[$key] = stream_get_contents($occ->getBoite()->getImageBlob());
+            // }
             
 
             return $this->render('site/catalogues/catalogue_jeux_occasion_details.html.twig', [

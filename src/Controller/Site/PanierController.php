@@ -111,13 +111,14 @@ class PanierController extends AbstractController
             $informationsLegales = $informationsLegalesRepository->findAll();
             $tva = $informationsLegales[0]->getTauxTva();
 
-            return $this->render('site/panier/index.html.twig', [
+            return $this->render('site/panier/panier.html.twig', [
                 'panier_occasions' => $panier_occasions,
                 'panier_boites' => $panier_boites,
                 'tva' => $tva,
                 'livraison_adresses' => $livraison_adresses,
                 'facturation_adresses' => $facturation_adresses,
-                'adresseRetrait' => $adresseRetrait
+                'informationsLegales' =>  $informationsLegales,
+                'adresseRetrait' => $adresseRetrait,
             ]);
         }
     }

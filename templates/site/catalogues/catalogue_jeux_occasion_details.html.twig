@@ -41,7 +41,8 @@
 								<div class="zoom__bottom zoom__left"></div>
 								<div class="zoom__bottom zoom__centre"></div>
 								<div class="zoom__bottom zoom__right"></div>
-								<img class="zoom__image" src="data:image/png;base64,{{ images[key] }}"/>
+								{# <img class="zoom__image" src="data:image/png;base64,{{ images[key] }}"/> #}
+                            	<img class="zoom__image" src="data:image/png;base64,{{ occasion.boite.imageblob }}"/>
 							</div>
 						</div>
 						<span class="col-12 col-md-6 lead text-muted small text-center">
@@ -94,15 +95,6 @@
 			</div>
 		</div>
 
-		<div class="row mb-3">
-			<div class="col-12 col-md-6">
-				{% if app.request.headers.get('referer') is null %}
-					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catlaogue général</a>
-				{% else %}
-					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catlaogue</a>
-				{% endif %}
-			</div>
-		</div>
 	{% endfor %}
 
 

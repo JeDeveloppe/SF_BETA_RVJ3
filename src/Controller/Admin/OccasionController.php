@@ -33,9 +33,9 @@ class OccasionController extends AbstractController
 
         $images = [];
 
-        foreach ($boites as $key => $boite) {
-            $images[$key] = stream_get_contents($boite->getImageBlob());
-        }
+        // foreach ($boites as $key => $boite) {
+        //     $images[$key] = stream_get_contents($boite->getImageBlob());
+        // }
 
         return $this->render('admin/occasion/index.html.twig', [
             'boites' => $boites,
@@ -50,7 +50,7 @@ class OccasionController extends AbstractController
     {
 
         $boite = $boiteRepository->find($id);
-        $imageBoite = stream_get_contents($boite->getImageBlob());
+        $imageBoite = $boite->getImageBlob();
 
         $occasions = $occasionRepository->findBy(['boite' => $id], ['reference' => 'ASC']);
 
