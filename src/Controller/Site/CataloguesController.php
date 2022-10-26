@@ -160,17 +160,8 @@ class CataloguesController extends AbstractController
             return $this->redirectToRoute('catalogue_jeux_occasion');
         }else{
 
-
-    
-            $images = [];
-            // foreach ($occasion as $key => $occ) {
-            //     $images[$key] = stream_get_contents($occ->getBoite()->getImageBlob());
-            // }
-            
-
             return $this->render('site/catalogues/catalogue_jeux_occasion_details.html.twig', [
                 'occasions' => $occasion,
-                'images' => $images,
                 'tva' => $tva,
                 'informationsLegales' =>  $informationsLegalesRepository->findAll()
             ]);

@@ -45,6 +45,7 @@ class PartenaireRepository extends ServiceEntityRepository
         }
     }
 
+
     // /**
     //  * @return Partenaire[] Returns an array of Partenaire objects
     //  */

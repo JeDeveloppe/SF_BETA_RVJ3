@@ -20,12 +20,6 @@ class SearchBoiteType extends AbstractType
                     'placeholder' => 'Rechercher un jeu...'
                 ]
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Chercher',
-                'attr' => [
-                    'class' => 'btn-success'
-                ]
-            ])
         ;
     }
 

@@ -8,21 +8,21 @@
     <table class="table table-responsive text-center align-middle">
         <thead>
             <tr>
-                <th>ImageBlob</th>
-                <th>Name</th>
+                <th>Image</th>
+                <th>Nom</th>
                 <th>Url</th>
-                <th>IsDon</th>
-                <th>IsDetachee</th>
-                <th>IsComplet</th>
-                <th>IsEcommerce</th>
-                <th>IsOnLine</th>
+                <th>Accepte les dons</th>
+                <th>Vend des pièces détachées</th>
+                <th>Vend des jeux complet</th>
+                <th>Site E-commerce</th>
+                <th>En ligne</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
         {% for key,partenaire in partenaires %}
             <tr>
-                <td><img class="img-admin-liste" src="data:image/png;base64,{{ images[key] }}"/></td>
+                <td><img class="img-admin-liste" src="data:image/png;base64,{{ partenaire.imageblob }}"/></td>
                 <td>{{ partenaire.name }}</td>
                 <td>{{ partenaire.url }}</td>
                 <td>{{ partenaire.isDon ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>

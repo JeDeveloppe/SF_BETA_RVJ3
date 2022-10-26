@@ -164,7 +164,10 @@ class Partenaire
 
     public function getImageBlob()
     {
-        return $this->imageBlob;
+        // return $this->imageBlob;
+        if(!is_null($this->imageBlob)){
+            return stream_get_contents($this->imageBlob,-1,0);
+        }
     }
 
     public function setImageBlob($imageBlob): self

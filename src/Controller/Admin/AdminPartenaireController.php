@@ -23,15 +23,9 @@ class AdminPartenaireController extends AbstractController
     {
 
         $partenaires = $partenaireRepository->findAll();
-        //on va stocker les images
-        $images = [];
-        foreach ($partenaires as $key => $partenaire) {
-            $images[$key] = stream_get_contents($partenaire->getImageBlob());
-        }
 
         return $this->render('admin/partenaire/index.html.twig', [
             'partenaires' => $partenaires,
-            'images' => $images
         ]);
     }
 
@@ -106,8 +100,7 @@ class AdminPartenaireController extends AbstractController
 
         return $this->renderForm('admin/partenaire/edit.html.twig', [
             'partenaire' => $partenaire,
-            'form' => $form,
-            'image' => stream_get_contents($partenaire->getImageBlob()),
+            'form' => $form
         ]);
     }
 

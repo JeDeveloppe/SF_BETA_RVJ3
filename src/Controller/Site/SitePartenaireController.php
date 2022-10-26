@@ -7,6 +7,7 @@ use App\Entity\Partenaire;
 use App\Form\PartenaireType;
 use App\Repository\PaysRepository;
 use App\Entity\InformationsLegales;
+use App\Repository\DepartementRepository;
 use App\Repository\PartenaireRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,28 +22,25 @@ class SitePartenaireController extends AbstractController
      * @Route("/partenaires/{pays}", name="carte_partenaires", methods={"GET"})
      */
     public function index(
-        PartenaireRepository $partenaireRepository,
+        DepartementRepository $departementRepository,
         $pays,
         InformationsLegalesRepository $informationsLegalesRepository,
-        PaysRepository $paysRepository
+        PaysRepository $paysRepository,
+        PartenaireRepository $partenaireRepository
         ): Response
     {
 
         $country = $paysRepository->findOneBy(['name' => $pays]);
-        if (!$country) {
+        if(!$country) {
             $this->addFlash('danger', 'Pays inconnu!');
             return $this->redirectToRoute('accueil');
         }
 
-        //on cree un tableau vite
+        //on cherche les partenaires du pays selectionner
+        $partenaires = $partenaireRepository->findBy(['country' => $country->getId()]);
+
         $depots = [];
-        $partenaires = $partenaireRepository->findBy(['country' => $country]);
-
-        $images = [];
-        foreach ($partenaires as $key => $partenaire) {
-            $images[$key] = stream_get_contents($partenaire->getImageBlob());
-        }
-
+        
         //on boucle sur chaque partenaire
         foreach($partenaires as $key => $partenaire){
 
@@ -66,7 +64,7 @@ class SitePartenaireController extends AbstractController
                 "lat" => $partenaire->getVille()->getLat(),
                 "lng" => $partenaire->getVille()->getLng(),
                 "name" => $partenaire->getName().' à '.$partenaire->getVille()->getVilleNom().' ('.$partenaire->getVille()->getVilleDepartement().')',
-                // "description" => '<p style="margin-top:10px; width:100%; text-align:center;"><img style="width:100px;" src="data:image/jpeg;base64,'.$images[$key].'"/></p><p>'.$partenaire->getDescription().'</p><p><b>Le service collecte:</b><br/>'.$partenaire->getCollecte().'</p><p>'.$detailsVente.'</p>',
+                "description" => '<p style="margin-top:10px; width:100%; text-align:center;"><img style="width:100px;" src="data:image/jpeg;base64,'.$partenaire->getImageBlob().'"/></p><p>'.$partenaire->getDescription().'</p><p><b>Le service collecte:</b><br/>'.$partenaire->getCollecte().'</p><p>'.$detailsVente.'</p>',
                 "url" => $partenaire->getUrl(),
                 "type" => "image",
                 "image_url" => "https://www.refaitesvosjeux.fr/images/design/logoDepots.png",
@@ -80,7 +78,7 @@ class SitePartenaireController extends AbstractController
                         "lat" => $partenaire->getVille()->getLat(),
                         "lng" => $partenaire->getVille()->getLng(),
                         "name" => $partenaire->getName().' à '.$partenaire->getVille()->getVilleNom().' ('.$partenaire->getVille()->getVilleDepartement().')',
-                        // "description" => '<p style="margin-top:10px; width:100%; text-align:center;"><img style="width:100px;" src="data:image/jpeg;base64,'.$images[$key].'"/></p><p>'.$partenaire->getDescription().'</p><p><b>Le service collecte:</b><br/>'.$partenaire->getCollecte().'</p><p>'.$detailsVente.'</p><p>Site E-commerce disponible.</p>',
+                        "description" => '<p style="margin-top:10px; width:100%; text-align:center;"><img style="width:100px;" src="data:image/jpeg;base64,'.$partenaire->getImageBlob().'"/></p><p>'.$partenaire->getDescription().'</p><p><b>Le service collecte:</b><br/>'.$partenaire->getCollecte().'</p><p>'.$detailsVente.'</p><p>Site E-commerce disponible.</p>',
                         "url" => $partenaire->getUrl(),
                         "size" => "35",
                         "image_url" => "imgURL"
@@ -91,7 +89,7 @@ class SitePartenaireController extends AbstractController
                         "lat" => $partenaire->getVille()->getLat(),
                         "lng" => $partenaire->getVille()->getLng(),
                         "name" => $partenaire->getName().' à '.$partenaire->getVille()->getVilleNom().' ('.$partenaire->getVille()->getVilleDepartement().')',
-                        // "description" => '<p style="margin-top:10px; width:100%; text-align:center;"><img style="width:100px;" src="data:image/jpeg;base64,'.$images[$key].'"/></p><p>'.$partenaire->getDescription().'</p><p><b>Le service collecte:</b><br/>'.$partenaire->getCollecte().'</p><p>'.$detailsVente.'</p>',
+                        "description" => '<p style="margin-top:10px; width:100%; text-align:center;"><img style="width:100px;" src="data:image/jpeg;base64,'.$partenaire->getImageBlob().'"/></p><p>'.$partenaire->getDescription().'</p><p><b>Le service collecte:</b><br/>'.$partenaire->getCollecte().'</p><p>'.$detailsVente.'</p>',
                         "url" => $partenaire->getUrl(),
                         "size" => "35",
                         "image_url" => "imgURL"
