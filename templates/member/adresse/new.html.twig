@@ -1,10 +1,12 @@
 {% extends 'member/base.html.twig' %}
 
 {% block member %}
-    <a class="btn btn-primary" href="{{ path('app_adresse_index') }}">Retour aux adresses</a>
 
     <div class="row my-5">
-    <h3>Création d'une adresse:</h3>
+    
+    <a class="btn btn-primary text-center" href="{{ path('app_member_adresses') }}">Retour aux adresses</a>
+    
+    <h3 class="col-12 text-center my-4">Création d'une adresse de {{array['titre']}}:</h3>
 
     {{ include('member/adresse/_form.html.twig') }}
 

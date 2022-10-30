@@ -9,10 +9,8 @@
 
     {% include "member/nav.html.twig" %}
 
-    <div class="container d-flex flex-column justify-content-between h-100 card bg-secondary my-5">
-        {% block member %}
-         
-        {% endblock %}
-    </div>
+         <div class="container d-flex flex-column justify-content-between h-100">
+            {% block member %}{% endblock %}
+        </div>
 
 {% endblock %}
