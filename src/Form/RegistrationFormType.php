@@ -89,7 +89,7 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'label' => "",
+                'label' => false,
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
@@ -104,6 +104,7 @@ class RegistrationFormType extends AbstractType
                 $departments = $this->villeRepository->findDepartmentsByPays($isoCode);
                 $form
                     ->add('department', EntityType::class,  [
+                        'label' => 'Département / Région',
                         'class' => Ville::class,
                         'choice_label' => 'villeDepartement',
                         'choices' => $departments,
