@@ -116,7 +116,7 @@ class DocumentService
         //puis on met dans la base
         $document = new Document();
         $now = new DateTimeImmutable();
-        $endDevis = $now->add(new DateInterval('P1D'));
+        $endDevis = $now->add(new DateInterval('P3D'));
 
         $document->setUser($this->userRepository->find($user))
                 ->setCreatedAt($now)

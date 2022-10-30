@@ -194,8 +194,10 @@ class PanierController extends AbstractController
     /**
      * @Route("/panier/demande-de-devis/fin", name="panier-soumis")
      */
-    public function panierDemandeDevisEnd(): Response
+    public function panierDemandeDevisEnd(InformationsLegalesRepository $informationsLegalesRepository): Response
     {
-        return $this->render('site/panier/demandeTerminee.html.twig');
+        return $this->render('site/panier/demandeTerminee.html.twig', [
+            'informationsLegales' =>  $informationsLegalesRepository->findAll()
+        ]);
     }
 }

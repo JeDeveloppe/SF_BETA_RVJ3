@@ -106,7 +106,7 @@ class SiteDocumentsController extends AbstractController
                 'occasions' => $occasions,
                 'boites' => $boites,
                 'totalOccasions' => $totalOccasions,
-                'totalDetachees' => $totalDetachees / 100,
+                'totalDetachees' => $totalDetachees,
                 'informationsLegales' =>  $informationsLegalesRepository->findAll()
             ]);
         }
