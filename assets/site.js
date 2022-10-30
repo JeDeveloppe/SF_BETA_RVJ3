@@ -14,7 +14,6 @@ import { Tooltip, Toast, Popover } from 'bootstrap';
 
 // You can specify which plugins you need
 // start the Stimulus application
-import $ from 'jquery';
 import './bootstrap';
 
 

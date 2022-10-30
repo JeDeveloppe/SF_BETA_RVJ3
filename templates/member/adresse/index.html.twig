@@ -8,14 +8,13 @@
                 <thead>
                     <tr>
                         <th>Les adresses de facturation</th>
-                        <th>Modifier</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for adresse in facturation_adresses %}
                     <tr>
-                        <td>{{ adresse.organisation }} {{ adresse.lastName }} {{ adresse.firstName }}, {{ adresse.adresse }} - {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
-                        <td>
+                        <td class="col-9">{{ adresse.organisation }} {{ adresse.lastName }} {{ adresse.firstName }}, {{ adresse.adresse }}, {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
+                        <td class="col-3 text-center align-self-center">
                             <a class="btn btn-warning" href="{{ path('app_adresse_edit', {'id': adresse.id}) }}">Éditer</a>
                             {{ include('member/adresse/_delete_form.html.twig') }}
                         </td>
@@ -28,7 +27,7 @@
                 </tbody>
             </table>
             {% if facturation_adresses | length < 2 %}
-                <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'facturation'}) }}">Créer une nouvelle adresse (maximum 2)</a>
+                <a class="btn btn-outline-primary" href="{{ path('app_adresse_new', {'slug': 'facturation'}) }}">Créer une nouvelle adresse (maximum 2)</a>
             {% else %}
                 <p class="p-2 text-center h5">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
             {% endif %}
@@ -41,14 +40,13 @@
                 <thead>
                     <tr>
                         <th>Les adresses de livraison</th>
-                        <th>Modifier</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for adresse in livraison_adresses %}
                     <tr>
-                        <td>{{ adresse.organisation }} {{ adresse.lastName }} {{ adresse.firstName }}, {{ adresse.adresse }} {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
-                        <td>
+                        <td class="col-9">{{ adresse.organisation }} {{ adresse.lastName }} {{ adresse.firstName }}, {{ adresse.adresse }}, {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
+                        <td class="col-3 text-center align-self-center">
                             <a class="btn btn-warning" href="{{ path('app_adresse_edit', {'id': adresse.id}) }}">Éditer</a>
                             {{ include('member/adresse/_delete_form.html.twig') }}
                         </td>
@@ -61,7 +59,7 @@
                 </tbody>
             </table>
             {% if livraison_adresses | length < 2 %}
-                <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'livraison'}) }}">Créer une nouvelle adresse (maximum 2)</a>
+                <a class="btn btn-outline-primary" href="{{ path('app_adresse_new', {'slug': 'livraison'}) }}">Créer une nouvelle adresse (maximum 2)</a>
             {% else %}
                 <p class="p-2 text-center h5">Vous avez le nombre d'adresse maximum autorisées. (modifiez en une...)</p>
             {% endif %}

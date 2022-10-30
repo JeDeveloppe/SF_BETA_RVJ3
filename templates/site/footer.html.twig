@@ -5,7 +5,11 @@
         <li><a class="text-white text-decoration-none" href="{{ path('cgv') }}">CGV</a></li>
         <li><a class="text-white text-decoration-none" href="{{ path('contact') }}">Contact</a></li>
         <li><a class="text-white text-decoration-none" href="{{ path('carte_partenaires', {'pays': informationsLegales[0].country.name }) }}">Partenaires</a></li>
-        <li><a class="text-white text-decoration-none" href="https://www.facebook.com/refaitesvosjeux" target="_blank">Nous suivre sur Facebook</a></li>
+        <li>
+            <a class="col-6" href="https://www.facebook.com/refaitesvosjeux">
+                <img src="{{ asset('build/images/design/FindUsOnFacebook.png') }}" class="imgFindUsOnFacebook" alt="Suivez-nous sur Facebook !">
+            </a>
+        </li>
     </ul>
     <div class="col-12 text-center">
         <a class="text-warning text-decoration-none" href="https://www.je-developpe.fr/" target="_blank">Sité créé par: Je-Développe</a><br/>
