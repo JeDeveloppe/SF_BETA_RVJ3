@@ -1,0 +1,26 @@
+<div class="col-12 bg-opacity-50 bg-warning p-1 shadow rounded-top">
+	{% if app.user %}
+		{% if app.user.department != 14 %}
+			<span id="precisionIdentificationDetails" class="col-11 col-sm-10 mx-auto col-md-9 bg-vos p-2">
+				<i class="fas fa-lightbulb text-info"></i>
+				Réservé au bassin de Caen pour le moment...
+			</span>
+		{% else %}
+			<form class="text-center" method="POST" action="{{ path('panier-ajout-jeu-occasion') }}">
+				<input type="hidden" name="rvjc" value="{{ occasion.id }}">
+				<button class="btn btn-info pl-3" type="submit">Ajouter au panier</button>
+			</form>
+		{% endif %}
+	{% else %}
+		<div class="col-12 text-center mt-4">
+			<i class="fas fa-lightbulb text-info"></i>
+			Vous devez être identifié(e) pour continuer...
+			<div class="col-12 text-center">
+				<div class="btn-group mt-2" role="group" aria-label="Basic example">
+					<a href="/login/" class="btn btn-outline-success">Connexion</a>
+					<a href="/inscription-au-service/" class="btn btn-outline-secondary">Inscription</a>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+</div>

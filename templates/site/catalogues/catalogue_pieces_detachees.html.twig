@@ -15,45 +15,19 @@
 
         {% for key,boite in boites %}
             
-            <div class="col-11 mx-auto col-md-6 col-lg-4 col-xl-3 m-2">
-                <div class="card col-12 p-0 h-100">
-                        {% if boite.nom | length > 20 %}
-                            <div class="card-header text-center bg-secondary text-white" data-html="true" data-toggle="tooltip" data-placement="top" title="{{ boite.nom }}">
-                            {{ boite.nom | slice(0, 20) ~ '...' }} <br />
-                        {% else %}
-                            <div class="card-header text-center bg-secondary text-white">
-                            {{ boite.nom }} <br/>
-                        {% endif %}
-                            {{ boite.editeur }} - {{ boite.annee }}
-                    </div>
-                    <div class="card-body card-body-catalogue d-flex flex-column align-items-center justify-content-between">
-                        <p class="d-flex justify-content-center align-items-center h-100">
-                            {# <img src="data:image/png;base64,{{ images[key] }}"/> #}
-                            <img src="data:image/png;base64,{{ boite.imageblob }}"/>
-                        </p>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <p class="card-text">
-                                <a class="btn btn-primary mr-3" href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.nom | lower | slug, 'editeur': boite.editeur | lower | slug }) }}">Faire une demande de pièces</a>
-                                <a href="{{ path('admin_boite_edit', {'id': boite.id }) }}"><i class="fa-solid fa-gear"></i></a>
-                            </p>
-                        {% else %}
-                            <p class="card-text">
-                                <a class="btn btn-primary" href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.nom | lower | slug, 'editeur': boite.editeur | lower | slug }) }}">Faire une demande de pièces</a>
-                            </p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
+        {% include "site/components/catalogues/card-pieces-detachees.html.twig" %}
 
         {% endfor %}
     </div>
 
     {% if boites | length > 0 %}
+
         <div class="row my-5">
             <div class="col-12 d-flex justify-content-center">
-                {{ knp_pagination_render(boites, 'site/pagination.html.twig') }}
+                {{ knp_pagination_render(boites, 'site/components/catalogues/pagination.html.twig') }}
             </div>
         </div>
+
     {% endif %}
 
 <script>

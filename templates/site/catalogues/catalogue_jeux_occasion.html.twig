@@ -7,21 +7,38 @@
 
     <div class="row">
         {% for occasion in occasions %}
-            <div class="col-12 p-2 col-sm-6 col-md-4 col-lg-3">
-                <div class="card col-12 p-0 h-100">
-                    <div class="card-header text-center">
-                        {{ occasion.boite.nom }} <br/>
-                        {{ occasion.boite.editeur }} - {{ occasion.boite.annee }}
+            <div class="col-12 p-1 col-md-6 col-lg-4 col-xl-3">
+                <div class="card col-12 h-100">
+                    <div class="card-header col-12 p-1 d-flex flex-column justify-content-center align-items-center">
+                        <div class="">{{ occasion.boite.nom }}</div>
+                        <div class="">{{ occasion.boite.editeur }}</div>
+                        <div class="">{{ occasion.boite.annee }}</div>
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between align-items-center">
-                        <p class="d-flex justify-content-center align-items-center">
-                            <img src="data:image/jpeg;charset=utf-8;base64, {{ occasion.boite.imageBlob }}" alt="{{ occasion.boite.nom }} - {{ occasion.boite.annee }}" />
-                        </p>
-                        <p>Prix TTC: {{ (occasion.priceHt * tva) | number_format(2, '.', ',') }}</p>
-              
-                    </div>
-                    <div class="col-12 text-center mb-2">
-                        <a class="btn btn-primary" href="{{ path('catalogue_jeux_occasion_details',  {'id': occasion.id, 'slug':occasion.boite.nom | lower | slug, 'editeur': occasion.boite.editeur | lower | slug }) }}">Voir</a>
+                         <div class="d-flex justify-content-center align-items-center h-100">
+                            {# <img src="data:image/png;base64,{{ images[key] }}"/> #}
+                            <img src="data:image/png;base64,{{ occasion.boite.imageblob }}"/>
+                        </div>
+                   
+                        <div class="col-12 mt-3">
+                             <div class="col-12 lead text-muted small text-center mb-2">
+                                Photo non contractuelle
+                            </div>
+                            <div>État de la boite: {{ occasion.etatBoite }}</div>
+                            <div>État du matériel: {{ occasion.etatMateriel }}</div>
+                            <div>Règle du jeu: {{ occasion.regleJeu }}</div>
+                            <div class="col-12 text-end">
+                                <a href="{{ path('catalogue_jeux_occasion_details',  {'id': occasion.id, 'slug':occasion.boite.nom | lower | slug, 'editeur': occasion.boite.editeur | lower | slug }) }}">Voir plus...</a>
+                            </div>
+                            {% if occasion.information is not null  %}
+                                <div><em>Informations:</em></p><p class="ml-5">{{ occasion.information }}</div>
+                            {% endif %}
+                            <div class="col-12 text-center my-2">Prix TTC: {{ (occasion.priceHt * tva) | number_format(2, '.', ',') }} </div>
+
+                            {# on inclus le bouton login/register/panier #}
+                            {% include "site/components/catalogues/button-connexion-inscription-panier.html.twig" %}
+
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -29,9 +46,13 @@
     </div>
  
     {% if occasions | length > 0 %}
-         <div class="col-12 d-flex justify-content-center py-5">
-            {{ knp_pagination_render(occasions, 'site/pagination.html.twig') }}
+
+        <div class="row my-5">
+            <div class="col-12 d-flex justify-content-center">
+                {{ knp_pagination_render(occasions, 'site/components/catalogues/pagination.html.twig') }}
+            </div>
         </div>
+        
     {% endif %}
 
 

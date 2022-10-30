@@ -59,30 +59,10 @@
 						{% endif %}
 
 						<p>Prix TTC: {{ occasion.priceHt }} </p>
-						<div class="position-relative">
-						    {% if app.user %}
-								{% if app.user.department != 14 %}
-									<span id="precisionIdentificationDetails" class="col-11 col-sm-10 mx-auto col-md-9 bg-vos p-2">
-										<i class="fas fa-lightbulb text-info"></i> Réservé au bassin de Caen pour le moment...
-									</span>
-								{% else %}
-									<form class="text-center" method="POST" action="{{ path('panier-ajout-jeu-occasion') }}">
-										<input type="hidden" name="rvjc" value="{{ occasion.id }}">
-										<button class="btn btn-info pl-3" type="submit">Ajouter au panier</button>
-									</form>
-								{% endif %}
-							{% else %}
-								<span id="precisionIdentificationDetails" class="col-11 col-sm-10 mx-auto col-md-9 bg-vos pt-3 pb-4">
-									<i class="fas fa-lightbulb text-info"></i> Vous devez être identifié(e) pour continuer...
-									<div class="text-center">
-										<div class="btn-group mt-2" role="group" aria-label="Basic example">
-											<a href="/connexion/" class="btn btn-secondary">Connexion</a>
-											<a href="/inscription/" class="btn btn-secondary">Inscription</a>
-										</div>
-									</div>
-								</span>
-							{% endif %}
-						</div>
+                        
+						{# on inclus le bouton login/register/panier #}
+                        {% include "site/components/catalogues/button-connexion-inscription-panier.html.twig" %}
+
 					</div> 
 					</div>
 
