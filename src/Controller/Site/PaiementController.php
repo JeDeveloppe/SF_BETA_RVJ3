@@ -2,35 +2,57 @@
 
 namespace App\Controller\Site;
 
-use Slim\App;
+use Stripe\Charge;
 use Stripe\Stripe;
-use Slim\Http\Request;
+use Stripe\Checkout\Session;
 use App\Repository\DocumentRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 
 class PaiementController extends AbstractController
 {
     #[Route('/paiement/{token}', name: 'app_paiement')]
-    public function creationPaiement($token, DocumentRepository $documentRepository): Response
+    public function creationPaiement($token, DocumentRepository $documentRepository, Request $request): Response
     {
 
-        $devis = $documentRepository->findActiveDevis($token);
+        $document = $documentRepository->findOneBy(['token' => $token, 'numeroFacture' => NULL, 'paiement' => NULL]);
 
-        if(!$devis){
+        if(!$document){
             //pas de devis
             $this->addFlash('warning', 'Devis inconnu!');
             return $this->redirectToRoute('accueil');
         }
 
+        $stripe = new Stripe();
+        $stripe->setApiKey($_ENV["STRIPE_SECRET"]);
 
-        return $this->render('paiement/index.html.twig', [
-            'controller_name' => 'PaiementController',
-        ]);
+
+        $session = Session::create([
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'eur',
+                    
+                    'product_data' => [
+                            'name' => 'Devis '.$document->getNumeroDevis(),
+                        ],
+                    'unit_amount' => $document->getTotalTTC(),
+                ],
+              'quantity' => 1,
+            ]],
+            'email' => $document->getUser()->getEmail(),
+            
+            'mode' => 'payment',
+            'success_url' => $this->generateUrl('paiement_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'cancel_url' => $this->generateUrl('paiement_canceled', [], UrlGeneratorInterface::ABSOLUTE_URL),
+          ]);
+
+        return $this->redirect($session->url, 303);
     }
+
 
     /**
      * @Route("/paiement/validation", name="paiement_success")
