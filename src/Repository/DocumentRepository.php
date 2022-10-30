@@ -123,6 +123,7 @@ class DocumentRepository extends ServiceEntityRepository
             ->where('d.endValidationDevis < :now')
             ->setParameter('now', $now)
             ->andWhere('d.numeroFacture IS NULL')
+            ->andWhere('d.isDeleteByUser IS NULL')
             ->orderBy('d.id', 'DESC')
             ->getQuery()
             ->getResult()

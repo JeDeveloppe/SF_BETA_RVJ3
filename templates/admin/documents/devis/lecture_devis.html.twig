@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Devis{% endblock %}
+{% block title %}Devis (modifications){% endblock %}
 
 {% block body %}
     {% set tva = devis.tauxTva + 100 / 100 %}
@@ -52,6 +52,8 @@
             </div>
         </div>
 
+
+{% if devis.isDeleteByUser is null %}
 
     <div class="row justify-content-center my-5">
             <h3>Totaux:</h3>
@@ -106,98 +108,99 @@
     </form>
 
 
-<script>
-    let tva = {{ tva }};
-    let totalOccasions = {{ totalOccasions * tva }};
-    let totalDetachees = {{ totalDetachees }};
+    <script>
+        let tva = {{ tva }};
+        let totalOccasions = {{ totalOccasions * tva }};
+        let totalDetachees = {{ totalDetachees }};
 
-    let divTotalOccasions = document.getElementById('totalOccasions');
-    let divTotalPiecesDetachees = document.getElementById('totalPiecesDetachees');
-    let divTotalLivraison = document.getElementById('totalLivraison');
-    let divTotalGeneralTTC = document.getElementById('totalGeneralTTC');
-    let divTotalGeneralHT = document.getElementById('totalGeneralHT');
-    let selectLivraison = document.getElementById('selectLivraison');
-    let totalLignesPiecesDetachees = 0;
+        let divTotalOccasions = document.getElementById('totalOccasions');
+        let divTotalPiecesDetachees = document.getElementById('totalPiecesDetachees');
+        let divTotalLivraison = document.getElementById('totalLivraison');
+        let divTotalGeneralTTC = document.getElementById('totalGeneralTTC');
+        let divTotalGeneralHT = document.getElementById('totalGeneralHT');
+        let selectLivraison = document.getElementById('selectLivraison');
+        let totalLignesPiecesDetachees = 0;
 
-    let hiddenValues = [];
-    let divHiddenValues = document.getElementById('hiddenValues');
+        let hiddenValues = [];
+        let divHiddenValues = document.getElementById('hiddenValues');
 
-    if(totalOccasions > 0){
-        divTotalOccasions.innerHTML = '<input type="text" class="form-control" name="totalOccasions" value="'+totalOccasions.toFixed(2)+'" class="text-right" size="5" readonly>';
-        hiddenOccasion = '<input type="hidden" name="totalOccasionsTTC" id="hiddenInputOccasion" value="'+totalOccasions.toFixed(2)+'">';
-    }else{
-        divTotalOccasions.innerHTML = '<input type="text" class="form-control" name="totaOccasions" value="0.00" class="text-right" size="5" readonly>';
-        hiddenOccasion = '<input type="hidden" name="totalOccasionsTTC" id="hiddenInputOccasion" value="0.00">';
-    }
-
-    function notNull(str){
-        if(str === ""){
-            str = "0";
-        }
-        return str;
-    }
-
-
-    function calculDevis(){
-
-        //clear innerHTML
-        hiddenValues = [];
-        hiddenValues.push(hiddenOccasion);
-
-        let elts = document.getElementsByName('prix[]');
-        totalLignesPiecesDetachees = 0;
-
-        elts.forEach(element => {
-                totalLignesPiecesDetachees += +element.value;
-
-                if(element.value > 0){
-                    let hiddenLignePieceDetachee = '<input type="hidden" name="prixLigne[]" value="'+element.value+'">';
-                    hiddenValues.push(hiddenLignePieceDetachee);
-                }
-
-                divTotalPiecesDetachees.innerHTML = '<input type="text" class="form-control" name="totalPiecesDetacheesTTC" value="'+totalLignesPiecesDetachees.toFixed(2)+'" class="text-right" size="5" readonly>';
-                
-                if(totalLignesPiecesDetachees > 0){
-                    hiddenPieceDetachees = '<input type="hidden" name="totalPiecesDetacheesTTC" id="hiddenInputTotalPiecesDetachees" value="'+totalLignesPiecesDetachees.toFixed(2)+'">';
-                    hiddenValues.push(hiddenPieceDetachees);
-                }
-        });
-
-
-        if(selectLivraison.value === "" || selectLivraison.value == 0){
-            totalLivraison = 0;
-            divTotalLivraison.innerHTML = '<input type="text" class="form-control" name="totalLivraisonTTC" value="0.00" class="text-right" size="5" readonly>';
+        if(totalOccasions > 0){
+            divTotalOccasions.innerHTML = '<input type="text" class="form-control" name="totalOccasions" value="'+totalOccasions.toFixed(2)+'" class="text-right" size="5" readonly>';
+            hiddenOccasion = '<input type="hidden" name="totalOccasionsTTC" id="hiddenInputOccasion" value="'+totalOccasions.toFixed(2)+'">';
         }else{
-            totalLivraison = Number(selectLivraison.value);
-            hiddenLivraison = '<input type="hidden" name="totalLivraison" id="hiddenInputTotalLivraison" value="'+totalLivraison.toFixed(2)+'">';
-            hiddenValues.push(hiddenLivraison);
-            divTotalLivraison.innerHTML = '<input type="text" class="form-control" name="totalLivraisonTTC" value="'+totalLivraison.toFixed(2)+'" class="text-right" size="5" readonly>';
+            divTotalOccasions.innerHTML = '<input type="text" class="form-control" name="totaOccasions" value="0.00" class="text-right" size="5" readonly>';
+            hiddenOccasion = '<input type="hidden" name="totalOccasionsTTC" id="hiddenInputOccasion" value="0.00">';
+        }
+
+        function notNull(str){
+            if(str === ""){
+                str = "0";
+            }
+            return str;
         }
 
 
-        totalGeneralTTC = notNull(totalOccasions) + notNull(totalLignesPiecesDetachees) + notNull(totalLivraison);
-        totalGeneralHT = totalGeneralTTC / tva;
+        function calculDevis(){
 
+            //clear innerHTML
+            hiddenValues = [];
+            hiddenValues.push(hiddenOccasion);
+
+            let elts = document.getElementsByName('prix[]');
+            totalLignesPiecesDetachees = 0;
+
+            elts.forEach(element => {
+                    totalLignesPiecesDetachees += +element.value;
+
+                    if(element.value > 0){
+                        let hiddenLignePieceDetachee = '<input type="hidden" name="prixLigne[]" value="'+element.value+'">';
+                        hiddenValues.push(hiddenLignePieceDetachee);
+                    }
+
+                    divTotalPiecesDetachees.innerHTML = '<input type="text" class="form-control" name="totalPiecesDetacheesTTC" value="'+totalLignesPiecesDetachees.toFixed(2)+'" class="text-right" size="5" readonly>';
+                    
+                    if(totalLignesPiecesDetachees > 0){
+                        hiddenPieceDetachees = '<input type="hidden" name="totalPiecesDetacheesTTC" id="hiddenInputTotalPiecesDetachees" value="'+totalLignesPiecesDetachees.toFixed(2)+'">';
+                        hiddenValues.push(hiddenPieceDetachees);
+                    }
+            });
+
+
+            if(selectLivraison.value === "" || selectLivraison.value == 0){
+                totalLivraison = 0;
+                divTotalLivraison.innerHTML = '<input type="text" class="form-control" name="totalLivraisonTTC" value="0.00" class="text-right" size="5" readonly>';
+            }else{
+                totalLivraison = Number(selectLivraison.value);
+                hiddenLivraison = '<input type="hidden" name="totalLivraison" id="hiddenInputTotalLivraison" value="'+totalLivraison.toFixed(2)+'">';
+                hiddenValues.push(hiddenLivraison);
+                divTotalLivraison.innerHTML = '<input type="text" class="form-control" name="totalLivraisonTTC" value="'+totalLivraison.toFixed(2)+'" class="text-right" size="5" readonly>';
+            }
+
+
+            totalGeneralTTC = notNull(totalOccasions) + notNull(totalLignesPiecesDetachees) + notNull(totalLivraison);
+            totalGeneralHT = totalGeneralTTC / tva;
+
+            divTotalGeneralHT.innerHTML = '<input type="text" class="form-control" name="totalGeneralHT" value="'+totalGeneralHT.toFixed(2)+'" class="text-right" size="5" readonly>';
+            hiddenTotalHT = '<input type="hidden" name="totalGeneralHT" value="'+totalGeneralHT.toFixed(2)+'">';
+            hiddenValues.push(hiddenTotalHT);
+
+            hiddenTotalTTC = '<input type="hidden" name="totalGeneralTTC" value="'+totalGeneralTTC.toFixed(2)+'">';
+            hiddenValues.push(hiddenTotalTTC);
+
+            divTotalGeneralTTC.innerHTML = '<input type="text" class="form-control" name="totalGeneralTTC" value="'+totalGeneralTTC.toFixed(2)+'" class="text-right" size="5" readonly>';
+
+            divHiddenValues.innerHTML = hiddenValues.join("");
+        }
+
+        let totalLivraison = 0;
+        let totalGeneralTTC = notNull(totalOccasions) + notNull(totalLignesPiecesDetachees) + notNull(totalLivraison);
+        let totalGeneralHT = totalGeneralTTC / tva;
+
+        divTotalPiecesDetachees.innerHTML = '<input type="text" class="form-control" name="totalPiecesDetachees" value="'+totalDetachees.toFixed(2)+'" class="text-right" size="5" readonly>';
+        divTotalLivraison.innerHTML = '<input type="text" class="form-control" name="totalLivraison" value="0.00" class="text-right" size="5" readonly>';
         divTotalGeneralHT.innerHTML = '<input type="text" class="form-control" name="totalGeneralHT" value="'+totalGeneralHT.toFixed(2)+'" class="text-right" size="5" readonly>';
-        hiddenTotalHT = '<input type="hidden" name="totalGeneralHT" value="'+totalGeneralHT.toFixed(2)+'">';
-        hiddenValues.push(hiddenTotalHT);
-
-        hiddenTotalTTC = '<input type="hidden" name="totalGeneralTTC" value="'+totalGeneralTTC.toFixed(2)+'">';
-        hiddenValues.push(hiddenTotalTTC);
-
         divTotalGeneralTTC.innerHTML = '<input type="text" class="form-control" name="totalGeneralTTC" value="'+totalGeneralTTC.toFixed(2)+'" class="text-right" size="5" readonly>';
+    </script>
 
-        divHiddenValues.innerHTML = hiddenValues.join("");
-    }
-
-    let totalLivraison = 0;
-    let totalGeneralTTC = notNull(totalOccasions) + notNull(totalLignesPiecesDetachees) + notNull(totalLivraison);
-    let totalGeneralHT = totalGeneralTTC / tva;
-
-    divTotalPiecesDetachees.innerHTML = '<input type="text" class="form-control" name="totalPiecesDetachees" value="'+totalDetachees.toFixed(2)+'" class="text-right" size="5" readonly>';
-    divTotalLivraison.innerHTML = '<input type="text" class="form-control" name="totalLivraison" value="0.00" class="text-right" size="5" readonly>';
-    divTotalGeneralHT.innerHTML = '<input type="text" class="form-control" name="totalGeneralHT" value="'+totalGeneralHT.toFixed(2)+'" class="text-right" size="5" readonly>';
-    divTotalGeneralTTC.innerHTML = '<input type="text" class="form-control" name="totalGeneralTTC" value="'+totalGeneralTTC.toFixed(2)+'" class="text-right" size="5" readonly>';
-</script>
-
+{% endif %}
 {% endblock %}
