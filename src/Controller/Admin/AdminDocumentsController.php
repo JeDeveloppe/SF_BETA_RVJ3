@@ -215,7 +215,6 @@ class AdminDocumentsController extends AbstractController
             }else{
                 $datas = $documentRepository->findOnlyFactures($number);
             }
-        
 
             return $this->renderForm('admin/documents/search.html.twig', [
                 'form' => $form,

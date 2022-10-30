@@ -74,7 +74,6 @@ class DocumentRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('d')
             ->where('d.numeroDevis LIKE :numero')
-            ->andWhere('d.numeroFacture IS NULL')
             ->setParameter('numero','%'.$number.'%')
             ->orderBy('d.createdAt', 'DESC')
             ->getQuery()
