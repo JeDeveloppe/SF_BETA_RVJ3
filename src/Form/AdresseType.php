@@ -38,19 +38,20 @@ class AdresseType extends AbstractType
             ->add('adresse', TextType::class, [
                 'label' => 'Adresse:'
             ])
-            ->add('ville', EntityType::class, [
-                'class' => Ville::class,
-                'label' => "Code postal et ville:",
-                'placeholder' => "Choisissez une ville dans la liste...",
-                'choice_label' => function (Ville $ville) {
-                    return $ville->getVilleCodePostal() . ' ' . $ville->getVilleNom();
-                },
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('v')
-                        ->where('v.villeDepartement = '.$this->department)
-                        ->orderBy('v.villeCodePostal', 'ASC');
-                }
-            ])
+            ->add('ville', AdressesVilleAutocompleteField::class)
+            // ->add('ville', EntityType::class, [
+            //     'class' => Ville::class,
+            //     'label' => "Code postal et ville:",
+            //     'placeholder' => "Choisissez une ville dans la liste...",
+            //     'choice_label' => function (Ville $ville) {
+            //         return $ville->getVilleCodePostal() . ' ' . $ville->getVilleNom();
+            //     },
+            //     'query_builder' => function (EntityRepository $er) {
+            //         return $er->createQueryBuilder('v')
+            //             ->where('v.villeDepartement = '.$this->department)
+            //             ->orderBy('v.villeCodePostal', 'ASC');
+            //     }
+            // ])
             ->add('isFacturation', HiddenType::class, [
                 'required' => false
             ])

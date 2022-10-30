@@ -100,7 +100,7 @@ class AdresseController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $adresseRepository->add($adresse);
-            return $this->redirectToRoute('app_adresse_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_member_adresses', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('member/adresse/edit.html.twig', [

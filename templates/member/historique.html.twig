@@ -30,7 +30,7 @@
                         </td>
                         <td>
                            {% if document.paiement is not null %}
-                              <a href="{{ path('app_member_facture_download', {'token': document.token }) }}" target="_blank"><i class="fas fa-print fa-2x text-light"></i></a>
+                              <a href="{{ path('app_member_facture_download', {'token': document.token }) }}" target="_blank" data-toggle="tooltip" data-html="true" title="<em>Tooltip</em> <u>with</u> <b>HTML</b>"><i class="fas fa-print fa-2x"></i></a>
                            {% endif %}
                         </td>
                         

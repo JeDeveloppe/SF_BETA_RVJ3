@@ -10,7 +10,7 @@ use Symfony\UX\Autocomplete\Form\AsEntityAutocompleteField;
 use Symfony\UX\Autocomplete\Form\ParentEntityAutocompleteType;
 
 #[AsEntityAutocompleteField]
-class VilleAutocompleteField extends AbstractType
+class PartenaireVilleAutocompleteField extends AbstractType
 {
 
 

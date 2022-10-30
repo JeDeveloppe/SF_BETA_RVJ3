@@ -2,26 +2,17 @@
 
 namespace App\Form;
 
-use App\Entity\Departement;
-use App\Entity\Pays;
-use App\Entity\Ville;
 use App\Entity\Partenaire;
-use App\Repository\DepartementRepository;
 use App\Repository\PaysRepository;
-use Doctrine\ORM\EntityRepository;
 use App\Repository\VilleRepository;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormInterface;
+use App\Repository\DepartementRepository;
+use App\Form\PartenaireVilleAutocompleteField;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -62,7 +53,7 @@ class PartenaireType extends AbstractType
                 'required' => false,
                 'mapped' => false
             ])
-            ->add('ville', VilleAutocompleteField::class)
+            ->add('ville', PartenaireVilleAutocompleteField::class)
             ->add('isDon', CheckboxType::class, [
                 'label' => 'Accepte les dons',
                 'required' => false
@@ -172,7 +163,7 @@ class PartenaireType extends AbstractType
     //         //     'choices' => $departement ? $this->villeRepository->findVillesFromDepartementOrderByASC($departement) : [],
     //         //     'label' => 'Ville:'
     //         // ]);
-    //         $form->add('ville', VilleAutocompleteField::class);
+    //         $form->add('ville', PartenaireVilleAutocompleteField::class);
     // }
 
     public function configureOptions(OptionsResolver $resolver): void
