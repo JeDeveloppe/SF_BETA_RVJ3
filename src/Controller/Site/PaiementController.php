@@ -43,8 +43,6 @@ class PaiementController extends AbstractController
                 ],
               'quantity' => 1,
             ]],
-            'email' => $document->getUser()->getEmail(),
-            
             'mode' => 'payment',
             'success_url' => $this->generateUrl('paiement_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'cancel_url' => $this->generateUrl('paiement_canceled', [], UrlGeneratorInterface::ABSOLUTE_URL),
