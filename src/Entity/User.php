@@ -75,6 +75,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $documents;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $nickname;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
@@ -305,6 +310,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $document->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNickname(): ?string
+    {
+        return $this->nickname;
+    }
+
+    public function setNickname(?string $nickname): self
+    {
+        $this->nickname = $nickname;
 
         return $this;
     }

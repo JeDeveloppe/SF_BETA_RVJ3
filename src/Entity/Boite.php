@@ -152,6 +152,11 @@ class Boite
      */
     private $documentLignes;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $creator;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -446,6 +451,18 @@ class Boite
                 $documentLigne->setBoite(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreator(): ?string
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(string $creator): self
+    {
+        $this->creator = $creator;
 
         return $this;
     }

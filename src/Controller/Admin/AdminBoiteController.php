@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
@@ -66,7 +67,11 @@ class AdminBoiteController extends AbstractController
     /**
      * @Route("/new", name="boite_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        SluggerInterface $slugger,
+        Security $security): Response
     {
         $boite = new Boite();
         $form = $this->createForm(BoiteType::class, $boite);
@@ -74,6 +79,8 @@ class AdminBoiteController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $user = $security->getUser();
+            
             $imageSend = $form->get('imageblob')->getData();
 
             if(is_null($imageSend)){
@@ -95,6 +102,8 @@ class AdminBoiteController extends AbstractController
             }
 
             $boite->setCreatedAt( new DateTimeImmutable('now'));
+            $boite->setCreator($user->getNickname());
+
             $entityManager->persist($boite);
             $entityManager->flush();
 
