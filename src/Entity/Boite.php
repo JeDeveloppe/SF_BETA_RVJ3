@@ -75,30 +75,30 @@ class Boite
     private $isComplet;
 
     /**
-     * @var int|null
+     * @var string|null
      *
-     * @ORM\Column(name="poid_boite", type="integer", nullable=true)
+     * @ORM\Column(name="poid_boite", type="string", length=255, nullable=true)
      */
     private $poidBoite;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="age", type="integer", nullable=true)
+     * @ORM\Column(name="age", type="string", length=10, nullable=true)
      */
     private $age;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="nbr_joueurs", type="string", length=2, nullable=true)
+     * @ORM\Column(name="nbr_joueurs", type="string", length=4, nullable=true)
      */
     private $nbrJoueurs;
 
     /**
-     * @var int|null
+     * @var string|null
      *
-     * @ORM\Column(name="prix_ht", type="integer", nullable=true)
+     * @ORM\Column(name="prix_ht", type="string", length=4, nullable=true)
      */
     private $prixHt;
 
@@ -110,7 +110,7 @@ class Boite
     private $isDeee;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="contenu", type="text", length=65535, nullable=true)
      */
@@ -257,24 +257,24 @@ class Boite
         return $this;
     }
 
-    public function getPoidBoite(): ?int
+    public function getPoidBoite(): ?string
     {
         return $this->poidBoite;
     }
 
-    public function setPoidBoite(?int $poidBoite): self
+    public function setPoidBoite(?string $poidBoite): self
     {
         $this->poidBoite = $poidBoite;
 
         return $this;
     }
 
-    public function getAge(): ?int
+    public function getAge(): ?string
     {
         return $this->age;
     }
 
-    public function setAge(?int $age): self
+    public function setAge(?string $age): self
     {
         $this->age = $age;
 
@@ -293,12 +293,12 @@ class Boite
         return $this;
     }
 
-    public function getPrixHt(): ?int
+    public function getPrixHt(): ?string
     {
         return $this->prixHt;
     }
 
-    public function setPrixHt(?int $prixHt): self
+    public function setPrixHt(?string $prixHt): self
     {
         $this->prixHt = $prixHt;
 
