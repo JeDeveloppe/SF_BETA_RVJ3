@@ -1,5 +1,96 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {# {{ form_widget(form) }} #}
+    <div class="row">
 
-    <button class="btn btn-success">{{ button_label|default('Sauvegarder') }}</button>
+        {% if boite.id is null %}
+            <div class="col-7 mx-auto mb-3">
+                <label for="exampleInputEmail1" class="form-label">{{ form_label(form.imageblob) }}</label>
+                {{ form_widget(form.imageblob) }}
+            </div>
+        {% else %}
+            <div class="col-12 col-md-6 mb-3 text-center">
+                <img class="img-admin-form" src="data:image/png;base64,{{ image }}"/>
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <label for="exampleInputEmail1" class="form-label">{{ form_label(form.imageblob, 'Changer d\'image:') }}</label>
+                {{ form_widget(form.imageblob) }}
+            </div>
+        {% endif %}
+
+
+
+        <div class="col-6 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.nom) }}</label>
+            {{ form_widget(form.nom) }}
+        </div>
+
+        <div class="col-6 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.slug) }}</label>
+            {{ form_widget(form.slug) }}
+        </div>
+        
+        <div class="col-6 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.editeur) }}</label>
+            {{ form_widget(form.editeur) }}
+        </div>
+
+        <div class="col-6 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.annee) }}</label>
+            {{ form_widget(form.annee) }}
+        </div>
+        
+        <div class="col-3 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.poidBoite) }}</label>
+            {{ form_widget(form.poidBoite) }}
+        </div>
+
+        <div class="col-3 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.prixHt) }}</label>
+            {{ form_widget(form.prixHt) }}
+        </div>
+
+        <div class="col-3 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.age) }}</label>
+            {{ form_widget(form.age) }}
+        </div>
+
+        <div class="col-3 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.nbrJoueurs) }}</label>
+            {{ form_widget(form.nbrJoueurs) }}
+        </div>
+
+        <div class="col-12 col-md-6 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.contenu) }}</label>
+            {{ form_widget(form.contenu) }}
+        </div>
+
+        <div class="col-12 col-md-6 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.message) }}</label>
+            {{ form_widget(form.message) }}
+        </div>
+
+        <div class="col-6 col-md-3 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.isDeee) }}</label>
+            {{ form_widget(form.isDeee) }}
+        </div>
+
+        <div class="col-6 col-md-3 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.isLivrable) }}</label>
+            {{ form_widget(form.isLivrable) }}
+        </div>
+
+        <div class="col-6 col-md-3 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.isComplet) }}</label>
+            {{ form_widget(form.isComplet) }}
+        </div>
+
+        <div class="col-6 col-md-3 mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{ form_label(form.isOnLine) }}</label>
+            {{ form_widget(form.isOnLine) }}
+        </div>
+    </div>
+
+    <div class="col-12 text-center">
+        <button class="btn btn-success">{{ button_label|default('Sauvegarder') }}</button>
+    </div>
 {{ form_end(form) }}

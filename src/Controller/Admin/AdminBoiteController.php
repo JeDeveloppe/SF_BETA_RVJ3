@@ -138,18 +138,16 @@ class AdminBoiteController extends AbstractController
 
             $imageSend = $form->get('imageblob')->getData();
 
+            dd($imageSend);
+
             if(!is_null($imageSend)){
-                dd("LIGNE 93");
                 $imageBase64 = base64_encode(file_get_contents($imageSend));
                 $boite->setImageBlob($imageBase64);
             }else{
-                $boiteInBdd = $boiteRepository->findOneBy(['id' => $boite->getId()]);
-
-                dd($boiteInBdd);
+                
             }
+            dd($boite);
 
-dd("STOP");
-            $entityManager->flush();
 
             return $this->redirectToRoute('admin_boite_index', [], Response::HTTP_SEE_OTHER);
         }

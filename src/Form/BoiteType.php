@@ -8,6 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\DomCrawler\Field\TextareaFormField;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class BoiteType extends AbstractType
 {
@@ -17,24 +20,50 @@ class BoiteType extends AbstractType
         $builder
             ->add('imageblob', FileType::class, [
                 'data_class' => null,
-                'required' => false
+                'required' => false,
+                'label' => "Choisir une image:"
             ])
-            ->add('nom')
+            ->add('nom', TextType::class, [
+                'label' => 'Nom de la boite:'
+            ])
             ->add('editeur')
-            ->add('annee')
-            ->add('slug', TextType::class, [
-                'required' => false
+            ->add('annee', TextType::class, [
+                'label' => 'Année:'
             ])
-            ->add('poidBoite')
-            ->add('age')
-            ->add('nbrJoueurs')
-            ->add('prixHt')
-            ->add('contenu')
-            ->add('message')
-            ->add('isOnLine')
-            ->add('isLivrable')
-            ->add('isComplet')
-            ->add('isDeee')
+            ->add('slug', TextType::class, [
+                'required' => false,
+                'label' => 'Slug (nom-de-la-boite):'
+            ])
+            ->add('poidBoite', TextType::class, [
+                'label' => 'Poid de la boite (g):'
+            ])
+            ->add('age', TextType::class, [
+                'label' => 'A partir de: (âge)'
+            ])
+            ->add('nbrJoueurs', TextType::class, [
+                'label' => 'Nombre de joueurs:'
+            ])
+            ->add('prixHt', TextType::class, [
+                'label' => 'Prix de vente TTC:'
+            ])
+            ->add('contenu', TextType::class, [
+                'label' => 'Contenu de la boite:'
+            ])
+            ->add('message', TextType::class, [
+                'label' => 'Message spécial:'
+            ])
+            ->add('isOnLine', CheckboxType::class, [
+                'label' => 'En ligne (cocher)'
+            ])
+            ->add('isLivrable', CheckboxType::class, [
+                'label' => 'Disponible en livraison'
+            ])
+            ->add('isComplet', CheckboxType::class, [
+                'label' => 'Disponible en jeu d\'occasion'
+            ])
+            ->add('isDeee', CheckboxType::class, [
+                'label' => 'Jeu DEEE'
+            ])
         ;
     }
 

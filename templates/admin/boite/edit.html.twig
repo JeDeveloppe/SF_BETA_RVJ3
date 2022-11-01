@@ -8,8 +8,6 @@
 
     <a class="btn btn-primary mb-5" href="{{ path('admin_boite_index') }}">Retour à la liste</a>
 
-    <img class="img-admin-liste" src="data:image/png;base64,{{ image }}"/>
-
     {{ include('admin/boite/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
 {% endblock %}

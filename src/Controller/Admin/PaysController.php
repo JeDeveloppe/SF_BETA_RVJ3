@@ -58,18 +58,18 @@ class PaysController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_pays_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Pays $pay, PaysRepository $paysRepository): Response
+    public function edit(Request $request, Pays $pays, PaysRepository $paysRepository): Response
     {
-        $form = $this->createForm(PaysType::class, $pay);
+        $form = $this->createForm(PaysType::class, $pays);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $paysRepository->add($pay);
+            $paysRepository->add($pays);
             return $this->redirectToRoute('app_pays_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('admin/pays/edit.html.twig', [
-            'pay' => $pay,
+            'pay' => $pays,
             'form' => $form,
         ]);
     }
