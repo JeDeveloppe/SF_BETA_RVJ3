@@ -22,7 +22,7 @@
                 <th>Règle du jeu</th>
                 <th>En ligne</th>
                 <th>Donner / vendu</th>
-                {# <th>actions</th> #}
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -44,18 +44,17 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if occasion.donation is not null %}
+                    {% if occasion.donation == true %}
                         Donner le {{ occasion.donation|date("d-m-Y") }}.
                     {% endif %}
-                    {% if occasion.sale is not null %}
+                    {% if occasion.sale == true %}
                         {% set donnees = occasion.sale| split("|") %}
                         Vendu en {{ donnees[0] }} le {{ donnees[1]|date("d-m-Y") }}
                     {% endif %}
                 </td>
-                {# <td>
-                    <a href="{{ path('admin_occasion_show', {'id': occasion.id}) }}">show</a>
-                    <a href="{{ path('admin_occasion_edit', {'id': occasion.id}) }}">edit</a>
-                </td> #}
+                <td>
+                    <a class="btn btn-warning" href="{{ path('admin_occasion_edit', {'id': occasion.id}) }}">Modifier</a>
+                </td>
             </tr>
         {% else %}
             <tr>

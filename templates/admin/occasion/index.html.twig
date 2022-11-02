@@ -8,6 +8,7 @@
     <table class="table table-responsive text-center align-middle">
         <thead>
             <tr>
+                <th>Id</th>
                 <th>Nom</th>
                 <th>Editeur</th>
                 <th>Annee</th>
@@ -20,6 +21,7 @@
         <tbody>
         {% for key,boite in boites %}
             <tr>
+                <td>[{{ boite.id}}]</td>
                 <td>{{ boite.nom }}</td>
                 <td>{{ boite.editeur }}</td>
                 <td>{{ boite.annee }}</td>

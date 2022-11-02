@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
+use App\Service\DocumentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PanierController extends AbstractController
@@ -90,7 +91,8 @@ class PanierController extends AbstractController
         PanierRepository $panierRepository,
         Security $security, 
         AdresseRepository $adresseRepository,
-        InformationsLegalesRepository $informationsLegalesRepository): Response
+        InformationsLegalesRepository $informationsLegalesRepository,
+        DocumentService $documentService): Response
     {
 
         $user = $security->getUser();
@@ -115,6 +117,7 @@ class PanierController extends AbstractController
                 'panier_occasions' => $panier_occasions,
                 'panier_boites' => $panier_boites,
                 'tva' => $tva,
+                'token' => $documentService->generateRandomString(),
                 'livraison_adresses' => $livraison_adresses,
                 'facturation_adresses' => $facturation_adresses,
                 'informationsLegales' =>  $informationsLegales,

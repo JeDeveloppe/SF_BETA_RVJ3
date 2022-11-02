@@ -148,7 +148,6 @@ class AdminBoiteController extends AbstractController
             }
             dd($boite);
 
-
             return $this->redirectToRoute('admin_boite_index', [], Response::HTTP_SEE_OTHER);
         }
 

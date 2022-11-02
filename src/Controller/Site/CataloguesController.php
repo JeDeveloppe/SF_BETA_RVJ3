@@ -115,8 +115,8 @@ class CataloguesController extends AbstractController
         ): Response
     {
 
-        $informationsLegales = $informationsLegalesRepository->findAll();
-        $tva = $informationsLegales[0]->getTauxTva();
+        // $informationsLegales = $informationsLegalesRepository->findAll();
+        // $tva = $informationsLegales[0]->getTauxTva();
 
         $donnees = $entityManager
         ->getRepository(Occasion::class)
@@ -128,17 +128,8 @@ class CataloguesController extends AbstractController
             12 /*limit per page*/
         );
 
-        //on va stocker les images
-        $images = [];
-        // foreach($occasions as $key => $occasion) {
-        //     $images[$key] = stream_get_contents($occasion->getBoite()->getImageBlob());
-        // }
-
-
         return $this->render('site/catalogues/catalogue_jeux_occasion.html.twig', [
             'occasions' => $occasions,
-            'images' => $images,
-            'tva' => $tva,
             'informationsLegales' =>  $informationsLegalesRepository->findAll()
         ]);
     }

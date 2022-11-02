@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Occasion;
+use App\Form\OccasionStatutChangeType;
 use App\Form\OccasionType;
 use App\Repository\BoiteRepository;
 use App\Repository\OccasionRepository;
@@ -46,7 +47,11 @@ class OccasionController extends AbstractController
     /**
      * @Route("/{id}/{slug}", name="occasion_liste", methods={"GET"})
      */
-    public function occasionListeParBoite(BoiteRepository $boiteRepository, OccasionRepository $occasionRepository, $id, $slug): Response
+    public function occasionListeParBoite(
+        BoiteRepository $boiteRepository,
+        OccasionRepository $occasionRepository,
+        $id,
+        $slug): Response
     {
 
         $boite = $boiteRepository->find($id);
@@ -79,10 +84,11 @@ class OccasionController extends AbstractController
         $form = $this->createForm(OccasionType::class, $occasion);
         $form->handleRequest($request);
 
-        $occasion->setBoite($boite);
+        $occasion->setBoite($boite)
+                 ->setDonation(false)
+                 ->setSale(false);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $occasionRepository->add($occasion);
 
             $lastId = $occasion->getId();

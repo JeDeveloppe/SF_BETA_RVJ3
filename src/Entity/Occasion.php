@@ -25,12 +25,12 @@ class Occasion
     private $reference;
 
     /**
-     * @ORM\Column(type="decimal", precision=5, scale=2)
+     * @ORM\Column(type="string", length=10)
      */
     private $priceHt;
 
     /**
-     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     * @ORM\Column(type="string", length=210)
      */
     private $oldPriceHt;
 
@@ -71,14 +71,14 @@ class Occasion
     private $boite;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="boolean")
      */
-    private $donation;
+    private $isDonation;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="boolean")
      */
-    private $sale;
+    private $isSale;
 
     /**
      * @ORM\OneToMany(targetEntity=Panier::class, mappedBy="occasion")
@@ -89,6 +89,31 @@ class Occasion
      * @ORM\OneToMany(targetEntity=DocumentLignes::class, mappedBy="occasion")
      */
     private $documentLignes;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $donation;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $sale;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $meansOfSale;
+
+    /**
+     * @ORM\Column(type="string", length=1)
+     */
+    private $stock;
+
+    /**
+     * @ORM\Column(type="string", length=8, nullable=true)
+     */
+    private $prixDeVente;
 
     public function __construct()
     {
@@ -221,26 +246,26 @@ class Occasion
         return $this;
     }
 
-    public function getDonation(): ?string
+    public function getIsDonation(): ?bool
     {
-        return $this->donation;
+        return $this->isDonation;
     }
 
-    public function setDonation(?string $donation): self
+    public function setIsDonation(?bool $isDonation): self
     {
-        $this->donation = $donation;
+        $this->isDonation = $isDonation;
 
         return $this;
     }
 
-    public function getSale(): ?string
+    public function getIsSale(): ?bool
     {
-        return $this->sale;
+        return $this->isSale;
     }
 
-    public function setSale(?string $sale): self
+    public function setIsSale(?bool $isSale): self
     {
-        $this->sale = $sale;
+        $this->isSale = $isSale;
 
         return $this;
     }
@@ -301,6 +326,66 @@ class Occasion
                 $documentLigne->setOccasion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDonation(): ?\DateTimeImmutable
+    {
+        return $this->donation;
+    }
+
+    public function setDonation(?\DateTimeImmutable $donation): self
+    {
+        $this->donation = $donation;
+
+        return $this;
+    }
+
+    public function getSale(): ?\DateTimeImmutable
+    {
+        return $this->sale;
+    }
+
+    public function setSale(?\DateTimeImmutable $sale): self
+    {
+        $this->sale = $sale;
+
+        return $this;
+    }
+
+    public function getMeansOfSale(): ?string
+    {
+        return $this->meansOfSale;
+    }
+
+    public function setMeansOfSale(?string $meansOfSale): self
+    {
+        $this->meansOfSale = $meansOfSale;
+
+        return $this;
+    }
+
+    public function getStock(): ?string
+    {
+        return $this->stock;
+    }
+
+    public function setStock(string $stock): self
+    {
+        $this->stock = $stock;
+
+        return $this;
+    }
+
+    public function getPrixDeVente(): ?string
+    {
+        return $this->prixDeVente;
+    }
+
+    public function setPrixDeVente(?string $prixDeVente): self
+    {
+        $this->prixDeVente = $prixDeVente;
 
         return $this;
     }
