@@ -50,6 +50,15 @@
 					</div>
 
 					<div class="col-12 col-md-6 mt-4 mt-md-0">
+					    <p class="col-12 mb-1 text-center small">
+                            A partir de {{ occasion.boite.nbrJoueurs }} 
+                            {% if occasion.boite.nbrJoueurs > 1 %}
+                                joueurs
+                            {% else %}
+                                joueur
+                            {% endif %}
+                            et dès {{ occasion.boite.age }} ans.
+                        </p>
 						<p>État de la boite: {{ occasion.etatBoite }}</p>
 						<p>État du matériel: {{ occasion.etatMateriel }}</p>
 						<p>Règle du jeu: {{ occasion.regleJeu }}</p>
