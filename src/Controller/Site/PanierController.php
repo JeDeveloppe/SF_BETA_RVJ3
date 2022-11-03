@@ -203,4 +203,21 @@ class PanierController extends AbstractController
             'informationsLegales' =>  $informationsLegalesRepository->findAll()
         ]);
     }
+
+
+    /**
+     * @Route("/panier/paiement", name="panier_paiement")
+     */
+    public function panierPaiement(DocumentService $documentService): Response
+    {
+
+        $paniers = [];
+        $demande = [];
+        //on sauvegarde dans la base
+        $newNumero = $documentService->saveDevisInDataBase($user, $request, $paniers, $demande);
+
+        return $this->redirectToRoute('lecture_devis', [
+            'numeroDevis' => $newNumero
+        ]);
+    }
 }

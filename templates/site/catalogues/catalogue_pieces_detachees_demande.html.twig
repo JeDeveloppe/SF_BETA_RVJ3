@@ -70,7 +70,7 @@
 					</div>
 
 					<!-- message d'information sur un jeu -->
-					{% if boite.message is not null %}
+					{% if (boite.message is not null)  %}
 						<div class="col-12 text-danger mt-5">
 							<i class="fas fa-bell fa-2x">Information:</i>
 							<p class="pl-5">{{ boite.message }}'</p>

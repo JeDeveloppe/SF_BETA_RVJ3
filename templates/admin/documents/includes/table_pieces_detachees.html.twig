@@ -6,6 +6,7 @@
                 <div class="card p-0">
                     <div class="card-header">{{ boite.boite.nom }} {{ boite.boite.editeur }} {{ boite.boite.annee }}</div>
                         <div class="card-body bg-secondary">
+ 
                             <div class="card-text my-2">{{ boite.message }}</div>
                             <div class="card-text"><input class="col-12" name="reponse[]" type="text" maxlength="80" value="{% if boite.reponse is defined %}{{ boite.reponse }}{% endif %}" required /></div>
                         </div>
