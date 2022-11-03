@@ -60,6 +60,8 @@ class PanierRepository extends ServiceEntityRepository
     public function findDemandesGroupeBy(){
         return $this->createQueryBuilder('p')
             ->groupBy('p.etat')
+            ->where('p.etat != :etat')
+            ->setParameter('etat', 'panier')
             ->getQuery()
             ->getResult()
         ;

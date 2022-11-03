@@ -35,7 +35,7 @@ class AdminDocumentsController extends AbstractController
 
         $paniers = $panierRepository->findBy(['etat' => $slug]);
 
-        if($paniers == null){
+        if(!$paniers){
             //on signal le changement
             $this->addFlash('warning', 'État inconnu!');
             return $this->redirectToRoute('admin_accueil');
@@ -77,7 +77,7 @@ class AdminDocumentsController extends AbstractController
         //on cherche si y a bien quelque chose dans la table panier en fonction du bouton choisi
         $paniers = $panierRepository->findBy(['user' => $user, 'etat' => $demande]);
 
-        DD($paniers);
+
         if($paniers == null){
             //si y a rien
             $this->addFlash('warning', 'Demande inconnue!');

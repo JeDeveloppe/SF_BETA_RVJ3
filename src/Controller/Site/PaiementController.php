@@ -44,8 +44,8 @@ class PaiementController extends AbstractController
               'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => $this->generateUrl('paiement_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'cancel_url' => $this->generateUrl('paiement_canceled', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'success_url' => $this->generateUrl('paiement_success', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL),
+            'cancel_url' => $this->generateUrl('paiement_canceled', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL),
           ]);
 
         return $this->redirect($session->url, 303);
@@ -53,21 +53,21 @@ class PaiementController extends AbstractController
 
 
     /**
-     * @Route("/paiement/validation", name="paiement_success")
+     * @Route("/paiement/validation/{token}", name="paiement_success")
      */
     public function paiementSuccess()
     {
-        return $this->render('paiement/success.html.twig', [
+        return $this->render('site/paiement/success.html.twig', [
             'controller_name' => 'PaiementController',
         ]);
     }
 
      /**
-     * @Route("/paiement/annulation", name="paiement_canceled")
+     * @Route("/paiement/annulation-achat/{token}", name="paiement_canceled")
      */
     public function paiementCancel()
     {
-        return $this->render('paiement/cancel.html.twig', [
+        return $this->render('site/paiement/cancel.html.twig', [
             'controller_name' => 'PaiementController',
         ]);
     }

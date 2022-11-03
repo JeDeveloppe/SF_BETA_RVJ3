@@ -11,12 +11,13 @@
         </thead>
         <tbody>
             {% for occasion in occasions %}
-                <td>{{ occasion.occasion.boite.nom }} - {{ occasion.occasion.boite.editeur }} - {{ occasion.occasion.boite.annee }}</td>
-                <td>{{ occasion.occasion.reference }}</td>
-                <td>1</td>
-                <td>{{ (occasion.occasion.priceHt * tva) | number_format(2, '.', ',')  }}</td>
-                
-                {% set totalOccasions = totalOccasions + occasion.occasion.priceHt %}
+                <tr>
+                    <td>{{ occasion.occasion.boite.nom }} - {{ occasion.occasion.boite.editeur }} - {{ occasion.occasion.boite.annee }}</td>
+                    <td>{{ occasion.occasion.reference }}</td>
+                    <td>1</td>
+                    <td>{{ (occasion.occasion.priceHt * tva / 100) | number_format(2, '.', ',')  }} €</td>
+                    {% set totalOccasions = totalOccasions + occasion.occasion.priceHt %}
+                </tr>
             {% endfor %}
         </tbody>
     </table>

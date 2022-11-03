@@ -30,10 +30,10 @@ class ImportRVJ2 extends Command
         $io = new SymfonyStyle($input,$output);
         
         //on importe pour les boites
-        // $this->importBoitesService->importBoites($io);
+        $this->importBoitesService->importBoites($io);
 
         //on importe le detail des boites
-        // $this->importPiecesService->importPieces($io);
+        $this->importPiecesService->importPieces($io);
 
         //on importe les jeux complet (occasions)
         $this->importOccasionsService->importOccasions($io);

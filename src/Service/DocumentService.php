@@ -169,6 +169,60 @@ class DocumentService
         return $newNumero;
     }
 
+    public function saveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande){
+        $informationsLegales = $this->informationsLegalesRepository->findAll();
+        $tva = $informationsLegales[0]->getTauxTva();
+        $methodeEnvoi = $this->methodeEnvoiRepository->findOneBy(['id' => 3]);
+        $livraison = $setup['adresseLivraison'];
+        $facturation = $setup['adresseFacturation'];
+
+        //ON genere un nouveau numero
+        $newNumero = $this->generateNewNumberOf("numeroDevis", "getNumeroDevis");
+
+        //puis on met dans la base
+        $document = new Document();
+        $now = new DateTimeImmutable();
+        $endDevis = $now->add(new DateInterval('P3D'));
+
+        $document->setUser($user)
+                ->setCreatedAt($now)
+                ->setTotalTTC($setup['totalOccasionsHT'] * $tva)
+                ->setTotalHT($setup['totalOccasionsHT'])
+                ->setTauxTva($tva * 100 -100)
+                ->setTotalLivraison(0)
+                ->setIsRelanceDevis(false)
+                ->setAdresseLivraison($livraison->getFirstName().' '.$livraison->getLastName().'<br/>'.$livraison->getAdresse().'<br/>'.$livraison->getVille()->getVilleCodePostal().' '.$livraison->getVille()->getVilleNom())
+                ->setAdresseFacturation($facturation->getFirstName().' '.$facturation->getLastName().'<br/>'.$facturation->getAdresse().'<br/>'.$facturation->getVille()->getVilleCodePostal().' '.$facturation->getVille()->getVilleNom())
+                ->setToken($setup['token'])
+                ->setNumeroDevis($newNumero)
+                ->setEndValidationDevis($endDevis)
+                ->setEnvoi($methodeEnvoi);
+
+        $this->em->persist($document);
+        $this->em->flush();
+
+        // $panier_occasions = $this->panierRepository->findBy(['etat' => $demande,'user' => $user, 'boite' => null]);
+
+        foreach($paniers as $panier){
+            $documentLigne = new DocumentLignes();
+
+            $documentLigne->setBoite($panier->getBoite())
+                            ->setDocument($document)
+                            ->setOccasion($panier->getOccasion())
+                            ->setPrixVente($panier->getOccasion()->getPriceHt());
+            $this->em->persist($documentLigne);
+        }
+
+        //on met en BDD les differentes lignes
+        $this->em->flush();
+
+        //on supprime les lignes dans le panier
+        $this->deletePanierFromUser($paniers);
+
+        //et on return le numero du devis
+        return $setup['token'];
+    }
+
     public function factureToPdf($token){
 
         //on cherche le devis par le token

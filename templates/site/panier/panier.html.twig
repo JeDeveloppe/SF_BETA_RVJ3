@@ -77,7 +77,7 @@
     {% if panier_boites | length > 0 %}
         {% set formAction = path('panier-mise-en-devis') %}
     {% else %}
-        {% set formAction = path('app_paiement', {'token': token}) %}
+        {% set formAction = path('panier_paiement', {'token': token, 'demande': 'panier'}) %}
     {% endif %}
 
     <form method="post" action="{{ formAction }}">
@@ -98,6 +98,9 @@
                     </div>
                 {% endif %}
             {% else %}
+                <select class="form-control" name="adresse_facturation" id="" required>
+                    <option value="">Aucune adresse de facturation...</option>
+                </select>
                 <div class="col-12 py-2">
                     <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'facturation'}) }}">Créer une adresse de facturation...</a>
                 </div>
@@ -134,7 +137,7 @@
             {% if panier_boites | length > 0 %}
                 <input class="col-11 col-md-4 col-xl-2 mx-auto btn btn-primary btn-outline-secondary text-light" type="submit" value="Demander un devis">
             {% else %}
-                <input class="col-11 col-md-4 col-xl-2 mx-auto btn btn-primary btn-outline-secondary text-light" type="submit" value="Payer">
+                <input class="col-11 col-md-4 col-xl-2 mx-auto btn btn-success text-light" type="submit" value="Payer">
             {% endif %}
         </div>
     </div>

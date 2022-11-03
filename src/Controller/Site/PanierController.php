@@ -50,7 +50,11 @@ class PanierController extends AbstractController
     /**
      * @Route("/panier/ajout-jeu-occasion", name="panier-ajout-jeu-occasion")
      */
-    public function addpanierOccasion(Request $request, Security $security, OccasionRepository $occasionRepository, EntityManagerInterface $em): Response
+    public function addpanierOccasion(
+        Request $request,
+        Security $security,
+        OccasionRepository $occasionRepository,
+        EntityManagerInterface $em): Response
     {
 
         $idOccasion = $request->request->get('rvjc');
@@ -64,6 +68,8 @@ class PanierController extends AbstractController
             $panier->setUser($security->getUser())
             ->setCreatedAt( new DateTimeImmutable('now'))
             ->setOccasion($occasionRepository->find(['id' => $idOccasion]))
+            ->setFacturation()
+            ->setLivraison()
             ->setEtat("panier");
 
             $em->persist($panier);
@@ -206,18 +212,45 @@ class PanierController extends AbstractController
 
 
     /**
-     * @Route("/panier/paiement", name="panier_paiement")
+     * @Route("/panier/paiement/{demande}/{token}", name="panier_paiement")
      */
-    public function panierPaiement(DocumentService $documentService): Response
+    public function panierPaiement(
+        $demande,
+        $token,
+        DocumentService $documentService,
+        PanierRepository $panierRepository,
+        AdresseRepository $adresseRepository,
+        Request $request,
+        Security $security)
     {
+        $user = $security->getUser();
 
-        $paniers = [];
-        $demande = [];
+        $paniers = $panierRepository->findBy(['user' => $user, 'etat' => $demande]);
+
+        if(!$paniers){
+            //si y a rien
+            $this->addFlash('warning', 'Demande inconnue!');
+            return $this->redirectToRoute('accueil');
+        }else{
+
+        $setup = [];
+        $totalOccasionsHT = 0;
+        $setup['adresseFacturation'] = $adresseRepository->findOneBy(['id' => $request->request->get('adresse_facturation')]);
+        $setup['adresseLivraison'] = $adresseRepository->findOneBy(['id' => $request->request->get('adresse_livraison')]);
+        $setup['token'] = $token;
+
+        foreach($paniers as $panier){
+            $totalOccasionsHT += $panier->getOccasion()->getPriceHt();
+        }
+
+        $setup['totalOccasionsHT'] = $totalOccasionsHT;
+
         //on sauvegarde dans la base
-        $newNumero = $documentService->saveDevisInDataBase($user, $request, $paniers, $demande);
+        $token = $documentService->saveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande);
 
-        return $this->redirectToRoute('lecture_devis', [
-            'numeroDevis' => $newNumero
+        return $this->redirectToRoute('app_paiement', [
+            'token' => $token
         ]);
+        }
     }
 }
