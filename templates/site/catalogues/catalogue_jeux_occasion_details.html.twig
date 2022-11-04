@@ -50,15 +50,9 @@
 					</div>
 
 					<div class="col-12 col-md-6 mt-4 mt-md-0">
-					    <p class="col-12 mb-1 text-center small">
-                            A partir de {{ occasion.boite.nbrJoueurs }} 
-                            {% if occasion.boite.nbrJoueurs > 1 %}
-                                joueurs
-                            {% else %}
-                                joueur
-                            {% endif %}
-                            et dès {{ occasion.boite.age }} ans.
-                        </p>
+						<div class="col-12 mb-3 text-center small">
+					    	{% include "site/components/catalogues/affichage_nbrJoueurs-age.html.twig" %}
+						</div>
 						<p>État de la boite: {{ occasion.etatBoite }}</p>
 						<p>État du matériel: {{ occasion.etatMateriel }}</p>
 						<p>Règle du jeu: {{ occasion.regleJeu }}</p>
@@ -66,7 +60,7 @@
 							<p><em>Informations:</em></p><p class="ml-5">{{ occasion.information }}</p>
 						{% endif %}
 
-						<p>Prix TTC: {{ (occasion.priceHt * tva / 100) | number_format(2, ',', '.') }} </p>
+						<p>Prix TTC: {{ (occasion.priceHt * tva / 100) | number_format(2, ',', '.') }} €</p>
                         
 						{# on inclus le bouton login/register/panier #}
                         {% include "site/components/catalogues/button-connexion-inscription-panier.html.twig" %}

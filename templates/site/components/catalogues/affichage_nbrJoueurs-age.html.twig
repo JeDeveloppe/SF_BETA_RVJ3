@@ -1,0 +1,14 @@
+A partir de
+	{{ occasion.boite.nbrJoueurs }}
+	{% if occasion.boite.nbrJoueurs > 1 %}
+		joueurs
+	{% else %}
+		joueur
+	{% endif %}
+	et dès
+	{{ occasion.boite.age }}
+    {% if occasion.boite.age > 1 %}
+        ans
+    {% else %}
+        an
+    {% endif %}
