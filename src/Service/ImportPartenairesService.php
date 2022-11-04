@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use League\Csv\Reader;
 use App\Repository\BoiteRepository;
 use App\Repository\PartenaireRepository;
+use App\Repository\PaysRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -17,7 +18,8 @@ class ImportPartenairesService
     public function __construct(
         private EntityManagerInterface $em,
         private PartenaireRepository $partenaireRepository,
-        private VilleRepository $villeRepository
+        private VilleRepository $villeRepository,
+        private PaysRepository $paysRepository
         ){
     }
 
@@ -69,9 +71,11 @@ class ImportPartenairesService
                 ->setIsEcommerce($arrayPartenaire['ecommerce'])
                 ->setIsComplet($arrayPartenaire['complet'])
                 ->setIsOnLine($arrayPartenaire['isActif'])
-                ->setVille($this->villeRepository->findOnBy(['id' => $arrayPartenaire['id_villes_free']]);
+                ->setVille($this->villeRepository->findOneBy(['id' => $arrayPartenaire['id_villes_free']]))
+                ->setCountry($this->paysRepository->findOneBy(['isoCode' => $arrayPartenaire['pays']]));
 
         return $partenaire;
+
     }
 
 }

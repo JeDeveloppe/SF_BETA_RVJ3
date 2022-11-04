@@ -37,7 +37,7 @@ class SitePartenaireController extends AbstractController
         }
 
         //on cherche les partenaires du pays selectionner
-        $partenaires = $partenaireRepository->findBy(['country' => $country->getId()]);
+        $partenaires = $partenaireRepository->findBy(['country' => $country->getId(), 'isOnLine' => true]);
 
         $depots = [];
         
