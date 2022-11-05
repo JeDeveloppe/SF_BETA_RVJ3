@@ -125,7 +125,7 @@ class CataloguesController extends AbstractController
         $occasions = $paginator->paginate(
             $donnees, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            12 /*limit per page*/
+            16 /*limit per page*/
         );
 
         return $this->render('site/catalogues/catalogue_jeux_occasion.html.twig', [

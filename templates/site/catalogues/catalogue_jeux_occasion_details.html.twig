@@ -17,7 +17,7 @@
 		<div class="row mb-3">
 			<div class="col-12 col-md-6">
 				{% if app.request.headers.get('referer') is null %}
-					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catlaogue général</a>
+					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catalogue général</a>
 				{% else %}
 					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catlaogue</a>
 				{% endif %}
@@ -25,7 +25,7 @@
 		</div>
 		<!-- BLOC PRESENTATION DU JEU  -->
 		<div class="row mb-5" id="">
-			<div class="card col-11 mx-auto col-md-12 p-0 border shadow">
+			<div class="card col-11 mx-auto col-md-9 p-0 border shadow">
 				<div class="card-body d-flex flex-wrap">
 					<!-- image de la boite -->
 					<div class="col-12 col-md-6 text-center p-0">
@@ -44,7 +44,7 @@
                             	<img class="zoom__image" src="data:image/png;base64,{{ occasion.boite.imageblob }}"/>
 							</div>
 						</div>
-						<span class="col-12 col-md-6 lead text-muted small text-center">
+						<span class="col-12 col-md-6 text-muted small text-center">
 							Photo non contractuelle
 						</span>
 					</div>

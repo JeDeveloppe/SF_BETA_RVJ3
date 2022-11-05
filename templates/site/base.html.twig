@@ -18,8 +18,8 @@
 
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
-            {{ encore_entry_link_tags('themeSite') }}
             {{ encore_entry_link_tags('site') }}
+            {{ encore_entry_link_tags('themeSite') }}
         {% endblock %}
     </head>
     <body>
@@ -27,7 +27,7 @@
 
             {% include "commun/flash_message.html.twig" %}
 
-            <div class="container d-flex flex-column justify-content-between h-100">
+            <div class="container-fluid d-flex flex-column justify-content-between h-100">
                 {% block body %}{% endblock %}
             </div>
 
