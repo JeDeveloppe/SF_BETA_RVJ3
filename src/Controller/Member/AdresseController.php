@@ -4,6 +4,7 @@ namespace App\Controller\Member;
 
 use App\Entity\Adresse;
 use App\Form\AdresseType;
+use App\Repository\PanierRepository;
 use App\Repository\AdresseRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -17,7 +18,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class AdresseController extends AbstractController
 {
-
+    public function __construct(
+        private InformationsLegalesRepository $informationsLegalesRepository,
+        private Security $security,
+        private PanierRepository $panierRepository
+    )
+    { 
+    }
 
     /**
      * @Route("/new/{slug}/", name="app_adresse_new", methods={"GET", "POST"})
@@ -27,7 +34,6 @@ class AdresseController extends AbstractController
         Request $request,
         AdresseRepository $adresseRepository,
         Security $security,
-        InformationsLegalesRepository $informationsLegalesRepository
         ): Response
     {
         $user = $security->getUser();
@@ -65,8 +71,9 @@ class AdresseController extends AbstractController
         return $this->renderForm('member/adresse/new.html.twig', [
             'adresse' => $adresse,
             'form' => $form,
-            'informationsLegales' =>  $informationsLegalesRepository->findAll(),
-            'array' => $array
+            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'array' => $array,
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
 
@@ -88,7 +95,6 @@ class AdresseController extends AbstractController
         Adresse $adresse,
         AdresseRepository $adresseRepository,
         Security $security,
-        InformationsLegalesRepository $informationsLegalesRepository
         ): Response
     {
         $user = $security->getUser();
@@ -106,7 +112,8 @@ class AdresseController extends AbstractController
         return $this->renderForm('member/adresse/edit.html.twig', [
             'adresse' => $adresse,
             'form' => $form,
-            'informationsLegales' =>  $informationsLegalesRepository->findAll()
+            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
 

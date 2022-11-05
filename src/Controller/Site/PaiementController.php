@@ -2,23 +2,27 @@
 
 namespace App\Controller\Site;
 
-use Stripe\Charge;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
+use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
+
 
 class PaiementController extends AbstractController
 {
 
     public function __construct(
-        private DocumentRepository $documentRepository){  
+        private DocumentRepository $documentRepository,
+        private InformationsLegalesRepository $informationsLegalesRepository,
+        private PanierRepository $panierRepository,
+        private Security $security){  
     }
 
     #[Route('/paiement/{token}', name: 'app_paiement')]
@@ -61,7 +65,7 @@ class PaiementController extends AbstractController
     /**
      * @Route("/paiement/validation/{token}", name="paiement_success")
      */
-        public function paiementSuccess($token, InformationsLegalesRepository $informationsLegalesRepository)
+        public function paiementSuccess($token)
     {
         $document = $this->documentRepository->findOneBy(['token' => $token, 'numeroFacture' => NULL, 'paiement' => NULL]);
 
@@ -74,7 +78,8 @@ class PaiementController extends AbstractController
 
             return $this->render('site/paiement/success.html.twig', [
                 'token' => $token,
-                'informationsLegales' =>  $informationsLegalesRepository->findAll()
+                'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+                'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);
         }
     }
@@ -82,7 +87,7 @@ class PaiementController extends AbstractController
      /**
      * @Route("/paiement/annulation-achat/{token}", name="paiement_canceled")
      */
-    public function paiementCancel($token, InformationsLegalesRepository $informationsLegalesRepository)
+    public function paiementCancel($token)
     {
         $document = $this->documentRepository->findOneBy(['token' => $token, 'numeroFacture' => NULL, 'paiement' => NULL]);
 
@@ -95,7 +100,8 @@ class PaiementController extends AbstractController
 
             return $this->render('site/paiement/cancel.html.twig', [
                 'token' => $token,
-                'informationsLegales' =>  $informationsLegalesRepository->findAll()
+                'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+                'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);
         }
     }

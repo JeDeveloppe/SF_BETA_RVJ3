@@ -2,14 +2,12 @@
 
 namespace App\Controller\Site;
 
-use stdClass;
-use App\Entity\Partenaire;
-use App\Form\PartenaireType;
+
 use App\Repository\PaysRepository;
-use App\Entity\InformationsLegales;
-use App\Repository\DepartementRepository;
+use App\Repository\PanierRepository;
 use App\Repository\PartenaireRepository;
-use Symfony\Component\HttpFoundation\Request;
+use App\Repository\DepartementRepository;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
@@ -18,13 +16,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SitePartenaireController extends AbstractController
 {
+    public function __construct(
+        private InformationsLegalesRepository $informationsLegalesRepository,
+        private Security $security,
+        private PanierRepository $panierRepository
+    )
+    { 
+    }
     /**
      * @Route("/partenaires/{pays}", name="carte_partenaires", methods={"GET"})
      */
     public function index(
         DepartementRepository $departementRepository,
         $pays,
-        InformationsLegalesRepository $informationsLegalesRepository,
         PaysRepository $paysRepository,
         PartenaireRepository $partenaireRepository
         ): Response
@@ -108,41 +112,8 @@ class SitePartenaireController extends AbstractController
         return $this->render('site/partenaire/'.$pays.'/carte-'.$pays.'.html.twig', [
             'partenaires' => $partenaires,
             'depots' => $jsonStructure,
-            'informationsLegales' =>  $informationsLegalesRepository->findAll()
+            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
-
-    // /**
-    //  * @Route("/partenaires/{pays}", name="carte_partenaires", methods={"GET"})
-    //  */
-    // public function index(
-    //     PartenaireRepository $partenaireRepository,
-    //     $pays,
-    //     InformationsLegalesRepository $informationsLegalesRepository,
-    //     PaysRepository $paysRepository
-    // ): Response {
-
-    //     $country = $paysRepository->findOneBy(['name' => $pays]);
-
-    //     if (!$country) {
-    //         $this->addFlash('danger', 'Pays inconnu!');
-    //         return $this->redirectToRoute('accueil');
-    //     }
-
-    //     $partenaires = $partenaireRepository->findBy(['country' => $country, 'isOnLine' => true], ['name' => 'ASC']);
-
-    //     $images = [];
-    //     foreach ($partenaires as $key => $partenaire) {
-
-    //         $images[$key] = stream_get_contents($partenaire->getImageBlob());
-    //     }
-
-
-    //     return $this->render('site/partenaire/partenaires-' . $country->getName() . '.html.twig', [
-    //         'partenaires' => $partenaires,
-    //         'informationsLegales' =>  $informationsLegalesRepository->findAll(),
-    //         'images' => $images,
-    //         'country' => $country
-    //     ]);
-    // }
 }

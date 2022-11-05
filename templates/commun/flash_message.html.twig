@@ -3,7 +3,7 @@
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="row">
-                <div class="col-11 mx-auto mt-3 mt-md-5 py-3 text-center alertDiv bg-{{ label }} alert-dismissible fade show" role="alert">
+                <div class="col-11 mx-auto col-md-6 mt-3 mt-md-5 py-3 text-center alertDiv bg-{{ label }} alert-dismissible fade show" role="alert">
                 {{ message }}
                 </div>
             </div>

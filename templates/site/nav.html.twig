@@ -37,7 +37,11 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_panier') }}">Panier</a>
+            {% if panier | length > 0 %}
+              <a class="nav-link" href="{{ path('app_panier') }}">Panier ({{ panier | length }})</a>
+            {% else %}
+              <a class="nav-link disabled" href="#">Panier (vide)</a>
+            {% endif %}
           </li>
         {% else %}
           <li class="nav-item">

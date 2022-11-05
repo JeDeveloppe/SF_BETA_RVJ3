@@ -4,11 +4,7 @@ namespace App\Controller\Site;
 
 use App\Entity\Panier;
 use DateTimeImmutable;
-use App\Entity\Adresse;
-use App\Form\AdresseLivraisonType;
-use App\Entity\InformationsLegales;
 use App\Repository\BoiteRepository;
-use App\Form\AdresseFacturationType;
 use App\Repository\PanierRepository;
 use App\Repository\AdresseRepository;
 use App\Repository\OccasionRepository;
@@ -23,10 +19,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PanierController extends AbstractController
 {
+public function __construct(
+    private PanierRepository $panierRepository,
+    private InformationsLegalesRepository $informationsLegalesRepository,
+    private Security $security
+)
+{
+}
+
     /**
      * @Route("/panier/ajout-pieces-detachees", name="panier-ajout-pieces-detachees")
      */
-    public function addpanierDetachees(Request $request, Security $security, BoiteRepository $boiteRepository, EntityManagerInterface $em): Response
+    public function addpanierDetachees(
+        Request $request,
+        BoiteRepository $boiteRepository,
+        EntityManagerInterface $em): Response
     {
 
         $panier = new Panier();
@@ -34,7 +41,7 @@ class PanierController extends AbstractController
 
         //ici on ajoute les differentes infos
         $panier->setMessage($request->request->get('message'))
-                ->setUser($security->getUser())
+                ->setUser($this->security->getUser())
                 ->setCreatedAt( new DateTimeImmutable('now'))
                 ->setBoite($boiteRepository->find(['id' => $idBoite]))
                 ->setEtat("panier");
@@ -52,7 +59,6 @@ class PanierController extends AbstractController
      */
     public function addpanierOccasion(
         Request $request,
-        Security $security,
         OccasionRepository $occasionRepository,
         EntityManagerInterface $em): Response
     {
@@ -65,11 +71,9 @@ class PanierController extends AbstractController
 
             $panier = new Panier();
             //ici on ajoute les differentes infos
-            $panier->setUser($security->getUser())
+            $panier->setUser($this->security->getUser())
             ->setCreatedAt( new DateTimeImmutable('now'))
             ->setOccasion($occasionRepository->find(['id' => $idOccasion]))
-            ->setFacturation()
-            ->setLivraison()
             ->setEtat("panier");
 
             $em->persist($panier);
@@ -94,16 +98,13 @@ class PanierController extends AbstractController
      * @Route("/panier", name="app_panier")
      */
     public function index(
-        PanierRepository $panierRepository,
-        Security $security, 
         AdresseRepository $adresseRepository,
-        InformationsLegalesRepository $informationsLegalesRepository,
         DocumentService $documentService): Response
     {
 
-        $user = $security->getUser();
-        $panier_occasions = $panierRepository->findByUserAndNotNullColumn('occasion',$user);
-        $panier_boites = $panierRepository->findByUserAndNotNullColumn('boite', $user);
+        $user = $this->security->getUser();
+        $panier_occasions = $this->panierRepository->findByUserAndNotNullColumn('occasion',$user);
+        $panier_boites = $this->panierRepository->findByUserAndNotNullColumn('boite', $user);
 
         $livraison_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
         $facturation_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
@@ -116,7 +117,7 @@ class PanierController extends AbstractController
             return $this->redirectToRoute('accueil');
         }else{
 
-            $informationsLegales = $informationsLegalesRepository->findAll();
+            $informationsLegales = $this->informationsLegalesRepository->findAll();
             $tva = $informationsLegales[0]->getTauxTva();
 
             return $this->render('site/panier/panier.html.twig', [
@@ -128,6 +129,7 @@ class PanierController extends AbstractController
                 'facturation_adresses' => $facturation_adresses,
                 'informationsLegales' =>  $informationsLegales,
                 'adresseRetrait' => $adresseRetrait,
+                'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);
         }
     }
@@ -135,12 +137,14 @@ class PanierController extends AbstractController
     /**
      * @Route("/panier/delete/{id}", name="app_panier_delete")
      */
-    public function panierDelete($id, PanierRepository $panierRepository, Security $security, EntityManagerInterface $em): Response
+    public function panierDelete(
+        $id,
+        EntityManagerInterface $em): Response
     {
 
-        $user = $security->getUser();
+        $user = $this->security->getUser();
 
-        $lignePanier = $panierRepository->findOneBy(['id' => $id, 'user' => $user]);
+        $lignePanier = $this->panierRepository->findOneBy(['id' => $id, 'user' => $user]);
 
         if(is_null($lignePanier)){
             return $this->redirectToRoute('accueil');
@@ -156,7 +160,7 @@ class PanierController extends AbstractController
         }
 
         //dans tous les cas on supprime la ligne du panier
-        $panierRepository->remove($lignePanier);
+        $this->panierRepository->remove($lignePanier);
 
         //on signal le changement
         $this->addFlash('success', 'Ligne supprimée du panier!');
@@ -172,13 +176,11 @@ class PanierController extends AbstractController
      */
     public function panierMiseEnDevis(
         Request $request,
-        PanierRepository $panierRepository,
-        Security $security,
         AdresseRepository $adresseRepository,
         EntityManagerInterface $em): Response
     {
 
-        $paniers = $panierRepository->findBy(['user' => $security->getUser(), 'etat' => 'panier']);
+        $paniers = $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier']);
 
         $facturation = $adresseRepository->find($request->request->get('adresse_facturation'));
 
@@ -188,8 +190,8 @@ class PanierController extends AbstractController
 
         foreach($paniers as $panier){
             $panier->setEtat('demandeDevis'.$lastEntryArray)
-                   ->setLivraison($livraison->getFirstName().' '.$livraison->getLastName().'<br/>'.$livraison->getAdresse().'<br/>'.$livraison->getVille()->getVilleCodePostal().' '.$livraison->getVille()->getVilleNom())
-                   ->setFacturation($facturation->getFirstName().' '.$facturation->getLastName().'<br/>'.$facturation->getAdresse().'<br/>'.$facturation->getVille()->getVilleCodePostal().' '.$facturation->getVille()->getVilleNom());
+                    ->setLivraison($livraison->getFirstName().' '.$livraison->getLastName().'<br/>'.$livraison->getAdresse().'<br/>'.$livraison->getVille()->getVilleCodePostal().' '.$livraison->getVille()->getVilleNom())
+                    ->setFacturation($facturation->getFirstName().' '.$facturation->getLastName().'<br/>'.$facturation->getAdresse().'<br/>'.$facturation->getVille()->getVilleCodePostal().' '.$facturation->getVille()->getVilleNom());
             $em->merge($panier);
         }
         
@@ -203,10 +205,11 @@ class PanierController extends AbstractController
     /**
      * @Route("/panier/demande-de-devis/fin", name="panier-soumis")
      */
-    public function panierDemandeDevisEnd(InformationsLegalesRepository $informationsLegalesRepository): Response
+    public function panierDemandeDevisEnd(): Response
     {
         return $this->render('site/panier/demandeTerminee.html.twig', [
-            'informationsLegales' =>  $informationsLegalesRepository->findAll()
+            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
 
@@ -218,14 +221,12 @@ class PanierController extends AbstractController
         $demande,
         $token,
         DocumentService $documentService,
-        PanierRepository $panierRepository,
         AdresseRepository $adresseRepository,
-        Request $request,
-        Security $security)
+        Request $request)
     {
-        $user = $security->getUser();
+        $user = $this->security->getUser();
 
-        $paniers = $panierRepository->findBy(['user' => $user, 'etat' => $demande]);
+        $paniers = $this->panierRepository->findBy(['user' => $user, 'etat' => $demande]);
 
         if(!$paniers){
             //si y a rien

@@ -36,11 +36,7 @@
             {% include "site/footer.html.twig" %}
 
         {% block javascripts %}
-            <script>
-                $(function () {
-                    $('[data-toggle="tooltip"]').tooltip()
-                })
-            </script>
+            {{ encore_entry_script_tags('site') }}
         {% endblock %}
     </body>
 </html>

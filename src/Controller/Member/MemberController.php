@@ -2,44 +2,44 @@
 
 namespace App\Controller\Member;
 
-use App\Entity\User;
 use App\Form\UserType;
+use App\Service\DocumentService;
 use App\Repository\UserRepository;
+use App\Repository\PanierRepository;
 use App\Repository\AdresseRepository;
+use App\Repository\DocumentRepository;
 use App\Repository\ConfigurationRepository;
 use App\Repository\DocumentLignesRepository;
-use App\Repository\DocumentRepository;
-use App\Repository\InformationsLegalesRepository;
-use App\Service\DocumentService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\InformationsLegalesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Dompdf\Dompdf as Dompdf;
-use Dompdf\Options;
+
 
 class MemberController extends AbstractController
 {
 
-    private $documentRepository;
-    private $documentLignesRepository;
-
-    public function __construct(DocumentRepository $documentRepository, DocumentLignesRepository $documentLignesRepository)
+    public function __construct(
+        private DocumentRepository $documentRepository,
+        private DocumentLignesRepository $documentLignesRepository,
+        private InformationsLegalesRepository $informationsLegalesRepository,
+        private Security $security,
+        private PanierRepository $panierRepository)
     {
-        $this->documentLignesRepository = $documentLignesRepository;
-        $this->documentRepository = $documentRepository;
     }
 
 
     /**
      * @Route("/membre", name="app_member")
      */
-    public function index(InformationsLegalesRepository $informationsLegalesRepository ): Response
+    public function index(): Response
     {
         return $this->render('member/index.html.twig', [
             'controller_name' => 'MemberController',
-            'informationsLegales' =>  $informationsLegalesRepository->findAll()
+            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
 
@@ -47,13 +47,11 @@ class MemberController extends AbstractController
      * @Route("/membre/adresses", name="app_member_adresses", methods={"GET"})
      */
     public function membreAdresses(
-        Security $security,
         AdresseRepository $adresseRepository,
-        InformationsLegalesRepository $informationsLegalesRepository
         ): Response
     {
 
-        $user = $security->getUser();
+        $user = $this->security->getUser();
 
         $livraison_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
         $facturation_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
@@ -61,7 +59,8 @@ class MemberController extends AbstractController
         return $this->render('member/adresse/index.html.twig', [
             'livraison_adresses' => $livraison_adresses,
             'facturation_adresses' => $facturation_adresses,
-            'informationsLegales' =>  $informationsLegalesRepository->findAll()
+            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
 
     }
@@ -70,12 +69,10 @@ class MemberController extends AbstractController
      * @Route("/membre/historique", name="app_member_historique")
      */
     public function membreHistorique(
-        Security $security,
         DocumentRepository $documentRepository,
-        ConfigurationRepository $configurationRepository,
-        InformationsLegalesRepository $informationsLegalesRepository): Response
+        ConfigurationRepository $configurationRepository): Response
     {
-        $user = $security->getUser();
+        $user = $this->security->getUser();
 
         //on cherche les devis
         $devis = $documentRepository->findDevisFromUser($user);
@@ -94,7 +91,8 @@ class MemberController extends AbstractController
             'user' => $user,
             'documents' => $documents,
             'configurations' => $configuration,
-            'informationsLegales' =>  $informationsLegalesRepository->findAll()
+            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
 
@@ -103,11 +101,9 @@ class MemberController extends AbstractController
      */
     public function membreCompte(
         Request $request,
-        UserRepository $userRepository,
-        Security $security,
-        InformationsLegalesRepository $informationsLegalesRepository): Response
+        UserRepository $userRepository,): Response
     {
-        $user = $security->getUser();
+        $user = $this->security->getUser();
 
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -120,7 +116,8 @@ class MemberController extends AbstractController
         return $this->render('member/compte.html.twig', [
             'controller_name' => 'MemberController',
             'form' => $form->createView(),
-            'informationsLegales' =>  $informationsLegalesRepository->findAll()
+            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
 
