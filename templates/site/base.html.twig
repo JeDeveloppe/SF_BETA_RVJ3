@@ -16,6 +16,8 @@
 
         <script src="https://kit.fontawesome.com/39dfe16fa3.js" crossorigin="anonymous"></script>
 
+        {% include "site/components/meta_og.html.twig" %}
+
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('site') }}
@@ -34,7 +36,11 @@
             {% include "site/footer.html.twig" %}
 
         {% block javascripts %}
-            {{ encore_entry_script_tags('site') }}
+            <script>
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip()
+                })
+            </script>
         {% endblock %}
     </body>
 </html>

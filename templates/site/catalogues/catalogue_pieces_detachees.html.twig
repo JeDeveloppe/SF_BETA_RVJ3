@@ -6,6 +6,11 @@
 
     <h1 class="col-12 text-center my-5">Catalogue des pièces détachées</h1>
 
+    <div class="col-12 d-flex justify-content-center mb-2">
+        {% set url = path('catalogue_pieces_detachees') %}
+        {% include "site/components/catalogues/share_buttons.html.twig" %}
+    </div>
+
     <div class="row">
             {{ form_start(catalogueFiltersForm) }}
                 <div class="col-8 col-sm-6 col-md-4 mx-auto d-flex justify-content-center">{{ form_row(catalogueFiltersForm.filters) }}</div>

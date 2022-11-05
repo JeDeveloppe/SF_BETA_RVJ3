@@ -39,7 +39,6 @@ Encore
     .addEntry('themeAdmin', './assets/themeAdmin.js')
     .addEntry('themeSite', './assets/themeSite.js')
 
-
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 
