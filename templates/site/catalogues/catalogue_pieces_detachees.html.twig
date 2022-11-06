@@ -4,6 +4,7 @@
 
 {% block body %}
 
+
     <h1 class="col-12 text-center my-5">Catalogue des pièces détachées</h1>
 
     <div class="col-12 d-flex justify-content-center mb-2">
@@ -11,7 +12,7 @@
         {% include "site/components/catalogues/share_buttons.html.twig" %}
     </div>
 
-    <div class="row">
+    <div class="row mb-2">
         {{ form_start(boiteSearch) }}
             <div class="col-9 col-sm-6 col-md-4">{{ form_row(boiteSearch.searchBoite) }}</div>
             <div class="row">
@@ -31,11 +32,19 @@
                 {{ form_end(catalogueFiltersForm) }}
         </div>
         <div class="row justify-content-start">
-                {% for key,boite in boites %}
-                
-                {% include "site/components/catalogues/card-pieces-detachees.html.twig" %}
 
-                {% endfor %}
+            {# S'il y a une recherche #}
+            {% if boiteSearch.vars.value is not null %}
+                <div class="col-11 mx-auto small">
+                    => Il y a {{ boites | length }} résultat{% if boites | length > 1 %}s{% endif %} à votre recherche.
+                </div>
+            {% endif %}
+
+            {% for key,boite in boites %}
+            
+            {% include "site/components/catalogues/card-pieces-detachees.html.twig" %}
+
+            {% endfor %}
         </div>
         
         {% if boites | length > 0 %}
