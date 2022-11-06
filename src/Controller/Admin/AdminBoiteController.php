@@ -3,18 +3,19 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Boite;
+use DateTimeImmutable;
 use App\Form\BoiteType;
 use App\Form\SearchBoiteType;
+use App\Form\AdminSearchBoiteType;
 use App\Repository\BoiteRepository;
-use DateTimeImmutable;
-use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/admin/boite", name="admin_")
@@ -31,7 +32,7 @@ class AdminBoiteController extends AbstractController
         BoiteRepository $boiteRepository
         ): Response
     {
-        $form = $this->createForm(SearchBoiteType::class);
+        $form = $this->createForm(AdminSearchBoiteType::class);
         $form->handleRequest($request);
 
 

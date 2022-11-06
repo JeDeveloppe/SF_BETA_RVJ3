@@ -12,28 +12,62 @@
     </div>
 
     <div class="row">
-            {{ form_start(catalogueFiltersForm) }}
-                <div class="col-8 col-sm-6 col-md-4 mx-auto d-flex justify-content-center">{{ form_row(catalogueFiltersForm.filters) }}</div>
-            {{ form_end(catalogueFiltersForm) }}
-    </div>
-    <div class="row justify-content-start">
-
-        {% for key,boite in boites %}
-            
-        {% include "site/components/catalogues/card-pieces-detachees.html.twig" %}
-
-        {% endfor %}
+        {{ form_start(boiteSearch) }}
+            <div class="col-9 col-sm-6 col-md-4">{{ form_row(boiteSearch.searchBoite) }}</div>
+            <div class="row">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-success" type="submit" class="btn btn-primary">Recherche</button>
+                    <a class="btn btn-warning" href="{{ path('catalogue_pieces_detachees') }}">Reset</a>
+                </div>
+            </div>
+        {{ form_end(boiteSearch) }}
     </div>
 
     {% if boites | length > 0 %}
 
-        <div class="row my-5">
-            <div class="col-12 d-flex justify-content-center">
-                {{ knp_pagination_render(boites, 'site/components/catalogues/pagination.html.twig') }}
+        <div class="row">
+                {{ form_start(catalogueFiltersForm) }}
+                    <div class="d-flex justify-content-end">{{ form_row(catalogueFiltersForm.filters) }}</div>
+                {{ form_end(catalogueFiltersForm) }}
+        </div>
+        <div class="row justify-content-start">
+                {% for key,boite in boites %}
+                
+                {% include "site/components/catalogues/card-pieces-detachees.html.twig" %}
+
+                {% endfor %}
+        </div>
+        
+        {% if boites | length > 0 %}
+
+            <div class="row my-5">
+                <div class="col-12 d-flex justify-content-center">
+                    {{ knp_pagination_render(boites, 'site/components/catalogues/pagination.html.twig') }}
+                </div>
+            </div>
+
+        {% endif %}
+
+    {% else %}
+
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="h2">Nous n'avons pas ce jeu en stock pour le moment.</p>
+                <p class="h5">Vous pouvez suivre nos arrivages sur la page <a href="https://www.refaitesvosjeux.fr" target="_blank">Facebook !</a></p>    
+                <p class="h5 mt-5">Ou tenter votre chance chez l'un de nos partenaires:</p>
             </div>
         </div>
+        <div class="row justify-content-start mb-5">
 
+            {% for partenaire in partenaires %}
+
+            {% include "site/components/catalogues/card-partenaire.html.twig" %}
+                
+            {% endfor %}
+        </div>
     {% endif %}
+
+
 
 <script>
     let filters = document.getElementById("catalogue_filters_filters");
@@ -43,10 +77,6 @@
         let link ="/catalogue-pieces-detachees/?tri="+this.options[filter].value;
         window.location.href = link;
     })
-
-
-
-
 </script>
 
 {% endblock %}

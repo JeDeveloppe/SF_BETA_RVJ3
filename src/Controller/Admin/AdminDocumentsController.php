@@ -5,25 +5,20 @@ namespace App\Controller\Admin;
 use DateInterval;
 use DateTimeImmutable;
 use App\Entity\Paiement;
-use App\Service\MailService;
 use App\Form\SearchDocumentType;
 use App\Service\DocumentService;
 use App\Form\DocumentPaiementType;
-use App\Repository\UserRepository;
 use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ConfigurationRepository;
 use App\Repository\DocumentLignesRepository;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
 use App\Service\MailerService;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Mime\DraftEmail;
 
 class AdminDocumentsController extends AbstractController
 {
