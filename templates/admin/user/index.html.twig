@@ -1,0 +1,49 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+{% block body %}
+
+    <h1 class="col-12 text-center my-5">Liste des utilisateurs</h1>
+
+    <table class="table table-responsive text-center align-middle">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Pseudo</th>
+                <th>Téléphone</th>
+                <th>Inscription le:</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% for role in user.roles %}
+                        {% if role == "ROLE_SUPER_ADMIN" %}
+                            <span class="badge rounded-pill bg-danger">SUPER ADMIN</span>
+                        {% elseif role == "ROLE_ADMIN" %}
+                            <span class="badge rounded-pill bg-warning">ADMIN</span>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ user.nickname }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.createdAt ? user.createdAt|date('d-m-Y à H:i:s') : '' }}</td>
+                <td>
+                    <a class="btn btn-warning" href="{{ path('app_admin_user_edit', {'id': user.id}) }}">Éditer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_user_new') }}">Create new</a>
+{% endblock %}
