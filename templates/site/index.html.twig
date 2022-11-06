@@ -5,4 +5,15 @@
 
 {% block body %}
 
+<div class="row my-4">
+    <div class="col-11 mx-auto display-6">Quelques statistiques:</div>
+    <div class="col-6 mx-auto">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between"><span>{{ boites | length }} boites dans le catalogue des pièces détachées</span><span><a href="{{ path('catalogue_pieces_detachees') }}">Voir le catalogue</a></span></li>
+            <li class="list-group-item d-flex justify-content-between"><span>{{ occasions | length }} boites de jeu d'occasion au catalogue</span><span><a href="{{ path('catalogue_jeux_occasion') }}">Voir le catalogue</a><span></li>
+            <li class="list-group-item d-flex justify-content-between"><span>{{ partenaires | length }} partenaires du réemploi</span><span><a href="{{ path('carte_partenaires', {'pays': informationsLegales[0].country.name }) }}">Voir les partenaires</a><span></li>
+        </ul>
+    </div>
+</div>
+
 {% endblock %}

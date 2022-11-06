@@ -3,6 +3,7 @@
 namespace App\Controller\Site;
 
 use App\Form\ContactType;
+use App\Repository\BoiteRepository;
 use App\Service\MailerService;
 use App\Repository\PanierRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +11,8 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
+use App\Repository\OccasionRepository;
+use App\Repository\PartenaireRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SiteController extends AbstractController
@@ -25,9 +28,15 @@ class SiteController extends AbstractController
     /**
      * @Route("/", name="accueil")
      */
-    public function index(): Response
+    public function index(
+        PartenaireRepository $partenaireRepository,
+        BoiteRepository $boiteRepository,
+        OccasionRepository $occasionRepository): Response
     {
         return $this->render('site/index.html.twig', [
+            'boites' => $boiteRepository->findBy(['isOnLine' => true]),
+            'occasions' => $occasionRepository->findBy(['isOnLine' => true]),
+            'partenaires' => $partenaireRepository->findBy(['isOnLine' => true]),
             'controller_name' => 'SiteController',
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
