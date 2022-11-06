@@ -1,0 +1,157 @@
+body{
+    // background-image: url(/build/images/design/back1.jpg); 
+    // background-size: cover;
+    // background-position: 50% 70%;
+    // background-repeat: no-repeat;
+    // background-attachment: fixed;
+    // background: rgb(9,9,121);
+    // background: linear-gradient(360deg, rgba(9,9,121,1) 0,2%, rgba(0,212,255,1) 100%); 
+  
+    background: rgb(9,9,121);
+    background: linear-gradient(360deg, rgba(9,9,121,1) 0,2%, rgba(144,221,236,1) 100%); 
+  }
+  
+  .imgFindUsOnFacebook{
+    max-width: 110px;
+  }
+  
+  .full-width {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  
+  .img-liste{
+    width: 75px;
+    height: 45px;
+    object-fit: cover;
+  }
+  
+  .logoTop {
+    top: 0%;
+    left: 50%;
+    transform: translate(-70%, 10%);
+    z-index: 2;
+    width: 14%;
+  }
+  
+  #precision {
+      display: none;
+      position: absolute;
+      z-index: 2;
+      margin-top: 5px;
+  }
+  .image-upload > input {
+      display: none;
+  }
+  .divImgPresentation {
+      .zoom {
+        overflow: hidden;
+        position: relative;
+        display: inline-block;
+        width: 300px;
+        height: 280px;
+        cursor: move;
+        & > div {
+          height: 33.33%;
+          width: 33.333%;
+          z-index: 1;
+          float: left;
+          display: inline-block;
+          position: relative;
+        }
+        //  top
+        &__top {
+          //  left
+          &.zoom__left:hover ~ .zoom__image {
+            transform: translate(20%, 20%) scale(1.5);
+          }
+          //  centre
+          &.zoom__centre:hover ~ .zoom__image {
+            transform: translate(0%, 20%) scale(1.5);
+          }
+          //  right
+          &.zoom__right:hover ~ .zoom__image {
+            transform: translate(-20%, 20%) scale(1.5);
+          }
+        }
+        //  middle
+        &__middle {
+          //  left
+          &.zoom__left:hover ~ .zoom__image {
+            transform: translate(20%, 0) scale(1.5);
+          }
+          //  centre
+          &.zoom__centre:hover ~ .zoom__image {
+            transform: translate(0, 0) scale(1.5);
+          }
+          //  right
+          &.zoom__right:hover ~ .zoom__image {
+            transform: translate(-20%, 0) scale(1.5);
+          }
+        }
+        //  middle
+        &__bottom {
+          //  left
+          &.zoom__left:hover ~ .zoom__image {
+            transform: translate(20%, -20%) scale(1.5);
+          }
+          //  centre
+          &.zoom__centre:hover ~ .zoom__image {
+            transform: translate(0, -20%) scale(1.5);
+          }
+          //  right
+          &.zoom__right:hover ~ .zoom__image {
+            transform: translate(-20%, -20%) scale(1.5);
+          }
+        }
+        &__image {
+          transition: all 0.5s ease;
+          display: block;
+          max-width: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          margin: auto;
+        }
+      }
+    }
+  
+    // Small devices (landscape phones, 576px and up)
+  @media (min-width: 576px) {
+    .logoTop {
+      transform: translate(-20%, 5%);
+      width: 10%;
+    }
+  }
+  
+  // Medium devices (tablets, 768px and up)
+  @media (min-width: 768px) {
+    .logoTop {
+      transform: translate(-40%, 5%);
+      width: 9%;
+    }
+  }
+  
+  // Large devices (desktops, 992px and up)
+  @media (min-width: 992px) {
+    .logoTop {
+      transform: translate(-50%, 5%);
+      width: 8%;
+    }
+  }
+  
+  // X-Large devices (large desktops, 1200px and up)
+  @media (min-width: 1200px) {
+    .logoTop {
+      width: 7%;
+    }
+  }
+  
+  // XX-Large devices (larger desktops, 1400px and up)
+  @media (min-width: 1400px) {
+    .logoTop {
+      width: 6%;
+    }
+  }
