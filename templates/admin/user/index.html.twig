@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Utilisateurs{% endblock %}
+{% block title %}Liste des utilisateurs{% endblock %}
 
 {% block body %}
 
@@ -9,6 +9,7 @@
     <table class="table table-responsive text-center align-middle">
         <thead>
             <tr>
+                <th>Id</th>
                 <th>Email</th>
                 <th>Roles</th>
                 <th>Level</th>
@@ -21,6 +22,7 @@
         <tbody>
         {% for user in users %}
             <tr>
+                <td>[{{ user.id }}]</td>
                 <td>{{ user.email }}</td>
                 <td>
                     {% for role in user.roles %}
@@ -38,9 +40,9 @@
                 <td>
                     {% if app.user.id != user.id %}
                         {% if app.user.level > user.level %}
-                            <a class="btn btn-warning" href="{{ path('app_admin_user_edit', {'id': user.id}) }}">Éditer</a>
+                            <a class="btn btn-sm btn-warning" href="{{ path('app_admin_user_edit', {'id': user.id}) }}">Éditer</a>
                         {% else %}
-                            Level insuffisant
+                            <a class="btn btn-sm btn-primary" href="#">Level insuffisant</a>
                         {% endif %}
                     {% else %}
                         ###
@@ -57,5 +59,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_admin_user_new') }}">Create new</a>
 {% endblock %}

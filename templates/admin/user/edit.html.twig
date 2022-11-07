@@ -1,13 +1,17 @@
-<!DOCTYPE html>
+{% extends 'admin/base.html.twig' %}
 
-<title>Edit User</title>
+{% block title %}Édition d'un utilisateurs{% endblock %}
 
 {% block body %}
-    <h1>Edit User</h1>
 
-    {{ include('admin/user/_form.html.twig', {'button_label': 'Update'}) }}
+    <h1 class="col-12 text-center my-5">Édition d'un utilisateur</h1>
 
-    <a href="{{ path('app_admin_user_index') }}">back to list</a>
+    <div class="col-2 text-center my-5">
+        <a class="btn btn-warning" href="{{ path('app_admin_user_index') }}">< Retour</a>
+    </div>
 
-    {{ include('admin/user/_delete_form.html.twig') }}
+    {{ include('admin/user/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    {# {{ include('admin/user/_delete_form.html.twig') }} #}
+
 {% endblock %}

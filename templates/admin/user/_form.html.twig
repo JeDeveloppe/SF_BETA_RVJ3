@@ -1,4 +1,35 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    {# {{ form_widget(form) }} #}
+    <div class="row">
+        <div class="col-6 form-group">
+            {{ form_row(form.email) }}
+        </div>
+        <div class="col-6 form-group">
+            {{ form_row(form.nickname) }}
+        </div>
+        <div class="col-6 form-group">
+            {{ form_row(form.password) }}
+        </div>
+        <div class="col-6 form-group">
+            {{ form_row(form.phone) }}
+        </div>
+        <div class="col-5 form-group">
+            {{ form_row(form.roles) }}
+        </div>
+        <div class="col-1 form-group">
+            {{ form_row(form.level) }}
+        </div>
+        <div class="col-6 form-group">
+            <fieldset>
+                <legend>Informations:</legend>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">ROLE_SUPER_ADMIN: 100 et plus</li>
+                        <li class="list-group-item">ADMIN: de 90 à 99</li>
+                    </ul>
+            </fieldset>
+        </div>
+    </div>
+
+
+    <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}
