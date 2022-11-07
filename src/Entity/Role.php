@@ -25,6 +25,11 @@ class Role
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $description;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $level;
 
     public function getId(): ?int
@@ -44,12 +49,24 @@ class Role
         return $this;
     }
 
-    public function getLevel(): ?string
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getLevel(): ?int
     {
         return $this->level;
     }
 
-    public function setLevel(string $level): self
+    public function setLevel(int $level): self
     {
         $this->level = $level;
 
