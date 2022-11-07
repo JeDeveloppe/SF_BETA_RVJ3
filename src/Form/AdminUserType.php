@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class AdminUserType extends AbstractType
 {
@@ -25,6 +26,7 @@ class AdminUserType extends AbstractType
                 'multiple' => true,
                 'label' => 'Rôles'
             ])
+            ->add('level')
             ->add('password')
             ->add('phone')
             ->add('department')

@@ -11,6 +11,7 @@
             <tr>
                 <th>Email</th>
                 <th>Roles</th>
+                <th>Level</th>
                 <th>Pseudo</th>
                 <th>Téléphone</th>
                 <th>Inscription le:</th>
@@ -30,12 +31,22 @@
                         {% endif %}
                     {% endfor %}
                 </td>
+                <td>{{ user.level }}</td>
                 <td>{{ user.nickname }}</td>
                 <td>{{ user.phone }}</td>
                 <td>{{ user.createdAt ? user.createdAt|date('d-m-Y à H:i:s') : '' }}</td>
                 <td>
-                
-                    <a class="btn btn-warning" href="{{ path('app_admin_user_edit', {'id': user.id}) }}">Éditer</a>
+                    {% if app.user.id != user.id %}
+                        {% if app.user.level > user.level %}
+                            <a class="btn btn-warning" href="{{ path('app_admin_user_edit', {'id': user.id}) }}">Éditer</a>
+                        {% else %}
+                            Level insuffisant
+                        {% endif %}
+                    {% else %}
+                        ###
+                    {% endif %}
+                    
+
                 </td>
             </tr>
         {% else %}

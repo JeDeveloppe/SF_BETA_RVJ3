@@ -1,6 +1,6 @@
-<!DOCTYPE html>
+{% extends 'admin/base.html.twig' %}
 
-<title>Role index</title>
+{% block title %}Gestion des rôles{% endblock %}
 
 {% block body %}
     <h1>Role index</h1>
@@ -10,6 +10,7 @@
             <tr>
                 <th>Id</th>
                 <th>Color</th>
+                <th>Description</th>
                 <th>Level</th>
                 <th>actions</th>
             </tr>
@@ -19,6 +20,7 @@
             <tr>
                 <td>{{ role.id }}</td>
                 <td>{{ role.color }}</td>
+                <td>{{ role.description }}</td>
                 <td>{{ role.level }}</td>
                 <td>
                     <a href="{{ path('app_admin_role_show', {'id': role.id}) }}">show</a>

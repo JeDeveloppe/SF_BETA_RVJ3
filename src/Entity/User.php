@@ -80,6 +80,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $nickname;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $level;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
@@ -322,6 +327,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNickname(?string $nickname): self
     {
         $this->nickname = $nickname;
+
+        return $this;
+    }
+
+    public function getLevel(): ?int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(?int $level): self
+    {
+        $this->level = $level;
 
         return $this;
     }
