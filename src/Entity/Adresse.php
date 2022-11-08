@@ -54,6 +54,11 @@ class Adresse
      */
     private $organisation;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $token;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -139,6 +144,18 @@ class Adresse
     public function setOrganisation(?string $organisation): self
     {
         $this->organisation = $organisation;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }

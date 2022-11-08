@@ -37,7 +37,7 @@ class ConfigurationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $configuration->setPrefixeFacture(strtoupper($configuration->getPrefixeFacture()))
-                          ->setPrefixeDevis(strtoupper($configuration->getPrefixeDevis()));
+                        ->setPrefixeDevis(strtoupper($configuration->getPrefixeDevis()));
 
             $configurationRepository->add($configuration);
             return $this->redirectToRoute('app_configuration_index', [], Response::HTTP_SEE_OTHER);

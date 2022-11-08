@@ -2,9 +2,10 @@
 
 namespace App\Command;
 
-
 use App\Service\ImportBoitesService;
 use App\Service\ImportPiecesService;
+use App\Service\ImportClientsService;
+use App\Service\ImportAdressesService;
 use App\Service\ImportOccasionsService;
 use App\Service\ImportPartenairesService;
 use Symfony\Component\Console\Command\Command;
@@ -21,7 +22,9 @@ class ImportRVJ2 extends Command
         private ImportBoitesService $importBoitesService,
         private ImportPiecesService $importPiecesService,
         private ImportOccasionsService $importOccasionsService,
-        private ImportPartenairesService $importPartenairesService
+        private ImportPartenairesService $importPartenairesService,
+        private ImportClientsService $importClientsService,
+        private ImportAdressesService $importAdressesService
         )
     {
         parent::__construct();
@@ -41,7 +44,13 @@ class ImportRVJ2 extends Command
         // $this->importOccasionsService->importOccasions($io);
 
         //on importe les jeux partenaires
-        $this->importPartenairesService->importPartenaires($io);
+        // $this->importPartenairesService->importPartenaires($io);
+
+        //on importe les clients
+        $this->importClientsService->importClients($io);
+
+        //on importe les adresses de facturation
+        $this->importAdressesService->importAdresses($io);
 
         return Command::SUCCESS;
     }
