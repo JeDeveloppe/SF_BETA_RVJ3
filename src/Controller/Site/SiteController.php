@@ -33,6 +33,7 @@ class SiteController extends AbstractController
         BoiteRepository $boiteRepository,
         OccasionRepository $occasionRepository): Response
     {
+
         return $this->render('site/index.html.twig', [
             'boites' => $boiteRepository->findBy(['isOnLine' => true]),
             'occasions' => $occasionRepository->findBy(['isOnLine' => true]),

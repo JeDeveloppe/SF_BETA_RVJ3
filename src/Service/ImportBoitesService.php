@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Boite;
 use DateTimeImmutable;
 use League\Csv\Reader;
+use League\Csv\Statement;
 use App\Repository\BoiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -19,9 +20,9 @@ class ImportBoitesService
 
     public function importBoites(SymfonyStyle $io): void
     {
-        $io->title('Importation des boites');
+        $io->title('Importation des boites 1/2');
 
-        $boites = $this->readCsvFileCatalogue();
+        $boites = $this->readCsvFileCatalogue1_2();
         
         $io->progressStart(count($boites));
 
@@ -30,20 +31,62 @@ class ImportBoitesService
             $boite = $this->createOrUpdateBoite($arrayBoite);
             $this->em->persist($boite);
         }
-
         $this->em->flush();
 
         $io->progressFinish();
-        $io->success('Importation terminée');
+        $io->success('Importation 1/2 terminée');
+
+        $io->title('Importation des boites 2/2');
+
+        $boites = $this->readCsvFileCatalogue2_2();
+        
+        $io->progressStart(count($boites));
+
+        foreach($boites as $arrayBoite){
+            $io->progressAdvance();
+            $boite = $this->createOrUpdateBoite($arrayBoite);
+            $this->em->persist($boite);
+        }
+        $this->em->flush();
+
+        $io->progressFinish();
+        $io->success('Importation 2/2 terminée');
     }
 
     //lecture des fichiers exportes dans le dossier import
-    private function readCsvFileCatalogue(): Reader
+    private function readCsvFileCatalogue1_2()
     {
         $csvCatalogue = Reader::createFromPath('%kernel.root.dir%/../import/catalogue.csv','r');
         $csvCatalogue->setHeaderOffset(0);
 
-        return $csvCatalogue;
+        //Calcul du milieu
+        $lastIndex = count($csvCatalogue) - 1; //3
+        $divided = $lastIndex / 2;
+        $middleIndex = floor($divided);
+
+        //on fait un mini tableau avec les données jusqu'au milieu
+        $stmt = Statement::create()
+        ->offset(0)
+        ->limit($middleIndex);
+
+        return $stmt->process($csvCatalogue);
+    }
+
+    private function readCsvFileCatalogue2_2()
+    {
+        $csvCatalogue = Reader::createFromPath('%kernel.root.dir%/../import/catalogue.csv','r');
+        $csvCatalogue->setHeaderOffset(0);
+
+        //Calcul du milieu
+        $lastIndex = count($csvCatalogue) - 1; //3
+        $divided = $lastIndex / 2;
+        $middleIndex = floor($divided);
+
+        //on fait un mini tableau de résultats du milieu à la fin des donnees...
+        $stmt = Statement::create()
+        ->offset($middleIndex+1);
+
+        return $stmt->process($csvCatalogue);
     }
 
     private function createOrUpdateBoite(array $arrayBoite): Boite
