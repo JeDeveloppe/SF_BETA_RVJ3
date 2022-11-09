@@ -5,6 +5,8 @@ namespace App\Command;
 
 use App\Service\ImportClientsService;
 use App\Service\ImportAdressesService;
+use App\Service\ImportDepartementsService;
+use App\Service\ImportVillesService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -17,7 +19,9 @@ class ImportRVJ2_2 extends Command
 {
     public function __construct(
         private ImportClientsService $importClientsService,
-        private ImportAdressesService $importAdressesService
+        private ImportAdressesService $importAdressesService,
+        private ImportDepartementsService $importDepartementsService,
+        private ImportVillesService $importVillesService
         )
     {
         parent::__construct();
@@ -29,6 +33,12 @@ class ImportRVJ2_2 extends Command
 
         //on importe les clients
         $this->importClientsService->importClients($io);
+
+        //on importe les departementss
+        $this->importDepartementsService->importDepartements($io);
+
+        //on importe les villes
+        $this->importVillesService->importVilles($io);
 
         //on importe les adresses (facturation et livraison)
         $this->importAdressesService->importAdresses($io);
