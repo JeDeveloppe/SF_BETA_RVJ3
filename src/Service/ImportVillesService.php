@@ -3,52 +3,72 @@
 namespace App\Service;
 
 use App\Entity\Ville;
-use App\Repository\DepartementRepository;
 use League\Csv\Reader;
-use App\Repository\PartenaireRepository;
-use App\Repository\PaysRepository;
+use League\Csv\Statement;
+use App\Repository\BoiteRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\DepartementRepository;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ImportVillesService
 {
     public function __construct(
+        private BoiteRepository $boiteRepository,
         private EntityManagerInterface $em,
-        private PartenaireRepository $partenaireRepository,
         private VilleRepository $villeRepository,
-        private PaysRepository $paysRepository,
         private DepartementRepository $departementRepository
         ){
     }
 
     public function importVilles(SymfonyStyle $io): void
     {
-        $io->title('Importation des villes');
+        $diviseur = 4;
+        $csvArray = $this->calculDesRangs($diviseur);
 
-        $villes = $this->readCsvFileVille();
-        
-        $io->progressStart(count($villes));
+        $io->title('Importation des villes /'.$diviseur);
 
-        foreach($villes as $arrayVille){
-            $io->progressAdvance();
-            $ville = $this->createOrUpdateVille($arrayVille);
-            $this->em->persist($ville);
-        }
+        foreach($csvArray['rangs'] as $rang){
+                $stmt = Statement::create()->offset($rang['start'])->limit($rang['limit']);
+                $villes = $stmt->process($csvArray['csv']);
 
-        $this->em->flush();
+                $io->progressStart(count($villes));
+                foreach($villes as $arrayVille){
+                    
+                    $io->progressAdvance();
+                    $ville = $this->createOrUpdateVille($arrayVille);
+                    $this->em->persist($ville);
 
-        $io->progressFinish();
+                    $this->em->flush();     
+                }
+                $io->progressFinish();
+         }
+
         $io->success('Importation des villes terminée');
     }
 
     //lecture des fichiers exportes dans le dossier import
-    private function readCsvFileVille(): Reader
+    private function calculDesRangs($diviseur)
     {
-        $csvVille = Reader::createFromPath('%kernel.root.dir%/../import/ville.csv','r');
-        $csvVille->setHeaderOffset(0);
+        $csvArray = [];
+        $rangs = [];
+        $csvVilles = Reader::createFromPath('%kernel.root.dir%/../import/ville.csv','r');
+        $csvVilles->setHeaderOffset(0);
 
-        return $csvVille;
+        $allRecords = count($csvVilles);
+
+        $rang = floor($allRecords / $diviseur);
+
+        for($i = 0; $i < $diviseur; $i++){
+            $rangs[] = ['start' => $rang * $i,
+            'limit' => $rang
+            ];
+        }
+
+        $csvArray['rangs'] = $rangs;
+        $csvArray['csv'] = $csvVilles;
+        
+        return $csvArray;
     }
 
     private function createOrUpdateVille(array $arrayVille): Ville
