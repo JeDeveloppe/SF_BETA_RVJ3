@@ -26,9 +26,11 @@ class ImportVillesService
         $diviseur = 4;
         $csvArray = $this->calculDesRangs($diviseur);
 
-        $io->title('Importation des villes /'.$diviseur);
+        $io->title('Importation des villes');
 
-        foreach($csvArray['rangs'] as $rang){
+        foreach($csvArray['rangs'] as $key=>$rang){
+                $io->title('Partie '.$key.'/'.$diviseur);
+
                 $stmt = Statement::create()->offset($rang['start'])->limit($rang['limit']);
                 $villes = $stmt->process($csvArray['csv']);
 

@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
+use App\Repository\UserRepository;
 use App\Service\DocumentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -99,7 +100,8 @@ public function __construct(
      */
     public function index(
         AdresseRepository $adresseRepository,
-        DocumentService $documentService): Response
+        DocumentService $documentService,
+        UserRepository $userRepository): Response
     {
 
         $user = $this->security->getUser();
@@ -109,7 +111,9 @@ public function __construct(
         $livraison_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
         $facturation_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
 
-        $adresseRetrait = $adresseRepository->findBy(['user' => 2, 'isFacturation' => null]);
+        //on cherche l'user administrateur
+        $userRetrait = $userRepository->findOneBy(['email' => 'ADMINISTRATION@ADMINISTRATION.FR']);
+        $adresseRetrait = $adresseRepository->findOneBy(['user' => $userRetrait, 'isFacturation' => false]);
 
         if(count($panier_boites) < 1 && count($panier_occasions) < 1){
             //on signal le changement

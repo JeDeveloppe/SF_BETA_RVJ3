@@ -90,6 +90,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $token;
 
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $membership;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
@@ -356,6 +361,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setToken(?string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getMembership(): ?\DateTimeImmutable
+    {
+        return $this->membership;
+    }
+
+    public function setMembership(?\DateTimeImmutable $membership): self
+    {
+        $this->membership = $membership;
 
         return $this;
     }

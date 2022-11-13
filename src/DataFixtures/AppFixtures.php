@@ -4,7 +4,6 @@ namespace App\DataFixtures;
 
 use App\Entity\Pays;
 use App\Entity\MethodeEnvoi;
-use App\DataFixtures\PaysFixtures;
 use App\Entity\Configuration;
 use App\Repository\PaysRepository;
 use App\Entity\InformationsLegales;
@@ -13,7 +12,8 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class AppFixtures extends Fixture
 {
-    public function __construct(private PaysRepository $paysRepository)
+    public function __construct(
+        private PaysRepository $paysRepository)
     {
         
     }
