@@ -157,6 +157,11 @@ class Boite
      */
     private $creator;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $rvj2Id;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -463,6 +468,18 @@ class Boite
     public function setCreator(string $creator): self
     {
         $this->creator = $creator;
+
+        return $this;
+    }
+
+    public function getRvj2Id(): ?int
+    {
+        return $this->rvj2Id;
+    }
+
+    public function setRvj2Id(?int $rvj2Id): self
+    {
+        $this->rvj2Id = $rvj2Id;
 
         return $this;
     }

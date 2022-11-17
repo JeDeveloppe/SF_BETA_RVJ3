@@ -95,6 +95,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $membership;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $rvj2Id;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
@@ -373,6 +378,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMembership(?\DateTimeImmutable $membership): self
     {
         $this->membership = $membership;
+
+        return $this;
+    }
+
+    public function getRvj2Id(): ?int
+    {
+        return $this->rvj2Id;
+    }
+
+    public function setRvj2Id(?int $rvj2Id): self
+    {
+        $this->rvj2Id = $rvj2Id;
 
         return $this;
     }

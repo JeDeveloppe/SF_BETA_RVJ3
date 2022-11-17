@@ -32,13 +32,16 @@ class AppFixtures extends Fixture
         
         //on met les methodes d'envoi'
         $methode = new MethodeEnvoi();
-        $methode->setName('Envoi par La Poste');
+        $methode->setName('Envoi par La Poste'); // id 1
         $manager->persist($methode);
         $methode = new MethodeEnvoi();
-        $methode->setName('Envoi par Colissimo');
+        $methode->setName('Envoi par Colissimo'); // id 2
         $manager->persist($methode);
         $methode = new MethodeEnvoi();
-        $methode->setName('Retrait sur Caen (COOP 5 pour 100)');
+        $methode->setName('Retrait sur Caen (COOP 5 pour 100)'); // id 3
+        $manager->persist($methode);
+        $methode = new MethodeEnvoi();
+        $methode->setName('Envoi par Mondial Relay'); // id 4
         $manager->persist($methode);
 
         //on fait la configuration du site

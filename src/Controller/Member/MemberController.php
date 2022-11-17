@@ -53,12 +53,10 @@ class MemberController extends AbstractController
 
         $user = $this->security->getUser();
 
-        $livraison_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
-        $facturation_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
-
+        // dd($adresseRepository->findBy(['user' => $user, 'isFacturation' => true]));
         return $this->render('member/adresse/index.html.twig', [
-            'livraison_adresses' => $livraison_adresses,
-            'facturation_adresses' => $facturation_adresses,
+            'livraison_adresses' => $adresseRepository->findBy(['user' => $user, 'isFacturation' => null]),
+            'facturation_adresses' => $adresseRepository->findBy(['user' => $user, 'isFacturation' => true]),
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
