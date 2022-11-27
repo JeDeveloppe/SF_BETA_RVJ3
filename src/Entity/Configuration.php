@@ -51,6 +51,11 @@ class Configuration
      */
     private $prefixeDevis;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $cost;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +93,18 @@ class Configuration
     public function setPrefixeDevis(string $prefixeDevis): self
     {
         $this->prefixeDevis = $prefixeDevis;
+
+        return $this;
+    }
+
+    public function getCost(): ?int
+    {
+        return $this->cost;
+    }
+
+    public function setCost(int $cost): self
+    {
+        $this->cost = $cost;
 
         return $this;
     }

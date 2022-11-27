@@ -53,7 +53,7 @@ class ImportOccasionsService
 
 
         
-        if(is_null($occasion)){
+        if(!$occasion){
             $occasion = new Occasion();
         }
 

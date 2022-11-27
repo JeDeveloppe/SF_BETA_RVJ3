@@ -8,6 +8,7 @@ use App\Entity\DocumentLignes;
 use App\Repository\PaysRepository;
 use App\Repository\UserRepository;
 use App\Repository\BoiteRepository;
+use App\Repository\DocumentLignesRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,7 +26,8 @@ class ImportDocumentsLignesService
         private InformationsLegalesRepository $informationsLegalesRepository,
         private UserRepository $userRepository,
         private OccasionRepository $occasionRepository,
-        private BoiteRepository $boiteRepository
+        private BoiteRepository $boiteRepository,
+        private DocumentLignesRepository $documentLignesRepository
         ){
     }
 
@@ -34,14 +36,23 @@ class ImportDocumentsLignesService
     {
         $io->title('Importation des lignes "boite"');
 
+        //on vide la table
+        //CHERCHER TRUNCABLE
+        $lignes = $this->documentLignesRepository->findAll();
+        foreach($lignes as $ligne){
+            $this->em->remove($ligne);
+        }
+        $this->em->flush();
+
+        //puis on inclu les lignes
         $docs = $this->readCsvFileDocumentsLignesBoite();
         
         $io->progressStart(count($docs));
 
         foreach($docs as $arrayDoc){
             $io->progressAdvance();
-            $docLigne= $this->createOrUpdateDocumentLigneBoite($arrayDoc);
-            $this->em->persist($docLigne);
+            $ligne = $this->createOrUpdateDocumentLigneBoite($arrayDoc);
+            $this->em->persist($ligne);
         }
 
         $this->em->flush();
@@ -90,15 +101,13 @@ class ImportDocumentsLignesService
     //lignes des boite pour chaque document
     private function createOrUpdateDocumentLigneBoite(array $arrayDoc): DocumentLignes
     {
-        //on vide la table
-        //CHERCHER TRUNCABLE
-        
+    
+        //la TABLE a était vidée avant
         $docLigne = new DocumentLignes();
 
         // "idDocLigne","idDocument","idJeu","question","reponse","prix"
 
-        $docLigne
-        ->setDocument($this->documentRepository->findOneBy(['rvj2Id' => $arrayDoc['idDocument']]))
+        $docLigne->setDocument($this->documentRepository->findOneBy(['rvj2Id' => $arrayDoc['idDocument']]))
         ->setBoite($this->boiteRepository->findOneBy(['rvj2Id' => $arrayDoc['idJeu']]))
         ->setMessage($arrayDoc['question'])
         ->setReponse($arrayDoc['reponse'])
@@ -106,32 +115,21 @@ class ImportDocumentsLignesService
 
         return $docLigne;
     }
+
     //lignes des boite pour chaque document
     private function createOrUpdateDocumentLigneOccasion(array $arrayDoc): DocumentLignes
     {
-        //on vide la table
-        //CHERCHER TRUNCABLE
+        //TABLE DEJA VIDER AVANT
         
         $docLigne = new DocumentLignes();
 
         // "idDocLigne","idDocument","idJeu","question","reponse","prix"
 
-        $docLigne
-        ->setDocument($this->documentRepository->findOneBy(['rvj2Id' => $arrayDoc['idDocument']]))
-        ->setOccasion($this->occasionRepository->findOneBy(['id' => $arrayDoc['idJeuComplet']]))
+        $docLigne->setDocument($this->documentRepository->findOneBy(['rvj2Id' => $arrayDoc['idDocument']]))
+        ->setOccasion($this->occasionRepository->findOneBy(['rvj2Id' => $arrayDoc['idJeuComplet']]))
         ->setPrixVente($arrayDoc['prix']);
 
         return $docLigne;
     }
-
-    private function getDateTimeImmutableFromTimestamp($timestamp)
-    {
-        $tps = (int) $timestamp;
-        $date = new DateTimeImmutable();
-
-        return $date->setTimestamp($tps);
-    }
-
-
 
 }

@@ -5,24 +5,12 @@
 
 {% block body %}
 
-<div class="row my-4">
-    <div class="col-6">
-    
+    <div class="row my-5 pt-3">
+        {% include "site/components/index/_links.html.twig" %}
     </div>
-    <div class="col-6">
-    
-    </div>
-</div>
 
-<div class="row my-4">
-    <div class="col-11 mx-auto display-6">Quelques statistiques:</div>
-    <div class="col-11 col-md-8 col-lg-6 mx-auto">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex justify-content-between"><span>{{ boites | length }} boites dans le catalogue des pièces détachées</span><span><a href="{{ path('catalogue_pieces_detachees') }}">Voir le catalogue</a></span></li>
-            <li class="list-group-item d-flex justify-content-between"><span>{{ occasions | length }} boites de jeu d'occasion au catalogue</span><span><a href="{{ path('catalogue_jeux_occasion') }}">Voir le catalogue</a><span></li>
-            <li class="list-group-item d-flex justify-content-between"><span>{{ partenaires | length }} partenaires du réemploi</span><span><a href="{{ path('carte_partenaires', {'pays': informationsLegales[0].country.name }) }}">Voir les partenaires</a><span></li>
-        </ul>
+    <div class="row mt-2 mb-5">
+        {% include "site/components/index/_stats.html.twig" %}
     </div>
-</div>
 
 {% endblock %}

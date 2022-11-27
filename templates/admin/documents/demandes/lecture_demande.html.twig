@@ -5,6 +5,13 @@
 {% block body %}
     {% set tva = tva %}
 
+    {% if paniers[0].user.membership < date('now') %}
+        {% set totalCostHT = configurationSite[0].cost / 100 %}
+    {% else %}
+        {% set totalCostHT = 0 %}
+    {% endif %}
+    
+
     <h3 class="col-12 text-center mb-5">Création d'un nouveau devis</h3>
 
     <form action="{{ path('document_creation_devis', {'demande': paniers[0].etat,'user': paniers[0].user.id }) }}" method="POST">
@@ -77,6 +84,12 @@
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
+                            <span class="input-group-text">Total adhésion:</span>
+                        </div>
+                        <div id="totalCostHt"></div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
                             <span class="input-group-text">Total livraison TTC:</span>
                         </div>
                         <div id="totalLivraison"></div>
@@ -109,6 +122,7 @@
 <script>
     let tva = {{ tva }};
     let totalOccasions = {{ totalOccasions * tva }};
+    let totalCostHT = {{ totalCostHT }};
 
     let divTotalOccasions = document.getElementById('totalOccasions');
     let divTotalPiecesDetachees = document.getElementById('totalPiecesDetachees');
@@ -116,6 +130,7 @@
     let divTotalGeneralTTC = document.getElementById('totalGeneralTTC');
     let divTotalGeneralHT = document.getElementById('totalGeneralHT');
     let selectLivraison = document.getElementById('selectLivraison');
+    let divTotalCostHT = document.getElementById('totalCostHt');
     let totalLignesPiecesDetachees = 0;
 
     let hiddenValues = [];
@@ -174,7 +189,7 @@
         }
 
 
-        totalGeneralTTC = notNull(totalOccasions) + notNull(totalLignesPiecesDetachees) + notNull(totalLivraison);
+        totalGeneralTTC = notNull(totalOccasions) + notNull(totalLignesPiecesDetachees) + notNull(totalLivraison) + totalCostHT*tva;
         totalGeneralHT = totalGeneralTTC / tva;
 
         divTotalGeneralHT.innerHTML = '<input type="text" class="form-control" name="totalGeneralHT" value="'+totalGeneralHT.toFixed(2)+'" class="text-right" size="5" readonly>';
@@ -190,13 +205,14 @@
     }
 
     let totalLivraison = 0;
-    let totalGeneralTTC = notNull(totalOccasions) + notNull(totalLignesPiecesDetachees) + notNull(totalLivraison);
+    let totalGeneralTTC = notNull(totalOccasions) + notNull(totalLignesPiecesDetachees) + notNull(totalLivraison) + totalCostHT*tva;
     let totalGeneralHT = totalGeneralTTC / tva;
 
     divTotalPiecesDetachees.innerHTML = '<input type="text" class="form-control" name="totalPiecesDetachees" value="0.00" class="text-right" size="5" readonly>';
     divTotalLivraison.innerHTML = '<input type="text" class="form-control" name="totalLivraison" value="0.00" class="text-right" size="5" readonly>';
     divTotalGeneralHT.innerHTML = '<input type="text" class="form-control" name="totalGeneralHT" value="'+totalGeneralHT.toFixed(2)+'" class="text-right" size="5" readonly>';
     divTotalGeneralTTC.innerHTML = '<input type="text" class="form-control" name="totalGeneralTTC" value="'+totalGeneralTTC.toFixed(2)+'" class="text-right" size="5" readonly>';
+    divTotalCostHT.innerHTML = '<input type="text" class="form-control" name="totalCostHT" value="'+totalCostHT.toFixed(2)+'" class="text-right" size="5" readonly>';
 </script>
 
 {% endblock %}

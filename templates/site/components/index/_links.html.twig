@@ -1,0 +1,59 @@
+<div class="col-11 mx-auto col-lg-6 mb-4 d-flex justify-content-center">
+	<div class="card col-12">
+        <div class="card-body d-flex flex-column flex-md-row justify-content-between">
+            <div class="col-12 col-md-4 d-flex justify-content-center align-item-center">
+                <img class="border border-dark rounded img-fluid" src="{{ asset('build/images/design/jumbotron1.jpg') }}" alt="Card image cap">
+            </div>
+            <div class="col-12 col-md-7 mt-4 mt-md-0 d-flex flex-column justify-content-between">
+                <h5 class="card-title">Catalogue des pièces détachées</h5>
+                <p class="card-text">Retrouvez tous nos jeux disponibles pour compléter les vôtres.</p>
+                <p><a href="{{ path('catalogue_pieces_detachees') }}" class="btn btn-warning">Catalogue ➡️</a></p>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="col-11 mx-auto col-lg-6 mb-4 d-flex justify-content-center">
+	<div class="card col-12">
+        <div class="card-body d-flex flex-column flex-md-row justify-content-between">
+            <div class="col-12 col-md-4 d-flex justify-content-center">
+                <img class="border border-dark rounded img-fluid" src="{{ asset('build/images/design/jumbotron2.jpg') }}" alt="Card image cap">
+            </div>
+            <div class="col-12 col-md-7 mt-4 mt-md-0 d-flex flex-column justify-content-between">
+                <h5 class="card-title">Catalogue des jeux complets</h5>
+                <p class="card-text">Des jeux complets reconstruits par le service, en retrait sur Caen uniquement.</p>
+                <p><a href="{{ path('catalogue_jeux_occasion') }}" class="btn btn-warning">Catalogue ➡️</a></p>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="col-11 mx-auto col-lg-6 mb-4 d-flex justify-content-center">
+	<div class="card col-12">
+        <div class="card-body d-flex flex-column flex-md-row justify-content-between">
+            <div class="col-12 col-md-4 d-flex justify-content-center">
+                <img class="border border-dark rounded img-fluid" src="{{ asset('build/images/design/jumbotron3.jpg') }}" alt="Card image cap">
+            </div>
+            <div class="col-12 col-md-7 mt-4 mt-md-0 d-flex flex-column justify-content-between">
+                <h5 class="card-title">Donner des jeux, nos partenaires</h5>
+                <p class="card-text">Vous trouvez une liste de nos partenaires du réemploi.</p>
+                <p><a href="{{ path('carte_partenaires', {'pays': informationsLegales[0].country.name }) }}" class="btn btn-warning">Catalogue ➡️</a></p>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="col-11 mx-auto col-lg-6 mb-4 d-flex justify-content-center">
+	<div class="card col-12">
+        <div class="card-body d-flex flex-column flex-md-row justify-content-between">
+            <div class="col-12 col-md-4 d-flex justify-content-center">
+                <img class="border border-dark rounded img-fluid" src="{{ asset('build/images/design/jumbotron3.jpg') }}" alt="Card image cap">
+            </div>
+            <div class="col-12 col-md-7 mt-4 mt-md-0 d-flex flex-column justify-content-between">
+                <h5 class="card-title">Nous soutenir</h5>
+                <p class="card-text">Vous souhaitez participer au projet ?</p>
+                <p><a href="{{ path('nous-soutenir') }}" class="btn btn-warning">Informations ➡️</a></p>
+            </div>
+		</div>
+	</div>
+</div>

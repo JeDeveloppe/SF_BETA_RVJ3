@@ -85,7 +85,8 @@ class ImportDocumentsService
         ->setIsDeleteByUser(false)
         ->setPaiement(null)
         ->setMessage($arrayDoc['commentaire'])
-        ->setTauxTva($infosLegales[0]->getTauxTva());
+        ->setTauxTva($infosLegales[0]->getTauxTva())
+        ->setCost($arrayDoc['prix_preparation']);
 
         if($arrayDoc['expedition'] == "poste"){
             $expedition = $this->methodeEnvoiRepository->find(1);

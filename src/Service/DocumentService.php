@@ -186,9 +186,10 @@ class DocumentService
 
         $document->setUser($user)
                 ->setCreatedAt($now)
-                ->setTotalTTC($setup['totalOccasionsHT'] * $tva)
-                ->setTotalHT($setup['totalOccasionsHT'])
+                ->setTotalTTC(($setup['totalOccasionsHT'] + $setup['cost']) * $tva) //on ajoute le cout adhésion
+                ->setTotalHT($setup['totalOccasionsHT'] + $setup['cost']) //on ajoute le cout adhésion
                 ->setTauxTva($tva * 100 -100)
+                ->setCost($setup['cost'])
                 ->setTotalLivraison(0)
                 ->setIsRelanceDevis(false)
                 ->setAdresseLivraison($livraison->getFirstName().' '.$livraison->getLastName().'<br/>'.$livraison->getAdresse().'<br/>'.$livraison->getVille()->getVilleCodePostal().' '.$livraison->getVille()->getVilleNom())

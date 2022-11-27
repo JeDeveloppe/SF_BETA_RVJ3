@@ -75,6 +75,10 @@
                     <td>{{ (devis[0].totalLivraison / 100) |number_format(2, '.', ',') }} €</td>
                 </tr>
                 <tr>
+                    <td>Adhésion au service:</td>
+                    <td>{{ (devis[0].cost / 100) |number_format(2, '.', ',') }} €</td>
+                </tr>
+                <tr>
                     <td>Total HT:</td>
                     <td>{{ (devis[0].totalHt / 100) |number_format(2, '.', ',') }} €</td>
                 </tr>

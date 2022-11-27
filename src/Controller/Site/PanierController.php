@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use App\Repository\BoiteRepository;
 use App\Repository\PanierRepository;
 use App\Repository\AdresseRepository;
+use App\Repository\ConfigurationRepository;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,6 +102,7 @@ public function __construct(
     public function index(
         AdresseRepository $adresseRepository,
         DocumentService $documentService,
+        ConfigurationRepository $configurationRepository,
         UserRepository $userRepository): Response
     {
 
@@ -127,6 +129,7 @@ public function __construct(
             return $this->render('site/panier/panier.html.twig', [
                 'panier_occasions' => $panier_occasions,
                 'panier_boites' => $panier_boites,
+                'configurationSite' => $configurationRepository->findAll(),
                 'tva' => $tva,
                 'token' => $documentService->generateRandomString(),
                 'livraison_adresses' => $livraison_adresses,
@@ -226,6 +229,7 @@ public function __construct(
         $token,
         DocumentService $documentService,
         AdresseRepository $adresseRepository,
+        ConfigurationRepository $configurationRepository,
         Request $request)
     {
         $user = $this->security->getUser();
@@ -246,6 +250,15 @@ public function __construct(
 
         foreach($paniers as $panier){
             $totalOccasionsHT += $panier->getOccasion()->getPriceHt();
+        }
+
+        //on regarde si le user doit payer l'adhésion
+        if($user->getMembership() < new DateTimeImmutable('now')){
+            $configurationSite = $configurationRepository->findAll();
+            $cost = $configurationSite[0]->getCost();
+            $setup['cost'] = $cost;
+        }else{
+            $setup['cost'] = 0;
         }
 
         $setup['totalOccasionsHT'] = $totalOccasionsHT;

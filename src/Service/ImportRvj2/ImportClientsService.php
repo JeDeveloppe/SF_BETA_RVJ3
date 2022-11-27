@@ -63,6 +63,7 @@ class ImportClientsService
                 ->setPhone($arrayClient['telephone'])
                 ->setLevel($arrayClient['userLevel'])
                 ->setToken($arrayClient['idUser'])
+                ->setMembership($this->getDateTimeImmutableFromTimestamp($arrayClient['isAssociation']))
                 ->setDepartment(substr($arrayClient['cpLivraison'],0,2));
 
                 if($arrayClient['paysFacturation'] == "BE"){
@@ -81,9 +82,15 @@ class ImportClientsService
 
     private function getDateTimeImmutableFromTimestamp($timestamp)
     {
-        $date = new DateTimeImmutable();
+        if($timestamp !== null){
+            $tps = (int) $timestamp;
+            $date = new DateTimeImmutable();
+    
+            return $date->setTimestamp($tps);
+        }else{
+            return null;
+        }
 
-        return $date->setTimestamp($timestamp);
     }
 
 }

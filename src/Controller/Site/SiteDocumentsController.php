@@ -3,18 +3,22 @@
 namespace App\Controller\Site;
 
 
+use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DocumentLignesRepository;
-use App\Repository\InformationsLegalesRepository;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\InformationsLegalesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SiteDocumentsController extends AbstractController
 {
     public function __construct(
-        private InformationsLegalesRepository $informationsLegalesRepository
+        private InformationsLegalesRepository $informationsLegalesRepository,
+        private PanierRepository $panierRepository,
+        private Security $security
     )
     {
         
@@ -54,7 +58,8 @@ class SiteDocumentsController extends AbstractController
         
         return $this->render('site/devis/devis_end.html.twig', [
             'tableau' => $tableau,
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll()
+            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
 
     }
@@ -110,7 +115,8 @@ class SiteDocumentsController extends AbstractController
                 'boites' => $boites,
                 'totalOccasions' => $totalOccasions,
                 'totalDetachees' => $totalDetachees,
-                'informationsLegales' =>  $this->informationsLegalesRepository->findAll()
+                'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+                'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);
         }
     }

@@ -23,6 +23,9 @@ class ConfigurationType extends AbstractType
             ->add('prefixeDevis', TextType::class, [
                 'label' => 'Préfixe des devis:'
             ])
+            ->add('cost', NumberType::class, [
+                'label' => 'Prix de l\' adhésion (en cents HT):'
+            ])
         ;
     }
 

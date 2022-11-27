@@ -25,7 +25,11 @@ class AdminDocumentsController extends AbstractController
     /**
      * @Route("/admin/document/lecture-demande/{slug}", name="document_demande")
      */
-    public function lectureDemande($slug, PanierRepository $panierRepository, InformationsLegalesRepository $informationsLegalesRepository): Response
+    public function lectureDemande(
+        $slug,
+        PanierRepository $panierRepository,
+        InformationsLegalesRepository $informationsLegalesRepository,
+        ConfigurationRepository $configurationRepository): Response
     {
 
         $paniers = $panierRepository->findBy(['etat' => $slug]);
@@ -53,6 +57,7 @@ class AdminDocumentsController extends AbstractController
                 'occasions' => $occasions,
                 'boites' => $boites,
                 'tva' => $tva,
+                'configurationSite' => $configurationRepository->findAll(),
                 'totalOccasions' => $totalOccasions
             ]);
         }
@@ -137,6 +142,7 @@ class AdminDocumentsController extends AbstractController
                 'devis' => $devis,
                 'occasions' => $occasions,
                 'boites' => $boites,
+                'cost' => $devis->getCost(),
                 'totalOccasions' => $totalOccasions,
                 'totalDetachees' => $totalDetachees / 100,
                 'suppressionDevis' => $suppressionDevis

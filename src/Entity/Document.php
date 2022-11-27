@@ -121,6 +121,11 @@ class Document
      */
     private $rvj2Id;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $cost;
+
 
 
     
@@ -388,6 +393,18 @@ class Document
     public function setRvj2Id(?int $rvj2Id): self
     {
         $this->rvj2Id = $rvj2Id;
+
+        return $this;
+    }
+
+    public function getCost(): ?int
+    {
+        return $this->cost;
+    }
+
+    public function setCost(?int $cost): self
+    {
+        $this->cost = $cost;
 
         return $this;
     }

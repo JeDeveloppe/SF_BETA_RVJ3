@@ -25,12 +25,12 @@
                            {% if document.paiement is not null %}
                               Payé le {{ document.paiement.timeTransaction|date('d-m-Y') }} <br/>par {{ document.paiement.moyenPaiement }} 
                            {% else %}
-                              <a class="btn btn-outline-warning" href="{{ path('lecture_devis_avant_paiement', {'token': document.token }) }}" target="_blank">Visualiser le devis</a>
+                              <a class="btn btn-outline-warning" href="{{ path('lecture_devis_avant_paiement', {'token': document.token }) }}">Visualiser le devis</a>
                            {% endif %}
                         </td>
                         <td>
                            {% if document.paiement is not null %}
-                              <a href="{{ path('app_member_facture_download', {'token': document.token }) }}" target="_blank" data-toggle="tooltip" data-html="true" title="<em>Tooltip</em> <u>with</u> <b>HTML</b>"><i class="fas fa-print fa-2x"></i></a>
+                              <a href="{{ path('app_member_facture_download', {'token': document.token }) }}" data-toggle="tooltip" data-html="true" title="<em>Tooltip</em> <u>with</u> <b>HTML</b>"><i class="fas fa-print fa-2x"></i></a>
                            {% endif %}
                         </td>
                         
