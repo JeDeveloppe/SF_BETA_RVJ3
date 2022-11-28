@@ -5,16 +5,33 @@
 
 {% block body %}
 
-    <div class="row mt-5 pt-5">
-        <span class="tracking-in-contract-bck-top text-center display-6">Pièces détachées ET jeux complets</span>
+    <div class="row pt-5">
+        <div id="slogan" class="tracking-in-contract-bck-top text-center">Pièces détachées ET jeux complets</div>
     </div>
 
-    <div class="row my-5 pt-3">
+    <div class="row my-2 pt-3">
         {% include "site/components/index/_links.html.twig" %}
+    </div>
+
+    <div class="col-11 mx-auto display-6 mt-5">Les dernières boites ajoutées:</div>
+
+    <div class="row mb-5 justify-content-start flex-nowrap overflow-auto">
+
+        {% include "site/components/catalogues/card-pieces-detachees.html.twig"  
+            with {
+                boites: lastEntries,
+            }
+        %}
     </div>
 
     <div class="row mt-2 mb-5">
         {% include "site/components/index/_stats.html.twig" %}
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+    {{ encore_entry_script_tags('typeWriter') }}
 {% endblock %}

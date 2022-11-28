@@ -34,11 +34,14 @@ class SiteController extends AbstractController
         OccasionRepository $occasionRepository): Response
     {
 
+        $lastEntries = $boiteRepository->findBy(['isOnLine' => true], ['createdAt' => 'DESC'], 8);
+
         return $this->render('site/index.html.twig', [
             'boites' => $boiteRepository->findBy(['isOnLine' => true]),
             'occasions' => $occasionRepository->findBy(['isOnLine' => true]),
             'partenaires' => $partenaireRepository->findBy(['isOnLine' => true]),
             'controller_name' => 'SiteController',
+            'lastEntries' => $lastEntries,
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);

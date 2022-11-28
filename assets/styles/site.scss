@@ -1,19 +1,9 @@
 body{
-    // background-image: url(/build/images/design/back1.jpg); 
-    // background-size: cover;
-    // background-position: 50% 70%;
-    // background-repeat: no-repeat;
-    // background-attachment: fixed;
-    // background: rgb(9,9,121);
-    // background: linear-gradient(360deg, rgba(9,9,121,1) 0,2%, rgba(0,212,255,1) 100%); 
-  
     background: rgb(9,9,121);
     background: linear-gradient(360deg, rgba(9,9,121,1) 0,2%, rgba(144,221,236,1) 100%); 
   }
   
   .tracking-in-contract-bck-top {
-    text-transform: uppercase;
-    position: relative;
     -webkit-animation: tracking-in-contract-bck-top 1s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
             animation: tracking-in-contract-bck-top 1s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
   }
@@ -78,11 +68,12 @@ body{
   }
   
   .logoTop {
+    position: absolute;
     top: 0%;
     left: 50%;
-    transform: translate(-70%, 10%);
+    transform: translate(-50%, 5%);
     z-index: 2;
-    width: 14%;
+    width: 90px;
   }
   
   #precision {
@@ -171,38 +162,25 @@ body{
   
     // Small devices (landscape phones, 576px and up)
   @media (min-width: 576px) {
-    .logoTop {
-      transform: translate(-20%, 5%);
-      width: 10%;
-    }
+
   }
   
   // Medium devices (tablets, 768px and up)
   @media (min-width: 768px) {
-    .logoTop {
-      transform: translate(-40%, 5%);
-      width: 9%;
-    }
+
   }
   
   // Large devices (desktops, 992px and up)
   @media (min-width: 992px) {
-    .logoTop {
-      transform: translate(-50%, 5%);
-      width: 8%;
-    }
+
   }
   
   // X-Large devices (large desktops, 1200px and up)
   @media (min-width: 1200px) {
-    .logoTop {
-      width: 7%;
-    }
+
   }
   
   // XX-Large devices (larger desktops, 1400px and up)
   @media (min-width: 1400px) {
-    .logoTop {
-      width: 6%;
-    }
+
   }

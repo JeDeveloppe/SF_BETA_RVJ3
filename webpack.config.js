@@ -14,9 +14,9 @@ Encore
     // only needed for CDN's or subdirectory deploy
     //.setManifestKeyPrefix('build/')
     .copyFiles({
-                from: './assets/images',
-                // optional target path, relative to the output dir
-                    to: 'images/[path][name].[ext]'
+        from: './assets/images',
+        // optional target path, relative to the output dir
+        to: 'images/[path][name].[ext]'
     })
     /*
      * ENTRY CONFIG
@@ -26,6 +26,7 @@ Encore
      */
     .addEntry('site', './assets/site.js')
     .addEntry('admin', './assets/admin.js')
+    .addEntry('typeWriter', './assets/typeWriter/typeWriter.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

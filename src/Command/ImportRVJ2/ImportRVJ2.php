@@ -53,17 +53,17 @@ class ImportRVJ2 extends Command
         // //on importe les jeux complet (occasions)
         // $this->importOccasionsService->importOccasions($io);
 
+        //on importe les villes
+        $this->importVillesService->importVilles($io);
+
         //on importe les partenaires
         // $this->importPartenairesService->importPartenaires($io);
 
         //on importe les clients
-        $this->importClientsService->importClients($io);
+        //$this->importClientsService->importClients($io);
 
         //on importe les departementss
         // $this->importDepartementsService->importDepartements($io);
-
-        //on importe les villes
-        // $this->importVillesService->importVilles($io);
 
         //on importe les adresses (facturation et livraison)
         // $this->importAdressesService->importAdresses($io);

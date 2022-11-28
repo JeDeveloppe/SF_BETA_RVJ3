@@ -9,7 +9,11 @@
 import './styles/site.scss';
 import './styles/site_template.css';
 
+
+// import Typewriter from 'typewriter-effect';
+
 // start the Stimulus application
 import './stimulus';
 
 require('bootstrap');
+

@@ -64,13 +64,8 @@ class ImportClientsService
                 ->setLevel($arrayClient['userLevel'])
                 ->setToken($arrayClient['idUser'])
                 ->setMembership($this->getDateTimeImmutableFromTimestamp($arrayClient['isAssociation']))
-                ->setDepartment(substr($arrayClient['cpLivraison'],0,2));
-
-                if($arrayClient['paysFacturation'] == "BE"){
-                    $client->setCountry($this->paysRepository->findOneBy(['isoCode' => $arrayClient['paysFacturation']]));
-                }else{
-                    $client->setCountry($this->paysRepository->findOneBy(['isoCode' => 'FR']));
-                }
+                ->setDepartment(substr($arrayClient['cpLivraison'],0,2))
+                ->setCountry($this->paysRepository->findOneBy(['isoCode' => $arrayClient['paysFacturation']]));
 
                 if($arrayClient['timeInscription'] != 0){
                     $time = (int) $arrayClient['timeInscription'];

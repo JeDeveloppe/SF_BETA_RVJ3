@@ -40,11 +40,8 @@
                 </div>
             {% endif %}
 
-            {% for key,boite in boites %}
-            
             {% include "site/components/catalogues/card-pieces-detachees.html.twig" %}
 
-            {% endfor %}
         </div>
         
         {% if boites | length > 0 %}
