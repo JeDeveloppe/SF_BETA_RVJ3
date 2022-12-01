@@ -45,6 +45,19 @@ class PartenaireRepository extends ServiceEntityRepository
         }
     }
 
+    //recherche des partenaires en ligne et ville connue
+    public function findPartenairesFullVisibility($country)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.country = :country')
+            ->andWhere('p.isOnLine = :online')
+            ->andWhere('p.ville IS NOT NULL')
+            ->setParameter('country', $country)
+            ->setParameter('online', true)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     // /**
     //  * @return Partenaire[] Returns an array of Partenaire objects

@@ -40,10 +40,15 @@ class SitePartenaireController extends AbstractController
             return $this->redirectToRoute('accueil');
         }
 
-        //on cherche les partenaires du pays selectionner
-        $partenaires = $partenaireRepository->findBy(['country' => $country->getId(), 'isOnLine' => true]);
+        //on cherche les partenaires du pays selectionner ET ville bien renseignée
+        // $partenaires = $partenaireRepository->findBy(['country' => $country, 'isOnLine' => true]);
+        $partenaires = $partenaireRepository->findPartenairesFullVisibility($country);
 
         $depots = [];
+        // nouvel affichage
+        // foreach($partenaires as $partenaire){
+        //     $depots[$partenaire->getId()] = $partenaire->getVille()->getVilleDepartement();
+        // }
         
         //on boucle sur chaque partenaire
         foreach($partenaires as $key => $partenaire){

@@ -54,19 +54,24 @@ class ImportRVJ2 extends Command
         // $this->importOccasionsService->importOccasions($io);
 
         //on importe les villes
-        $this->importVillesService->importVilles($io);
+        ini_set('memory_limit', '512M');
+        $this->importVillesService->importVilles1_5($io);
+        $this->importVillesService->importVilles2_5($io);
+        $this->importVillesService->importVilles3_5($io);
+        $this->importVillesService->importVilles4_5($io);
+        $this->importVillesService->importVilles5_5($io);
 
         //on importe les partenaires
-        // $this->importPartenairesService->importPartenaires($io);
+        $this->importPartenairesService->importPartenaires($io);
 
         //on importe les clients
         //$this->importClientsService->importClients($io);
 
         //on importe les departementss
-        // $this->importDepartementsService->importDepartements($io);
+        //$this->importDepartementsService->importDepartements($io);
 
         //on importe les adresses (facturation et livraison)
-        // $this->importAdressesService->importAdresses($io);
+        $this->importAdressesService->importAdresses($io);
 
         //on crée user administrateur et adresse de retrait
         // $this->CreationAdministrateurAdresseService->creationAdminAdresse($io);

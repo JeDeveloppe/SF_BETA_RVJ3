@@ -65,6 +65,11 @@ class Ville
      */
     private $departement;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $rvj2Id;
+
     public function __construct()
     {
         $this->adresses = new ArrayCollection();
@@ -216,6 +221,18 @@ class Ville
     public function setDepartement(?Departement $departement): self
     {
         $this->departement = $departement;
+
+        return $this;
+    }
+
+    public function getRvj2Id(): ?int
+    {
+        return $this->rvj2Id;
+    }
+
+    public function setRvj2Id(?int $rvj2Id): self
+    {
+        $this->rvj2Id = $rvj2Id;
 
         return $this;
     }

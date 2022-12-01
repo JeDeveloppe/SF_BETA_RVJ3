@@ -68,7 +68,7 @@ class ImportPartenairesService
                 ->setIsEcommerce($arrayPartenaire['ecommerce'])
                 ->setIsComplet($arrayPartenaire['complet'])
                 ->setIsOnLine($arrayPartenaire['isActif'])
-                ->setVille($this->villeRepository->findOneBy(['id' => $arrayPartenaire['id_villes_free']]))
+                ->setVille($this->villeRepository->findOneBy(['rvj2Id' => $arrayPartenaire['id_villes_free']]))
                 ->setCountry($this->paysRepository->findOneBy(['isoCode' => $arrayPartenaire['pays']]));
 
         return $partenaire;
