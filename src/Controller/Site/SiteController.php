@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
 use App\Repository\OccasionRepository;
 use App\Repository\PartenaireRepository;
+use App\Repository\PaysRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SiteController extends AbstractController
@@ -31,15 +32,18 @@ class SiteController extends AbstractController
     public function index(
         PartenaireRepository $partenaireRepository,
         BoiteRepository $boiteRepository,
+        PaysRepository $paysRepository,
         OccasionRepository $occasionRepository): Response
     {
 
         $lastEntries = $boiteRepository->findBy(['isOnLine' => true], ['createdAt' => 'DESC'], 8);
+        //pays par DEFAULT
+        $country = $paysRepository->findBy(['isoCode' => "FR"]);
 
         return $this->render('site/index.html.twig', [
             'boites' => $boiteRepository->findBy(['isOnLine' => true]),
             'occasions' => $occasionRepository->findBy(['isOnLine' => true]),
-            'partenaires' => $partenaireRepository->findBy(['isOnLine' => true]),
+            'partenaires' => $partenaireRepository->findPartenairesFullVisibility($country),
             'controller_name' => 'SiteController',
             'lastEntries' => $lastEntries,
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),

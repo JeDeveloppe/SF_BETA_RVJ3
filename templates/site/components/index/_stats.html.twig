@@ -10,7 +10,7 @@
 			<span><a href="{{ path('catalogue_jeux_occasion') }}">Voir le catalogue</a></span>
         </li>
 		<li class="list-group-item d-flex justify-content-between">
-			<span>{{ partenaires | length }} partenaires du réemploi</span>
+			<span>{{ partenaires | length - 1}} partenaires du réemploi</span>
 			<span><a href="{{ path('carte_partenaires', {'pays': informationsLegales[0].country.name }) }}">Voir les partenaires</a><span>
         </li>
 	</ul>

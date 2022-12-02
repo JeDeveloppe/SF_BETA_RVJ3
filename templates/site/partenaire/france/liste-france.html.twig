@@ -1,0 +1,61 @@
+{% extends 'site/base.html.twig' %}
+
+{% block title %}Partenaires{% endblock %}
+
+{% block body %}
+
+
+<div class="container-fluid">
+    <h1 class="col-12 text-center my-5">Nos partenaires en FRANCE</h1>
+
+     {% for key, dep in depots %}
+            {% if dep.0.ville.departement.name | length < 2 %}
+                {% set dept = '0' ~ dep.0.ville.departement.name %}
+            {% else %}
+                {% set dept = dep.0.ville.departement.name  %}
+            {% endif %}
+        <div class="row my-5 justify-content-between" id="{{ dept }}">
+            <div class="col-12">Département: {{ dept }}</div>
+                {% for partenaire in dep %}
+                    <div class="col-12 col-md-6 py-3">
+                        <div class="card col-11 mx-auto h-100">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="col-6 h6">{{ partenaire.name }}</div>
+                                <div class="col-6 text-end"><a class="btn btn-warning" href="{{ partenaire.url }}">Voir le site</a></div>
+                            </div>
+                            <div class="card-body d-flex justify-content-between flex-wrap">
+                                <div class="col-12 mb-3 mb-lg-0 col-lg-4">
+                                     <p class="d-flex justify-content-center align-items-center h-100">
+                                        {# <img src="data:image/png;base64,{{ images[key] }}"/> #}
+                                        <img class="img-thumbnail border-0 img-partenaires" src="data:image/png;base64,{{ partenaire.imageblob }}"/>
+                                    </p>
+                                </div>
+                                <div class="col-12 col-lg-7">
+                                    <p>Description:<br/>{{ partenaire.description }}</p>
+                                    <p>Collecte:<br/>{{ partenaire.collecte }}</p>
+                                    <p>Vend:<br/>{{ partenaire.vend }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+        </div>
+    {% endfor %}
+
+    <div class="row my-5">
+        <div class="col-11 col-md-9 col-lg-6 mx-auto text-center p-0">
+        <a class="h5" href="{{ path('contact') }}">Vous avez envie de figurer sur cette page ?<br/>Prenez contact avec nous !</a>
+        </div>
+    </div>
+</div>
+
+    {# //<script>
+    //     document.getElementById('deptSelect').addEventListener('change', function() {
+    //         scrollTo(this.value);
+    //     }, false);
+
+    //     function scrollTo(hash) {
+    //         location.hash = "#" + hash;
+    //     }
+    // </script> #}
+{% endblock %}

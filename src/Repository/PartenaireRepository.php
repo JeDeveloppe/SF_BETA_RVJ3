@@ -49,11 +49,14 @@ class PartenaireRepository extends ServiceEntityRepository
     public function findPartenairesFullVisibility($country)
     {
         return $this->createQueryBuilder('p')
+            ->addSelect('v')
+            ->leftJoin('p.ville', 'v')
             ->where('p.country = :country')
             ->andWhere('p.isOnLine = :online')
             ->andWhere('p.ville IS NOT NULL')
             ->setParameter('country', $country)
             ->setParameter('online', true)
+            ->orderBy('v.villeDepartement', 'ASC')
             ->getQuery()
             ->getResult()
         ;
