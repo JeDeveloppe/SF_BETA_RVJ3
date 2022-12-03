@@ -132,13 +132,13 @@ Règle du jeu",NULL
 "30","30","1 tableau de jeu
 3 montagnes, 1 pont de péage, 7 bâtiments
 1 roue du destin
-6 voitures + pions roses et bleus
+6 voitures + 18 pions roses et 18 bleus
 2 petits fanions
 1 casier de rangement
 Billets
 Polices d'assurance, actions, billets à ordre 
-12 cartes Partage de la Richesse 
-18 cartes Marque de Standing
+12 cartes Partage de la Richesse (4 cartes perdantes, 4 gagnantes et 4 d'exemption)
+18 cartes Marque de Standing (3 de chaque sorte)
 1 règle du jeu",NULL
 "31","31","1 plateau de jeu vertical
 1 base de jeu
@@ -1818,7 +1818,7 @@ Détail :
 5 séries avec 2 chiffres identiques + 1 autre chiffre : 001 ; 002 ... 553 ; 554
 20 plaques avec 3 chiffres différents : 012 ; 013 ; 014 ; 015 ; 023 ; 024 ; 025 ; 034 ; 035 ; 045 ; 123 ; 124 ; 125 ; 134 ; 135 ; 145 ; 234 ; 235 ; 245 ; 345.
 4 réglettes
-1 règle du jeu",NULL
+1 règle du jeu","Attention, il existe deux formats de pièce pour cette même édition. Les pièces font soit 4 cm de côté soit 3.7 cm de côté."
 "377","378","1 plateau de jeu
 1 grand dé
 32 petits châteaux (16 rouges et 16 bleus)
@@ -4705,7 +4705,7 @@ Autocollants numérotés de 1 à 6
 5 planches",NULL
 "950","852","1 support transparent
 6 planches illustrées
-40 pions de couleur ( 9 rouges, 10 bleus, 5 jaunes, 10 verts, 3 violets et 3 orange)",NULL
+40 pions de couleur ( 9 rouges, 10 bleus, 5 jaunes, 10 verts, 3 violets et 3 oranges)",NULL
 "951","853","1 tableau de jeu
 16 souris
 1 dé
@@ -6404,4 +6404,351 @@ Le cahier Happy Week",NULL
 20 grandes cartes-mots de 1 à 4 syllabes
 6 grandes planches recto-verso
 108 jetons-lettres
+1 règle du jeu",NULL
+"1284","1178","4 pots de peinture à doigts
+6 marqueurs
+8 fiches violettes à colorier avec la peinture à doigts
+8 fiches bleues à colorier avec les marqueurs
+4 plaques de jeu de loto des couleurs d'un côté et des formes de l'autre
+12 cartes de loto avec les couleurs et les formes
+1 puzzle petit train de 37 pièces
+24 cartes à emboîtement pour former 12 mini puzzles des quantités et 12 mini puzzles sur les opérations
+30 cartes à emboîtement pour former 10 mini puzzles des quantités de 3 pièces 
+4 plaques de jeu loto des chiffres
+4 fiches avec des mots à compléter d'un côté et des mots croisés de l'autre
+48 cartes avec des lettres
+1 guide de jeu",NULL
+"1285","1179","3 cochons
+3 chapeaux
+3 paires d'yeux
+3 petits noeuds
+12 pattes
+3 queues
+3 maisons constituées de 6 éléments chacune (1 base en bois, 4 murs, 1 toit)
+3 dés
+1 gobelet
+Des jetons
+1 règle du jeu",NULL
+"1286","1180","1 plateau de jeu
+4 pions en bois
+1 flèche tournante
+30 bons points
+1 règle du jeu",NULL
+"1287","1181","9 pièces-fleurs
+1 abeille
+1 papillon
+1 coccinelle
+6 cartes
+1 livret de règles",NULL
+"1288","1182","4 planches illustrées avec des éléments manquants
+32 jetons transparents sur lesquels figure 1 élément manquant
+1 planche-modèle
+1 règle du jeu",NULL
+"1289","1183","36 cartes carrées
+6 véhicules
+Règle du jeu",NULL
+"1290","1184","24 dés gravés
+36 cartes illustrées
+1 sac de transport en tissu
+1 règle du jeu",NULL
+"1291","1185","1 plateau Preuves
+55 cartes Personnages
+52 cartes catégories d'Indices et Objets Spéciaux
+1 livret de règles
+17 plateaux lieux
+4 plateaux Contact scientifique",NULL
+"1292","1186","1 shaker composé d'un socle de jeu et d'un couvercle
+16 dés Boggle
+1 sablier",NULL
+"1293","1187","1 plateau de jeu
+2 marqueurs de ligne
+112 blocs en plastique (16 de chaque forme) 
+1 règle du jeu",NULL
+"1294","1188","1 plateau de jeu
+6 pions personnage
+6 jetons de mobilier
+7 socles blancs
+7 socles jaunes
+1 carnet de détective
+1 dé
+1 feuille d'autocollants
+1 règle de jeu",NULL
+"1295","1189",NULL,NULL
+"1296","1190","1 plateau de jeu avec 1 panneau central
+48 pièces carrées de 6 couleurs différentes
+1 petit shaker composé d'un socle de jeu et d'un couvercle
+9 petits cubes
+1 règle du jeu",NULL
+"1297","1191","32 pions en forme de pyramide
+1 planche supérieure prédécoupée
+2 planches illustrées recto/verso
+1 plateau de jeu",NULL
+"1298","1192","28 dominos
+1 carte Joker Plume
+1 règle du jeu",NULL
+"1299","1193","5 totems nourriture
+42 cartes
+1 sac
+1 règle de jeu",NULL
+"1300","1194","1 socle en bois
+32 boules noires en bois (2,95 cm de diamètre - orifice = 0,96 cm)
+32 boules blanches en bois",NULL
+"1301","1195","1 plateau 
+20 cartes
+1 dé
+6 pions
+36 triangles",NULL
+"1302","1196","37 cartes
+1 règle du jeu",NULL
+"1303","1197","37 cartes dont 1 collector
+1 règle de jeux",NULL
+"1304","1198","48 cartes
+1 règle du jeu",NULL
+"1305","1199","5 planches
+30 cartes",NULL
+"1306","1200","36 cartes
+1 règle du jeu",NULL
+"1307","1201","1 plateau de jeu
+44 cartes Risk
+14 cartes Mission
+6 séries de pions de différentes couleurs (rouge, vert, bleu, jaune, violet, noir)
+5 dés (3 rouges, 2 bleus)
+1 règle du jeu",NULL
+"1308","1202","1 animal en bois
+1 dé en bois
+Des cylindres en bois",NULL
+"1309","1203","110 cartes
+1 règle du jeu",NULL
+"1310","1204","270 cartes
+1 dé
+1 buzzer
+Des feuilles de score
+1 sablier
+1 pote-cartes
+1 casier en plastique
+1 règle du jeu",NULL
+"1311","1205","1 plateau de jeu
+6 pions
+6 armes
+21 cartes (6 suspects, 6 armes, 9 pièces)
+1 carnet de détective
+1 étui confidentiel
+2 dés
+1 règle du jeu",NULL
+"1312","1206","1 valisette ( 1 côté mosaïque avec support transparent, 1 côté tableau blanc effaçable)
+7 planches illustrées recto-verso
+60 pions de couleur ( 10 de chaque couleur : bleu, rouge, jaune, orange, vert, violet)",NULL
+"1313","1207","32 cartes
+1 règle du jeu",NULL
+"1314","1208","24 cartes illustrées
+20 gobelets (4 de chaque couleur : bleu, rouge, vert, noir, jaune)
+1 sonnette
+1 règle du jeu",NULL
+"1315","1209","4 tuiles de départ
+4 château en 3D (1 rose, 1 jaune, 1 vert, 1 bleu)
+48 dominos (1 face paysage, 1 face numérotée)
+8 rois en bois de 4 couleurs (2 roses, 2 jaunes, 2 verts, 2 bleus)
+1 règle du jeu",NULL
+"1316","1210","1 alarme d'une durée aléatoire
+6 cubes colorés en bois
+20 cartes mission
+10 jetons de pénalité
+1 règle du jeu",NULL
+"1317","1211","2 coffrets de jeux avec les grilles océan
+2 flottes complètes composées chacune de : 
+   1 porte-avions (5 trous)
+   1 cuirassé (4 trous)
+   1 contre-torpilleur (3 trous)
+   1 sous-marin (3 trous)
+   1 lance-torpilles (2 trous)
+Pions blancs
+Pions rouges",NULL
+"1318","1212","2 supports de jeu
+48 supports blancs
+48 cartons personnage (24 rouges, 24 bleus)
+24 cartes personnage (jaunes)
+Marqueurs jaunes",NULL
+"1319","1213","1 tableau de jeu
+3 montagnes, 1 pont de péage, 7 bâtiments
+1 roue du destin
+6 voitures + pions roses et bleus
+2 petits fanions
+1 casier de rangement
+Billets
+Polices d'assurance, actions, billets à ordre 
+12 cartes Partage de la Richesse 
+18 cartes Marque de Standing
+1 règle du jeu",NULL
+"1320","1214","220 cartes
+1 sablier
+1 sac en tissu
+1 carnet de scores
+1 règle de jeu",NULL
+"1321","1215","1 projecteur électronique Pablo Crâno
+1 pistolet électronique
+1 notice",NULL
+"1322","1216","1 arbre en bois
+4 paniers
+4 pinces
+8 grosses billes de couleur (2 jaunes, 2 violettes, 2 rouges, 2 vertes)
+8 petites billes de couleur (2 jaunes, 2 violettes, 2 rouges, 2 vertes)
+1 dé de couleurs
+1 sablier
+1 règle du jeu",NULL
+"1323","1217","72 cartes",NULL
+"1324","1218","4 planches
+32 images
+1 règle du jeu",NULL
+"1325","1219","1 crocodile
+40 cartes de bébés animaux
+16 cartes de mamans animaux
+1 règle du jeu",NULL
+"1326","1220","1 plateau de jeu
+36 ours de 6 couleurs (jaune, orange, rouge, vert, bleu, violet)
+7 cartes ours
+1 dé en couleurs
+1 règle du jeu",NULL
+"1327","1221","1 sabot de cartes en forme de voiture
+110 cartes
+1 règle du jeu",NULL
+"1328","1222","1 colline verte avec une carotte tournante
+16 lapins de 4 couleurs différentes
+48 cartes
+1 notice
+1 paire d'oreilles de lapin",NULL
+"1329","1223","80 énigmes illustrées
+1 règle du jeu",NULL
+"1330","1224","1 grille de jeu
+2 supports
+1 glissière
+21 pions rouges
+21 pions jaunes
+1 notice d'instructions",NULL
+"1331","1225","240 cartes
+1 buzzer
+2 pions
+1 plateau de jeu
+1 sablier
+1 règle du jeu",NULL
+"1332","1226","1 plateau de jeu
+12 apprentis sorciers en 4 couleurs (bleu, rouge, jaune vert)
+13 tonneaux
+13 bouchons
+13 étiquettes numérotées de 1 à 13
+Environ 100 pierres magiques
+2 dés
+1 règle du jeu",NULL
+"1333","1227","2 plateaux de jeu (1 rouge, 1 bleu)
+48 cadres blancs
+24 cartes rouges
+24 cartes bleues
+24 cartes jaunes
+2 indicateurs de score
+1 règle du jeu",NULL
+"1334","1228","107 cartes &quot;lettres-image&quot; composant 21 illustrations d'animaux",NULL
+"1335","1229","1 Elefun
+1 trompe
+4 filets à papillons
+30 papillons
+1 règle du jeu",NULL
+"1336","1230","1 plateau de jeu réversible 
+84 lettres dont 2 lettres blanches
+30 jetons bleus
+1 sac de rangement pour les lettres
+1 règle du jeu",NULL
+"1337","1231","24 cartes trésor
+3 dés spéciaux
+1 chien de garde en bois
+1 règle du jeu",NULL
+"1338","1232","60 cartes de menhirs
+15 cartes de points
+1 oeil magique
+1 règle du jeu",NULL
+"1339","1233","1 support
+48 grenouilles
+1 dé de couleur
+1 règle du jeu",NULL
+"1340","1234","64 dalles qui forment la mare
+4 Grenouilles Reines
+24 Grenouilles Servantes
+24 pions Mâles
+1 livret de règles",NULL
+"1341","1235","1 plan de jeu
+48 jetons d'or (en carton)
+16 jetons de voleur (en carton)
+6 radeaux (en carton)
+10 jetons de réserve (en carton)
+6 figurines de chercheur d'or (en bois)
+1 locomotive (en bois)
+1 dé (en bois)
+1 règle du jeu",NULL
+"1342","1236","1 plan de jeu
+6 pions en bois
+9 temples
+1 trésor
+12 mini-cartes de temple
+160 cartes d'orientation
+17 cartes évènement
+17 cartes de risque
+6 cartes de secours
+2 dés
+1 règle du jeu",NULL
+"1343","1237","1 plan de jeu
+60 cartes d'action (cartes de voyage et cartes spéciales)
+40 cartes d'évènement
+1 rose des vents
+6 pions
+1 règle du jeu",NULL
+"1344","1238","1 grand sac
+77 pions/dominos
+1 règle du jeu",NULL
+"1345","1239","1 plateau de jeu
+4 dinosaures rouges
+4 dinosaures bleus
+4 dinosaures jaunes
+4 dinosaures verts
+1 dinosaure noir
+2 dés blancs
+1 dé noir
+1 règle du jeu",NULL
+"1346","1240","1 plateau
+16 pièces en bois
+1 règle du jeu",NULL
+"1347","1241","1 plateau de jeu
+28 boules (14 blanches + 14 noires)
+1 règle du jeu",NULL
+"1348","1242","5 dés
+20 jetons
+1 gobelet
+1 plateau
+1 feuille d'autocollants",NULL
+"1349","1243","1 P'tite Souris
+1 lit magique
+13 pièces d'or
+16 dents
+4 bouches
+1 plateau de jeu
+1 roue
+1 livret de règle du jeu",NULL
+"1350","1244","1 plateau de jeu composé de 2 parties
+3 dés jaunes (pour les déplacements des voitures)
+2 dés rouges (pour les attaques)
+1 dé noir (bonus)
+12 voitures de 4 couleurs différentes (avec 3 modèles différents et les châssis correspondants)
+4 hélicoptères de couleurs différentes avec leur rotor noir
+8 épaves de voitures noires
+1 règle du jeu",NULL
+"1351","1245","1 corbeau
+1 dé
+40 fruits
+9 cartes de parcours
+1 verger
+6 paniers
+1 règle du jeu",NULL
+"1352","1246","86 cartes
+1 règle du jeu",NULL
+"1353","1247","1 palmier
+Des singes
+Des bâtonnets colorés
+1 dé
 1 règle du jeu",NULL

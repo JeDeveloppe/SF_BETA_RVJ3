@@ -125,4 +125,16 @@ class SiteController extends AbstractController
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
+
+    /**
+     * @Route("/comment-ca-marche/", name="comment_ca_marche_passer_une_commande")
+     */
+    public function ccm_passer_cmd(): Response
+    {
+
+        return $this->render('site/informations/comment-ca-marche/passer-commande.html.twig', [
+            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
+        ]);
+    }
 }

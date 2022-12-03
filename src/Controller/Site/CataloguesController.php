@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Security;
 use App\Form\CatalogueSearchBoiteType;
+use App\Form\SearchOccasionType;
 use App\Repository\PartenaireRepository;
 
 class CataloguesController extends AbstractController
@@ -107,19 +108,21 @@ class CataloguesController extends AbstractController
     public function cataloguePiecesDetacheesDemande(
         EntityManagerInterface $entityManager,
         $id,
+        $slug
         ): Response
     {
 
-        $boites = $entityManager
+        $boite = $entityManager
         ->getRepository(Boite::class)
-        ->findBy(['id' => $id, 'isOnLine' => true ]);
+        ->findOneBy(['id' => $id, 'slug' => $slug, 'isOnLine' => true ]);
 
-        if(empty($boites)){
+        if(empty($boite)){
+            $this->addFlash('warning', 'MERCI DE NE PAS JOUER AVEC L\'URL...');
             return $this->redirectToRoute('catalogue_pieces_detachees');
         }else{
 
             return $this->render('site/catalogues/catalogue_pieces_detachees_demande.html.twig', [
-                'boites' => $boites,
+                'boite' => $boite,
                 'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);
@@ -131,21 +134,61 @@ class CataloguesController extends AbstractController
      */
     public function catalogueJeuxOccasion(
         EntityManagerInterface $entityManager,
+        BoiteRepository $boiteRepository,
+        PartenaireRepository $partenaireRepository,
         Request $request,
         ): Response
     {
-        $donnees = $entityManager
-        ->getRepository(Occasion::class)
-        ->findBy(['isOnLine' => true], ['id' => "DESC"]);
+        $boite = new Boite();
+        $form = $this->createForm(SearchOccasionType::class, $boite);
+        $form->handleRequest($request);
 
-        $occasions = $this->paginator->paginate(
-            $donnees, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            12 /*limit per page*/
-        );
+        if($form->isSubmitted() && $form->isValid()) {
+            $recherche = preg_replace('/\s+/', '%', $form->get('nom')->getData());
+            $age = $form->get('age')->getData();
+            $nbrJoueurs = $form->get('nbrJoueurs')->getData();
+
+            $boites = $boiteRepository->findOccasionsMultiCritere($recherche,$age,$nbrJoueurs);
+
+            $donnees = [];
+            //on parcours le resultat precedent
+            foreach($boites as $boite){
+                $occasion = $entityManager->getRepository(Occasion::class)->findOneBy(['boite' => $boite, 'isOnLine' => true]);
+                //si l'occasion est en ligne on met dans le tableau de donnees
+                if($occasion){
+                    $donnees[] = $occasion;
+                }
+            }
+
+            if(count($donnees) > 0){
+                $occasions = $this->paginator->paginate(
+                    $donnees, /* query NOT result */
+                    $request->query->getInt('page', 1), /*page number*/
+                    100 /*limit per page => NOT LIMIT OR LIKE THAT*/
+                );
+            }else{
+                $occasions = [];
+            }
+
+        }else{
+            $donnees = $entityManager
+            ->getRepository(Occasion::class)
+            ->findBy(['isOnLine' => true], ['id' => "DESC"]);
+
+            $occasions = $this->paginator->paginate(
+                $donnees, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                12 /*limit per page*/
+            );
+        }
+
+        //dans tous les cas on cherches les partenaires avec un site web
+        $partenaires = $partenaireRepository->findBy(['isComplet' => true, 'isOnLine' => true]);
 
         return $this->render('site/catalogues/catalogue_jeux_occasion.html.twig', [
             'occasions' => $occasions,
+            'form' => $form->createView(),
+            'partenaires' => $partenaires,
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
@@ -154,7 +197,7 @@ class CataloguesController extends AbstractController
     /**
      * @Route("/catalogue-jeux-occasion/{id}/{slug}/{editeur}", name="catalogue_jeux_occasion_details")
      */
-    public function catalogueJeuxOccasionDetails(InformationsLegalesRepository $informationsLegalesRepository, EntityManagerInterface $entityManager, $id): Response
+    public function catalogueJeuxOccasionDetails(EntityManagerInterface $entityManager, $id, $slug): Response
     {
 
         $informationsLegales = $this->informationsLegalesRepository->findAll();
@@ -162,14 +205,26 @@ class CataloguesController extends AbstractController
 
         $occasion = $entityManager
         ->getRepository(Occasion::class)
-        ->findBy(['id' => $id, 'isOnLine' => true ]);
+        ->findOneBy(['id' => $id, 'isOnLine' => true ]);
 
         if(empty($occasion)){
+            $this->addFlash('warning', 'OCCASION INCONNUE...');
             return $this->redirectToRoute('catalogue_jeux_occasion');
         }else{
+            //on verifier qu'on a pas jouer avec l'url en retrouvant le slug de la boite
+            $boite = $entityManager
+            ->getRepository(Boite::class)
+            ->findBy(['id' => $occasion->getBoite(), 'slug' => $slug ]);
+
+            if(empty($boite)){
+                $this->addFlash('warning', 'MERCI DE NE PAS JOUER AVEC L\'URL...');
+                return $this->redirectToRoute('catalogue_jeux_occasion');
+            }
+
+
 
             return $this->render('site/catalogues/catalogue_jeux_occasion_details.html.twig', [
-                'occasions' => $occasion,
+                'occasion' => $occasion,
                 'tva' => $tva,
                 'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])

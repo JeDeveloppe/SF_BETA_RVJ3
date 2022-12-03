@@ -22,7 +22,7 @@ class AdminPartenaireController extends AbstractController
     public function index(PartenaireRepository $partenaireRepository): Response
     {
 
-        $partenaires = $partenaireRepository->findAll();
+        $partenaires = $partenaireRepository->findBy([], ['name' => 'ASC']);
 
         return $this->render('admin/partenaire/index.html.twig', [
             'partenaires' => $partenaires,

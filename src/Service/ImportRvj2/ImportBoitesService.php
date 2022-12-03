@@ -125,11 +125,11 @@ class ImportBoitesService
             ->setImageblob($arrayBoite['imageBlob'])
             ->setSlug($arrayBoite['urlNom'])
             ->setIsLivrable($arrayBoite['isLivrable'])
-            ->setIsComplet($arrayBoite['isComplet'])
-            ->setPoidBoite($arrayBoite['poidBoite'])
-            ->setAge($arrayBoite['age'])
-            ->setNbrJoueurs($arrayBoite['nbrJoueurs'])
-            ->setPrixHt($arrayBoite['prix_HT'])
+            ->setIsComplet($this->stringToNull($arrayBoite['isComplet']))
+            ->setPoidBoite($this->stringToNull($arrayBoite['poidBoite']))
+            ->setAge($this->stringToNull($arrayBoite['age']))
+            ->setNbrJoueurs($this->stringToNull($arrayBoite['nbrJoueurs']))
+            ->setPrixHt($this->stringToNull($arrayBoite['prix_HT']))
             ->setCreator($arrayBoite['createur'])
             ->setIsDeee($arrayBoite['deee'])
             ->setCreatedAt(new DateTimeImmutable($arrayBoite['created_at']))
@@ -139,4 +139,12 @@ class ImportBoitesService
         return $boite;
     }
 
+    private function stringToNull($value){
+        
+        if($value == "NULL"){
+            $value = NULL;
+        }
+
+        return $value;
+    }
 }

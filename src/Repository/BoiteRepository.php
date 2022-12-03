@@ -56,6 +56,27 @@ class BoiteRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findOccasionsMultiCritere($recherche,$age,$nbrJoueurs)
+    {
+        if($nbrJoueurs == "u1" || $nbrJoueurs == "u2"){
+            $addJoueurs = "b.nbrJoueurs = :joueurs";
+        }else{
+            $addJoueurs = "b.nbrJoueurs >= :joueurs";
+        }
+
+        return $this->createQueryBuilder('b')
+            ->where('b.nom LIKE :recherche')
+            ->orWhere('b.editeur LIKE :recherche')
+            ->setParameter('recherche', '%'.$recherche.'%')
+            ->andWhere('b.age >= :age')
+            ->setParameter('age', $age)
+            ->andWhere($addJoueurs)
+            ->setParameter('joueurs', $nbrJoueurs)
+            ->orderBy('b.nom', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     // /**
     //  * @return Boite[] Returns an array of Boite objects
     //  */

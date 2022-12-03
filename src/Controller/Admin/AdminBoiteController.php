@@ -78,7 +78,7 @@ class AdminBoiteController extends AbstractController
         $form = $this->createForm(BoiteType::class, $boite);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if($form->isSubmitted() && $form->isValid()) {
 
             $user = $security->getUser();
             

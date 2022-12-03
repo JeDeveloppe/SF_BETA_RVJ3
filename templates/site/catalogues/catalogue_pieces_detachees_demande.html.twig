@@ -1,18 +1,16 @@
 {% extends 'site/base.html.twig' %}
 
 {% block title %}
-	{{ boites[0].nom }}
+	{{ boite.nom }}
 	-
-	{{ boites[0].editeur }}
+	{{ boite.editeur }}
 	-
-	{{ boites[0].annee }}
+	{{ boite.annee }}
 {% endblock %}
 
 {% block body %}
 
-	<h1 class="col-12 text-center mt-5 mb-3">{{ boites[0].nom }} - {{ boites[0].editeur }} - {{ boites[0].annee }}</h1>
-
-	{% for key, boite in boites %}
+	<h1 class="col-12 text-center mt-5 pt-3 mb-3">{{ boite.nom }} - {{ boite.editeur }} - <span class="small">{{ boite.annee }}</span></h1>
 
 		<div class="row mb-3">
 			<div class="col-12 col-md-6">
@@ -76,17 +74,17 @@
 					</div>
 
 					<!-- message d'information sur un jeu -->
-					{% if (boite.message is not null)  %}
+					{% if boite.message is defined and boite.message is not null %}
 						<div class="col-12 text-danger text-center my-5">
-							<i class="fas fa-bell fa-2x">Information:</i>
-							<p class="pl-5">{{ boite.message }}'</p>
+							<i class="fas fa-bell fa-2x"> Information:</i>
+							<p class="pl-5">{{ boite.message }}</p>
 						</div>
 					{% endif %}
 
 					<!-- question pre-formulaire -->
-					<div class="col-11 mx-auto mt-2">
+					<div class="col-11 mx-auto mt-4">
 						Vous souhaitez faire une demande de pièces pour ce jeu ?
-						<a href="/comment-ca-marche/passer-une-commande/" target="_blank" data-html="true" data-toggle="tooltip" data-placement="top" title="Aide">
+						<a href="{{ path('comment_ca_marche_passer_une_commande') }}" target="_blank" data-html="true" data-toggle="tooltip" data-placement="top" title="Aide">
 							<i class="fas fa-question-circle text-info p-2"></i>
 						</a><br/>
 						Remplissez ce formulaire et ajoutez cette demande à votre panier !
@@ -147,7 +145,7 @@
 				{% endif %}
 			</div>
 		</div>
-	{% endfor %}
+
 
 
 	<script>

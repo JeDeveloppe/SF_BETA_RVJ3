@@ -57,6 +57,23 @@ class ImportPartenairesService
             $partenaire = new Partenaire();
         }
 
+        if($arrayPartenaire['complet'] == 1){
+            $complet = true;
+        }else{
+            $complet = false;
+        }
+        if($arrayPartenaire['detachee'] == 1){
+            $detachee = true;
+        }else{
+            $detachee = false;
+        }
+        if($arrayPartenaire['isActif'] == 1){
+            $online = true;
+        }else{
+            $online = false;
+        }
+
+
         $partenaire->setName($arrayPartenaire['nom'])
                 ->setDescription($arrayPartenaire['description'])
                 ->setCollecte($arrayPartenaire['collecte'])
@@ -64,15 +81,14 @@ class ImportPartenairesService
                 ->setIsDon($arrayPartenaire['don'])
                 ->setUrl($arrayPartenaire['url'])
                 ->setImageBlob($arrayPartenaire['image'])
-                ->setIsDetachee($arrayPartenaire['detachee'])
+                ->setIsDetachee($detachee)
                 ->setIsEcommerce($arrayPartenaire['ecommerce'])
-                ->setIsComplet($arrayPartenaire['complet'])
-                ->setIsOnLine($arrayPartenaire['isActif'])
+                ->setIsComplet($complet)
+                ->setIsOnLine($online)
                 ->setVille($this->villeRepository->findOneBy(['rvj2Id' => $arrayPartenaire['id_villes_free']]))
                 ->setCountry($this->paysRepository->findOneBy(['isoCode' => $arrayPartenaire['pays']]));
 
         return $partenaire;
 
     }
-
 }

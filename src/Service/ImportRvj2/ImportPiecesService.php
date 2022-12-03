@@ -50,10 +50,18 @@ class ImportPiecesService
 
         if($boite){
             $boite->setContenu($arrayPiece['contenu_total'])
-            ->setMessage($arrayPiece['message']);
+            ->setMessage($this->stringToNull($arrayPiece['message']));
             $this->em->persist($boite);
         }
 
+    }
+    private function stringToNull($value){
+        
+        if($value == "NULL"){
+            $value = NULL;
+        }
+
+        return $value;
     }
 
 }
