@@ -1,0 +1,99 @@
+{% extends 'site/base.html.twig' %}
+
+{% block title %}Comment ça marche{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-12 col-md-2 col-xl-1">
+            {% include "site/informations/comment-ca-marche/_menu-ccm.html.twig" %}
+        </div>
+        <div class="col-12 col-md-10 col-xl-11">
+            <section id="commande" class="pt-0 pt-md-5">
+                <h2 class="col-12 text-center mt-5">Passer une commande</h2>
+                <div class="row py-2">
+                    <div class="col-11 col-lg-10 mx-auto py-3 px-0">
+                        <p class="py-2 col-11 mx-auto">
+                        Vous avez un ou plusieurs jeux incomplets ?<br />
+                        Pas de panique ! Le service a peut-être en stock la ou les pièces qu'il vous manque.<br/>
+                        Voici comment fonctionne le service :
+                        </p>
+                    </div>
+                    <div class="col-11 mx-auto py-3 mb-2">
+                            <ul class="mt-3">
+                                <li class="mt-3 mb-2">Étape 1: remplir le formulaire de demande.</li>
+                                    <ol>Il est essentiel de bien préciser le nombre de pièces que vous souhaitez ainsi que les autres caractéristiques (noms, couleurs, formes).</ol>
+                                    <ol class="ml-5 text-danger mb-2">Exemple : « Bonjour, je souhaiterais commander 3 jetons verts et 1 jeton rouge du jeu COLORINO ».</ol>
+                                    <ol>Il vous est possible de joindre 1 ou 2 photos pour expliciter votre demande.</ol>
+                                    <ol>Il ne vous reste plus qu’à cliquer sur le bouton « ajouter au panier ».</ol>
+
+                                
+                                <li class="mt-3 mb-2">Étape 2: validez votre panier.</li>
+                                    <ol>Il vous suffit de cliquer sur le symbole « panier » en haut à droite du site internet.<br/>
+                                        Après avoir renseigné le formulaire, vous n’avez plus qu’à cliquer sur le bouton « demander un devis ».<br/>
+                                        Un mail de confirmation vous est automatiquement envoyé (penser à vérifier vos spams).<br/>
+                                        Votre demande est traitée dès que possible.<br/>
+                                        Vous recevez alors un devis par mail vous indiquant les pièces disponibles ainsi que le montant de la commande.
+                                    </ol>
+                                
+                                <li class="mt-3 mb-2">Étape 3: paiement de la commande.</li>
+                                    <ol>Sur le devis se trouve un bouton « payer ma commande ». En cliquant sur le lien vous serez automatiquement dirigé vers la page de paiement sécurisé.</ol>
+                                    <ol>Le paiement sécurisé se fait par carte bancaire sur le site de <a href="<?php echo $GLOBALS['urlService']; ?>" class="text-info" target="_blank"><?php echo $GLOBAL['servicePaiement']; ?></a>.</ol>
+                                
+                                <li class="mt-3 mb-2">Étape 4: Envoi de votre commande.</li>
+                                    <ol>Dès validation du paiement, le service est tenu informé. Votre commande est alors préparée. En fonction de ce que vous avez choisi, elle est envoyée par voie postale ou déposée à la Coop 5 pour 100 à Caen.</ol>
+                            </ul>
+                            
+                    </div>
+                    <div class="col-12 mt-4 d-flex justify-content-around">
+                        <figure class="figure col-4 col-sm-3 col-md-2 col-lg-2">
+                            <img src="/images/photos/rangement1-min.JPG" class="figure-img img-fluid img-thumbnail border-primary" alt="photo rangement jeux">
+                            <figcaption class="figure-caption text-center">En pile...</figcaption>
+                        </figure>
+
+                        <figure class="figure col-4 col-sm-3 col-md-2 col-lg-2">
+                            <img src="/images/photos/rangement2-min.JPG" class="figure-img img-fluid img-thumbnail border-primary" alt="photo rangement jeux">
+                            <figcaption class="figure-caption text-center">En pile...</figcaption>
+                        </figure>
+
+                        <figure class="figure col-4 col-sm-3 col-md-2 col-lg-2">
+                            <img src="/images/photos/rangement3-min.JPG" class="figure-img img-fluid img-thumbnail border-primary" alt="photo rangement jeux">
+                            <figcaption class="figure-caption text-center">En pile...</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="my-4"></hr>
+{{ dump(informationsLegales) }}
+            <section id="expedition">
+                <h2 class="col-12 text-center mt-5">Expédition et retrait</h2>
+                <div class="row py-2">
+                    <div class="col-11 col-md-8 mx-auto py-3">
+                        <p class="py-2 col-11 mx-auto text-center p-0">
+                        Le service propose plusieurs options pour récupérer votre commande :
+                            <ul>
+                                <li class="mt-3 mb-2">Le retrait à la Coop 5 pour 100, 33 route de Trouville 14000 Caen : pas de frais de port.</li>
+                                    <ol>La commande est déposée à la Coop dans un délai de maximum 7 jours après validation du paiement.<br/>
+                                    Vous pouvez la retirer à la caisse du magasin en indiquant votre nom et prénom <ins class="text-danger">(prévoir une pièce d'identité)</ins>.<br/>
+                                    Le magasin est ouvert du mercredi au vendredi de 11h à 19h et le samedi de 11h à 18h.</ol>
+                                <li class="mt-3 mb-2">L'envoi par voie postale : </li>
+                                    <ol>Les petites pièces sont envoyées sous enveloppe / enveloppe à bulles (pas de suivi d'envoi). A partir de <?php echo str_replace(".",",",$donneesConfig[20]['valeur']);?> €.</ol>
+                                    <ol class="mt-2">Les plateaux de jeux ainsi que les pièces dont l'épaisseur dépasse 3 cm sont envoyés par colis.</ol>
+                                        <ul class="mt-3 ml-5">Vous avez le choix entre deux options :
+                                            <li>Mondial Relay : colis à retirer dans le point relais de votre choix. A partir de <?php echo str_replace(".",",",$donneesConfig[23]['valeur']);?> €.</li>
+                                            <li>Colissimo : colis expédié directement chez vous. A partir de <?php echo str_replace(".",",",$donneesConfig[22]['valeur']);?> €.</li>
+                                        </ul>
+                            </ul>
+                        </p>
+
+                        <p class="py-2 col-11 mx-auto text-center text-danger">
+                        Le service peut faire des envois à l'étranger, le frais postaux sont alors majorés.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+{% endblock %}

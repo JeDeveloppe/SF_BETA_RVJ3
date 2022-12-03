@@ -1,3 +1,7 @@
+html{
+  scroll-padding-top: 20%;
+}
+
 body{
     background: rgb(9,9,121);
     background: linear-gradient(360deg, rgba(9,9,121,1) 0,2%, rgba(144,221,236,1) 100%); 
@@ -73,6 +77,18 @@ body{
     object-fit: cover;
   }
   
+  #menu_information{
+    position: sticky;
+    top: 10%;
+  }
+
+  // .anchor {
+  //     display: block;
+  //     position: relative;
+  //     top: -40%;
+  //     visibility: hidden;
+  // }
+
   .logoTop {
     position: absolute;
     top: 0%;

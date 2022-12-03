@@ -57,7 +57,7 @@ class SiteController extends AbstractController
     public function cgv(): Response
     {
 
-        return $this->render('site/informations/cgv.html.twig', [
+        return $this->render('site/informations/legale/cgv.html.twig', [
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
@@ -69,7 +69,7 @@ class SiteController extends AbstractController
     public function mentionsLegales(): Response
     {
 
-        return $this->render('site/informations/mentions_legales.html.twig', [
+        return $this->render('site/informations/legale/mentions_legales.html.twig', [
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
@@ -81,7 +81,7 @@ class SiteController extends AbstractController
     public function nousSoutenir(): Response
     {
 
-        return $this->render('site/informations/nous_soutenir.html.twig', [
+        return $this->render('site/informations/aide/nous_soutenir.html.twig', [
             'informationsLegales' => $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
@@ -134,6 +134,29 @@ class SiteController extends AbstractController
 
         return $this->render('site/informations/comment-ca-marche/passer-commande.html.twig', [
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
+        ]);
+    }
+
+    /**
+     * @Route("/informations-legales", name="informations-legales")
+     */
+    public function informations_legales(): Response
+    {
+
+        return $this->render('site/informations/legale/legale.html.twig', [
+            'informationsLegales' => $this->informationsLegalesRepository->findAll(),
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
+        ]);
+    }
+    /**
+     * @Route("/informations-comment-ca-marche", name="informations-comment-ca-marche")
+     */
+    public function informations_comment_ca_marche(): Response
+    {
+
+        return $this->render('site/informations/comment-ca-marche/ccm.html.twig', [
+            'informationsLegales' => $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
