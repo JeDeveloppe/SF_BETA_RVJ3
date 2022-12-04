@@ -57,6 +57,14 @@
                         <td>{{ configuration.autrePiece }} € HT</td>
                     </tr>
                     <tr>
+                        <td>Prix de l'enveloppe simple:</td>
+                        <td>{{ (configuration.enveloppeSimple / 100) | number_format(2, ',', '.') }} € HT</td>
+                    </tr>
+                    <tr>
+                        <td>Prix de l'enveloppe à bulles:</td>
+                        <td>{{ (configuration.enveloppeBulle / 100) | number_format(2, ',', '.') }} € HT</td>
+                    </tr>
+                    <tr>
                         <td>
                             <a class="btn btn-warning" href="{{ path('app_configuration_edit', {'id': configuration.id}) }}">Éditer</a>
                         </td>

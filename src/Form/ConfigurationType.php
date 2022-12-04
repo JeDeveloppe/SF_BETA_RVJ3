@@ -50,6 +50,12 @@ class ConfigurationType extends AbstractType
             ->add('autrePiece', TextType::class, [
                 'label' => 'Prix des autres pièces:'
             ])
+            ->add('enveloppeSimple', NumberType::class, [
+                'label' => 'Prix de l\' enveloppe simple (en cents HT):'
+            ])
+            ->add('enveloppeBulle', NumberType::class, [
+                'label' => 'Prix de l\' enveloppe à bulles (en cents HT):'
+            ])
         ;
     }
 

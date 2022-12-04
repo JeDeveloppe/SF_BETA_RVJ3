@@ -4,6 +4,7 @@ namespace App\Controller\Site;
 
 use App\Form\ContactType;
 use App\Repository\BoiteRepository;
+use App\Repository\ConfigurationRepository;
 use App\Service\MailerService;
 use App\Repository\PanierRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -150,13 +151,14 @@ class SiteController extends AbstractController
         ]);
     }
     /**
-     * @Route("/informations-comment-ca-marche", name="informations-comment-ca-marche")
+     * @Route("/informations/comment-ca-marche", name="informations-comment-ca-marche")
      */
-    public function informations_comment_ca_marche(): Response
+    public function informations_comment_ca_marche(ConfigurationRepository $configurationRepository): Response
     {
 
         return $this->render('site/informations/comment-ca-marche/ccm.html.twig', [
             'informationsLegales' => $this->informationsLegalesRepository->findAll(),
+            'configuration' => $configurationRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }

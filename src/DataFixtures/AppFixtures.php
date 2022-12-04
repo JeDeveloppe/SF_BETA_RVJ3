@@ -56,7 +56,9 @@ class AppFixtures extends Fixture
             ->setPieceUnique("De 0,60 à 2,00")
             ->setPieceMultiple("De 0,05 à 0,20")
             ->setPieceMetalBois("De 0,60 à 2,00")
-            ->setAutrePiece("De 0,30 à 0,50");
+            ->setAutrePiece("De 0,30 à 0,50")
+            ->setEnveloppeSimple(120)
+            ->setEnveloppeBulle(160);
         $manager->persist($conf);
 
         //les informations legales
