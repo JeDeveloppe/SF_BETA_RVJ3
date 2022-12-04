@@ -26,6 +26,30 @@ class ConfigurationType extends AbstractType
             ->add('cost', NumberType::class, [
                 'label' => 'Prix de l\' adhésion (en cents HT):'
             ])
+            ->add('grandPlateauBois', TextType::class, [
+                'label' => 'Prix du grand plateau / support en bois (en cents HT):'
+            ])
+            ->add('grandPlateauPlastique', TextType::class, [
+                'label' => 'Prix du grand plateau / support en plastique (en cents HT):'
+            ])
+            ->add('petitPlateauBois', TextType::class, [
+                'label' => 'Prix du petit plateau / support en bois (en cents HT):'
+            ])
+            ->add('petitPlateauPlastique', TextType::class, [
+                'label' => 'Prix du petit plateau / support en plastique (en cents HT):'
+            ])
+            ->add('pieceUnique', TextType::class, [
+                'label' => 'Prix de la pièce unique dans un jeu:'
+            ])
+            ->add('pieceMultiple', TextType::class, [
+                'label' => 'Prix de la pièce en grande quantité:'
+            ])
+            ->add('pieceMetalBois', TextType::class, [
+                'label' => 'Prix de la pièce en métal / bois:'
+            ])
+            ->add('autrePiece', TextType::class, [
+                'label' => 'Prix des autres pièces:'
+            ])
         ;
     }
 

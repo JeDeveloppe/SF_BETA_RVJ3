@@ -56,6 +56,46 @@ class Configuration
      */
     private $cost;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $grandPlateau_bois;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $grandPlateau_plastique;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $petitPlateau_bois;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $petitPlateau_plastique;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $pieceUnique;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $pieceMultiple;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $pieceMetalBois;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $autrePiece;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +145,102 @@ class Configuration
     public function setCost(int $cost): self
     {
         $this->cost = $cost;
+
+        return $this;
+    }
+
+    public function getGrandPlateauBois(): ?string
+    {
+        return $this->grandPlateau_bois;
+    }
+
+    public function setGrandPlateauBois(string $grandPlateau_bois): self
+    {
+        $this->grandPlateau_bois = $grandPlateau_bois;
+
+        return $this;
+    }
+
+    public function getGrandPlateauPlastique(): ?string
+    {
+        return $this->grandPlateau_plastique;
+    }
+
+    public function setGrandPlateauPlastique(string $grandPlateau_plastique): self
+    {
+        $this->grandPlateau_plastique = $grandPlateau_plastique;
+
+        return $this;
+    }
+
+    public function getPetitPlateauBois(): ?string
+    {
+        return $this->petitPlateau_bois;
+    }
+
+    public function setPetitPlateauBois(string $petitPlateau_bois): self
+    {
+        $this->petitPlateau_bois = $petitPlateau_bois;
+
+        return $this;
+    }
+
+    public function getPetitPlateauPlastique(): ?string
+    {
+        return $this->petitPlateau_plastique;
+    }
+
+    public function setPetitPlateauPlastique(string $petitPlateau_plastique): self
+    {
+        $this->petitPlateau_plastique = $petitPlateau_plastique;
+
+        return $this;
+    }
+
+    public function getPieceUnique(): ?string
+    {
+        return $this->pieceUnique;
+    }
+
+    public function setPieceUnique(string $pieceUnique): self
+    {
+        $this->pieceUnique = $pieceUnique;
+
+        return $this;
+    }
+
+    public function getPieceMultiple(): ?string
+    {
+        return $this->pieceMultiple;
+    }
+
+    public function setPieceMultiple(string $pieceMultiple): self
+    {
+        $this->pieceMultiple = $pieceMultiple;
+
+        return $this;
+    }
+
+    public function getPieceMetalBois(): ?string
+    {
+        return $this->pieceMetalBois;
+    }
+
+    public function setPieceMetalBois(string $pieceMetalBois): self
+    {
+        $this->pieceMetalBois = $pieceMetalBois;
+
+        return $this;
+    }
+
+    public function getAutrePiece(): ?string
+    {
+        return $this->autrePiece;
+    }
+
+    public function setAutrePiece(string $autrePiece): self
+    {
+        $this->autrePiece = $autrePiece;
 
         return $this;
     }

@@ -48,7 +48,15 @@ class AppFixtures extends Fixture
         $conf = new Configuration();
         $conf->setDevisDelayBeforeDelete(5)
             ->setPrefixeDevis('DEV')
-            ->setPrefixeFacture('FAC');
+            ->setPrefixeFacture('FAC')
+            ->setGrandPlateauBois(300)
+            ->setGrandPlateauPlastique(200)
+            ->setPetitPlateauBois(200)
+            ->setPetitPlateauPlastique(100)
+            ->setPieceUnique("De 0,60 à 2,00")
+            ->setPieceMultiple("De 0,05 à 0,20")
+            ->setPieceMetalBois("De 0,60 à 2,00")
+            ->setAutrePiece("De 0,30 à 0,50");
         $manager->persist($conf);
 
         //les informations legales
