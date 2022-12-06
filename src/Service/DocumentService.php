@@ -61,7 +61,7 @@ class DocumentService
 
         //il faudra trouver le dernier document de la base et incrementer de 1 pour le document
         $lastDocumentByYear = $this->documentRepository->findLastEntryFromThisYear($column, $year);
-  
+
         //si pas d'entree alors nouvelle annee
         if(count($lastDocumentByYear) == 0){
             
@@ -75,7 +75,7 @@ class DocumentService
 
             return $this->numberConstruction($numero,$year,$month);
         }
-       
+
     }
 
     public function numberConstruction($numero,$year,$month){
@@ -122,7 +122,7 @@ class DocumentService
                 ->setCreatedAt($now)
                 ->setTotalTTC($request->request->get('totalGeneralTTC') * 100)
                 ->setTotalHT($request->request->get('totalGeneralHT') * 100)
-                ->setTauxTva($tva * 100 -100)
+                ->setTauxTva(($tva * 100) -100)
                 ->setTotalLivraison($request->request->get('totalLivraisonTTC') * 100)
                 ->setIsRelanceDevis(false)
                 ->setAdresseFacturation($paniers[0]->getFacturation())
@@ -188,12 +188,12 @@ class DocumentService
                 ->setCreatedAt($now)
                 ->setTotalTTC(($setup['totalOccasionsHT'] + $setup['cost']) * $tva) //on ajoute le cout adhésion
                 ->setTotalHT($setup['totalOccasionsHT'] + $setup['cost']) //on ajoute le cout adhésion
-                ->setTauxTva($tva * 100 -100)
+                ->setTauxTva(($tva * 100) -100)
                 ->setCost($setup['cost'])
                 ->setTotalLivraison(0)
                 ->setIsRelanceDevis(false)
-                ->setAdresseLivraison($livraison->getFirstName().' '.$livraison->getLastName().'<br/>'.$livraison->getAdresse().'<br/>'.$livraison->getVille()->getVilleCodePostal().' '.$livraison->getVille()->getVilleNom())
-                ->setAdresseFacturation($facturation->getFirstName().' '.$facturation->getLastName().'<br/>'.$facturation->getAdresse().'<br/>'.$facturation->getVille()->getVilleCodePostal().' '.$facturation->getVille()->getVilleNom())
+                ->setAdresseLivraison($livraison->getFirstName().' '.$livraison->getLastName().'<br/>'.$livraison->getAdresse().'<br/>'.$livraison->getVille()->getVilleCodePostal().' '.$livraison->getVille()->getVilleNom().'<br/>'.$livraison->getVille()->getDepartement()->getPays()->getIsoCode())
+                ->setAdresseFacturation($facturation->getFirstName().' '.$facturation->getLastName().'<br/>'.$facturation->getAdresse().'<br/>'.$facturation->getVille()->getVilleCodePostal().' '.$facturation->getVille()->getVilleNom().'<br/>'.$facturation->getVille()->getDepartement()->getPays()->getIsoCode())
                 ->setToken($setup['token'])
                 ->setNumeroDevis($newNumero)
                 ->setEndValidationDevis($endDevis)

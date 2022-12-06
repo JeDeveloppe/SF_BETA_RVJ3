@@ -138,6 +138,7 @@ class DocumentRepository extends ServiceEntityRepository
         ->setParameter('token', $token)
         ->andWhere('d.numeroFacture IS NULL')
         ->andWhere('d.isDeleteByUser IS NULL')
+        ->andWhere('d.paiement IS NULL')
         ->getQuery()
         ->getResult()
     ;  

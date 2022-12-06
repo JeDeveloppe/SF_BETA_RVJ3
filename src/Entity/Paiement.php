@@ -23,12 +23,12 @@ class Paiement
     private $tokenTransaction;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime_immutable",  nullable=true)
      */
     private $timeTransaction;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=50,  nullable=true)
      */
     private $moyenPaiement;
 
@@ -36,6 +36,11 @@ class Paiement
      * @ORM\OneToOne(targetEntity=Document::class, mappedBy="paiement", cascade={"persist", "remove"})
      */
     private $document;
+
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
+    private $createdAt;
 
     public function getId(): ?int
     {
@@ -96,6 +101,18 @@ class Paiement
         }
 
         $this->document = $document;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
