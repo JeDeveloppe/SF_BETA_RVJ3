@@ -241,7 +241,7 @@ class AdminDocumentsController extends AbstractController
         EntityManagerInterface $em,
         DocumentService $documentService
         ): Response
-        {
+    {
 
         //on cherche le devis par le token
         $devis = $documentRepository->findOneBy(['token' => $token]);
@@ -315,7 +315,7 @@ class AdminDocumentsController extends AbstractController
         EntityManagerInterface $em,
         Request $request
         ): Response
-        {
+    {
 
         if($value == 0){
             $value = null;
@@ -392,7 +392,7 @@ class AdminDocumentsController extends AbstractController
         ConfigurationRepository $configurationRepository,
         MailerService $mailerService
         ): Response
-        {
+    {
 
             $compteSmtp = $this->getParameter('COMPTESMTP');
             $configurations = $configurationRepository->findAll();

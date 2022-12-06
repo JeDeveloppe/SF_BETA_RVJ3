@@ -2,22 +2,23 @@
 
 namespace App\Controller\Site;
 
-use App\Entity\Paiement;
+use DateInterval;
 use Stripe\Stripe;
 use Payplug\Payment;
 use Payplug\Payplug;
+use DateTimeImmutable;
+use App\Entity\Paiement;
 use Stripe\Checkout\Session;
+use App\Service\DocumentService;
 use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
+use App\Repository\PaiementRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
-use App\Repository\PaiementRepository;
-use App\Service\DocumentService;
-use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -180,11 +181,16 @@ class PaiementController extends AbstractController
                 $newNumero = $documentService->generateNewNumberOf('numeroFacture', 'getNumeroFacture');
                 $document->setNumeroFacture($newNumero);
     
+                //il faut mettre à jour la date du paiement
                 $paiement = $this->paiementRepository->findOneBy(['tokenTransaction' => $payment_id]);
-    
                 $paiement->setTimeTransaction($payment_date)
                          ->setMoyenPaiement($card);
     
+                //il faut mettre le membership de l'utilisateur + 1an
+                $OneYearLater = $payment_date->add(new DateInterval('P1Y'));
+                $user = $document->getUser()->setMembership($OneYearLater);
+
+                $this->em->merge($user);
                 $this->em->merge($paiement);
                 $this->em->merge($document);
                 $this->em->flush();
@@ -243,12 +249,19 @@ class PaiementController extends AbstractController
                 $payment_date = $this->getDateTimeImmutableFromTimestamp($resource->hosted_payment->paid_at);
                 $card = $resource->card->brand.'(***** '.$resource->card->last4.' - '.$resource->card->exp_month.'/'.$resource->card->exp_year.')';
 
-
+                //on retrouve le paiement et le document
                 $paiement = $this->paiementRepository->findOneBy(['tokenTransaction' => $payment_id]);
+                $document = $paiement->getDocument();
 
+                //on met a jour le paiement
                 $paiement->setTimeTransaction($payment_date)
                 ->setMoyenPaiement($card);
 
+                //il faut mettre le membership de l'utilisateur + 1an
+                $OneYearLater = $payment_date->add(new DateInterval('P1Y'));
+                $user = $document->getUser()->setMembership($OneYearLater);
+
+                $this->em->merge($user);
                 $this->em->merge($paiement);
                 $this->em->flush();
             }

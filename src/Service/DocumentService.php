@@ -122,7 +122,7 @@ class DocumentService
                 ->setCreatedAt($now)
                 ->setTotalTTC($request->request->get('totalGeneralTTC') * 100)
                 ->setTotalHT($request->request->get('totalGeneralHT') * 100)
-                ->setTauxTva(($tva * 100) -100)
+                ->setTauxTva($tva)
                 ->setTotalLivraison($request->request->get('totalLivraisonTTC') * 100)
                 ->setIsRelanceDevis(false)
                 ->setAdresseFacturation($paniers[0]->getFacturation())
@@ -169,7 +169,8 @@ class DocumentService
         return $newNumero;
     }
 
-    public function saveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande){
+    public function saveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande)
+    {
         $informationsLegales = $this->informationsLegalesRepository->findAll();
         $tva = $informationsLegales[0]->getTauxTva();
         $methodeEnvoi = $this->methodeEnvoiRepository->findOneBy(['id' => 3]);
@@ -188,7 +189,7 @@ class DocumentService
                 ->setCreatedAt($now)
                 ->setTotalTTC(($setup['totalOccasionsHT'] + $setup['cost']) * $tva) //on ajoute le cout adhésion
                 ->setTotalHT($setup['totalOccasionsHT'] + $setup['cost']) //on ajoute le cout adhésion
-                ->setTauxTva(($tva * 100) -100)
+                ->setTauxTva($tva)
                 ->setCost($setup['cost'])
                 ->setTotalLivraison(0)
                 ->setIsRelanceDevis(false)
@@ -224,7 +225,8 @@ class DocumentService
         return $setup['token'];
     }
 
-    public function factureToPdf($token){
+    public function factureToPdf($token)
+    {
 
         //on cherche le devis par le token
         $doc = $this->documentRepository->findOneBy(['token' => $token]);
@@ -423,7 +425,4 @@ class DocumentService
         // Création du PDF
         $pdf->Output($nom,'I');
     }
-
-
-
 }
