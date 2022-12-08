@@ -13,6 +13,7 @@ use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\MethodeEnvoiRepository;
 use App\Repository\InformationsLegalesRepository;
+use App\Service\Utilities;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ImportDocumentsService
@@ -22,6 +23,7 @@ class ImportDocumentsService
         private DocumentRepository $documentRepository,
         private PaysRepository $paysRepository,
         private MethodeEnvoiRepository $methodeEnvoiRepository,
+        private Utilities $utilities,
         private InformationsLegalesRepository $informationsLegalesRepository,
         private UserRepository $userRepository,
         private OccasionRepository $occasionRepository,
@@ -79,9 +81,9 @@ class ImportDocumentsService
         ->setAdresseFacturation($arrayDoc['adresse_facturation'])
         ->setAdresseLivraison($arrayDoc['adresse_livraison'])
         ->setIsRelanceDevis($arrayDoc['relance_devis'])
-        ->setEndValidationDevis($this->getDateTimeImmutableFromTimestamp($arrayDoc['end_validation']))
-        ->setCreatedAt($this->getDateTimeImmutableFromTimestamp($arrayDoc['time']))
-        ->setEnvoiEmailDevis($this->getDateTimeImmutableFromTimestamp($arrayDoc['time_mail_devis']))
+        ->setEndValidationDevis($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['end_validation']))
+        ->setCreatedAt($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time']))
+        ->setEnvoiEmailDevis($this->utilities->getDateTimeImmutableFromTimestamp($arrayDoc['time_mail_devis']))
         ->setIsDeleteByUser(false)
         ->setPaiement(null)
         ->setMessage($arrayDoc['commentaire'])
@@ -112,13 +114,4 @@ class ImportDocumentsService
 
         return $document;
     }
-
-    private function getDateTimeImmutableFromTimestamp($timestamp)
-    {
-        $tps = (int) $timestamp;
-        $date = new DateTimeImmutable();
-
-        return $date->setTimestamp($tps);
-    }
-
 }

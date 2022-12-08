@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use League\Csv\Reader;
 use App\Repository\BoiteRepository;
 use App\Repository\OccasionRepository;
+use App\Service\Utilities;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -15,7 +16,8 @@ class ImportOccasionsService
     public function __construct(
         private BoiteRepository $boiteRepository,
         private EntityManagerInterface $em,
-        private OccasionRepository $occasionRepository
+        private OccasionRepository $occasionRepository,
+        private Utilities $utilities
         ){
     }
 
@@ -63,7 +65,7 @@ class ImportOccasionsService
                 $vente = true;
                 $moyenAchat = $donnees[1];
                 $prixVente = $donnees[0];
-                $timeVente = $this->getDateTimeImmutableFromTimestamp($arrayOccasion['timeVente']);
+                $timeVente = $this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeVente']);
             }else{
                 $vente = false;
                 $moyenAchat = null;
@@ -90,17 +92,9 @@ class ImportOccasionsService
                     ->setRvj2Id($arrayOccasion['idJeuxComplet']);
 
             if($arrayOccasion['timeDon'] != 0){
-                $occasion->setDonation($this->getDateTimeImmutableFromTimestamp($arrayOccasion['timeDon']));
+                $occasion->setDonation($this->utilities->getDateTimeImmutableFromTimestamp($arrayOccasion['timeDon']));
             }
 
         $this->em->persist($occasion);
     }
-
-    private function getDateTimeImmutableFromTimestamp($timestamp)
-    {
-        $date = new DateTimeImmutable();
-
-        return $date->setTimestamp($timestamp);
-    }
-
 }

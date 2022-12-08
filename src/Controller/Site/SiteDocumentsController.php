@@ -46,7 +46,7 @@ class SiteDocumentsController extends AbstractController
         }else{
             //on met a jour la base
             $devis->setIsDeleteByUser(true);
-            $em->merge($devis);
+            $em->persist($devis);
             $em->flush();
 
             $tableau = [
@@ -89,7 +89,8 @@ class SiteDocumentsController extends AbstractController
 
             return $this->render('site/devis/devis_end.html.twig', [
                 'tableau' => $tableau,
-                'informationsLegales' =>  $this->informationsLegalesRepository->findAll()
+                'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+                'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);
 
         }else{
@@ -153,7 +154,7 @@ class SiteDocumentsController extends AbstractController
                 //on recupere la boite et on met en ligne
                 $occasion = $Loccasion->getOccasion();
                 $occasion->setIsOnLine(true);
-                $em->merge($occasion);
+                $em->persist($occasion);
                 //on supprime la ligne
                 $documentLignesRepository->remove($Loccasion);
             }

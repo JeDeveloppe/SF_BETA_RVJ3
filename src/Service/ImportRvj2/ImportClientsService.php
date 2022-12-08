@@ -3,10 +3,10 @@
 namespace App\Service\ImportRvj2;
 
 use App\Entity\User;
-use DateTimeImmutable;
 use League\Csv\Reader;
 use App\Repository\UserRepository;
 use App\Repository\PaysRepository;
+use App\Service\Utilities;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -15,7 +15,8 @@ class ImportClientsService
     public function __construct(
         private UserRepository $userRepository,
         private EntityManagerInterface $em,
-        private PaysRepository $paysRepository
+        private PaysRepository $paysRepository,
+        private Utilities $utilities
         ){
     }
 
@@ -63,29 +64,15 @@ class ImportClientsService
                 ->setPhone($arrayClient['telephone'])
                 ->setLevel($arrayClient['userLevel'])
                 ->setToken($arrayClient['idUser'])
-                ->setMembership($this->getDateTimeImmutableFromTimestamp($arrayClient['isAssociation']))
+                ->setMembership($this->utilities->getDateTimeImmutableFromTimestamp($arrayClient['isAssociation']))
                 ->setDepartment(substr($arrayClient['cpLivraison'],0,2))
                 ->setCountry($this->paysRepository->findOneBy(['isoCode' => $arrayClient['paysFacturation']]));
 
                 if($arrayClient['timeInscription'] != 0){
                     $time = (int) $arrayClient['timeInscription'];
-                    $client->setCreatedAt($this->getDateTimeImmutableFromTimestamp($time));
+                    $client->setCreatedAt($this->utilities->getDateTimeImmutableFromTimestamp($time));
                 }
 
         return $client;
     }
-
-    private function getDateTimeImmutableFromTimestamp($timestamp)
-    {
-        if($timestamp !== null){
-            $tps = (int) $timestamp;
-            $date = new DateTimeImmutable();
-    
-            return $date->setTimestamp($tps);
-        }else{
-            return null;
-        }
-
-    }
-
 }

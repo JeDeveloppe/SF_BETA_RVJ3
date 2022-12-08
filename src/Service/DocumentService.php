@@ -43,8 +43,7 @@ class DocumentService
         $this->panierRepository = $panierRepository;
     }
 
-    public function generateRandomString($length = 250, $characters = '0123456789abcdefghijklmnopqrstuvwxyz@!_ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-    {
+    public function generateRandomString($length = 250, $characters = '0123456789abcdefghijklmnopqrstuvwxyz@!_ABCDEFGHIJKLMNOPQRSTUVWXYZ'){
         $charactersLength = strlen($characters);
         $randomString = "";
         for($i = 0; $i < $length; $i++) {
@@ -169,8 +168,7 @@ class DocumentService
         return $newNumero;
     }
 
-    public function saveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande)
-    {
+    public function saveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande){
         $informationsLegales = $this->informationsLegalesRepository->findAll();
         $tva = $informationsLegales[0]->getTauxTva();
         $methodeEnvoi = $this->methodeEnvoiRepository->findOneBy(['id' => 3]);
@@ -225,8 +223,7 @@ class DocumentService
         return $setup['token'];
     }
 
-    public function factureToPdf($token)
-    {
+    public function factureToPdf($token){
 
         //on cherche le devis par le token
         $doc = $this->documentRepository->findOneBy(['token' => $token]);
