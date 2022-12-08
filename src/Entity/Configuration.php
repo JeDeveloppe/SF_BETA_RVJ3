@@ -106,6 +106,11 @@ class Configuration
      */
     private $enveloppe_bulle;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $holiday;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -275,6 +280,18 @@ class Configuration
     public function setEnveloppeBulle(int $enveloppe_bulle): self
     {
         $this->enveloppe_bulle = $enveloppe_bulle;
+
+        return $this;
+    }
+
+    public function getHoliday(): ?string
+    {
+        return $this->holiday;
+    }
+
+    public function setHoliday(?string $holiday): self
+    {
+        $this->holiday = $holiday;
 
         return $this;
     }

@@ -23,7 +23,8 @@ class SiteController extends AbstractController
     public function __construct(
         private InformationsLegalesRepository $informationsLegalesRepository,
         private Security $security,
-        private PanierRepository $panierRepository)
+        private PanierRepository $panierRepository,
+        private ConfigurationRepository $configurationRepository)
     {
     }
 
@@ -46,6 +47,7 @@ class SiteController extends AbstractController
             'occasions' => $occasionRepository->findBy(['isOnLine' => true]),
             'partenaires' => $partenaireRepository->findPartenairesFullVisibility($country),
             'controller_name' => 'SiteController',
+            'configuration' => $this->configurationRepository->findAll(),
             'lastEntries' => $lastEntries,
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
@@ -60,7 +62,8 @@ class SiteController extends AbstractController
 
         return $this->render('site/informations/legale/cgv.html.twig', [
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
-            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier']),
+            'configuration' => $this->configurationRepository->findAll(),
         ]);
     }
 
@@ -72,6 +75,7 @@ class SiteController extends AbstractController
 
         return $this->render('site/informations/legale/mentions_legales.html.twig', [
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'configuration' => $this->configurationRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
@@ -83,6 +87,7 @@ class SiteController extends AbstractController
     {
 
         return $this->render('site/informations/aide/nous_soutenir.html.twig', [
+            'configuration' => $this->configurationRepository->findAll(),
             'informationsLegales' => $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
@@ -122,6 +127,7 @@ class SiteController extends AbstractController
 
         return $this->render('site/contact.html.twig', [
             'informationsLegales' =>  $informationsLegales,
+            'configuration' => $this->configurationRepository->findAll(),
             'form' => $form->createView(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
@@ -134,6 +140,7 @@ class SiteController extends AbstractController
     {
 
         return $this->render('site/informations/comment-ca-marche/passer-commande.html.twig', [
+            'configuration' => $this->configurationRepository->findAll(),
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
@@ -146,6 +153,7 @@ class SiteController extends AbstractController
     {
 
         return $this->render('site/informations/legale/legale.html.twig', [
+            'configuration' => $this->configurationRepository->findAll(),
             'informationsLegales' => $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);

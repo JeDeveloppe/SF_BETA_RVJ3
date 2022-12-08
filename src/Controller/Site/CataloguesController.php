@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Security;
 use App\Form\CatalogueSearchBoiteType;
 use App\Form\SearchOccasionType;
+use App\Repository\ConfigurationRepository;
 use App\Repository\PartenaireRepository;
 
 class CataloguesController extends AbstractController
@@ -25,7 +26,8 @@ class CataloguesController extends AbstractController
         private InformationsLegalesRepository $informationsLegalesRepository,
         private PaginatorInterface $paginator,
         private PanierRepository $panierRepository,
-        private Security $security
+        private Security $security,
+        private ConfigurationRepository $configurationRepository
     )
     {
         
@@ -95,6 +97,7 @@ class CataloguesController extends AbstractController
             'boites' => $boites,
             'catalogueFiltersForm' => $formFilters->createView(),
             'tri' => $tri,
+            'configuration' => $this->configurationRepository->findAll(),
             'partenaires' => $partenaires,
             'boiteSearch' => $formBoiteSearch->createView(),
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
@@ -122,6 +125,7 @@ class CataloguesController extends AbstractController
         }else{
 
             return $this->render('site/catalogues/catalogue_pieces_detachees_demande.html.twig', [
+                'configuration' => $this->configurationRepository->findAll(),
                 'boite' => $boite,
                 'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
@@ -188,6 +192,7 @@ class CataloguesController extends AbstractController
         return $this->render('site/catalogues/catalogue_jeux_occasion.html.twig', [
             'occasions' => $occasions,
             'form' => $form->createView(),
+            'configuration' => $this->configurationRepository->findAll(),
             'partenaires' => $partenaires,
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
@@ -225,6 +230,7 @@ class CataloguesController extends AbstractController
 
             return $this->render('site/catalogues/catalogue_jeux_occasion_details.html.twig', [
                 'occasion' => $occasion,
+                'configuration' => $this->configurationRepository->findAll(),
                 'tva' => $tva,
                 'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])

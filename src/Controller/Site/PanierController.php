@@ -8,6 +8,7 @@ use App\Repository\BoiteRepository;
 use App\Repository\PanierRepository;
 use App\Repository\AdresseRepository;
 use App\Repository\ConfigurationRepository;
+use App\Repository\DocumentRepository;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,12 @@ class PanierController extends AbstractController
 public function __construct(
     private PanierRepository $panierRepository,
     private InformationsLegalesRepository $informationsLegalesRepository,
-    private Security $security
+    private Security $security,
+    private ConfigurationRepository $configurationRepository,
+    private EntityManagerInterface $em,
+    private OccasionRepository $occasionRepository,
+    private AdresseRepository $adresseRepository,
+    private DocumentService $documentService
 )
 {
 }
@@ -34,8 +40,7 @@ public function __construct(
      */
     public function addpanierDetachees(
         Request $request,
-        BoiteRepository $boiteRepository,
-        EntityManagerInterface $em): Response
+        BoiteRepository $boiteRepository): Response
     {
 
         $panier = new Panier();
@@ -48,8 +53,8 @@ public function __construct(
                 ->setBoite($boiteRepository->find(['id' => $idBoite]))
                 ->setEtat("panier");
 
-        $em->persist($panier);
-        $em->flush($panier);
+        $this->em->persist($panier);
+        $this->em->flush($panier);
 
          //on signal le changement
          $this->addFlash('success', 'Demande ajoutée au panier!');
@@ -60,13 +65,11 @@ public function __construct(
      * @Route("/panier/ajout-jeu-occasion", name="panier-ajout-jeu-occasion")
      */
     public function addpanierOccasion(
-        Request $request,
-        OccasionRepository $occasionRepository,
-        EntityManagerInterface $em): Response
+        Request $request): Response
     {
 
         $idOccasion = $request->request->get('rvjc');
-        $occasion = $occasionRepository->findOneBy(['id' => $idOccasion, 'isOnLine' => true]);
+        $occasion = $this->occasionRepository->findOneBy(['id' => $idOccasion, 'isOnLine' => true]);
 
         //si l'occasion est disponible à la vente
         if(!is_null($occasion)){
@@ -75,16 +78,16 @@ public function __construct(
             //ici on ajoute les differentes infos
             $panier->setUser($this->security->getUser())
             ->setCreatedAt( new DateTimeImmutable('now'))
-            ->setOccasion($occasionRepository->find(['id' => $idOccasion]))
+            ->setOccasion($this->occasionRepository->find(['id' => $idOccasion]))
             ->setEtat("panier");
 
-            $em->persist($panier);
-            $em->flush($panier);
+            $this->em->persist($panier);
+            $this->em->flush($panier);
 
 
             $occasion->setIsOnLine(false);
-            $em->merge($occasion);
-            $em->flush();
+            $this->em->persist($occasion);
+            $this->em->flush();
 
             //on signal le changement
             $this->addFlash('success', 'Occasion mis dans votre panier!');
@@ -100,9 +103,6 @@ public function __construct(
      * @Route("/panier", name="app_panier")
      */
     public function index(
-        AdresseRepository $adresseRepository,
-        DocumentService $documentService,
-        ConfigurationRepository $configurationRepository,
         UserRepository $userRepository): Response
     {
 
@@ -110,12 +110,12 @@ public function __construct(
         $panier_occasions = $this->panierRepository->findByUserAndNotNullColumn('occasion',$user);
         $panier_boites = $this->panierRepository->findByUserAndNotNullColumn('boite', $user);
 
-        $livraison_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
-        $facturation_adresses = $adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
+        $livraison_adresses = $this->adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
+        $facturation_adresses = $this->adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
 
         //on cherche l'user administrateur
         $userRetrait = $userRepository->findOneBy(['email' => 'ADMINISTRATION@ADMINISTRATION.FR']);
-        $adresseRetrait = $adresseRepository->findOneBy(['user' => $userRetrait, 'isFacturation' => false]);
+        $adresseRetrait = $this->adresseRepository->findOneBy(['user' => $userRetrait, 'isFacturation' => false]);
 
         if(count($panier_boites) < 1 && count($panier_occasions) < 1){
             //on signal le changement
@@ -129,9 +129,9 @@ public function __construct(
             return $this->render('site/panier/panier.html.twig', [
                 'panier_occasions' => $panier_occasions,
                 'panier_boites' => $panier_boites,
-                'configurationSite' => $configurationRepository->findAll(),
+                'configuration' => $this->configurationRepository->findAll(),
                 'tva' => $tva,
-                'token' => $documentService->generateRandomString(),
+                'token' => $this->documentService->generateRandomString(),
                 'livraison_adresses' => $livraison_adresses,
                 'facturation_adresses' => $facturation_adresses,
                 'informationsLegales' =>  $informationsLegales,
@@ -145,8 +145,7 @@ public function __construct(
      * @Route("/panier/delete/{id}", name="app_panier_delete")
      */
     public function panierDelete(
-        $id,
-        EntityManagerInterface $em): Response
+        $id): Response
     {
 
         $user = $this->security->getUser();
@@ -162,8 +161,8 @@ public function __construct(
 
             $occasion = $lignePanier->getOccasion();
             $occasion->setIsOnLine(true);
-            $em->merge($occasion);
-            $em->flush();
+            $this->em->persist($occasion);
+            $this->em->flush();
         }
 
         //dans tous les cas on supprime la ligne du panier
@@ -182,16 +181,14 @@ public function __construct(
      * @Route("/panier/demande-de-devis/", name="panier-mise-en-devis")
      */
     public function panierMiseEnDevis(
-        Request $request,
-        AdresseRepository $adresseRepository,
-        EntityManagerInterface $em): Response
+        Request $request): Response
     {
 
         $paniers = $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier']);
 
-        $facturation = $adresseRepository->find($request->request->get('adresse_facturation'));
+        $facturation = $this->adresseRepository->find($request->request->get('adresse_facturation'));
 
-        $livraison = $adresseRepository->find($request->request->get('adresse_livraison'));
+        $livraison = $this->adresseRepository->find($request->request->get('adresse_livraison'));
 
         $lastEntryArray = end($paniers)->getId();
 
@@ -199,12 +196,10 @@ public function __construct(
             $panier->setEtat('demandeDevis'.$lastEntryArray)
                     ->setLivraison($livraison->getFirstName().' '.$livraison->getLastName().'<br/>'.$livraison->getAdresse().'<br/>'.$livraison->getVille()->getVilleCodePostal().' '.$livraison->getVille()->getVilleNom().'<br/>'.$livraison->getVille()->getDepartement()->getPays()->getIsoCode())
                     ->setFacturation($facturation->getFirstName().' '.$facturation->getLastName().'<br/>'.$facturation->getAdresse().'<br/>'.$facturation->getVille()->getVilleCodePostal().' '.$facturation->getVille()->getVilleNom().'<br/>'.$facturation->getVille()->getDepartement()->getPays()->getIsoCode());
-            $em->merge($panier);
+            $this->em->persist($panier);
         }
         
-
-
-        $em->flush();
+        $this->em->flush();
 
         return $this->redirectToRoute('panier-soumis');
     }
@@ -216,6 +211,7 @@ public function __construct(
     {
         return $this->render('site/panier/demandeTerminee.html.twig', [
             'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'configuration' => $this->configurationRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
@@ -227,9 +223,6 @@ public function __construct(
     public function panierPaiement(
         $demande,
         $token,
-        DocumentService $documentService,
-        AdresseRepository $adresseRepository,
-        ConfigurationRepository $configurationRepository,
         Request $request)
     {
         $user = $this->security->getUser();
@@ -244,8 +237,8 @@ public function __construct(
 
         $setup = [];
         $totalOccasionsHT = 0;
-        $setup['adresseFacturation'] = $adresseRepository->findOneBy(['id' => $request->request->get('adresse_facturation')]);
-        $setup['adresseLivraison'] = $adresseRepository->findOneBy(['id' => $request->request->get('adresse_livraison')]);
+        $setup['adresseFacturation'] = $this->adresseRepository->findOneBy(['id' => $request->request->get('adresse_facturation')]);
+        $setup['adresseLivraison'] = $this->adresseRepository->findOneBy(['id' => $request->request->get('adresse_livraison')]);
         $setup['token'] = $token;
 
         foreach($paniers as $panier){
@@ -254,8 +247,8 @@ public function __construct(
 
         //on regarde si le user doit payer l'adhésion
         if($user->getMembership() < new DateTimeImmutable('now')){
-            $configurationSite = $configurationRepository->findAll();
-            $cost = $configurationSite[0]->getCost();
+            $configuration = $this->configurationRepository->findAll();
+            $cost = $configuration[0]->getCost();
             $setup['cost'] = $cost;
         }else{
             $setup['cost'] = 0;
@@ -264,7 +257,7 @@ public function __construct(
         $setup['totalOccasionsHT'] = $totalOccasionsHT;
 
         //on sauvegarde dans la base
-        $token = $documentService->saveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande);
+        $token = $this->documentService->saveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande);
 
         return $this->redirectToRoute('app_paiement', [
             'token' => $token

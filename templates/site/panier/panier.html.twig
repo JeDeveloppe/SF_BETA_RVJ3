@@ -95,7 +95,7 @@
         {% endif %}
 
         <div class="col-12 h5 text-center text-danger mb-4">
-            Pour toute première commande, une adhésion au service de {{ (configurationSite[0].cost * tva / 100) | number_format(2, ',', '.') }} € vous sera facturée.<br/> 
+            Pour toute première commande, une adhésion au service de {{ (configuration[0].cost * tva / 100) | number_format(2, ',', '.') }} € vous sera facturée.<br/> 
             Cette adhésion est valable 1 an.
             <a href="/conditions-generales-de-vente/#cgvAdhesion" data-html="true" data-toggle="tooltip" data-placement="top">
                 <i class="fas fa-question-circle text-info p-2"></i>

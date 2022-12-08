@@ -56,6 +56,13 @@ class ConfigurationType extends AbstractType
             ->add('enveloppeBulle', NumberType::class, [
                 'label' => 'Prix de l\' enveloppe à bulles (en cents HT):'
             ])
+            ->add('holiday', TextType::class, [
+                'label' => 'Texte vacances:',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Laisser vide hors vacances...'
+                ]
+            ])
         ;
     }
 

@@ -26,6 +26,10 @@
     <body>
             {% include "site/nav.html.twig" %}
 
+            {% if configuration[0].holiday is not null %}
+                {% include "site/marquee.html.twig" %}
+            {% endif %}
+            
             {% include "commun/flash_message.html.twig" %}
 
             <div class="container-fluid d-flex flex-column justify-content-between h-100">

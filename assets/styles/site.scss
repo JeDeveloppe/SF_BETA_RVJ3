@@ -56,13 +56,38 @@ body{
   }
 }
 
+/* ---------------------------- */
+/* Défilement de droite à gauche */
+.marquee-rtl > div {
+  display: inline-block; /* important */
+  white-space: nowrap; /* important */
+  animation: defilement-rtl 15s infinite linear; /* défilement */
+  cursor: no-drop;
+  padding: 10px 2em 10px 100%;
+  margin-top: 5%;
+  font-size: 1.2em;
+}
+.marquee-rtl:hover > div {
+  animation-play-state: paused; /* met en pause le défilement */
+}
+@keyframes defilement-rtl {
+  0% {
+    -webkit-transform: translate(0);
+    transform: translate(0);
+  }
+  100% {
+    -webkit-transform: translate(-100%);
+    transform: translate(-100%);
+  }
+}
+
   .imgFindUsOnFacebook{
     max-width: 110px;
   }
   
   .img_full-width {
     max-width: 100%;
-    max-height: 100%;
+    height: auto;
   }
   
   .img-liste{

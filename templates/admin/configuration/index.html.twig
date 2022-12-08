@@ -65,6 +65,16 @@
                         <td>{{ (configuration.enveloppeBulle / 100) | number_format(2, ',', '.') }} € HT</td>
                     </tr>
                     <tr>
+                        <td>Texte vacances:</td>
+                        <td>
+                            {% if configuration.holiday is not null %}
+                                {{ configuration.holiday }}
+                            {% else %}
+                                AUCUN TEXTE POUR LE MOMENT...
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
                         <td>
                             <a class="btn btn-warning" href="{{ path('app_configuration_edit', {'id': configuration.id}) }}">Éditer</a>
                         </td>
