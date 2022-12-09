@@ -85,7 +85,7 @@ class SiteController extends AbstractController
     public function nousSoutenir(): Response
     {
 
-        return $this->render('site/informations/aide/nous_soutenir.html.twig', [
+        return $this->render('site/informations/aides/nous_soutenir.html.twig', [
             'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
@@ -143,7 +143,7 @@ class SiteController extends AbstractController
     }
 
     /**
-     * @Route("/informations-legales", name="informations-legales")
+     * @Route("/informations-legales/", name="informations-legales")
      */
     public function informations_legales(): Response
     {
@@ -156,7 +156,7 @@ class SiteController extends AbstractController
     /**
      * @Route("/informations/comment-ca-marche", name="informations-comment-ca-marche")
      */
-    public function informations_comment_ca_marche(ConfigurationRepository $configurationRepository): Response
+    public function informations_comment_ca_marche(): Response
     {
 
         return $this->render('site/informations/comment-ca-marche/ccm.html.twig', [

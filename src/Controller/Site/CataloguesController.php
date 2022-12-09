@@ -107,7 +107,7 @@ class CataloguesController extends AbstractController
     }
 
     /**
-     * @Route("/catalogue-pieces-detachees/demande/{id}/{slug}/{editeur}", name="catalogue_pieces_detachees_demande")
+     * @Route("/catalogue-pieces-detachees/boite-{id}/{slug}/{editeur}", name="catalogue_pieces_detachees_demande")
      */
     public function cataloguePiecesDetacheesDemande(
         EntityManagerInterface $entityManager,
@@ -199,7 +199,7 @@ class CataloguesController extends AbstractController
     }
 
     /**
-     * @Route("/catalogue-jeux-occasion/{id}/{slug}/{editeur}", name="catalogue_jeux_occasion_details")
+     * @Route("/catalogue-jeux-occasion/boite-{id}/{slug}/{editeur}", name="catalogue_jeux_occasion_details")
      */
     public function catalogueJeuxOccasionDetails(EntityManagerInterface $entityManager, $id, $slug): Response
     {

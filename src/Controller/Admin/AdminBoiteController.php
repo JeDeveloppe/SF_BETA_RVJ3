@@ -139,8 +139,6 @@ class AdminBoiteController extends AbstractController
 
             $imageSend = $form->get('imageblob')->getData();
 
-            dd($imageSend);
-
             if(!is_null($imageSend)){
                 $imageBase64 = base64_encode(file_get_contents($imageSend));
                 $boite->setImageBlob($imageBase64);
