@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
-use PhpParser\Node\Stmt\Foreach_;
+use App\Service\Utilities;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -20,7 +20,8 @@ class SitePartenaireController extends AbstractController
     public function __construct(
         private InformationsLegalesRepository $informationsLegalesRepository,
         private Security $security,
-        private PanierRepository $panierRepository
+        private PanierRepository $panierRepository,
+        private Utilities $utilities
     )
     { 
     }
@@ -62,7 +63,7 @@ class SitePartenaireController extends AbstractController
 
         return $this->render('site/partenaire/'.strtolower($pays).'/liste-'.strtolower($pays).'.html.twig', [
             'depots' => $depots,
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
 

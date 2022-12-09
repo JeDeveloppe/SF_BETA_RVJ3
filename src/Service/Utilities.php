@@ -2,13 +2,15 @@
 
 namespace App\Service;
 
+use App\Repository\ConfigurationRepository;
+use App\Repository\InformationsLegalesRepository;
 use DateTimeImmutable;
-
 
 class Utilities
 {
     public function __construct(
-
+        private ConfigurationRepository $configurationRepository,
+        private InformationsLegalesRepository $informationsLegalesRepository
         ){
     }
 
@@ -22,5 +24,15 @@ class Utilities
         }else{
             return null;
         }
+    }
+
+    public function importConfigurationAndInformationsLegales(): Array
+    {
+        $infosAndConfig = [];
+
+        $infosAndConfig['legales'] = $this->informationsLegalesRepository->findOneBy([]);
+        $infosAndConfig['config'] = $this->configurationRepository->findOneBy([]);
+
+        return $infosAndConfig;
     }
 }

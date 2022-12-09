@@ -26,7 +26,7 @@
     <body>
             {% include "site/nav.html.twig" %}
 
-            {% if configuration[0].holiday is not null %}
+            {% if infosAndConfig.config.holiday is not null %}
                 {% include "site/marquee.html.twig" %}
             {% endif %}
             

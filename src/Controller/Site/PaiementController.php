@@ -6,6 +6,7 @@ use App\Repository\InformationsLegalesRepository;
 use App\Repository\PanierRepository;
 use Exception;
 use App\Service\PaiementService;
+use App\Service\Utilities;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Security;
@@ -17,7 +18,8 @@ class PaiementController extends AbstractController
         private PaiementService $paiementService,
         private InformationsLegalesRepository $informationsLegalesRepository,
         private PanierRepository $panierRepository,
-        private Security $security
+        private Security $security,
+        private Utilities $utilities
     ){  
     }
 
@@ -57,7 +59,7 @@ class PaiementController extends AbstractController
             if(array_key_exists('paiement', $response)){
                 return $this->render('site/paiement/success.html.twig', [
                     'token' => $token,
-                    'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+                    'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
                     'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
                 ]);
             }else{
@@ -87,7 +89,7 @@ class PaiementController extends AbstractController
 
             return $this->render('site/paiement/cancel.html.twig', [
                 'token' => $token,
-                'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+                'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);
         }

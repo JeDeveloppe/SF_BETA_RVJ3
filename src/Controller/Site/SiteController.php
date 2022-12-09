@@ -15,6 +15,7 @@ use App\Repository\InformationsLegalesRepository;
 use App\Repository\OccasionRepository;
 use App\Repository\PartenaireRepository;
 use App\Repository\PaysRepository;
+use App\Service\Utilities;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SiteController extends AbstractController
@@ -24,7 +25,8 @@ class SiteController extends AbstractController
         private InformationsLegalesRepository $informationsLegalesRepository,
         private Security $security,
         private PanierRepository $panierRepository,
-        private ConfigurationRepository $configurationRepository)
+        private ConfigurationRepository $configurationRepository,
+        private Utilities $utilities)
     {
     }
 
@@ -47,9 +49,8 @@ class SiteController extends AbstractController
             'occasions' => $occasionRepository->findBy(['isOnLine' => true]),
             'partenaires' => $partenaireRepository->findPartenairesFullVisibility($country),
             'controller_name' => 'SiteController',
-            'configuration' => $this->configurationRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'lastEntries' => $lastEntries,
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
@@ -61,9 +62,8 @@ class SiteController extends AbstractController
     {
 
         return $this->render('site/informations/legale/cgv.html.twig', [
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier']),
-            'configuration' => $this->configurationRepository->findAll(),
         ]);
     }
 
@@ -74,8 +74,7 @@ class SiteController extends AbstractController
     {
 
         return $this->render('site/informations/legale/mentions_legales.html.twig', [
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
-            'configuration' => $this->configurationRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
@@ -87,8 +86,7 @@ class SiteController extends AbstractController
     {
 
         return $this->render('site/informations/aide/nous_soutenir.html.twig', [
-            'configuration' => $this->configurationRepository->findAll(),
-            'informationsLegales' => $this->informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
@@ -102,7 +100,7 @@ class SiteController extends AbstractController
         ): Response
     {
 
-        $informationsLegales = $this->informationsLegalesRepository->findAll();
+        $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
 
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
@@ -110,7 +108,7 @@ class SiteController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
 
             $mailerService->sendEmailContact(
-                $informationsLegales[0]->getAdresseMailSite(),
+                $informationsLegales->getAdresseMailSite(),
                 $form->get('email')->getData(),
                 "Message du site concernant: ".$form->get('sujet')->getData(),
                 [
@@ -126,8 +124,7 @@ class SiteController extends AbstractController
         }
 
         return $this->render('site/contact.html.twig', [
-            'informationsLegales' =>  $informationsLegales,
-            'configuration' => $this->configurationRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'form' => $form->createView(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
@@ -140,8 +137,7 @@ class SiteController extends AbstractController
     {
 
         return $this->render('site/informations/comment-ca-marche/passer-commande.html.twig', [
-            'configuration' => $this->configurationRepository->findAll(),
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
@@ -153,8 +149,7 @@ class SiteController extends AbstractController
     {
 
         return $this->render('site/informations/legale/legale.html.twig', [
-            'configuration' => $this->configurationRepository->findAll(),
-            'informationsLegales' => $this->informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
@@ -165,8 +160,7 @@ class SiteController extends AbstractController
     {
 
         return $this->render('site/informations/comment-ca-marche/ccm.html.twig', [
-            'informationsLegales' => $this->informationsLegalesRepository->findAll(),
-            'configuration' => $configurationRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }

@@ -19,6 +19,7 @@ use App\Form\CatalogueSearchBoiteType;
 use App\Form\SearchOccasionType;
 use App\Repository\ConfigurationRepository;
 use App\Repository\PartenaireRepository;
+use App\Service\Utilities;
 
 class CataloguesController extends AbstractController
 {
@@ -27,7 +28,8 @@ class CataloguesController extends AbstractController
         private PaginatorInterface $paginator,
         private PanierRepository $panierRepository,
         private Security $security,
-        private ConfigurationRepository $configurationRepository
+        private ConfigurationRepository $configurationRepository,
+        private Utilities $utilities
     )
     {
         
@@ -97,10 +99,9 @@ class CataloguesController extends AbstractController
             'boites' => $boites,
             'catalogueFiltersForm' => $formFilters->createView(),
             'tri' => $tri,
-            'configuration' => $this->configurationRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'partenaires' => $partenaires,
             'boiteSearch' => $formBoiteSearch->createView(),
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
@@ -125,9 +126,8 @@ class CataloguesController extends AbstractController
         }else{
 
             return $this->render('site/catalogues/catalogue_pieces_detachees_demande.html.twig', [
-                'configuration' => $this->configurationRepository->findAll(),
                 'boite' => $boite,
-                'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+                'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);
         }
@@ -192,9 +192,8 @@ class CataloguesController extends AbstractController
         return $this->render('site/catalogues/catalogue_jeux_occasion.html.twig', [
             'occasions' => $occasions,
             'form' => $form->createView(),
-            'configuration' => $this->configurationRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'partenaires' => $partenaires,
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
@@ -205,8 +204,8 @@ class CataloguesController extends AbstractController
     public function catalogueJeuxOccasionDetails(EntityManagerInterface $entityManager, $id, $slug): Response
     {
 
-        $informationsLegales = $this->informationsLegalesRepository->findAll();
-        $tva = $informationsLegales[0]->getTauxTva();
+        $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
+        $tva = $informationsLegales->getTauxTva();
 
         $occasion = $entityManager
         ->getRepository(Occasion::class)
@@ -230,9 +229,8 @@ class CataloguesController extends AbstractController
 
             return $this->render('site/catalogues/catalogue_jeux_occasion_details.html.twig', [
                 'occasion' => $occasion,
-                'configuration' => $this->configurationRepository->findAll(),
                 'tva' => $tva,
-                'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+                'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);
         }

@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
 use App\Repository\UserRepository;
 use App\Service\DocumentService;
+use App\Service\Utilities;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PanierController extends AbstractController
@@ -30,7 +31,8 @@ public function __construct(
     private EntityManagerInterface $em,
     private OccasionRepository $occasionRepository,
     private AdresseRepository $adresseRepository,
-    private DocumentService $documentService
+    private DocumentService $documentService,
+    private Utilities $utilities
 )
 {
 }
@@ -123,18 +125,17 @@ public function __construct(
             return $this->redirectToRoute('accueil');
         }else{
 
-            $informationsLegales = $this->informationsLegalesRepository->findAll();
-            $tva = $informationsLegales[0]->getTauxTva();
+            $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
+            $tva = $informationsLegales->getTauxTva();
 
             return $this->render('site/panier/panier.html.twig', [
                 'panier_occasions' => $panier_occasions,
                 'panier_boites' => $panier_boites,
-                'configuration' => $this->configurationRepository->findAll(),
+                'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
                 'tva' => $tva,
                 'token' => $this->documentService->generateRandomString(),
                 'livraison_adresses' => $livraison_adresses,
                 'facturation_adresses' => $facturation_adresses,
-                'informationsLegales' =>  $informationsLegales,
                 'adresseRetrait' => $adresseRetrait,
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);
@@ -210,8 +211,7 @@ public function __construct(
     public function panierDemandeDevisEnd(): Response
     {
         return $this->render('site/panier/demandeTerminee.html.twig', [
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
-            'configuration' => $this->configurationRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }

@@ -106,8 +106,8 @@ class DocumentService
     }
 
     public function saveDevisInDataBase($user, $request, $paniers, $demande){
-        $informationsLegales = $this->informationsLegalesRepository->findAll();
-        $tva = $informationsLegales[0]->getTauxTva();
+        $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
+        $tva = $informationsLegales->getTauxTva();
 
         //ON genere un nouveau numero
         $newNumero = $this->generateNewNumberOf("numeroDevis", "getNumeroDevis");
@@ -169,8 +169,8 @@ class DocumentService
     }
 
     public function saveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande){
-        $informationsLegales = $this->informationsLegalesRepository->findAll();
-        $tva = $informationsLegales[0]->getTauxTva();
+        $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
+        $tva = $informationsLegales->getTauxTva();
         $methodeEnvoi = $this->methodeEnvoiRepository->findOneBy(['id' => 3]);
         $livraison = $setup['adresseLivraison'];
         $facturation = $setup['adresseFacturation'];

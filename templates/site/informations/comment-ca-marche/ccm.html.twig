@@ -133,11 +133,11 @@
                                 </tr>
                                 <tr>
                                     <td>Enveloppe simple</td>
-                                    <td class="text-center">{{ (configuration[0].enveloppeSimple  / 100 * informationsLegales[0].tauxTva) | number_format(2, ',', '.') }}</td>
+                                    <td class="text-center">{{ (infosAndConfig.config.enveloppeSimple  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Enveloppe à bulles</td>
-                                    <td class="text-center">A partir de {{ (configuration[0].enveloppeBulle  / 100 * informationsLegales[0].tauxTva) | number_format(2, ',', '.') }}</td>
+                                    <td class="text-center">A partir de {{ (infosAndConfig.config.enveloppeBulle  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.') }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -171,25 +171,25 @@
                                 <tr>
                                     <td>Grand plateau de jeu / support de jeu en bois</td>
                                     <td class="text-center">
-                                        {{ (configuration[0].grandPlateauBois  / 100 * informationsLegales[0].tauxTva) | number_format(2, ',', '.') }}
+                                        {{ (infosAndConfig.config.grandPlateauBois  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Grand plateau de jeu / support de jeu en carton ou en plastique</td>
                                     <td class="text-center">
-                                        {{ (configuration[0].grandPlateauPlastique  / 100 * informationsLegales[0].tauxTva) | number_format(2, ',', '.')}}
+                                        {{ (infosAndConfig.config.grandPlateauPlastique  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.')}}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Petit plateau de jeu / support de jeu en bois</td>
                                     <td class="text-center">
-                                        {{ (configuration[0].petitPlateauBois  / 100 * informationsLegales[0].tauxTva) | number_format(2, ',', '.') }}
+                                        {{ (infosAndConfig.config.petitPlateauBois  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Petit plateau de jeu / support de jeu en carton ou en plastique</td>
                                     <td class="text-center">
-                                        {{ (configuration[0].petitPlateauPlastique  / 100 * informationsLegales[0].tauxTva) | number_format(2, ',', '.') }}
+                                        {{ (infosAndConfig.config.petitPlateauPlastique  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -197,27 +197,27 @@
                                     <span class="small">Exemples : dé spécial, sablier, pion spécifique…</span>
                                     </td>
                                     <td class="text-center">
-                                        {{ configuration[0].pieceUnique }}
+                                        {{ infosAndConfig.config.pieceUnique }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Pièces en bois ou en métal<br/>
                                     </td>
                                     <td class="text-center">
-                                        {{ configuration[0].pieceMetalBois }}
+                                        {{ infosAndConfig.config.pieceMetalBois }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Pièces en grande quantité dans le jeu<br/>
                                     <span class="small"> Exemples : jetons de Mastermind, de Touché-Coulé</span></td>
                                     <td class="text-center">
-                                        {{ configuration[0].pieceMultiple }}
+                                        {{ infosAndConfig.config.pieceMultiple }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Autres pièces de jeu</td>
                                     <td class="text-center">
-                                        {{ configuration[0].autrePiece }}
+                                        {{ infosAndConfig.config.autrePiece }}
                                     </td>
                                 </tr>
                             </tbody>

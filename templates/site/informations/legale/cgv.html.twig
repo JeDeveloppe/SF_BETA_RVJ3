@@ -13,14 +13,14 @@
             <h2>Informations légales</h2>
                 <p>
                 Statut du propriétaire : Auto- entrepreneur<br/>
-                Adresse : {{ informationsLegales[0].adresseSociete }}<br/>
-                SIRET : {{ informationsLegales[0].siretSociete }}<br/>
-                Adresse de courrier électronique : {{ informationsLegales[0].adresseMailSite }}<br/>
-                Responsable de la publication : {{ informationsLegales[0].nomSociete }} - Le responsable de la publication est une personne physique<br />
+                Adresse : {{ infosAndConfig.legales.adresseSociete }}<br/>
+                SIRET : {{ infosAndConfig.legales.siretSociete }}<br/>
+                Adresse de courrier électronique : {{ infosAndConfig.legales.adresseMailSite }}<br/>
+                Responsable de la publication : {{ infosAndConfig.legales.nomSociete }} - Le responsable de la publication est une personne physique<br />
                 </p>
                 <p>
-                Créateur du site: {{ informationsLegales[0].societeWebmaster }}<br />
-                <i class="fas fa-pen"></i> Webmaster : {{ informationsLegales[0].nomWebmaster }}
+                Créateur du site: {{ infosAndConfig.legales.societeWebmaster }}<br />
+                <i class="fas fa-pen"></i> Webmaster : {{ infosAndConfig.legales.nomWebmaster }}
                 </p>
         </div>
     </div>
@@ -29,18 +29,18 @@
         <div class="col-12">
             <ul class="list-unstyled ps-5">
                 <li class="h2 mt-4">Article 1 - Objet</li>
-                    <ol>Les présentes conditions régissent les ventes par {{ informationsLegales[0].nomSociete }} de produits ou services commercialisés par le site internet {{ informationsLegales[0].siteUrl }}.</ol>
+                    <ol>Les présentes conditions régissent les ventes par {{ infosAndConfig.legales.nomSociete }} de produits ou services commercialisés par le site internet {{ infosAndConfig.legales.siteUrl }}.</ol>
                 <li class="h2 mt-4">Article 2 - Prix et adhésion</li>
                     <ol>
                         Les prix de nos produits sont indiqués en euros toutes taxes comprises (TVA et autres taxes applicables au jour de la commande), sauf indication contraire et hors frais de traitement et d'expédition.
 
-                        En cas de commande vers un pays autre que la France métropolitaine vous êtes l'importateur du ou des produits concernés. Des droits de douane ou autres taxes locales ou droits d'importation ou taxes d'état sont susceptibles d'être exigibles. Ces droits et sommes ne relèvent pas du ressort de {{ informationsLegales[0].nomSociete }}. Ils seront à votre charge et relèvent de votre entière responsabilité, tant en termes de déclarations que de paiements aux autorités et organismes compétents de votre pays. Nous vous conseillons de vous renseigner sur ces aspects auprès de vos autorités locales.
+                        En cas de commande vers un pays autre que la France métropolitaine vous êtes l'importateur du ou des produits concernés. Des droits de douane ou autres taxes locales ou droits d'importation ou taxes d'état sont susceptibles d'être exigibles. Ces droits et sommes ne relèvent pas du ressort de {{ infosAndConfig.legales.nomSociete }}. Ils seront à votre charge et relèvent de votre entière responsabilité, tant en termes de déclarations que de paiements aux autorités et organismes compétents de votre pays. Nous vous conseillons de vous renseigner sur ces aspects auprès de vos autorités locales.
 
                         Toutes les commandes quelle que soit leur origine sont payables en euros.
 
-                        {{ informationsLegales[0].nomSociete }} se réserve le droit de modifier ses prix à tout moment, mais le produit sera facturé sur la base du tarif en vigueur au moment de la validation de la commande et sous réserve de disponibilité.
+                        {{ infosAndConfig.legales.nomSociete }} se réserve le droit de modifier ses prix à tout moment, mais le produit sera facturé sur la base du tarif en vigueur au moment de la validation de la commande et sous réserve de disponibilité.
 
-                        Les produits demeurent la propriété de {{ informationsLegales[0].nomSociete }} jusqu'au paiement complet du prix.
+                        Les produits demeurent la propriété de {{ infosAndConfig.legales.nomSociete }} jusqu'au paiement complet du prix.
 
                         Attention : dès que vous prenez possession physiquement des produits commandés, les risques de perte ou d'endommagement des produits vous sont transférés.
 
@@ -52,15 +52,15 @@
                     </ol>
                 <li class="h2 mt-4">Article 3 - Commandes</li>
                     <ol>
-                        Vous pouvez passer commande uniquement sur internet : {{ informationsLegales[0].siteUrl }}
+                        Vous pouvez passer commande uniquement sur internet : {{ infosAndConfig.legales.siteUrl }}
 
                         Les informations contractuelles sont présentées en langue française et feront l'objet d'une confirmation au plus tard au moment de la validation de votre commande.
 
-                        {{ informationsLegales[0].nomSociete }} se réserve le droit de ne pas enregistrer un paiement, et de ne pas confirmer une commande pour quelque raison que ce soit, et plus particulièrement en cas de problème d'approvisionnement, ou en cas de difficulté concernant la commande reçue.
+                        {{ infosAndConfig.legales.nomSociete }} se réserve le droit de ne pas enregistrer un paiement, et de ne pas confirmer une commande pour quelque raison que ce soit, et plus particulièrement en cas de problème d'approvisionnement, ou en cas de difficulté concernant la commande reçue.
                     </ol>
                 <li class="h2 mt-4">Article 4 - Validation de votre commande</li>
                     <ol>
-                        Toute commande figurant sur le site Internet {{ informationsLegales[0].siteUrl }} suppose l'adhésion aux présentes Conditions Générales. Toute confirmation de commande entraîne votre adhésion pleine et entière aux présentes conditions générales de vente, sans exception ni réserve.
+                        Toute commande figurant sur le site Internet {{ infosAndConfig.legales.siteUrl }} suppose l'adhésion aux présentes Conditions Générales. Toute confirmation de commande entraîne votre adhésion pleine et entière aux présentes conditions générales de vente, sans exception ni réserve.
 
                         L'ensemble des données fournies et la confirmation enregistrée vaudront preuve de la transaction.
 
@@ -72,7 +72,7 @@
                     <ol>
                         Le fait de valider votre commande implique pour vous l'obligation de payer le prix indiqué.<br/>
 
-                        Voici les moyens de paiement disponibles sur le site {{ informationsLegales[0].siteUrl }} :
+                        Voici les moyens de paiement disponibles sur le site {{ infosAndConfig.legales.siteUrl }} :
                             <ul>
                                 <li>Paiement par carte bancaire. Le débit de la carte est nécessaire pour confirmer la commande.</li>
                             </ul>
@@ -85,7 +85,7 @@
 
                         Les frais de retour sont à votre charge.
 
-                        En cas d'exercice du droit de rétractation, {{ informationsLegales[0].nomSociete }} procédera au remboursement des sommes versées, dans un délai de 14 jours suivant la notification de votre demande et via le même moyen de paiement que celui utilisé lors de la commande.
+                        En cas d'exercice du droit de rétractation, {{ infosAndConfig.legales.nomSociete }} procédera au remboursement des sommes versées, dans un délai de 14 jours suivant la notification de votre demande et via le même moyen de paiement que celui utilisé lors de la commande.
 
                         <p class="mt-4">EXCEPTIONS AU DROIT DE RETRACTATION</p>
 
@@ -108,21 +108,21 @@
                     <ol>
                         Les produits sont livrés à l'adresse de livraison indiquée au cours du processus de commande.
 
-                        Les délais d'expedition indiqués sont indicatifs. {{ informationsLegales[0].nomSociete }} s'engage à livrer le bien ou exécuter la prestation sans retard injustifié et au plus tard trente jours après la commande.
+                        Les délais d'expedition indiqués sont indicatifs. {{ infosAndConfig.legales.nomSociete }} s'engage à livrer le bien ou exécuter la prestation sans retard injustifié et au plus tard trente jours après la commande.
 
                         En cas de retard d'expédition, un mail vous sera adressé pour vous informer d'une éventuelle conséquence sur le délai de livraison qui vous a été indiqué.
 
                         Conformément aux dispositions légales, en cas de retard de livraison, vous bénéficiez de la possibilité d'annuler la commande dans les conditions et modalités définies à l'article L 138-2 du Code de la Consommation. Si entre temps vous recevez le produit, nous procéderons à son remboursement et aux frais de retour dans les conditions de l'article L 138-3 du Code de la Consommation.
 
-                        En cas de livraison par un transporteur, {{ informationsLegales[0].nomSociete }} ne peut être tenue pour responsable de retard de livraison dû exclusivement à une indisponibilité du client après plusieurs propositions de rendez-vous.
+                        En cas de livraison par un transporteur, {{ infosAndConfig.legales.nomSociete }} ne peut être tenue pour responsable de retard de livraison dû exclusivement à une indisponibilité du client après plusieurs propositions de rendez-vous.
                     </ol>
                 <li class="h2 mt-4">Article 8 - Responsabilité</li>
                     <ol>
-                        Les produits proposés sont conformes à la législation française en vigueur. La responsabilité de {{ informationsLegales[0].nomSociete }} ne saurait être engagée en cas de non-respect de la législation du pays où le produit est livré. Il vous appartient de vérifier auprès des autorités locales les possibilités d'importation ou d'utilisation des produits ou services que vous envisagez de commander.
+                        Les produits proposés sont conformes à la législation française en vigueur. La responsabilité de {{ infosAndConfig.legales.nomSociete }} ne saurait être engagée en cas de non-respect de la législation du pays où le produit est livré. Il vous appartient de vérifier auprès des autorités locales les possibilités d'importation ou d'utilisation des produits ou services que vous envisagez de commander.
 
-                        Par ailleurs, {{ informationsLegales[0].nomSociete }} ne saurait être tenue pour responsable des dommages résultant d'une mauvaise utilisation du produit acheté.
+                        Par ailleurs, {{ infosAndConfig.legales.nomSociete }} ne saurait être tenue pour responsable des dommages résultant d'une mauvaise utilisation du produit acheté.
 
-                        Enfin la responsabilité de {{ informationsLegales[0].nomSociete }} ne saurait être engagée pour tous les inconvénients ou dommages inhérents à l'utilisation du réseau Internet, notamment une rupture de service, une intrusion extérieure ou la présence de virus informatiques.
+                        Enfin la responsabilité de {{ infosAndConfig.legales.nomSociete }} ne saurait être engagée pour tous les inconvénients ou dommages inhérents à l'utilisation du réseau Internet, notamment une rupture de service, une intrusion extérieure ou la présence de virus informatiques.
                     </ol>
                 <li class="h2 mt-4">Article 9 - Droit applicable en cas de litiges</li>
                     <ol>
@@ -130,11 +130,11 @@
                     </ol>
                 <li class="h2 mt-4">Article 10 - Propriété intellectuelle</li>
                     <ol>
-                        Tous les éléments du site {{ informationsLegales[0].siteUrl }} sont et restent la propriété intellectuelle et exclusive de {{ informationsLegales[0].nomSociete }}. Nul n'est autorisé à reproduire, exploiter, rediffuser, ou utiliser à quelque titre que ce soit, même partiellement, des éléments du site qu'ils soient logiciels, visuels ou sonores.
+                        Tous les éléments du site {{ infosAndConfig.legales.siteUrl }} sont et restent la propriété intellectuelle et exclusive de {{ infosAndConfig.legales.nomSociete }}. Nul n'est autorisé à reproduire, exploiter, rediffuser, ou utiliser à quelque titre que ce soit, même partiellement, des éléments du site qu'ils soient logiciels, visuels ou sonores.
                     </ol>
                 <li class="h2 mt-4">Article 11 - Données personnelles</li>
                     <ol>
-                        {{ informationsLegales[0].nomSociete }} se réserve le droit de collecter les informations nominatives et les données personnelles vous concernant. Elles sont nécessaires à la gestion de votre commande, ainsi qu'à l'amélioration des services et des informations que nous vous adressons.
+                        {{ infosAndConfig.legales.nomSociete }} se réserve le droit de collecter les informations nominatives et les données personnelles vous concernant. Elles sont nécessaires à la gestion de votre commande, ainsi qu'à l'amélioration des services et des informations que nous vous adressons.
 
                         Elles peuvent aussi être transmises aux sociétés qui contribuent à ces relations, telles que celles chargées de l'exécution des services et commandes pour leur gestion, exécution, traitement et paiement.
 
@@ -144,9 +144,9 @@
                     </ol>
                 <li class="h2 mt-4">Article 12 - Archivage Preuve</li>
                     <ol>
-                        {{ informationsLegales[0].nomSociete }} archivera les bons de commandes et les factures sur un support fiable et durable constituant une copie fidèle conformément aux dispositions de l'article 1348 du Code civil.
+                        {{ infosAndConfig.legales.nomSociete }} archivera les bons de commandes et les factures sur un support fiable et durable constituant une copie fidèle conformément aux dispositions de l'article 1348 du Code civil.
 
-                        Les registres informatisés de {{ informationsLegales[0].nomSociete }} seront considérés par toutes les parties concernées comme preuve des communications, commandes, paiements et transactions intervenus entre les parties.
+                        Les registres informatisés de {{ infosAndConfig.legales.nomSociete }} seront considérés par toutes les parties concernées comme preuve des communications, commandes, paiements et transactions intervenus entre les parties.
                     </ol>
             </ul>
         </div>

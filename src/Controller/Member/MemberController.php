@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
+use App\Service\Utilities;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -25,6 +26,7 @@ class MemberController extends AbstractController
         private DocumentRepository $documentRepository,
         private DocumentLignesRepository $documentLignesRepository,
         private InformationsLegalesRepository $informationsLegalesRepository,
+        private Utilities $utilities,
         private Security $security,
         private PanierRepository $panierRepository)
     {
@@ -38,7 +40,7 @@ class MemberController extends AbstractController
     {
         return $this->render('member/index.html.twig', [
             'controller_name' => 'MemberController',
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
@@ -57,7 +59,7 @@ class MemberController extends AbstractController
         return $this->render('member/adresse/index.html.twig', [
             'livraison_adresses' => $adresseRepository->findBy(['user' => $user, 'isFacturation' => null]),
             'facturation_adresses' => $adresseRepository->findBy(['user' => $user, 'isFacturation' => true]),
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
 
@@ -88,8 +90,7 @@ class MemberController extends AbstractController
         return $this->render('member/historique.html.twig', [
             'user' => $user,
             'documents' => $documents,
-            'configurations' => $configuration,
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
@@ -114,7 +115,7 @@ class MemberController extends AbstractController
         return $this->render('member/compte.html.twig', [
             'controller_name' => 'MemberController',
             'form' => $form->createView(),
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }

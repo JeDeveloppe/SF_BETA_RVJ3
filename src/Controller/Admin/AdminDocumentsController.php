@@ -39,8 +39,8 @@ class AdminDocumentsController extends AbstractController
             $this->addFlash('warning', 'État inconnu!');
             return $this->redirectToRoute('admin_accueil');
         }else{
-            $informationsLegales = $informationsLegalesRepository->findAll();
-            $tva = $informationsLegales[0]->getTauxTva();
+            $informationsLegales = $informationsLegalesRepository->findOneBy([]);
+            $tva = $informationsLegales->getTauxTva();
 
             $occasions = $panierRepository->findBy(['etat' => $slug, 'boite' => null]);
             $boites = $panierRepository->findBy(['etat' => $slug, 'occasion' => null]);
