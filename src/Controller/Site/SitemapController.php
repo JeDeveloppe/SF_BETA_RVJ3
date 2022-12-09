@@ -95,7 +95,7 @@ class SitemapController extends AbstractController
                 ];
         foreach($boites as $boite){
             $urls[] = [
-                'loc'     => $this->generateUrl('catalogue_pieces_detachees_demande', ['id' => $boite->getId(), 'slug' => $boite->getSlug(), 'editeur' => $this->slugger->slug($boite->getEditeur() ?? "VIDE")]),
+                'loc'     => $this->generateUrl('catalogue_pieces_detachees_demande', ['id' => $boite->getId(), 'slug' => $boite->getSlug(), 'editeur' => strtolower($this->slugger->slug($boite->getEditeur() ?? "VIDE"))]),
                 'lastmod' => $boite->getCreatedAt()->format('Y-m-d'),
                 'changefreq' => "monthly",
 			    'priority' => 0.8
@@ -110,7 +110,7 @@ class SitemapController extends AbstractController
             ];
         foreach($occasions as $occasion){
             $urls[] = [
-                'loc'     => $this->generateUrl('catalogue_jeux_occasion_details', ['id' => $occasion->getId(), 'slug' => $occasion->getBoite()->getSlug(), 'editeur' => $this->slugger->slug($occasion->getBoite()->getEditeur() ?? "VIDE")]),
+                'loc'     => $this->generateUrl('catalogue_jeux_occasion_details', ['id' => $occasion->getId(), 'slug' => $occasion->getBoite()->getSlug(), 'editeur' => strtolower($this->slugger->slug($occasion->getBoite()->getEditeur() ?? "VIDE"))]),
                 'lastmod' => $occasion->getBoite()->getCreatedAt()->format('Y-m-d'),
                 'changefreq' => "monthly",
                 'priority' => 0.8
