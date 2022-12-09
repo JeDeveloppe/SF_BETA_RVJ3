@@ -36,7 +36,11 @@ class BoiteType extends AbstractType
             ])
             ->add('slug', TextType::class, [
                 'required' => false,
-                'label' => 'Slug (nom-de-la-boite):'
+                'label' => 'Slug (nom-de-la-boite):',
+                'attr' => [
+                    'placeholder' => 'nom-de-la-boite'
+                ],
+                'required' => false
             ])
             ->add('poidBoite', TextType::class, [
                 'label' => 'Poid de la boite (g):',
@@ -80,9 +84,9 @@ class BoiteType extends AbstractType
                 ]
             ])
             ->add('prixHt', TextType::class, [
-                'label' => 'Prix de vente TTC:',
+                'label' => 'Prix de vente en état neuf (cents HT):',
                 'attr' => [
-                    'placeholder' => '10.50'
+                    'placeholder' => '1050 pour 10.50'
                 ]
             ])
             ->add('contenu', TextareaType::class, [

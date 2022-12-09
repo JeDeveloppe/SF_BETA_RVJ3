@@ -8,6 +8,7 @@ use App\Form\BoiteType;
 use App\Form\SearchBoiteType;
 use App\Form\AdminSearchBoiteType;
 use App\Repository\BoiteRepository;
+use App\Service\Utilities;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,6 +72,7 @@ class AdminBoiteController extends AbstractController
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
+        Utilities $utilities,
         SluggerInterface $slugger,
         Security $security): Response
     {
@@ -81,6 +83,9 @@ class AdminBoiteController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
 
             $user = $security->getUser();
+            $infosAndConfig = $utilities->importConfigurationAndInformationsLegales();
+            $tauxTva = $infosAndConfig['legales']->getTauxTva();
+            $prixHt = round( $form->get('prixHt')->getData() / $tauxTva,2);
             
             $imageSend = $form->get('imageblob')->getData();
 
@@ -99,7 +104,7 @@ class AdminBoiteController extends AbstractController
             if(is_null($form->get('slug')->getData())){
                 $boite->setSlug($slugger->slug($boite->getNom()));
             }else{
-                $boite->setSlug($slugger->slug($boite->getSlug()));
+                $boite->setSlug($slugger->slug($form->get('slug')->getData()));
             }
 
             $boite->setCreatedAt( new DateTimeImmutable('now'));
@@ -108,7 +113,7 @@ class AdminBoiteController extends AbstractController
             $entityManager->persist($boite);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_boite_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_boite_edit', ['id' => $boite->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('admin/boite/new.html.twig', [
@@ -135,6 +140,8 @@ class AdminBoiteController extends AbstractController
         $form = $this->createForm(BoiteType::class, $boite);
         $form->handleRequest($request);
 
+        dump($boite);
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $imageSend = $form->get('imageblob')->getData();
@@ -143,8 +150,11 @@ class AdminBoiteController extends AbstractController
                 $imageBase64 = base64_encode(file_get_contents($imageSend));
                 $boite->setImageBlob($imageBase64);
             }else{
-                
+                $boiteInDatabase = $boiteRepository->findOneBy(['id' => $boite->getId()]);
+                dump($boiteInDatabase);
+
             }
+
             dd($boite);
 
             return $this->redirectToRoute('admin_boite_index', [], Response::HTTP_SEE_OTHER);
