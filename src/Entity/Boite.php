@@ -98,7 +98,7 @@ class Boite
     /**
      * @var string|null
      *
-     * @ORM\Column(name="prix_ht", type="string", length=4, nullable=true)
+     * @ORM\Column(name="prix_ht", type="string", length=8, nullable=true)
      */
     private $prixHt;
 

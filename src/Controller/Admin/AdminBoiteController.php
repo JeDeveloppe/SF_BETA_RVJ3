@@ -85,7 +85,7 @@ class AdminBoiteController extends AbstractController
             $user = $security->getUser();
             $infosAndConfig = $utilities->importConfigurationAndInformationsLegales();
             $tauxTva = $infosAndConfig['legales']->getTauxTva();
-            $prixHt = round( $form->get('prixHt')->getData() / $tauxTva,2);
+            $prixHt = $form->get('prixHt')->getData();
             
             $imageSend = $form->get('imageblob')->getData();
 
@@ -140,22 +140,19 @@ class AdminBoiteController extends AbstractController
         $form = $this->createForm(BoiteType::class, $boite);
         $form->handleRequest($request);
 
-        dump($boite);
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $imageSend = $form->get('imageblob')->getData();
 
-            if(!is_null($imageSend)){
+            if($imageSend){
                 $imageBase64 = base64_encode(file_get_contents($imageSend));
                 $boite->setImageBlob($imageBase64);
-            }else{
-                $boiteInDatabase = $boiteRepository->findOneBy(['id' => $boite->getId()]);
-                dump($boiteInDatabase);
-
             }
 
-            dd($boite);
+            $entityManager->persist($boite);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Boite mise à jour!');
 
             return $this->redirectToRoute('admin_boite_index', [], Response::HTTP_SEE_OTHER);
         }

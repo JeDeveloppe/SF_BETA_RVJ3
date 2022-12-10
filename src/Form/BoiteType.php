@@ -22,7 +22,8 @@ class BoiteType extends AbstractType
             ->add('imageblob', FileType::class, [
                 'data_class' => null,
                 'required' => false,
-                'label' => "Choisir une image:"
+                'label' => "Choisir une image:",
+                'mapped' =>false
             ])
             ->add('nom', TextType::class, [
                 'label' => 'Nom de la boite:'
@@ -66,7 +67,8 @@ class BoiteType extends AbstractType
                     'A partir de 12 ans' => '12',
                     'A partir de 14 ans' => '14',
                     'A partir de 16 ans' => '16',
-                ]
+                ],
+                'required' => true,
             ])
             ->add('nbrJoueurs', ChoiceType::class, [
                 'label' => 'Nombre de joueurs:',
@@ -81,7 +83,8 @@ class BoiteType extends AbstractType
                     '8 joueurs et plus' => '8',
                     'Uniquement 1 joueur' => 'u1',
                     'Uniquement 2 joueurs' => 'u2'
-                ]
+                ],
+                'required' => true,
             ])
             ->add('prixHt', TextType::class, [
                 'label' => 'Prix de vente en état neuf (cents HT):',
