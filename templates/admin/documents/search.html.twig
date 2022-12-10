@@ -6,9 +6,21 @@
 
     <h3 class="col-12 text-center mb-5">Recherche de document</h3>
 
-    <div class="col-3 my-5 mx-auto">
-        {{ form(form) }}
+        {{ form_start(form) }}
+
+    <div class="col-9 mx-auto d-flex my-5 justify-content-around align-items-center">
+          <div class="form-group col-3">
+            {{ form_widget(form.document) }}
+        </div>
+        <div class="form-group col-3">
+            {{ form_widget(form.numero) }}
+        </div>
+        <div class="col-3 mt-2">
+            {{ form_widget(form.rechercher) }}
+        </div>
     </div>
+        {{ form_end(form) }}
+
 
     {% if datas is defined %} 
         {% if datas | length > 0 %}

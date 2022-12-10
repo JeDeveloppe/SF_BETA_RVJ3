@@ -2,9 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use DateTime;
 use DateInterval;
 use DateTimeImmutable;
 use App\Entity\Paiement;
+use App\Service\MailerService;
 use App\Form\SearchDocumentType;
 use App\Service\DocumentService;
 use App\Form\DocumentPaiementType;
@@ -12,17 +14,25 @@ use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ConfigurationRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\DocumentLignesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
-use App\Service\MailerService;
-use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminDocumentsController extends AbstractController
 {
+
+    public function __construct(
+        private PaginatorInterface $paginator,
+        private DocumentRepository $documentRepository,
+        private DocumentLignesRepository $documentLignesRepository
+    )
+    {
+    }
+
     /**
      * @Route("/admin/document/lecture-demande/{slug}", name="document_demande")
      */
@@ -103,12 +113,10 @@ class AdminDocumentsController extends AbstractController
      */
     public function lectureDevis(
         $numeroDevis,
-        DocumentRepository $documentRepository,
-        DocumentLignesRepository $documentLignesRepository
         ): Response
     {
 
-        $devis = $documentRepository->findOneBy(['numeroDevis' => $numeroDevis]);
+        $devis = $this->documentRepository->findOneBy(['numeroDevis' => $numeroDevis]);
 
         if($devis == null){
             //on signal le changement
@@ -116,7 +124,7 @@ class AdminDocumentsController extends AbstractController
             return $this->redirectToRoute('admin_accueil');
         }else{
 
-            $moreRecentDevis = $documentRepository->findAMoreRecentDevis($numeroDevis);
+            $moreRecentDevis = $this->documentRepository->findAMoreRecentDevis($numeroDevis);
 
             if(count($moreRecentDevis) == 1){
                 $suppressionDevis = true;
@@ -124,8 +132,8 @@ class AdminDocumentsController extends AbstractController
                 $suppressionDevis = false;
             }
 
-            $occasions = $documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
-            $boites = $documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
+            $occasions = $this->documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
+            $boites = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
 
             //ON FAIT LE TOTAL DES OCCASIONS
             $totalOccasions = 0;
@@ -156,13 +164,11 @@ class AdminDocumentsController extends AbstractController
      */
     public function deleteDevis(
         $numeroDevis,
-        DocumentRepository $documentRepository,
-        DocumentLignesRepository $documentLignesRepository,
         EntityManagerInterface $em
         ): Response
     {
 
-        $devis = $documentRepository->findOneBy(['numeroDevis' => $numeroDevis]);
+        $devis = $this->documentRepository->findOneBy(['numeroDevis' => $numeroDevis]);
 
         if($devis == null){
             //on signal le changement
@@ -170,26 +176,26 @@ class AdminDocumentsController extends AbstractController
             return $this->redirectToRoute('admin_accueil');
         }else{
 
-            $occasions = $documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
-            $boites = $documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
+            $occasions = $this->documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
+            $boites = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
 
  
             //on supprime les demandes de piece
             foreach($boites as $boite){
-                $documentLignesRepository->remove($boite);
+                $this->documentLignesRepository->remove($boite);
             }
 
             foreach($occasions as $Loccasion){
                 //on recupere la boite et on met en ligne
                 $occasion = $Loccasion->getOccasion();
                 $occasion->setIsOnLine(true);
-                $em->merge($occasion);
+                $em->persist($occasion);
                 //on supprime la ligne
-                $documentLignesRepository->remove($Loccasion);
+                $this->documentLignesRepository->remove($Loccasion);
             }
 
             //finalement on supprime le document qui est en devis
-            $documentRepository->remove($devis);
+            $this->documentRepository->remove($devis);
 
             $em->flush();
 
@@ -203,7 +209,7 @@ class AdminDocumentsController extends AbstractController
     /**
      * @Route("/admin/document/recherche", name="documents_recherche")
      */
-    public function rechercheDocument(Request $request, DocumentRepository $documentRepository): Response
+    public function rechercheDocument(Request $request): Response
     {
         $form = $this->createForm(SearchDocumentType::class);
         $form->handleRequest($request);
@@ -214,10 +220,16 @@ class AdminDocumentsController extends AbstractController
             $number = $form->get('numero')->getData();
 
             if($column == 'numeroDevis'){
-                $datas = $documentRepository->findOnlyDevis($number);
+                $donnees = $this->documentRepository->findOnlyDevis($number);
             }else{
-                $datas = $documentRepository->findOnlyFactures($number);
+                $donnees = $this->documentRepository->findOnlyFactures($number);
             }
+
+            $datas = $this->paginator->paginate(
+                $donnees, /* query NOT result */
+                1, /*page number*/
+                50 /*limit per page*/
+            );
 
             return $this->renderForm('admin/documents/search.html.twig', [
                 'form' => $form,
@@ -236,8 +248,6 @@ class AdminDocumentsController extends AbstractController
      */
     public function visualisationDocument(
         $token,
-        DocumentRepository $documentRepository,
-        DocumentLignesRepository $documentLignesRepository,
         Request $request,
         EntityManagerInterface $em,
         DocumentService $documentService
@@ -245,11 +255,11 @@ class AdminDocumentsController extends AbstractController
     {
 
         //on cherche le devis par le token
-        $devis = $documentRepository->findOneBy(['token' => $token]);
+        $devis = $this->documentRepository->findOneBy(['token' => $token]);
         $numeroFacture = $devis->getNumeroFacture();
 
-        $occasions = $documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
-        $boites = $documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
+        $occasions = $this->documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
+        $boites = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
 
         //ON FAIT LE TOTAL DES OCCASIONS
         $totalOccasions = 0;
@@ -289,7 +299,7 @@ class AdminDocumentsController extends AbstractController
             //on enregistre dans la BDD
             $devis->setNumeroFacture($newNumero)
                   ->setPaiement($paiement);
-            $em->merge($devis);
+            $em->persist($devis);
             $em->flush();
 
         }
@@ -311,7 +321,6 @@ class AdminDocumentsController extends AbstractController
     public function rendreDisponibleOuIndisponibleAlUtilisateur(
         $token,
         $value,
-        DocumentRepository $documentRepository,
         EntityManagerInterface $em,
         Request $request
         ): Response
@@ -322,11 +331,11 @@ class AdminDocumentsController extends AbstractController
         }
 
         //on cherche le devis par le token
-        $devis = $documentRepository->findOneBy(['token' => $token]);
+        $devis = $this->documentRepository->findOneBy(['token' => $token]);
 
         $devis->setIsDeleteByUser($value);
 
-        $em->merge($devis);
+        $em->persist($devis);
         $em->flush();
        
         //on signal le changement
@@ -351,7 +360,6 @@ class AdminDocumentsController extends AbstractController
         $token,
         Request $request,
         MailerService $mailerService,
-        DocumentRepository $documentRepository,
         ConfigurationRepository $configurationRepository
         )
     {
@@ -359,7 +367,7 @@ class AdminDocumentsController extends AbstractController
         $compteSmtp = $this->getParameter('COMPTESMTP');
         $configurations = $configurationRepository->findAll();
 
-        $devis = $documentRepository->findOneBy(['token' => $token]);
+        $devis = $this->documentRepository->findOneBy(['token' => $token]);
 
         $host = $request->getSchemeAndHttpHost();
         $link = $request->getSchemeAndHttpHost().$this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);
@@ -386,7 +394,6 @@ class AdminDocumentsController extends AbstractController
      */
     public function relanceDevisDeXJours(
         $token,
-        DocumentRepository $documentRepository,
         EntityManagerInterface $em,
         Request $request,
         ConfigurationRepository $configurationRepository,
@@ -404,7 +411,7 @@ class AdminDocumentsController extends AbstractController
             }
 
             //on cherche le devis par le token
-            $devis = $documentRepository->findOneBy(['token' => $token]);
+            $devis = $this->documentRepository->findOneBy(['token' => $token]);
 
             //on recupere la date du jour et on ajoute X jours
             $now = new DateTimeImmutable();
@@ -413,7 +420,7 @@ class AdminDocumentsController extends AbstractController
             $devis->setEndValidationDevis($endDevis)
                 ->setIsRelanceDevis(1);
 
-            $em->merge($devis);
+            $em->persist($devis);
             $em->flush();
         
             $host = $request->getSchemeAndHttpHost();

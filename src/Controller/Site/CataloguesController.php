@@ -32,7 +32,6 @@ class CataloguesController extends AbstractController
         private Utilities $utilities
     )
     {
-        
     }
 
     /**

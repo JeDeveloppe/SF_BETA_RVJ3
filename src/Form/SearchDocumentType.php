@@ -21,17 +21,17 @@ class SearchDocumentType extends AbstractType
                     'DEVIS' => 'numeroDevis'
                 ],
                 'required' => true,
-                'placeholder' => '...'
+                'placeholder' => 'FACture ou DEVis...'
             ])
             ->add('numero', TextType::class, [
                 'label' => 'Numéro:',
                 'required' => true,
                 'attr' => [
-                    'placeholder' => 'Juste les chiffres...'
+                    'placeholder' => 'Numéro...'
                 ]
             ])
-            ->add('Rechercher', SubmitType::class, [
-                'attr' => ['class' => 'btn btn-lg btn-outline-success'],
+            ->add('rechercher', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-sm btn-outline-success'],
             ])
         ;
     }
