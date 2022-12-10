@@ -3,16 +3,17 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Occasion;
-use App\Form\OccasionStatutChangeType;
 use App\Form\OccasionType;
+use App\Form\AdminSearchBoiteType;
 use App\Repository\BoiteRepository;
+use App\Form\OccasionStatutChangeType;
 use App\Repository\OccasionRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/admin/occasion", name="admin_")
@@ -20,27 +21,41 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class OccasionController extends AbstractController
 {
     /**
-     * @Route("/", name="occasion_index", methods={"GET"})
+     * @Route("/", name="occasion_index", methods={"GET","POST"})
      */
     public function index(BoiteRepository $boiteRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        $donnees = $boiteRepository->findBy(['isComplet' => true],['nom' => "ASC"]);
+        $form = $this->createForm(AdminSearchBoiteType::class);
+        $form->handleRequest($request);
 
-        $boites = $paginator->paginate(
-            $donnees, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            25 /*limit per page*/
-        );
+        //si on faite une recherche
+        if(!is_null($form->get('searchBoite')->getData())){
+            $recherche = str_replace(" ","%",$form->get('searchBoite')->getData());
+            $donnees = $boiteRepository->findOccasionsInDatabase($recherche);
 
-        $images = [];
+            $boites = $paginator->paginate(
+                $donnees, /* query NOT result */
+                1, /*page number*/
+                50 /*limit per page*/
+            );
 
-        // foreach ($boites as $key => $boite) {
-        //     $images[$key] = stream_get_contents($boite->getImageBlob());
-        // }
+            unset ($form);
+            $form = $this->createForm(AdminSearchBoiteType::class);
+            
+        }else{
+
+            $donnees = $boiteRepository->findBy(['isComplet' => true],['nom' => "ASC"]);
+
+            $boites = $paginator->paginate(
+                $donnees, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                25 /*limit per page*/
+            );
+        }
 
         return $this->render('admin/occasion/index.html.twig', [
             'boites' => $boites,
-            'images'    => $images
+            'form' => $form->createView()
         ]);
     }
 

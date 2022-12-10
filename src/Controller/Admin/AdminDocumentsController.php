@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
 use App\Service\MailerService;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminDocumentsController extends AbstractController
@@ -273,13 +274,12 @@ class AdminDocumentsController extends AbstractController
 
             $paiement = new Paiement();
             $paiement->setTimeTransaction($immutable)
-                     ->setMoyenPaiement($form->get('moyenPaiement')->getData())
-                     ->setTokenTransaction("SAISIE MANUELLE");
-                     
+                     ->setMoyenPaiement('Enregistré manuellement en: '.$form->get('moyenPaiement')->getData())
+                     ->setTokenTransaction("SAISIE MANUELLE")
+                     ->setCreatedAt(new DateTimeImmutable('now'));
+
             $em->persist($paiement);
             $em->flush();
-
-
 
             //on signal le changement
             $this->addFlash('success', 'Paiement enregistré');

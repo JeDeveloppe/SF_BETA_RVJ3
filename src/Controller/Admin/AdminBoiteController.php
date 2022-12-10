@@ -48,6 +48,9 @@ class AdminBoiteController extends AbstractController
                 50 /*limit per page*/
             );
 
+            unset ($form);
+            $form = $this->createForm(AdminSearchBoiteType::class);
+            
         }else{
             $donnees = $entityManager
             ->getRepository(Boite::class)

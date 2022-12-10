@@ -56,6 +56,19 @@ class BoiteRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findOccasionsInDatabase($recherche)
+    {
+        return $this->createQueryBuilder('b')
+            ->where('b.nom LIKE :val')
+            ->setParameter('val', '%'.$recherche.'%')
+            ->andWhere('b.isComplet = :complet')
+            ->setParameter('complet', true)
+            ->orderBy('b.nom', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findOccasionsMultiCritere($recherche,$age,$nbrJoueurs)
     {
         if($nbrJoueurs == "u1" || $nbrJoueurs == "u2"){

@@ -18,7 +18,9 @@ class DocumentPaiementType extends AbstractType
             ->add('date', DateTimeType::class, [
                 'label' => 'Saisir un paiement manuellement:',
                 'required' => true,
-                'date_widget' => 'single_text',
+                'widget' => "single_text",
+                'html5' => false,
+                'format' => 'dd/MM/yyyy'
             ])
             ->add('moyenPaiement', ChoiceType::class, [
                 'label' => false,
