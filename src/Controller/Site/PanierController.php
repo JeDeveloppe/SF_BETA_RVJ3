@@ -257,7 +257,7 @@ public function __construct(
         $setup['totalOccasionsHT'] = $totalOccasionsHT;
 
         //on sauvegarde dans la base
-        $token = $this->documentService->saveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande);
+        $token = $this->documentService->fromPanierSaveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande);
 
         return $this->redirectToRoute('app_paiement', [
             'token' => $token

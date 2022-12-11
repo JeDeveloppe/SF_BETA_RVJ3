@@ -14,7 +14,7 @@ use App\Service\ImportRvj2\ImportOccasionsService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use App\Service\ImportRvj2\ImportPartenairesService;
-use App\Service\CreationAdministrateurAdresseService;
+use App\Service\ImportRvj2\CreationAdministrateurAdresseService;
 use App\Service\ImportRvj2\ImportDepartementsService;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Service\ImportRvj2\ImportDocumentsLignesService;
@@ -48,7 +48,7 @@ class ImportRVJ2 extends Command
         //$this->importBoitesService->importBoites($io);
 
         ////on importe le detail des boites
-        $this->importPiecesService->importPieces($io);
+        //$this->importPiecesService->importPieces($io);
 
         // //on importe les jeux complet (occasions)
         //$this->importOccasionsService->importOccasions($io);
@@ -71,7 +71,7 @@ class ImportRVJ2 extends Command
         //$this->importDepartementsService->importDepartements($io);
 
         //on importe les adresses (facturation et livraison)
-        //$this->importAdressesService->importAdresses($io);
+        $this->importAdressesService->importAdresses($io);
 
         //on crée user administrateur et adresse de retrait
         // $this->CreationAdministrateurAdresseService->creationAdminAdresse($io);

@@ -29,6 +29,7 @@
                     {% if form.vars.value.document == "numeroDevis" %}
                         <th>Devis</th>
                         <th>Fin de validitée</th>
+                        <th>Sup. par<br/>l'utilisateur</th>
                     {% else %}
                         <th>Facture</th>
                     {% endif %}
@@ -43,6 +44,13 @@
                             {% if form.vars.value.document == "numeroDevis" %}
                                 <td>{{ data.numeroDevis }}<br/><span class="small">({{ data.createdAt | date('d-m-Y') }})</span></td>
                                 <td>({{ data.endValidationDevis | date('d-m-Y') }})</td>
+                                <td>
+                                    {% if data.isDeleteByUser == true %}
+                                        <span class="badge bg-success"> OUI</span>
+                                    {% else %}
+                                        <span class="badge bg-danger"> NON</span>
+                                    {% endif %}
+                                </td>
                             {% else %}
                                 <td>{{ data.numeroFacture ? data.numeroFacture : 'NON' }}</td>
                             {% endif %}
@@ -51,7 +59,7 @@
                             <td>{{ (data.totalTtc / 100) |number_format(2, '.', ',') }}</td>
                             <td>
                                 <a class="btn btn-primary" href="{{ path('visualisation_document', {'token': data.token }) }}">Voir</a>
-                                <a class="btn btn-secondary" href="{{ path('admin_prevenir_devis_disponible', {'token': data.token }) }}" target="_blank">Imprimer</a>
+                                {# <a class="btn btn-secondary" href="{{ path('admin_prevenir_devis_disponible', {'token': data.token }) }}" target="_blank">Imprimer</a> #}
                             </td>
                         </tr>
                     {% endfor %}

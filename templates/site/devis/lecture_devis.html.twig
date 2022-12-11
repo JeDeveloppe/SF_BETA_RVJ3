@@ -4,12 +4,12 @@
 
 {% block body %}
 
-    {% set tva = (devis[0].tauxTva + 100 ) / 100 %}
+    {% set tva = devis[0].tauxTva %}
     {% set totalDetachees = totalDetachees %}
     {% set disabled = "disabled" %}
 
     <h3 class="col-12 text-center my-5">
-        Devis numéro {{ devis[0].numeroDevis }} <br>
+        Devis numéro {{ infosAndConfig['config'].prefixeDevis }}{{ devis[0].numeroDevis }} <br>
         du {{ devis[0].createdAt|date('d-m-Y') }} <br/>
         <span class="small">(valable jusqu'au {{ devis[0].endValidationDevis|date('d-m-Y') }})</span>
     </h3>

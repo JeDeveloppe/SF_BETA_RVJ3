@@ -120,7 +120,7 @@
 
 <script>
     let tva = {{ tva }};
-    let totalOccasions = {{ totalOccasions * tva }};
+    let totalOccasions = {{ totalOccasions / 100 * tva }};
     let totalCostHT = {{ totalCostHT }};
 
     let divTotalOccasions = document.getElementById('totalOccasions');

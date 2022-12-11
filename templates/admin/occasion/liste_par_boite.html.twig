@@ -29,7 +29,7 @@
         {% for occasion in occasions %}
             <tr>
                 <td>{{ occasion.reference }}</td>
-                <td>{{ occasion.priceHt }}</td>
+                <td>{{ (occasion.priceHt / 100) |number_format(2, '.', ',') }}</td>
                 <td>{{ occasion.oldPriceHt }}</td>
                 <td>{{ occasion.information }}</td>
                 <td>{{ occasion.isNeuf ? 'OUI' : 'NON' }}</td>

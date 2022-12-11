@@ -74,11 +74,17 @@ class ImportAdressesService
                 $adresse = new Adresse();
             }
 
+            if($arrayClient['organismeFacturation'] == "NULL"){
+                $organismeFacturation = null;
+            }else{
+                $organismeFacturation = $arrayClient['organismeFacturation'];
+            }
+
             $adresse->setIsFacturation(true)
                     ->setFirstName($arrayClient['nomFacturation'])
                     ->setLastName($arrayClient['prenomFacturation'])
                     ->setAdresse($arrayClient['adresseFacturation'])
-                    ->setOrganisation($arrayClient['organismeFacturation'])
+                    ->setOrganisation($organismeFacturation)
                     ->setUser($this->userRepository->findOneBy(['token' => $arrayClient['idUser']]))
                     ->setToken($arrayClient['idUser'])
                     ->setVille($ville);
@@ -98,11 +104,17 @@ class ImportAdressesService
                 $adresse = new Adresse();
             }
 
+            if($arrayClient['organismeLivraison'] == "NULL"){
+                $organismeLivraison = null;
+            }else{
+                $organismeLivraison = $arrayClient['organismeLivraison'];
+            }
+
             $adresse->setIsFacturation(null)
                     ->setFirstName($arrayClient['nomLivraison'])
                     ->setLastName($arrayClient['prenomLivraison'])
                     ->setAdresse($arrayClient['adresseLivraison'])
-                    ->setOrganisation($arrayClient['organismeLivraison'])
+                    ->setOrganisation($organismeLivraison)
                     ->setUser($this->userRepository->findOneBy(['token' => $arrayClient['idUser']]))
                     ->setToken($arrayClient['idUser'])
                     ->setVille($ville);

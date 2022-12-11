@@ -4,7 +4,7 @@
         {% for boite in boites %}
             <div class="col-11 mb-4">
                 <div class="card p-0">
-                    <div class="card-header">{{ boite.boite.nom }} {{ boite.boite.editeur }} {{ boite.boite.annee }}</div>
+                    <div class="card-header">[{{ boite.boite.id }}] {{ boite.boite.nom }} {{ boite.boite.editeur }} {{ boite.boite.annee }}</div>
                         <div class="card-body bg-secondary">
  
                             <div class="card-text my-2">{{ boite.message }}</div>

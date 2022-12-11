@@ -4,6 +4,7 @@ namespace App\Controller\Site;
 
 use App\Repository\InformationsLegalesRepository;
 use App\Repository\PanierRepository;
+use App\Service\Utilities;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,8 +18,8 @@ class SecurityController extends AbstractController
      */
     public function login(
         AuthenticationUtils $authenticationUtils,
-        InformationsLegalesRepository $informationsLegalesRepository,
         PanierRepository $panierRepository,
+        Utilities $utilities,
         Security $security): Response
     {
         // if ($this->getUser()) {
@@ -33,7 +34,7 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
-            'informationsLegales' =>  $informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $utilities->importConfigurationAndInformationsLegales(),
             'panier' => $panierRepository->findBy(['user' => $security->getUser(), 'etat' => 'panier'])
         ]);
     }

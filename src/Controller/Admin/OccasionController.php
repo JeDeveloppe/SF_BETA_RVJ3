@@ -100,10 +100,13 @@ class OccasionController extends AbstractController
         $form->handleRequest($request);
 
         $occasion->setBoite($boite)
-                 ->setDonation(false)
-                 ->setSale(false);
+                 ->setDonation(null)
+                 ->setSale(null);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $occasion->setOldPriceHt(0)->setIsDonation(false)->setIsSale(false)->setStock(1);
+
             $occasionRepository->add($occasion);
 
             $lastId = $occasion->getId();

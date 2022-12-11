@@ -13,7 +13,7 @@
                 <tbody>
                 {% for adresse in facturation_adresses %}
                     <tr>
-                        <td class="col-9">{{ adresse.organisation }} {{ adresse.lastName }} {{ adresse.firstName }}, {{ adresse.adresse }}, {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
+                        <td class="col-9">{{ adresse.organisation ?? "" }} {{ adresse.lastName }} {{ adresse.firstName }}, {{ adresse.adresse }}, {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
                         <td class="col-3 text-center align-self-center">
                             <a class="btn btn-warning" href="{{ path('app_adresse_edit', {'id': adresse.id}) }}">Éditer</a>
                             {{ include('member/adresse/_delete_form.html.twig') }}
@@ -45,7 +45,7 @@
                 <tbody>
                 {% for adresse in livraison_adresses %}
                     <tr>
-                        <td class="col-9">{{ adresse.organisation }} {{ adresse.lastName }} {{ adresse.firstName }}, {{ adresse.adresse }}, {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
+                        <td class="col-9">{{ adresse.organisation ?? "" }} {{ adresse.lastName }} {{ adresse.firstName }}, {{ adresse.adresse }}, {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</td>
                         <td class="col-3 text-center align-self-center">
                             <a class="btn btn-warning" href="{{ path('app_adresse_edit', {'id': adresse.id}) }}">Éditer</a>
                             {{ include('member/adresse/_delete_form.html.twig') }}

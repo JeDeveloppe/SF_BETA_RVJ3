@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\ImportRvj2;
 
 use App\Entity\User;
 use DateTimeImmutable;

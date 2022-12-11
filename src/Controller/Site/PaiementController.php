@@ -2,6 +2,7 @@
 
 namespace App\Controller\Site;
 
+use App\Repository\DocumentRepository;
 use App\Repository\InformationsLegalesRepository;
 use App\Repository\PanierRepository;
 use Exception;
@@ -19,7 +20,8 @@ class PaiementController extends AbstractController
         private InformationsLegalesRepository $informationsLegalesRepository,
         private PanierRepository $panierRepository,
         private Security $security,
-        private Utilities $utilities
+        private Utilities $utilities,
+        private DocumentRepository $documentRepository
     ){  
     }
 

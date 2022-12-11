@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Repository\ConfigurationRepository;
 use App\Repository\DocumentRepository;
 use App\Repository\PanierRepository;
+use App\Service\Utilities;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,12 +19,13 @@ class AdminController extends AbstractController
     public function index(
         PanierRepository $panierRepository,
         DocumentRepository $documentRepository,
-        ConfigurationRepository $configurationRepository
+        ConfigurationRepository $configurationRepository,
+        Utilities $utilities
         ): Response
     {
         $demandes = $panierRepository->findDemandesGroupeBy();
 
-        $devisSupprimerParUtilisateurs = $documentRepository->findBy(['isDeleteByUser' => true]);
+        $devisSupprimerParUtilisateurs = $documentRepository->findDevisDeleteByUser();
 
         $devisArelancer = $documentRepository->findDevisEndDelay(new DateTimeImmutable());
 
@@ -39,6 +41,7 @@ class AdminController extends AbstractController
             'demandes' => $demandes,
             'relances' => $devisArelancer,
             'devisSupprimerParUtilisateurs' => $devisSupprimerParUtilisateurs,
+            'infosAndConfig' => $utilities->importConfigurationAndInformationsLegales(),
             'delaiDevis' => $delaiDevis
         ]);
     }

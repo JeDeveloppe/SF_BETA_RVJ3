@@ -75,6 +75,7 @@ class DocumentRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('d')
             ->where('d.numeroDevis LIKE :numero')
             ->setParameter('numero','%'.$number.'%')
+            ->andWhere('d.numeroFacture IS NULL')
             ->orderBy('d.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
@@ -130,6 +131,19 @@ class DocumentRepository extends ServiceEntityRepository
         ;  
     }
 
+    
+    //[ADMIN] cherche les devis supprimer par l'utilisateur et non facturer du coup
+    public function findDevisDeleteByUser(){
+            return $this->createQueryBuilder('d')
+            ->where('d.isDeleteByUser = :delete')
+            ->setParameter('delete', true)
+            ->andWhere('d.numeroFacture IS NULL')
+            ->orderBy('d.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;  
+    }
+
     public function findActiveDevis($token){
         return $this->createQueryBuilder('d')
         ->where('d.endValidationDevis > :now ')
@@ -137,7 +151,8 @@ class DocumentRepository extends ServiceEntityRepository
         ->andWhere('d.token = :token')
         ->setParameter('token', $token)
         ->andWhere('d.numeroFacture IS NULL')
-        ->andWhere('d.isDeleteByUser IS NULL')
+        ->andWhere('d.isDeleteByUser = :deleted')
+        ->setParameter('deleted', false)
         ->andWhere('d.paiement IS NULL')
         ->getQuery()
         ->getResult()

@@ -6,6 +6,7 @@ use DateInterval;
 use DateTimeImmutable;
 use App\Entity\Document;
 use App\Entity\DocumentLignes;
+use App\Repository\ConfigurationRepository;
 use App\Repository\DocumentLignesRepository;
 use App\Repository\UserRepository;
 use App\Repository\PanierRepository;
@@ -17,30 +18,17 @@ use Fpdf\Fpdf;
 
 class DocumentService
 {
-    private $documentRepository;
-    private $em;
-    private $informationsLegalesRepository;
-    private $userRepository;
-    private $panierRepository;
-    private $documentLignesRepository;
-
     public function __construct(
-        DocumentRepository $documentRepository,
-        DocumentLignesRepository $documentLignesRepository,
-        EntityManagerInterface $em,
-        InformationsLegalesRepository $informationsLegalesRepository,
-        MethodeEnvoiRepository $methodeEnvoiRepository,
-        UserRepository $userRepository,
-        PanierRepository $panierRepository
+        private DocumentRepository $documentRepository,
+        private DocumentLignesRepository $documentLignesRepository,
+        private EntityManagerInterface $em,
+        private InformationsLegalesRepository $informationsLegalesRepository,
+        private MethodeEnvoiRepository $methodeEnvoiRepository,
+        private UserRepository $userRepository,
+        private PanierRepository $panierRepository,
+        private ConfigurationRepository $configurationRepository
         )
     {
-        $this->documentRepository = $documentRepository;
-        $this->documentLignesRepository = $documentLignesRepository;
-        $this->em = $em;
-        $this->informationsLegalesRepository = $informationsLegalesRepository;
-        $this->methodeEnvoiRepository = $methodeEnvoiRepository;
-        $this->userRepository = $userRepository;
-        $this->panierRepository = $panierRepository;
     }
 
     public function generateRandomString($length = 250, $characters = '0123456789abcdefghijklmnopqrstuvwxyz@!_ABCDEFGHIJKLMNOPQRSTUVWXYZ'){
@@ -107,6 +95,8 @@ class DocumentService
 
     public function saveDevisInDataBase($user, $request, $paniers, $demande){
         $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
+        $configuration = $this->configurationRepository->findOneBy([]);
+
         $tva = $informationsLegales->getTauxTva();
 
         //ON genere un nouveau numero
@@ -115,7 +105,7 @@ class DocumentService
         //puis on met dans la base
         $document = new Document();
         $now = new DateTimeImmutable();
-        $endDevis = $now->add(new DateInterval('P3D'));
+        $endDevis = $now->add(new DateInterval('P'.$configuration->getDevisDelayBeforeDelete().'D'));
 
         $document->setUser($this->userRepository->find($user))
                 ->setCreatedAt($now)
@@ -124,6 +114,7 @@ class DocumentService
                 ->setTauxTva($tva)
                 ->setTotalLivraison($request->request->get('totalLivraisonTTC') * 100)
                 ->setIsRelanceDevis(false)
+                ->setIsDeleteByUser(false)
                 ->setAdresseFacturation($paniers[0]->getFacturation())
                 ->setAdresseLivraison($paniers[0]->getLivraison())
                 ->setToken($this->generateRandomString())
@@ -154,10 +145,9 @@ class DocumentService
         foreach($panier_occasions as $panier){
             $documentLigne = new DocumentLignes();
 
-            $documentLigne->setBoite($panier->getBoite())
+            $documentLigne->setOccasion($panier->getOccasion())
                             ->setDocument($document)
-                            ->setOccasion($panier->getOccasion())
-                            ->setPrixVente($panier->getOccasion()->getPriceHt() * 100);
+                            ->setPrixVente($panier->getOccasion()->getPriceHt());
             $this->em->persist($documentLigne);
         }
 
@@ -168,7 +158,7 @@ class DocumentService
         return $newNumero;
     }
 
-    public function saveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande){
+    public function fromPanierSaveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande){
         $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
         $tva = $informationsLegales->getTauxTva();
         $methodeEnvoi = $this->methodeEnvoiRepository->findOneBy(['id' => 3]);
@@ -190,6 +180,7 @@ class DocumentService
                 ->setTauxTva($tva)
                 ->setCost($setup['cost'])
                 ->setTotalLivraison(0)
+                ->setIsDeleteByUser(false)
                 ->setIsRelanceDevis(false)
                 ->setAdresseLivraison($livraison->getFirstName().' '.$livraison->getLastName().'<br/>'.$livraison->getAdresse().'<br/>'.$livraison->getVille()->getVilleCodePostal().' '.$livraison->getVille()->getVilleNom().'<br/>'.$livraison->getVille()->getDepartement()->getPays()->getIsoCode())
                 ->setAdresseFacturation($facturation->getFirstName().' '.$facturation->getLastName().'<br/>'.$facturation->getAdresse().'<br/>'.$facturation->getVille()->getVilleCodePostal().' '.$facturation->getVille()->getVilleNom().'<br/>'.$facturation->getVille()->getDepartement()->getPays()->getIsoCode())
@@ -229,7 +220,7 @@ class DocumentService
         $doc = $this->documentRepository->findOneBy(['token' => $token]);
 
         //on recupere le taux de tva
-        $tva = ($doc->getTauxTva() + 100) / 100;
+        $tva = $doc->getTauxTva();
 
         //on recupere les info legales
         $infosLegales = $this->informationsLegalesRepository->findAll();
@@ -279,6 +270,7 @@ class DocumentService
     
     
         // }
+
 
          // Instanciation de la classe dérivée
         $pdf = new Fpdf('P','mm','A4');
@@ -331,7 +323,7 @@ class DocumentService
                 $pdf->MultiCell(168,8,utf8_decode("Jeu d'occasion: ".$ligneAchat->getOccasion()->getBoite()->getNom().' - '.$ligneAchat->getOccasion()->getBoite()->getEditeur()),1,'C');
                 $pdf->SetY($position_entete_produits + $positionLigneAchat);
                 $pdf->SetX(176);
-                $pdf->MultiCell(24,8,number_format($ligneAchat->getOccasion()->getPriceHt() * $tva,2),1,'R');
+                $pdf->MultiCell(24,8,number_format($ligneAchat->getOccasion()->getPriceHt() / 100 * $tva,2),1,'R');
                 $positionLigneAchat += 8;
             }
         }
@@ -345,7 +337,7 @@ class DocumentService
             $pdf->MultiCell(168,8,utf8_decode("Fourniture(s) de pièce(s)"),1,'C');
             $pdf->SetY($position_detail);
             $pdf->SetX(176);
-            $pdf->MultiCell(24,8,number_format($totalDetachees * 1 / 100,2),1,'R');
+            $pdf->MultiCell(24,8,number_format($totalDetachees / 100,2),1,'R');
         }else{
             $position_detail -= 8;
         }

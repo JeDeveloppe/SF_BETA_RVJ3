@@ -3,7 +3,8 @@
 {% block title %}Devis (modifications){% endblock %}
 
 {% block body %}
-    {% set tva = devis.tauxTva + 100 / 100 %}
+    {% set tva = devis.tauxTva %}
+
     {% set totalDetachees = totalDetachees %}
     {% set totalCostHT = cost %}
     {% set disabled = "disabled" %}
@@ -107,7 +108,7 @@
                         <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Sauvegarder</button>
                         <input type="hidden" name="user" value="{{ devis.user.id }}">
                         <input type="hidden" name="demande" value="{{ devis.numeroDevis }}">
-                        <a class="btn btn-success" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token }) }}">Envoyer par email</a>
+                        <a class="btn btn-success" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token, 'days': 0 }) }}">Envoyer par email</a>
                     </div>
                 {% endif %}
             </div>

@@ -28,7 +28,8 @@ class AdminDocumentsController extends AbstractController
     public function __construct(
         private PaginatorInterface $paginator,
         private DocumentRepository $documentRepository,
-        private DocumentLignesRepository $documentLignesRepository
+        private DocumentLignesRepository $documentLignesRepository,
+        private EntityManagerInterface $em
     )
     {
     }
@@ -164,7 +165,6 @@ class AdminDocumentsController extends AbstractController
      */
     public function deleteDevis(
         $numeroDevis,
-        EntityManagerInterface $em
         ): Response
     {
 
@@ -189,7 +189,7 @@ class AdminDocumentsController extends AbstractController
                 //on recupere la boite et on met en ligne
                 $occasion = $Loccasion->getOccasion();
                 $occasion->setIsOnLine(true);
-                $em->persist($occasion);
+                $this->em->persist($occasion);
                 //on supprime la ligne
                 $this->documentLignesRepository->remove($Loccasion);
             }
@@ -197,7 +197,7 @@ class AdminDocumentsController extends AbstractController
             //finalement on supprime le document qui est en devis
             $this->documentRepository->remove($devis);
 
-            $em->flush();
+            $this->em->flush();
 
             //on signal le changement
             $this->addFlash('success', 'Devis supprimer!');
@@ -249,7 +249,6 @@ class AdminDocumentsController extends AbstractController
     public function visualisationDocument(
         $token,
         Request $request,
-        EntityManagerInterface $em,
         DocumentService $documentService
         ): Response
     {
@@ -288,8 +287,8 @@ class AdminDocumentsController extends AbstractController
                      ->setTokenTransaction("SAISIE MANUELLE")
                      ->setCreatedAt(new DateTimeImmutable('now'));
 
-            $em->persist($paiement);
-            $em->flush();
+            $this->em->persist($paiement);
+            $this->em->flush();
 
             //on signal le changement
             $this->addFlash('success', 'Paiement enregistré');
@@ -299,8 +298,8 @@ class AdminDocumentsController extends AbstractController
             //on enregistre dans la BDD
             $devis->setNumeroFacture($newNumero)
                   ->setPaiement($paiement);
-            $em->persist($devis);
-            $em->flush();
+            $this->em->persist($devis);
+            $this->em->flush();
 
         }
 
@@ -321,7 +320,6 @@ class AdminDocumentsController extends AbstractController
     public function rendreDisponibleOuIndisponibleAlUtilisateur(
         $token,
         $value,
-        EntityManagerInterface $em,
         Request $request
         ): Response
     {
@@ -335,8 +333,8 @@ class AdminDocumentsController extends AbstractController
 
         $devis->setIsDeleteByUser($value);
 
-        $em->persist($devis);
-        $em->flush();
+        $this->em->persist($devis);
+        $this->em->flush();
        
         //on signal le changement
         $this->addFlash('success', 'État du document mis à jour!');
@@ -354,10 +352,11 @@ class AdminDocumentsController extends AbstractController
     }
 
     /**
-     * @Route("/admin/email/devis-terminer/{token}/", name="admin_prevenir_devis_disponible")
+     * @Route("/admin/email/prevenir-devis-disponible/{days}/{token}/", name="admin_prevenir_devis_disponible")
      */
     public function adminPrevenirDevisDisponible(
         $token,
+        $days,
         Request $request,
         MailerService $mailerService,
         ConfigurationRepository $configurationRepository
@@ -368,6 +367,20 @@ class AdminDocumentsController extends AbstractController
         $configurations = $configurationRepository->findAll();
 
         $devis = $this->documentRepository->findOneBy(['token' => $token]);
+
+        if($days > 0){
+            $now = new DateTimeImmutable();
+            $endDevis = $now->add(new DateInterval('P'.$days.'D'));
+
+            $devis->setEndValidationDevis($endDevis)
+            ->setIsDeleteByUser(false)
+            ->setIsRelanceDevis(true)
+            ->setEnvoiEmailDevis($now);
+
+            //on met a jour le document
+            $this->em->persist($devis);
+            $this->em->flush();
+        }
 
         $host = $request->getSchemeAndHttpHost();
         $link = $request->getSchemeAndHttpHost().$this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);

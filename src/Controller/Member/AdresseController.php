@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
+use App\Service\Utilities;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -21,7 +22,8 @@ class AdresseController extends AbstractController
     public function __construct(
         private InformationsLegalesRepository $informationsLegalesRepository,
         private Security $security,
-        private PanierRepository $panierRepository
+        private PanierRepository $panierRepository,
+        private Utilities $utilities
     )
     { 
     }
@@ -71,7 +73,7 @@ class AdresseController extends AbstractController
         return $this->renderForm('member/adresse/new.html.twig', [
             'adresse' => $adresse,
             'form' => $form,
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'array' => $array,
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
@@ -112,7 +114,7 @@ class AdresseController extends AbstractController
         return $this->renderForm('member/adresse/edit.html.twig', [
             'adresse' => $adresse,
             'form' => $form,
-            'informationsLegales' =>  $this->informationsLegalesRepository->findAll(),
+            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }

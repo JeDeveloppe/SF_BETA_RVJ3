@@ -12,6 +12,7 @@
                <th>Numéro de devis</th>
                <th>Date du devis</th>
                <th>Numéro de facture</th>
+               <th>Total TTC</th>
                <th></th>
                <th></th>
             </thead>
@@ -21,6 +22,7 @@
                         <td>{{ document.numeroDevis }}</td>
                         <td>{{ document.createdAt|date('d-m-Y') }}</td>
                         <td>{{ document.numeroFacture ? document.numeroFacture : "PAS DE PAIEMENT" }}</td>
+                        <td>{{ (document.totalTTC / 100) |number_format(2, '.', ',') }} €</td>
                         <td>
                            {% if document.paiement is not null %}
                               Payé le {{ document.paiement.timeTransaction|date('d-m-Y') }} <br/>par {{ document.paiement.moyenPaiement }} 

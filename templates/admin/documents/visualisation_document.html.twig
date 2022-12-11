@@ -27,7 +27,7 @@
                         <tr>
                             <td>
                                 {{ devis.numeroDevis }} <br>
-                                {{ devis.createdAt|date('d-m-Y') }}
+                                Créé le: {{ devis.createdAt|date('d/m/Y') }} <br/>
                             </td>
                             <td>
                                 {% if devis.isDeleteByUser == true %}
@@ -39,10 +39,26 @@
                             <td>{{ devis.numeroFacture ? devis.numeroFacture : "PAS DE PAIEMENT" }}</td>
                             <td>
                                 {% if devis.paiement is not null %}
-                                    {{ devis.paiement.timeTransaction|date('d-m-Y') }} <br/>par {{ devis.paiement.moyenPaiement }}
+                                    {{ devis.paiement.timeTransaction|date('d/m/Y') }} <br/>par {{ devis.paiement.moyenPaiement }}
                                 {% else %}
                                     AUCUN
                                 {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                               {% if devis.isRelanceDevis %}
+                                    <i class="fa-solid fa-rotate-right text-success"></i> (relancer au moins une fois) -
+                                {% else %}
+                                    <i class="fa-solid fa-rotate-right text-danger"></i> (non relancer) -
+                                {% endif %}
+
+                                {% if devis.envoiEmailDevis is not null %}
+                                    <i class="fa-solid fa-paper-plane text-success"></i> (email envoyé) le {{ devis.envoiEmailDevis|date('d/m/Y') }} -
+                                {% else %}
+                                    <i class="fa-solid fa-paper-plane text-danger"></i> (non envoyé) -
+                                {% endif %}
+                                Fin de validitée: {{ devis.endValidationDevis|date('d/m/Y') }}
                             </td>
                         </tr>
                     </tbody>
@@ -88,58 +104,57 @@
             </div>
         </div>
 
+        {# PARITE TOTAUX #}
+        <div class="row justify-content-center my-5">
+            <h3 class="col-12 text-start">Totaux:</h3>
 
-    <div class="row justify-content-center my-5">
-        <h3 class="col-12 text-start">Totaux:</h3>
-
-        <div class="col-11">
-            <table class="table table-bordered">
-                <tr>
-                    <td>Occasions:</td>
-                    <td>{{ (totalOccasions / 100) |number_format(2, '.', ',') }}</td>
-                </tr>
-                 <tr>
-                    <td>Pièces détachées:</td>
-                    <td>{{ (totalDetachees / 100) |number_format(2, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td>Livraison:</td>
-                    <td>{{ (devis.totalLivraison / 100) |number_format(2, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td>Total HT:</td>
-                    <td>{{ (devis.totalHt / 100) |number_format(2, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td>Total TTC:</td>
-                    <td>{{ (devis.totalTtc / 100) |number_format(2, '.', ',')}}</td>
-                </tr>
-            </table>
+            <div class="col-11">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>Occasions:</td>
+                        <td>{{ (totalOccasions / 100) |number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Pièces détachées:</td>
+                        <td>{{ (totalDetachees / 100) |number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Livraison:</td>
+                        <td>{{ (devis.totalLivraison / 100) |number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total HT:</td>
+                        <td>{{ (devis.totalHt / 100) |number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total TTC:</td>
+                        <td>{{ (devis.totalTtc / 100) |number_format(2, '.', ',')}}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
-    </div>
 
+        {# PARTIE BOUTONS #}
+        <div class="row my-5">
+            <div class="col-6 text-center">
+                {% if devis.numeroFacture  %}
+                    <span class="btn btn-lg btn-success disabled">DÉJA FACTURÉ</span>
+                {% else %}
+                    {{ form(form) }}
+                {% endif %}
+            </div>
+            <div class="col-6 d-flex flex-column justify-content-around align-items-center">
+                {% if devis.numeroFacture is null %}
+                    <a class="btn btn-lg btn-outline-danger col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}" >Supprimer définitivement le devis</a>
+                {% else %}
+                    <a class="btn btn-lg btn-outline-danger disabled col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}">Facturé: suppression impossible</a>
+                {% endif %}
+                {% if devis.isDeleteByUser is null and devis.numeroFacture is null %}
+                    <a class="btn btn-primary col-8 mx-auto" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token, 'days': 2 }) }}">Envoyer par email (dispo +2j)</a>                
+                {% endif %}
 
-    {# PARTIE BOUTONS #}
-    <div class="row my-5">
-        <div class="col-6 text-center">
-            {% if devis.numeroFacture  %}
-                <span class="btn btn-lg btn-success disabled">DÉJA FACTURÉ</span>
-            {% else %}
-                {{ form(form) }}
-            {% endif %}
+            </div>
         </div>
-        <div class="col-6 d-flex flex-column justify-content-around align-items-center">
-            {% if devis.numeroFacture is null %}
-                <a class="btn btn-lg btn-outline-danger col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}" >Supprimer définitivement le devis</a>
-            {% else %}
-                <a class="btn btn-lg btn-outline-danger disabled col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}">Facturé: suppression impossible</a>
-            {% endif %}
-            {% if devis.isDeleteByUser is null %}
-                <a class="btn btn-primary col-8 mx-auto" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token }) }}">Envoyer par email</a>                
-            {% endif %}
-
-        </div>
-    </div>
 
 
 
