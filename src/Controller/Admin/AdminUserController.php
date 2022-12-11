@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Form\AdminUserType;
 use App\Repository\UserRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,10 +15,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminUserController extends AbstractController
 {
     #[Route('/', name: 'app_admin_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, PaginatorInterface $paginator): Response
     {
+        $donnees = $userRepository->findUsersByNameAsc();
+
+        $users = $paginator->paginate(
+            $donnees, /* query NOT result */
+            1, /*page number*/
+            25 /*limit per page*/
+        );
+
         return $this->render('admin/user/index.html.twig', [
-            'users' => $userRepository->findAll()
+            'users' => $users
         ]);
     }
 

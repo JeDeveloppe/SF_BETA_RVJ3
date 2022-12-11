@@ -57,10 +57,16 @@ class ImportClientsService
             $client = new User();
         }
 
+        if($arrayClient['pseudo'] == "NULL"){
+            $pseudo = null;
+        }else{
+            $pseudo = $arrayClient['pseudo'];
+        }
+
         $client->setEmail($arrayClient['email'])
                 ->setRvj2Id($arrayClient['idClient'])
                 ->setPassword($arrayClient['password'])
-                ->setNickname($arrayClient['pseudo'])
+                ->setNickname($pseudo)
                 ->setPhone($arrayClient['telephone'])
                 ->setLevel($arrayClient['userLevel'])
                 ->setToken($arrayClient['idUser'])

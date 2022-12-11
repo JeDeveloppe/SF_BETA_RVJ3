@@ -10,12 +10,8 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Nom Prénom [Association]</th>
                 <th>Email</th>
-                <th>Roles</th>
-                <th>Level</th>
-                <th>Pseudo</th>
-                <th>Téléphone</th>
-                <th>Inscription le:</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -23,20 +19,17 @@
         {% for user in users %}
             <tr>
                 <td>[{{ user.id }}]</td>
+                {% for adresse in user.adresses %}
+                    {% if adresse.isFacturation %}
+                        <td>
+                            {{ adresse.firstName }} {{ adresse.lastName }}
+                            {% if adresse.organisation is not null %}
+                                {{ '['~ adresse.organisation ~']' }}
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                {% endfor %}
                 <td>{{ user.email }}</td>
-                <td>
-                    {% for role in user.roles %}
-                        {% if role == "ROLE_SUPER_ADMIN" %}
-                            <span class="badge rounded-pill bg-danger">SUPER ADMIN</span>
-                        {% elseif role == "ROLE_ADMIN" %}
-                            <span class="badge rounded-pill bg-warning">ADMIN</span>
-                        {% endif %}
-                    {% endfor %}
-                </td>
-                <td>{{ user.level }}</td>
-                <td>{{ user.nickname }}</td>
-                <td>{{ user.phone }}</td>
-                <td>{{ user.createdAt ? user.createdAt|date('d-m-Y à H:i:s') : '' }}</td>
                 <td>
                     {% if app.user.id != user.id %}
                         {% if app.user.level > user.level %}
@@ -51,6 +44,7 @@
 
                 </td>
             </tr>
+  
         {% else %}
             <tr>
                 <td colspan="9">no records found</td>
@@ -58,5 +52,15 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {% if users | length > 0 %}
+
+        <div class="row my-5">
+            <div class="col-12 d-flex justify-content-center">
+                {{ knp_pagination_render(users, 'admin/pagination.html.twig') }}
+            </div>
+        </div>
+
+    {% endif %}
 
 {% endblock %}
