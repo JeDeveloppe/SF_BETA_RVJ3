@@ -14,10 +14,10 @@ use App\Service\ImportRvj2\ImportOccasionsService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use App\Service\ImportRvj2\ImportPartenairesService;
-use App\Service\ImportRvj2\CreationAdministrateurAdresseService;
 use App\Service\ImportRvj2\ImportDepartementsService;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Service\ImportRvj2\ImportDocumentsLignesService;
+use App\Service\ImportRvj2\CreationAdministrateurAdresseService;
 
 #[AsCommand(name: 'app:importRVJ2')]
 
@@ -44,16 +44,19 @@ class ImportRVJ2 extends Command
     {
         $io = new SymfonyStyle($input,$output);
 
-        //on importe les boites
-        //$this->importBoitesService->importBoites($io);
+        // //on importe les boites
+        // $this->importBoitesService->importBoites($io);
 
-        ////on importe le detail des boites
-        //$this->importPiecesService->importPieces($io);
+        // ////on importe le detail des boites
+        // $this->importPiecesService->importPieces($io);
 
-        // //on importe les jeux complet (occasions)
-        //$this->importOccasionsService->importOccasions($io);
+        // // //on importe les jeux complet (occasions)
+        // $this->importOccasionsService->importOccasions($io);
 
-        //on importe les villes
+        // //on importe les departementss
+        // $this->importDepartementsService->importDepartements($io);
+
+        // //on importe les villes
         // ini_set('memory_limit', '512M');
         // $this->importVillesService->importVilles1_5($io);
         // $this->importVillesService->importVilles2_5($io);
@@ -61,29 +64,28 @@ class ImportRVJ2 extends Command
         // $this->importVillesService->importVilles4_5($io);
         // $this->importVillesService->importVilles5_5($io);
 
-        //on importe les partenaires
-        //$this->importPartenairesService->importPartenaires($io);
+        // //on importe les partenaires
+        // $this->importPartenairesService->importPartenaires($io);
 
-        //on importe les clients
-        //$this->importClientsService->importClients($io);
+        // //on importe les clients
+        // $this->importClientsService->importClients($io);
 
-        //on importe les departementss
-        //$this->importDepartementsService->importDepartements($io);
 
-        //on importe les adresses (facturation et livraison)
-        $this->importAdressesService->importAdresses($io);
+
+        // //on importe les adresses (facturation et livraison)
+        // $this->importAdressesService->importAdresses($io);
 
         //on crée user administrateur et adresse de retrait
-        // $this->CreationAdministrateurAdresseService->creationAdminAdresse($io);
+        $this->creationAdministrateurAdresseService->creationAdminAdresse($io);
 
         //on importe les documents
-        // $this->importDocumentsService->importDocuments($io);
+        $this->importDocumentsService->importDocuments($io);
 
         //on importe les ligne boite des documents
-        //$this->importDocumentsLignesService->importDocumentsLigneBoites($io);
+        $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
 
         //on importe les lignes occasion des documents
-        //$this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
+        $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
 
         return Command::SUCCESS;
     }

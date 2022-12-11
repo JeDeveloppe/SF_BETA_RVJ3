@@ -148,7 +148,7 @@ class ImportVillesService
         ->setVilleCodePostal($arrayVille['ville_code_postal'])
         ->setVilleDepartement($arrayVille['ville_departement'])
         ->setPays($arrayVille['pays'])
-        ->setDepartement($this->departementRepository->findOneBy(['id' => $arrayVille['departement_id']]))
+        ->setDepartement($this->departementRepository->findOneBy(['id' => $arrayVille['departement_id']]) ?? $this->departementRepository->findOneBy(['id' => 14]))
         ->setRvj2Id($arrayVille['id']);
 
         return $ville;

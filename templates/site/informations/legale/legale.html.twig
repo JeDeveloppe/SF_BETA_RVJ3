@@ -171,7 +171,7 @@
 
                                     <p id="cgvAdhesion" class="mt-4">Adhésion:</p>
                                     
-                                    Le service fonctionne avec un système d’adhésion. Pour toute première commande, une adhésion au service de 2€ est facturée. Cette adhésion est valable 1 an, de date à date. La date de début correspond à la date du premier achat. Cette adhésion n’est pas facturée pour les commandes suivantes passées durant l’année. Après expiration au bout d’1 an, l’adhésion est de nouveau facturée lors de l’achat suivant.
+                                    Le service fonctionne avec un système d’adhésion. Pour toute première commande, une adhésion au service de {{ (infosAndConfig['config'].cost * infosAndConfig['legales'].tauxTva / 100) | number_format(2, ',', '.') }}€ est facturée. Cette adhésion est valable 1 an, de date à date. La date de début correspond à la date du premier achat. Cette adhésion n’est pas facturée pour les commandes suivantes passées durant l’année. Après expiration au bout d’1 an, l’adhésion est de nouveau facturée lors de l’achat suivant.
 
                                     Cette adhésion permet de prendre en charge une partie des frais liés à la plateforme de paiement en ligne. Elle représente également un soutien au projet et valorise le temps consacré par nos équipes à la valorisation des jeux.
                                 </ol>

@@ -9,18 +9,22 @@ use App\Repository\PaysRepository;
 use App\Repository\UserRepository;
 use App\Repository\VilleRepository;
 use App\Repository\AdresseRepository;
+use App\Repository\DocumentRepository;
+use App\Service\DocumentService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class CreationAdministrateurAdresseService
 {
     public function __construct(
         private AdresseRepository $adresseRepository,
         private UserRepository $userRepository,
-        private EntityManagerInterface $em,
+        private EntityManagerInterface $manager,
         private PaysRepository $paysRepository,
-        private VilleRepository $villeRepository
+        private DocumentService $documentService,
+        private VilleRepository $villeRepository,
+        private UserPasswordHasherInterface $userPasswordHasher
         ){
     }
 
