@@ -3,10 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Occasion;
-use App\Form\OccasionType;
-use App\Form\AdminSearchBoiteType;
+use App\Form\Admin\OccasionType;
+use App\Form\Admin\AdminSearchBoiteType;
 use App\Repository\BoiteRepository;
-use App\Form\OccasionStatutChangeType;
 use App\Repository\OccasionRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;

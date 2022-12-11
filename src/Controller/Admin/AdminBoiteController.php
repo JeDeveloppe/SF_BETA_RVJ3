@@ -4,9 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Boite;
 use DateTimeImmutable;
-use App\Form\BoiteType;
+use App\Form\Admin\BoiteType;
 use App\Form\SearchBoiteType;
-use App\Form\AdminSearchBoiteType;
+use App\Form\Admin\AdminSearchBoiteType;
 use App\Repository\BoiteRepository;
 use App\Service\Utilities;
 use Doctrine\ORM\EntityManagerInterface;

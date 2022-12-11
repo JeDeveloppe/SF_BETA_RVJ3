@@ -62,6 +62,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
+    
+    public function findUsersInDatabase($recherche){
+        return $this->createQueryBuilder('u')
+        ->join('u.adresses', 'a')
+        ->orWhere('u.email LIKE :val')
+        ->orWhere('u.phone LIKE :val')
+        ->orWhere('a.firstName LIKE :val')
+        ->orWhere('a.lastName LIKE :val')
+        ->setParameter('val', '%'.$recherche.'%')
+        ->andWhere('a.isFacturation = :facturation')
+        ->setParameter('facturation', true)
+        ->orderBy('a.firstName', 'ASC')
+        ->getQuery()
+        ->getResult()
+    ;
+    }
+
     public function findUsersByNameAsc(){
         return $this->createQueryBuilder('u')
         ->join('u.adresses', 'a')

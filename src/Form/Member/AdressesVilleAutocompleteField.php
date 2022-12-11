@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Member;
 
 use App\Entity\Ville;
 use App\Repository\VilleRepository;

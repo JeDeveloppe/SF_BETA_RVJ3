@@ -3,8 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Partenaire;
-use App\Form\PartenaireType;
-use App\Repository\DepartementRepository;
+use App\Form\Admin\PartenaireType;
 use App\Repository\PartenaireRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

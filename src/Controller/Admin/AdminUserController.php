@@ -3,7 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use App\Form\AdminUserType;
+use App\Form\Admin\AdminSearchUserType;
+use App\Form\Admin\AdminUserType;
 use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,19 +15,41 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/admin/user')]
 class AdminUserController extends AbstractController
 {
-    #[Route('/', name: 'app_admin_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository, PaginatorInterface $paginator): Response
+    #[Route('/', name: 'app_admin_user_index', methods: ['GET','POST'])]
+    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        $donnees = $userRepository->findUsersByNameAsc();
+        $form = $this->createForm(AdminSearchUserType::class);
+        $form->handleRequest($request);
 
-        $users = $paginator->paginate(
-            $donnees, /* query NOT result */
-            1, /*page number*/
-            25 /*limit per page*/
-        );
+        //si on faite une recherche
+        if(!is_null($form->get('recherche')->getData())){
+            $recherche = str_replace(" ","%",$form->get('recherche')->getData());
+            $donnees = $userRepository->findUsersInDatabase($recherche);
+
+            $users = $paginator->paginate(
+                $donnees, /* query NOT result */
+                1, /*page number*/
+                1000 /*limit per page*/
+            );
+
+            unset($form);
+            $form = $this->createForm(AdminSearchUserType::class);
+            
+        }else{
+
+            $donnees = $userRepository->findUsersByNameAsc();
+            
+            $users = $paginator->paginate(
+                $donnees, /* query NOT result */
+                1, /*page number*/
+                25 /*limit per page*/
+            );
+
+        }
 
         return $this->render('admin/user/index.html.twig', [
-            'users' => $users
+            'users' => $users,
+            'form' => $form->createView()
         ]);
     }
 

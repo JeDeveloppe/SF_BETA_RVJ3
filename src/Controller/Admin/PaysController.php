@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Pays;
-use App\Form\PaysType;
+use App\Form\Admin\PaysType;
 use App\Repository\PaysRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

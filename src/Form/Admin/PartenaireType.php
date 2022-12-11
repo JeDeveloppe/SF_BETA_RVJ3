@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Admin;
 
 use App\Entity\Partenaire;
 use App\Repository\PaysRepository;
 use App\Repository\VilleRepository;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\DepartementRepository;
-use App\Form\PartenaireVilleAutocompleteField;
+use App\Form\Admin\PartenaireVilleAutocompleteField;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;

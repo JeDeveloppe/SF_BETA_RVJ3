@@ -3,7 +3,7 @@
 namespace App\Controller\Member;
 
 use App\Entity\Adresse;
-use App\Form\AdresseType;
+use App\Form\Member\AdresseType;
 use App\Repository\PanierRepository;
 use App\Repository\AdresseRepository;
 use Symfony\Component\HttpFoundation\Request;

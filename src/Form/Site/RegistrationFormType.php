@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Site;
 
 use App\Entity\Pays;
-use App\Entity\User;
 use App\Entity\Ville;
-use App\Repository\PaysRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\VilleRepository;
 use Symfony\Component\Form\FormInterface;
-use App\Repository\VilleBelgiqueRepository;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\IsTrue;

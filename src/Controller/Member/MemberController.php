@@ -2,7 +2,7 @@
 
 namespace App\Controller\Member;
 
-use App\Form\UserType;
+use App\Form\Site\UserType;
 use App\Service\DocumentService;
 use App\Repository\UserRepository;
 use App\Repository\PanierRepository;

@@ -4,7 +4,7 @@ namespace App\Controller\Site;
 
 use App\Entity\User;
 use DateTimeImmutable;
-use App\Form\RegistrationFormType;
+use App\Form\Site\RegistrationFormType;
 use App\Repository\InformationsLegalesRepository;
 use App\Repository\PanierRepository;
 use Doctrine\ORM\EntityManagerInterface;

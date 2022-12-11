@@ -2,7 +2,7 @@
 
 namespace App\Controller\Site;
 
-use App\Form\ContactType;
+use App\Form\Site\ContactType;
 use App\Repository\BoiteRepository;
 use App\Repository\ConfigurationRepository;
 use App\Service\MailerService;

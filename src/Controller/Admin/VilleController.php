@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Ville;
-use App\Form\VilleType;
+use App\Form\Admin\VilleType;
 use App\Repository\VilleRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;

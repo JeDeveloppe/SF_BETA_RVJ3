@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Admin;
 
-use App\Entity\Paiement;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

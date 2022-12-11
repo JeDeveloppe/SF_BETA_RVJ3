@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\InformationsLegales;
-use App\Form\InformationsLegalesType;
+use App\Form\Site\InformationsLegalesType;
 use App\Repository\InformationsLegalesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

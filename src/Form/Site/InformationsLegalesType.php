@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Site;
 
 use App\Entity\Pays;
 use App\Entity\InformationsLegales;

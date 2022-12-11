@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Configuration;
-use App\Form\ConfigurationType;
+use App\Form\Admin\ConfigurationType;
 use App\Repository\ConfigurationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
