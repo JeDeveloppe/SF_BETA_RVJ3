@@ -22,7 +22,7 @@ class AdminUserController extends AbstractController
         $form->handleRequest($request);
 
         //si on faite une recherche
-        if(!is_null($form->get('recherche')->getData())){
+        if(!is_null($form->get('recherche')->getData()) && strlen($form->get('recherche')->getData()) > 2){
             $recherche = str_replace(" ","%",$form->get('recherche')->getData());
             $donnees = $userRepository->findUsersInDatabase($recherche);
 

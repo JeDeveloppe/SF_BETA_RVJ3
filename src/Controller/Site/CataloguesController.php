@@ -52,7 +52,7 @@ class CataloguesController extends AbstractController
         $boites = NULL;
 
         //si on faite une recherche
-        if(!is_null($formBoiteSearch->get('searchBoite')->getData())){
+        if(!is_null($formBoiteSearch->get('searchBoite')->getData()) && strlen($formBoiteSearch->get('searchBoite')->getData()) > 2){
             $recherche = str_replace(" ","%",$formBoiteSearch->get('searchBoite')->getData());
             $donnees = $boiteRepository->findBoiteInDatabase($recherche);
 
