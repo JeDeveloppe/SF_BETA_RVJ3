@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminDocumentsController extends AbstractController
@@ -29,7 +30,9 @@ class AdminDocumentsController extends AbstractController
         private PaginatorInterface $paginator,
         private DocumentRepository $documentRepository,
         private DocumentLignesRepository $documentLignesRepository,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private UserRepository $userRepository,
+        private PanierRepository $panierRepository
     )
     {
     }
@@ -69,6 +72,7 @@ class AdminDocumentsController extends AbstractController
                 'occasions' => $occasions,
                 'boites' => $boites,
                 'tva' => $tva,
+                'demande' => $slug,
                 'configurationSite' => $configurationRepository->findAll(),
                 'totalOccasions' => $totalOccasions
             ]);
@@ -274,7 +278,7 @@ class AdminDocumentsController extends AbstractController
 
         $form = $this->createForm(DocumentPaiementType::class);
         $form->handleRequest($request);
-      
+
         if($form->isSubmitted() && $form->isValid()) {
             
             $date =$form->get('date')->getData();
@@ -335,7 +339,7 @@ class AdminDocumentsController extends AbstractController
 
         $this->em->persist($devis);
         $this->em->flush();
-       
+
         //on signal le changement
         $this->addFlash('success', 'État du document mis à jour!');
         return $this->redirect($request->headers->get('referer'));
@@ -385,8 +389,8 @@ class AdminDocumentsController extends AbstractController
         $host = $request->getSchemeAndHttpHost();
         $link = $request->getSchemeAndHttpHost().$this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);
 
-
-            $mailerService->sendEmailWithTemplate(
+            //on envoie le mail pour dire que le devis est disponible
+            $mailerService->sendEmailDevisDisponible(
                 $devis->getUser()->getEmail(),
                 $compteSmtp,
                 "Devis ".$configurations[0]->getPrefixeDevis().$devis->getNumeroDevis()." disponible jusqu'au ".$devis->getEndValidationDevis()->format('d-m-Y'),
@@ -402,7 +406,7 @@ class AdminDocumentsController extends AbstractController
         return $this->redirect($request->headers->get('referer'));
     }
 
-     /**
+    /**
      * @Route("admin/email/relance-devis/{token}/", name="admin_relance_devis")
      */
     public function relanceDevisDeXJours(
@@ -414,35 +418,31 @@ class AdminDocumentsController extends AbstractController
         ): Response
     {
 
-            $compteSmtp = $this->getParameter('COMPTESMTP');
-            $configurations = $configurationRepository->findAll();
+        $compteSmtp = $this->getParameter('COMPTESMTP');
+        $configuration = $configurationRepository->findOneBy([]);
 
-            if(count($configurations) < 1){
-                $delaiDevis = 2; //on relance de 2 jours minimum par defaut
-            }else{
-                $delaiDevis = $configurations[0]->getDevisDelayBeforeDelete();
-            }
+        $delaiDevis = $configuration->getDevisDelayBeforeDelete();
 
-            //on cherche le devis par le token
-            $devis = $this->documentRepository->findOneBy(['token' => $token]);
+        //on cherche le devis par le token
+        $devis = $this->documentRepository->findOneBy(['token' => $token]);
 
-            //on recupere la date du jour et on ajoute X jours
-            $now = new DateTimeImmutable();
-            $endDevis = $now->add(new DateInterval('P'.$delaiDevis.'D'));
-            
-            $devis->setEndValidationDevis($endDevis)
-                ->setIsRelanceDevis(1);
-
-            $em->persist($devis);
-            $em->flush();
+        //on recupere la date du jour et on ajoute X jours
+        $now = new DateTimeImmutable();
+        $endDevis = $now->add(new DateInterval('P'.$delaiDevis.'D'));
         
-            $host = $request->getSchemeAndHttpHost();
-            $link = $request->getSchemeAndHttpHost().$this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);
+        $devis->setEndValidationDevis($endDevis)
+            ->setIsRelanceDevis(true);
+
+        $em->persist($devis);
+        $em->flush();
     
-        $mailerService->sendEmailWithTemplate(
+        $host = $request->getSchemeAndHttpHost();
+        $link = $request->getSchemeAndHttpHost().$this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);
+    
+        $mailerService->sendEmailDevisDisponible(
             $devis->getUser()->getEmail(),
             $compteSmtp,
-            "Rappel devis ".$configurations[0]->getPrefixeDevis().$devis->getNumeroDevis()." disponible jusqu'au ".$devis->getEndValidationDevis()->format('d-m-Y'),
+            "Rappel devis ".$configuration->getPrefixeDevis().$devis->getNumeroDevis()." disponible jusqu'au ".$devis->getEndValidationDevis()->format('d-m-Y'),
             'email/relance_devis.html.twig',
             [
                 'link' => $link,
@@ -455,4 +455,52 @@ class AdminDocumentsController extends AbstractController
         $this->addFlash('success', 'Devis relancer de '.$delaiDevis.' jours!');
         return $this->redirect($request->headers->get('referer'));
     }
+
+    
+   /**
+     * @Route("/admin/email/prevenir-devis-pas-de-pieces/{user}/{demande}/", name="admin_prevenir_devis_pas_de_pieces")
+     */
+    public function adminPrevenirDevisPasDePieces(
+        $user,
+        $demande,
+        Request $request,
+        MailerService $mailerService,
+        )
+    {
+
+        $occasionsInPanier = $this->panierRepository->findIfOccasionIsInDemandePanier($user,$demande);
+
+        if(count($occasionsInPanier) > 0){
+            $this->addFlash('warning', 'Imposible => Il y a au moins un occasion dans la demande...!!!');
+            return $this->redirect($request->headers->get('referer'));
+        }
+
+        //on cherches les lignes de panier avec que des demandes de pieces
+        $paniers = $this->panierRepository->findBy(['user' => $user, 'etat' => $demande]);
+
+        $compteSmtp = $this->getParameter('COMPTESMTP');
+        $user = $this->userRepository->findOneBy(['id' => $user]);
+
+        $host = $request->getSchemeAndHttpHost();
+        $link = $request->getSchemeAndHttpHost().$this->generateUrl('accueil');
+
+            //on envoie le mail pour dire que le devis est disponible
+            $mailerService->sendEmailDevisDisponible(
+                $user->getEmail(),
+                $compteSmtp,
+                "Désolé...",
+                'email/devis_pas_de_pieces.html.twig',
+                [
+                    'link' => $link,
+                    'host' => $host
+                ]
+            );
+
+        //on supprime les entree du panier
+        $this->documentService->deletePanierFromUser($paniers);
+
+        $this->addFlash('success', 'Mail envoyé pour prévenir que le service n\a pas de pièces détachées!');
+        return $this->redirect($request->headers->get('referer'));
+    }
+
 }

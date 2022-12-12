@@ -112,7 +112,7 @@
                     <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Créer le devis</button>
                     <input type="hidden" name="user" value="{{ paniers[0].user.id }}">
                     <input type="hidden" name="demande" value="{{ paniers[0].etat }}">
-                    <a class="btn btn-lg btn-outline-warning" href="">Envoyer mail pas de pièces</a>
+                    <a class="btn btn-lg btn-outline-warning" href="{{ path('admin_prevenir_devis_pas_de_pieces', {'user': paniers[0].user.id, 'demande': demande }) }}">Envoyer email pas de pièces</a>
                 </div>
             </div>
         </div>

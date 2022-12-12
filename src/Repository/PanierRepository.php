@@ -51,7 +51,8 @@ class PanierRepository extends ServiceEntityRepository
             ->where('p.'.$columnName.' IS NOT NULL')
             ->andWhere('p.etat = :etat')
             ->setParameter('etat', 'panier')
-            ->andWhere('p.user = '.$user->getId())
+            ->andWhere('p.user = :user')
+            ->setParameter('user', $user->getId())
             ->getQuery()
             ->getResult()
         ;
@@ -62,6 +63,19 @@ class PanierRepository extends ServiceEntityRepository
             ->groupBy('p.etat')
             ->where('p.etat != :etat')
             ->setParameter('etat', 'panier')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findIfOccasionIsInDemandePanier($user, $demande)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.boite IS NULL')
+            ->andWhere('p.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('p.etat = :etat')
+            ->setParameter('etat', $demande)
             ->getQuery()
             ->getResult()
         ;

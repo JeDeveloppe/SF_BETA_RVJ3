@@ -19,23 +19,20 @@ use App\Repository\InformationsLegalesRepository;
 
 class MailerService
 {
-
-    private $mailer;
-
-
-    public function __construct(MailerInterface $mailer)
+    public function __construct(
+        private MailerInterface $mailer
+        )
     {
-        $this->mailer = $mailer;
     }
 
-    public function sendEmailWithTemplate($destinataire, $from, $sujet, $template, $parametres)
+    public function sendEmailDevisDisponible($destinataire, $from, $sujet, $template, $parametres)
     {
         $email = (new TemplatedEmail())
             ->from($from)
             ->to($destinataire)
             ->replyTo($from)
             ->subject($sujet)
-            ->htmlTemplate('email/devis_disponible.html.twig')
+            ->htmlTemplate($template)
             ->context($parametres);
     
         $this->mailer->send($email);

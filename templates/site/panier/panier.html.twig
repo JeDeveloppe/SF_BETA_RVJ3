@@ -146,10 +146,10 @@
                         {% for adresse in livraison_adresses %}
                             <option value="{{ adresse.id }} ">{{ adresse.lastName }} {{ adresse.firstName }} - {{ adresse.adresse }} - {{ adresse.ville.villeCodePostal }} {{ adresse.ville.villeNom }}</option>
                         {% endfor %}
-                        <option value="{{ adresseRetrait.id }}" selected >Retrait à: {{ adresseRetrait.lastName }} {{ adresseRetrait.firstName }} - {{ adresseRetrait.adresse }} - {{ adresseRetrait.ville.villeCodePostal }} {{ adresseRetrait.ville.villeNom }}</option>
+                        <option value="{{ adresseRetrait.id }}">Retrait à: {{ adresseRetrait.lastName }} {{ adresseRetrait.firstName }} - {{ adresseRetrait.adresse }} - {{ adresseRetrait.ville.villeCodePostal }} {{ adresseRetrait.ville.villeNom }}</option>
                     </select>
                     {% if livraison_adresses | length < 2 %}
-                        <div class="col-12 text-center">
+                        <div class="col-12 text-center py-2">
                             <a class="btn btn-primary" href="{{ path('app_adresse_new', {'slug': 'livraison'}) }}">Créer une adresse de livraison...</a>
                         </div>
                     {% endif %}
