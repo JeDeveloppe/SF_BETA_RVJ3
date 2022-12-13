@@ -3,7 +3,8 @@
 {% block title %}Devis (modifications){% endblock %}
 
 {% block body %}
-    {% set tva = devis.tauxTva %}
+    {% set tva = (devis.tauxTva / 100) + 1 %}
+    {% set totalLivraison = devis.totalLivraison %}
 
     {% set totalDetachees = totalDetachees %}
     {% set totalCostHT = cost %}
@@ -48,14 +49,14 @@
                             </select>
                         
                         </div>
-                        <div class="col-5"><input value="{% if devis.totalLivraison is defined %}{{ (devis.totalLivraison / 100) |number_format(2, '.', ',') }}{% endif %}" class="form-control" type="text" name="livraison" placeholder="Prix TTC... 0.00" pattern="^\d+(?:[.]\d{2})$" id="selectLivraison" onkeyup="calculDevis()" required /></div>
+                        <div class="col-5"><input value="{% if devis.totalLivraison is defined %}{{ (devis.totalLivraison / 100 * tva) |number_format(2, '.', ',') }}{% endif %}" class="form-control" type="text" name="livraison" placeholder="Prix TTC... 0.00" pattern="^\d+(?:[.]\d{2})$" id="selectLivraison" onkeyup="calculDevis()" required /></div>
                     </div>
                 </div>
             </div>
         </div>
 
 
-{% if devis.isDeleteByUser is null %}
+
 
     <div class="row justify-content-center my-5">
             <h3>Totaux:</h3>
@@ -103,7 +104,7 @@
 
                 {# PARTIE BOUTONS #}
                 {# si le devis n'est pas echu on affiche les boutons #}
-                {% if devis.endValidationDevis|date("m/d/Y") > "now"|date("m/d/Y") and devis.isDeleteByUser is null %}
+                {% if devis.endValidationDevis|date("m/d/Y") > "now"|date("m/d/Y") %}
                     <div class="col-6">
                         <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Sauvegarder</button>
                         <input type="hidden" name="user" value="{{ devis.user.id }}">
@@ -118,9 +119,10 @@
 
     <script>
         let tva = {{ tva }};
-        let totalOccasions = {{ totalOccasions * tva }};
-        let totalDetachees = {{ totalDetachees }};
-        let totalCostHT = {{ totalCostHT }};
+        let totalOccasions = {{ totalOccasions / 100 * tva }};
+        let totalDetachees = {{ totalDetachees * tva }};
+        let totalCostHT = {{ totalCostHT / 100 * tva }};
+        let totalLivraison = {{ totalLivraison / 100 * tva }};
 
 
         let divTotalOccasions = document.getElementById('totalOccasions');
@@ -216,5 +218,5 @@
 
     </script>
 
-{% endif %}
+
 {% endblock %}

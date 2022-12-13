@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
 use App\Repository\UserRepository;
+use App\Service\Utilities;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminDocumentsController extends AbstractController
@@ -32,7 +33,8 @@ class AdminDocumentsController extends AbstractController
         private DocumentLignesRepository $documentLignesRepository,
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
-        private PanierRepository $panierRepository
+        private PanierRepository $panierRepository,
+        private Utilities $utilities
     )
     {
     }
@@ -156,6 +158,7 @@ class AdminDocumentsController extends AbstractController
                 'devis' => $devis,
                 'occasions' => $occasions,
                 'boites' => $boites,
+                'tauxTva' => $this->utilities->calculTauxTva($devis->getTauxTva()),
                 'cost' => $devis->getCost(),
                 'totalOccasions' => $totalOccasions,
                 'totalDetachees' => $totalDetachees / 100,

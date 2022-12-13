@@ -14,7 +14,7 @@
                         </tr>
                         <tr>
                             <td>Ma réponse: {{ boite.reponse }}</td>
-                            <td class="text-end display-6">{{ (boite.prixVente / 100) |number_format(2, '.', ',') }} €</td>
+                            <td class="text-end display-6">{{ (boite.prixVente / 100 * tauxTva) |number_format(2, '.', ',') }} €</td>
                         </tr>
                     </tbody>
                 </table>

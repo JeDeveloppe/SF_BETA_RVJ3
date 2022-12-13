@@ -35,4 +35,26 @@ class Utilities
 
         return $infosAndConfig;
     }
+
+    public function calculTauxTva($taux){
+
+        $calculTauxTva = ($taux + 100) / 100;
+
+        if($calculTauxTva != 1){
+            $tauxTva = $calculTauxTva;
+        }else{
+            $tauxTva = 1; // pas de tva
+        }
+
+        return $tauxTva;
+    }
+
+    public function centsHtToCentsTTC($ht,$taux){
+
+        $tauxTva= $this->calculTauxTva($taux);
+
+        $ttc = round($ht * 100 / $tauxTva,2);
+
+        return $ttc;
+    }
 }

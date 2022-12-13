@@ -112,12 +112,15 @@ class SiteDocumentsController extends AbstractController
                 $totalDetachees = $totalDetachees + $boite->getPrixVente();
             }
 
+            $tauxTva = $this->utilities->calculTauxTva($devis[0]->getTauxTva());
+
             return $this->render('site/devis/lecture_devis.html.twig', [
                 'devis' => $devis,
                 'occasions' => $occasions,
                 'boites' => $boites,
-                'totalOccasions' => $totalOccasions,
-                'totalDetachees' => $totalDetachees,
+                'tauxTva' => $tauxTva,
+                'totalOccasions' => $totalOccasions * $tauxTva,
+                'totalDetachees' => $totalDetachees * $tauxTva,
                 'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);

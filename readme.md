@@ -19,7 +19,3 @@ PASSWORD_SMTP="SMTP_PASSWORD"
 MAILER_DSN=smtp://${COMPTE_SMTP}:${PASSWORD_SMTP}@${HOST_SMTP}:${PORT_SMTP}
 
 <!-- MISE EN ROUTE DU SITE -->
-register the admin
-in php my admin set role = ROLE_ADMIN
-
-configure infos legales and configuration

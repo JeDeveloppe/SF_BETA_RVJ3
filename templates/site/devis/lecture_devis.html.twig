@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    {% set tva = devis[0].tauxTva %}
+    {% set tva = tauxTva %}
     {% set totalDetachees = totalDetachees %}
     {% set disabled = "disabled" %}
 
@@ -61,22 +61,22 @@
                 {% if totalOccasions > 0 %}
                     <tr>
                         <td>Jeux d'occasion:</td>
-                        <td>{{ (totalOccasions / 100) |number_format(2, '.', ',') }} €</td>
+                        <td>{{ (totalOccasions / 100 ) |number_format(2, '.', ',') }} €</td>
                     </tr>
                 {% endif %}
                 {% if totalDetachees > 0 %}
                     <tr>
                         <td>Pièces détachées:</td>
-                        <td>{{ (totalDetachees / 100) |number_format(2, '.', ',') }} €</td>
+                        <td>{{ (totalDetachees / 100 ) |number_format(2, '.', ',') }} €</td>
                     </tr>
                 {% endif %}
                 <tr>
                     <td>Livraison/ Retrait:</td>
-                    <td>{{ (devis[0].totalLivraison / 100) |number_format(2, '.', ',') }} €</td>
+                    <td>{{ (devis[0].totalLivraison / 100 * tauxTva) |number_format(2, '.', ',') }} €</td>
                 </tr>
                 <tr>
                     <td>Adhésion au service:</td>
-                    <td>{{ (devis[0].cost / 100) |number_format(2, '.', ',') }} €</td>
+                    <td>{{ (devis[0].cost / 100 * tauxTva) |number_format(2, '.', ',') }} €</td>
                 </tr>
                 <tr>
                     <td>Total HT:</td>

@@ -26,7 +26,8 @@ class DocumentService
         private MethodeEnvoiRepository $methodeEnvoiRepository,
         private UserRepository $userRepository,
         private PanierRepository $panierRepository,
-        private ConfigurationRepository $configurationRepository
+        private ConfigurationRepository $configurationRepository,
+        private Utilities $utilities
         )
     {
     }
@@ -97,7 +98,7 @@ class DocumentService
         $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
         $configuration = $this->configurationRepository->findOneBy([]);
 
-        $tva = $informationsLegales->getTauxTva();
+        $taux = $informationsLegales->getTauxTva();
 
         //ON genere un nouveau numero
         $newNumero = $this->generateNewNumberOf("numeroDevis", "getNumeroDevis");
@@ -111,8 +112,8 @@ class DocumentService
                 ->setCreatedAt($now)
                 ->setTotalTTC($request->request->get('totalGeneralTTC') * 100)
                 ->setTotalHT($request->request->get('totalGeneralHT') * 100)
-                ->setTauxTva($tva)
-                ->setTotalLivraison($request->request->get('totalLivraisonTTC') * 100)
+                ->setTauxTva($this->utilities->calculTauxTva($taux))
+                ->setTotalLivraison($this->utilities->centsHtToCentsTTC($request->request->get('totalLivraisonTTC'),$taux))
                 ->setIsRelanceDevis(false)
                 ->setIsDeleteByUser(false)
                 ->setAdresseFacturation($paniers[0]->getFacturation())
@@ -120,6 +121,7 @@ class DocumentService
                 ->setToken($this->generateRandomString())
                 ->setNumeroDevis($newNumero)
                 ->setEndValidationDevis($endDevis)
+                ->setCost($this->utilities->centsHtToCentsTTC($request->request->get('totalCostTTC'),$taux))
                 ->setEnvoi($this->methodeEnvoiRepository->find($request->request->get('envoi')));
 
         $this->em->persist($document);
@@ -137,7 +139,7 @@ class DocumentService
             $documentLigne->setBoite($panier->getBoite())
                           ->setDocument($document)
                           ->setMessage($panier->getMessage())
-                          ->setPrixVente($lignesDemandeBoitePrix[$key] * 100)
+                          ->setPrixVente($this->utilities->centsHtToCentsTTC($lignesDemandeBoitePrix[$key],$taux))
                           ->setReponse($lignesDemandeBoiteReponse[$key]);
             $this->em->persist($documentLigne);
         }
