@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Form\Site;
+namespace App\Form\Admin;
 
 use App\Entity\Pays;
 use App\Entity\InformationsLegales;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class InformationsLegalesType extends AbstractType
@@ -22,7 +23,7 @@ class InformationsLegalesType extends AbstractType
             ->add('societeWebmaster')
             ->add('nomWebmaster')
             ->add('hebergeurSite')
-            ->add('tauxTva')
+            ->add('tauxTva', NumberType::class)
             ->add('country', EntityType::class, [
                 'class' => Pays::class,
                 'choice_label' => 'name'

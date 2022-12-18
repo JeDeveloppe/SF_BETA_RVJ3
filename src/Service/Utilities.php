@@ -38,23 +38,16 @@ class Utilities
 
     public function calculTauxTva($taux){
 
-        $calculTauxTva = ($taux + 100) / 100;
+        return ($taux + 100) / 100;
 
-        if($calculTauxTva != 1){
-            $tauxTva = $calculTauxTva;
-        }else{
-            $tauxTva = 1; // pas de tva
-        }
-
-        return $tauxTva;
     }
 
-    public function centsHtToCentsTTC($ht,$taux){
+    public function prixTtcToCentsHt($ttc,$taux){
 
-        $tauxTva= $this->calculTauxTva($taux);
+        $tauxTva = $this->calculTauxTva($taux);
 
-        $ttc = round($ht * 100 / $tauxTva,2);
+        $ht = round($ttc * 100 / $tauxTva,2);
 
-        return $ttc;
+        return $ht;
     }
 }

@@ -97,12 +97,12 @@ class Configuration
     private $autrePiece;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=50)
      */
     private $enveloppe_simple;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=50)
      */
     private $enveloppe_bulle;
 
@@ -260,24 +260,24 @@ class Configuration
         return $this;
     }
 
-    public function getEnveloppeSimple(): ?int
+    public function getEnveloppeSimple(): ?string
     {
         return $this->enveloppe_simple;
     }
 
-    public function setEnveloppeSimple(int $enveloppe_simple): self
+    public function setEnveloppeSimple(string $enveloppe_simple): self
     {
         $this->enveloppe_simple = $enveloppe_simple;
 
         return $this;
     }
 
-    public function getEnveloppeBulle(): ?int
+    public function getEnveloppeBulle(): ?string
     {
         return $this->enveloppe_bulle;
     }
 
-    public function setEnveloppeBulle(int $enveloppe_bulle): self
+    public function setEnveloppeBulle(string $enveloppe_bulle): self
     {
         $this->enveloppe_bulle = $enveloppe_bulle;
 

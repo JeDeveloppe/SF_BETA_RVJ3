@@ -6,7 +6,7 @@
     {% set tva = tva %}
 
     {% if paniers[0].user.membership < date('now') %}
-        {% set totalCostTTC = (configurationSite[0].cost / 100 * tva) | round(2,'ceil') %}
+        {% set totalCostTTC = (configurationSite[0].cost) | round(2,'ceil') %}
     {% else %}
         {% set totalCostTTC = 0 %}
     {% endif %}
@@ -49,10 +49,15 @@
                     <div class="my-3 col-12 d-flex justify-content-around align-items-center">
                         <div class="col-6 text-center">
                             <select name="envoi" required>
-                                <option value="">Choisissez un mode d'envoi / retrait...</option>
-                                <option value="1">Envoi par la poste</option>
-                                <option value="2">Envoi par Colissimo</option>
-                                <option value="3">Retrait à la COOP 5 pour 100 à Caen</option>
+                                {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
+                                {% if occasions | length > 0 %}
+                                    <option value="3">Retrait à la COOP 5 pour 100 à Caen</option>
+                                {% else %}
+                                    <option value="">Choisissez un mode d'envoi / retrait...</option>
+                                    <option value="1">Envoi par la poste</option>
+                                    <option value="2">Envoi par Colissimo</option>
+                                    <option value="3">Retrait à la COOP 5 pour 100 à Caen</option>
+                                {% endif %}
                             </select>
                         
                         </div>

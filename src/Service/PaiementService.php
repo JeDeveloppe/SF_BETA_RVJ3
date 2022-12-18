@@ -5,8 +5,6 @@ namespace App\Service;
 use Exception;
 use DateInterval;
 use Stripe\Stripe;
-use Payplug\Payment;
-use Payplug\Payplug;
 use DateTimeImmutable;
 use App\Entity\Paiement;
 use Stripe\Checkout\Session;
@@ -14,8 +12,10 @@ use App\Repository\DocumentRepository;
 use App\Repository\PaiementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class PaiementService
 {
@@ -28,6 +28,8 @@ class PaiementService
         private UrlGeneratorInterface $urlGeneratorInterface,
         private PaiementRepository $paiementRepository,
         private Security $security,
+        private FlashBagInterface $flashBagInterface,
+        private RouterInterface $router
         ){
     }
 
@@ -81,12 +83,13 @@ class PaiementService
     public function creationPaiementWithPayplug($token)
     {
 
-        $document = $this->documentRepository->findOneBy(['token' => $token, 'numeroFacture' => NULL, 'paiement' => NULL, 'isDeleteByUser' => null]);
+        $document = $this->documentRepository->findOneBy(['token' => $token, 'numeroFacture' => NULL, 'isDeleteByUser' => false]);
 
         if(!$document){
             //pas de devis
-            $this->session->getFlashBag->add('warning', 'Devis inconnu!');
-            return $this->urlMatcherInterface->redirectToRoute('accueil');
+            // $this->flashBagInterface->getFlashBag->add('warning', 'Devis inconnu!');
+            $this->flashBagInterface->add('warning', 'Devis inconnu!');
+            return $this->router->generate('accueil');
         }
 
         //on s'identifie

@@ -10,6 +10,7 @@ use App\Service\MailerService;
 use App\Form\Admin\SearchDocumentType;
 use App\Service\DocumentService;
 use App\Form\Admin\DocumentPaiementType;
+use App\Form\Admin\MethodeEnvoiType;
 use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -57,7 +58,7 @@ class AdminDocumentsController extends AbstractController
             return $this->redirectToRoute('admin_accueil');
         }else{
             $informationsLegales = $informationsLegalesRepository->findOneBy([]);
-            $tva = $informationsLegales->getTauxTva();
+            $tva = $this->utilities->calculTauxTva($informationsLegales->getTauxTva());
 
             $occasions = $panierRepository->findBy(['etat' => $slug, 'boite' => null]);
             $boites = $panierRepository->findBy(['etat' => $slug, 'occasion' => null]);
@@ -116,10 +117,11 @@ class AdminDocumentsController extends AbstractController
     }
 
     /**
-     * @Route("/admin/document/devis/lecture-devis/{numeroDevis}", name="lecture_devis")
+     * @Route("/admin/document/devis/lecture-devis/{numeroDevis}/", name="lecture_devis")
      */
     public function lectureDevis(
         $numeroDevis,
+        Request $request
         ): Response
     {
 
@@ -131,6 +133,8 @@ class AdminDocumentsController extends AbstractController
             return $this->redirectToRoute('admin_accueil');
         }else{
 
+            $form = $this->createForm(MethodeEnvoiType::class, ['methodeEnvoi' => $devis->getEnvoi()]);
+            $form->handleRequest($request);
             $moreRecentDevis = $this->documentRepository->findAMoreRecentDevis($numeroDevis);
 
             if(count($moreRecentDevis) == 1){
@@ -158,11 +162,12 @@ class AdminDocumentsController extends AbstractController
                 'devis' => $devis,
                 'occasions' => $occasions,
                 'boites' => $boites,
-                'tauxTva' => $this->utilities->calculTauxTva($devis->getTauxTva()),
+                'tva' => $this->utilities->calculTauxTva($devis->getTauxTva()),
                 'cost' => $devis->getCost(),
                 'totalOccasions' => $totalOccasions,
                 'totalDetachees' => $totalDetachees / 100,
-                'suppressionDevis' => $suppressionDevis
+                'suppressionDevis' => $suppressionDevis,
+                'form' => $form->createView()
             ]);
         }
     }

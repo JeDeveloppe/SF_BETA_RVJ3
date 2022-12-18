@@ -58,7 +58,7 @@ class InformationsLegales
     private $hebergeurSite;
 
     /**
-     * @ORM\Column(type="decimal", precision=3, scale=2)
+     * @ORM\Column(type="integer")
      */
     private $tauxTva;
 

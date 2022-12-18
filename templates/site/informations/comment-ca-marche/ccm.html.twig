@@ -133,11 +133,11 @@
                                 </tr>
                                 <tr>
                                     <td>Enveloppe simple</td>
-                                    <td class="text-center">{{ (infosAndConfig.config.enveloppeSimple  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.') }}</td>
+                                    <td class="text-center">{{ (infosAndConfig.config.enveloppeSimple) | number_format(2, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Enveloppe à bulles</td>
-                                    <td class="text-center">A partir de {{ (infosAndConfig.config.enveloppeBulle  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.') }}</td>
+                                    <td class="text-center">A partir de {{ (infosAndConfig.config.enveloppeBulle) | number_format(2, ',', '.') }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -171,25 +171,25 @@
                                 <tr>
                                     <td>Grand plateau de jeu / support de jeu en bois</td>
                                     <td class="text-center">
-                                        {{ (infosAndConfig.config.grandPlateauBois  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.') }}
+                                        {{ (infosAndConfig.config.grandPlateauBois) | number_format(2, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Grand plateau de jeu / support de jeu en carton ou en plastique</td>
                                     <td class="text-center">
-                                        {{ (infosAndConfig.config.grandPlateauPlastique  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.')}}
+                                        {{ (infosAndConfig.config.grandPlateauPlastique) | number_format(2, ',', '.')}}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Petit plateau de jeu / support de jeu en bois</td>
                                     <td class="text-center">
-                                        {{ (infosAndConfig.config.petitPlateauBois  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.') }}
+                                        {{ (infosAndConfig.config.petitPlateauBois) | number_format(2, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Petit plateau de jeu / support de jeu en carton ou en plastique</td>
                                     <td class="text-center">
-                                        {{ (infosAndConfig.config.petitPlateauPlastique  / 100 * infosAndConfig.legales.tauxTva) | number_format(2, ',', '.') }}
+                                        {{ (infosAndConfig.config.petitPlateauPlastique) | number_format(2, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>

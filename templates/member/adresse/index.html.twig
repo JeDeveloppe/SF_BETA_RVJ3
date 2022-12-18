@@ -34,6 +34,14 @@
         </div>
     </div>
 
+    {% if panier | length > 0 %}
+        <div class="row my-2">
+            <div class="col-12 text-center">
+                <a class="btn btn-secondary" href="{{ path('app_panier') }}">Retourner au panier</a>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="row my-5 card py-2" id="livraison">
         <div class="col-11 mx-auto">
             <table class="table align-middle">

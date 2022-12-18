@@ -111,7 +111,8 @@ class DocumentRepository extends ServiceEntityRepository
             ->andWhere('d.numeroFacture IS NULL')
             ->andWhere('d.endValidationDevis > :now')
             ->setParameter('now', new DateTimeImmutable('now'))
-            ->andWhere('d.isDeleteByUser IS NULL')
+            ->andWhere('d.isDeleteByUser = :false')
+            ->setParameter('false', false)
             ->orderBy('d.id', 'DESC')
             ->getQuery()
             ->getResult()
@@ -153,7 +154,6 @@ class DocumentRepository extends ServiceEntityRepository
         ->andWhere('d.numeroFacture IS NULL')
         ->andWhere('d.isDeleteByUser = :deleted')
         ->setParameter('deleted', false)
-        ->andWhere('d.paiement IS NULL')
         ->getQuery()
         ->getResult()
     ;  

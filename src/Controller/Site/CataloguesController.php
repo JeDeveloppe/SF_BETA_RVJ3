@@ -187,11 +187,13 @@ class CataloguesController extends AbstractController
 
         //dans tous les cas on cherches les partenaires avec un site web
         $partenaires = $partenaireRepository->findBy(['isComplet' => true, 'isOnLine' => true]);
+        $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
 
         return $this->render('site/catalogues/catalogue_jeux_occasion.html.twig', [
             'occasions' => $occasions,
             'form' => $form->createView(),
-            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
+            'infosAndConfig' => $infosAndConfig,
+            'tva' => $this->utilities->calculTauxTva($infosAndConfig['legales']->getTauxTva()),
             'partenaires' => $partenaires,
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
@@ -203,8 +205,7 @@ class CataloguesController extends AbstractController
     public function catalogueJeuxOccasionDetails(EntityManagerInterface $entityManager, $id, $slug): Response
     {
 
-        $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
-        $tva = $informationsLegales->getTauxTva();
+        $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
 
         $occasion = $entityManager
         ->getRepository(Occasion::class)
@@ -228,8 +229,8 @@ class CataloguesController extends AbstractController
 
             return $this->render('site/catalogues/catalogue_jeux_occasion_details.html.twig', [
                 'occasion' => $occasion,
-                'tva' => $tva,
-                'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
+                'infosAndConfig' => $infosAndConfig,
+                'tva' => $this->utilities->calculTauxTva($infosAndConfig['legales']->getTauxTva()),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);
         }

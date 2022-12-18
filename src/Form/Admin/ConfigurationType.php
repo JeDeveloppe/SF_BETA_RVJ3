@@ -24,19 +24,19 @@ class ConfigurationType extends AbstractType
                 'label' => 'Préfixe des devis:'
             ])
             ->add('cost', NumberType::class, [
-                'label' => 'Prix de l\' adhésion (en cents HT):'
+                'label' => 'Prix de l\' adhésion (TTC):'
             ])
             ->add('grandPlateauBois', TextType::class, [
-                'label' => 'Prix du grand plateau / support en bois (en cents HT):'
+                'label' => 'Prix du grand plateau / support en bois (TTC):'
             ])
             ->add('grandPlateauPlastique', TextType::class, [
-                'label' => 'Prix du grand plateau / support en plastique (en cents HT):'
+                'label' => 'Prix du grand plateau / support en plastique (TTC):'
             ])
             ->add('petitPlateauBois', TextType::class, [
-                'label' => 'Prix du petit plateau / support en bois (en cents HT):'
+                'label' => 'Prix du petit plateau / support en bois (TTC):'
             ])
             ->add('petitPlateauPlastique', TextType::class, [
-                'label' => 'Prix du petit plateau / support en plastique (en cents HT):'
+                'label' => 'Prix du petit plateau / support en plastique (TTC):'
             ])
             ->add('pieceUnique', TextType::class, [
                 'label' => 'Prix de la pièce unique dans un jeu:'
@@ -51,10 +51,10 @@ class ConfigurationType extends AbstractType
                 'label' => 'Prix des autres pièces:'
             ])
             ->add('enveloppeSimple', NumberType::class, [
-                'label' => 'Prix de l\' enveloppe simple (en cents HT):'
+                'label' => 'Prix de l\' enveloppe simple (TTC):'
             ])
             ->add('enveloppeBulle', NumberType::class, [
-                'label' => 'Prix de l\' enveloppe à bulles (en cents HT):'
+                'label' => 'Prix de l\' enveloppe à bulles (TTC):'
             ])
             ->add('holiday', TextType::class, [
                 'label' => 'Texte vacances:',

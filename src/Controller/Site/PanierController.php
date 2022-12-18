@@ -8,7 +8,6 @@ use App\Repository\BoiteRepository;
 use App\Repository\PanierRepository;
 use App\Repository\AdresseRepository;
 use App\Repository\ConfigurationRepository;
-use App\Repository\DocumentRepository;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -125,14 +124,13 @@ public function __construct(
             return $this->redirectToRoute('accueil');
         }else{
 
-            $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
-            $tva = $informationsLegales->getTauxTva();
+            $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
 
             return $this->render('site/panier/panier.html.twig', [
                 'panier_occasions' => $panier_occasions,
                 'panier_boites' => $panier_boites,
-                'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
-                'tva' => $tva,
+                'infosAndConfig' => $infosAndConfig,
+                'tva' => $this->utilities->calculTauxTva($infosAndConfig['legales']->getTauxTva()),
                 'token' => $this->documentService->generateRandomString(),
                 'livraison_adresses' => $livraison_adresses,
                 'facturation_adresses' => $facturation_adresses,
@@ -247,8 +245,8 @@ public function __construct(
 
         //on regarde si le user doit payer l'adhésion
         if($user->getMembership() < new DateTimeImmutable('now')){
-            $configuration = $this->configurationRepository->findAll();
-            $cost = $configuration[0]->getCost();
+            $configuration = $this->configurationRepository->findOneBy([]);
+            $cost = $configuration->getCost();
             $setup['cost'] = $cost;
         }else{
             $setup['cost'] = 0;

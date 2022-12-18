@@ -112,8 +112,8 @@ class DocumentService
                 ->setCreatedAt($now)
                 ->setTotalTTC($request->request->get('totalGeneralTTC') * 100)
                 ->setTotalHT($request->request->get('totalGeneralHT') * 100)
-                ->setTauxTva($this->utilities->calculTauxTva($taux))
-                ->setTotalLivraison($this->utilities->centsHtToCentsTTC($request->request->get('totalLivraisonTTC'),$taux))
+                ->setTauxTva($taux)
+                ->setTotalLivraison($this->utilities->prixTtcToCentsHt($request->request->get('totalLivraisonTTC'),$taux))
                 ->setIsRelanceDevis(false)
                 ->setIsDeleteByUser(false)
                 ->setAdresseFacturation($paniers[0]->getFacturation())
@@ -121,7 +121,7 @@ class DocumentService
                 ->setToken($this->generateRandomString())
                 ->setNumeroDevis($newNumero)
                 ->setEndValidationDevis($endDevis)
-                ->setCost($this->utilities->centsHtToCentsTTC($request->request->get('totalCostTTC'),$taux))
+                ->setCost($request->request->get('totalCostTTC') * 100)
                 ->setEnvoi($this->methodeEnvoiRepository->find($request->request->get('envoi')));
 
         $this->em->persist($document);
@@ -139,7 +139,7 @@ class DocumentService
             $documentLigne->setBoite($panier->getBoite())
                           ->setDocument($document)
                           ->setMessage($panier->getMessage())
-                          ->setPrixVente($this->utilities->centsHtToCentsTTC($lignesDemandeBoitePrix[$key],$taux))
+                          ->setPrixVente($this->utilities->prixTtcToCentsHt($lignesDemandeBoitePrix[$key],$taux))
                           ->setReponse($lignesDemandeBoiteReponse[$key]);
             $this->em->persist($documentLigne);
         }
@@ -162,7 +162,7 @@ class DocumentService
 
     public function fromPanierSaveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande){
         $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
-        $tva = $informationsLegales->getTauxTva();
+        $tva = $this->utilities->calculTauxTva($informationsLegales->getTauxTva());
         $methodeEnvoi = $this->methodeEnvoiRepository->findOneBy(['id' => 3]);
         $livraison = $setup['adresseLivraison'];
         $facturation = $setup['adresseFacturation'];
@@ -175,12 +175,13 @@ class DocumentService
         $now = new DateTimeImmutable();
         $endDevis = $now->add(new DateInterval('P3D'));
 
+
         $document->setUser($user)
                 ->setCreatedAt($now)
-                ->setTotalTTC(($setup['totalOccasionsHT'] + $setup['cost']) * $tva) //on ajoute le cout adhésion
-                ->setTotalHT($setup['totalOccasionsHT'] + $setup['cost']) //on ajoute le cout adhésion
-                ->setTauxTva($tva)
-                ->setCost($setup['cost'])
+                ->setTotalTTC(($setup['totalOccasionsHT'] * $tva) + ($setup['cost'] * 100)) //on ajoute le cout adhésion
+                ->setTotalHT($setup['totalOccasionsHT'] + ($setup['cost'] / $tva * 100)) //on ajoute le cout adhésion
+                ->setTauxTva($informationsLegales->getTauxTva())
+                ->setCost($setup['cost'] * 100)
                 ->setTotalLivraison(0)
                 ->setIsDeleteByUser(false)
                 ->setIsRelanceDevis(false)
@@ -190,7 +191,6 @@ class DocumentService
                 ->setNumeroDevis($newNumero)
                 ->setEndValidationDevis($endDevis)
                 ->setEnvoi($methodeEnvoi);
-
         $this->em->persist($document);
         $this->em->flush();
 
