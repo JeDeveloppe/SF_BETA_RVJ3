@@ -126,12 +126,18 @@ class Document
      */
     private $cost;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Occasion::class, mappedBy="document")
+     */
+    private $occasions;
+
 
 
     
     public function __construct()
     {
         $this->documentLignes = new ArrayCollection();
+        $this->occasions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -405,6 +411,36 @@ class Document
     public function setCost(?int $cost): self
     {
         $this->cost = $cost;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Occasion>
+     */
+    public function getOccasions(): Collection
+    {
+        return $this->occasions;
+    }
+
+    public function addOccasion(Occasion $occasion): self
+    {
+        if (!$this->occasions->contains($occasion)) {
+            $this->occasions[] = $occasion;
+            $occasion->setDocument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOccasion(Occasion $occasion): self
+    {
+        if ($this->occasions->removeElement($occasion)) {
+            // set the owning side to null (unless already changed)
+            if ($occasion->getDocument() === $this) {
+                $occasion->setDocument(null);
+            }
+        }
 
         return $this;
     }

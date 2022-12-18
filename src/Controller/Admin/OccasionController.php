@@ -59,7 +59,7 @@ class OccasionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/{slug}", name="occasion_liste", methods={"GET"})
+     * @Route("/liste-par-boite/{id}/{slug}", name="occasion_liste", methods={"GET"})
      */
     public function occasionListeParBoite(
         BoiteRepository $boiteRepository,
@@ -132,7 +132,7 @@ class OccasionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="occasion_edit", methods={"GET", "POST"})
+     * @Route("/edition-boite/{id}/", name="occasion_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Occasion $occasion, OccasionRepository $occasionRepository): Response
     {

@@ -29,7 +29,8 @@ class PaiementService
         private PaiementRepository $paiementRepository,
         private Security $security,
         private FlashBagInterface $flashBagInterface,
-        private RouterInterface $router
+        private RouterInterface $router,
+        private StockService $stockService
         ){
     }
 
@@ -216,6 +217,8 @@ class PaiementService
                 $this->em->persist($user);
                 $this->em->flush();
 
+                //on met a jour les stocks des jeux d'occasion achetés
+                $this->stockService->updateOccasionStock($document);
 
                 $response['paiement'] = true;
                 return $response;
@@ -274,6 +277,9 @@ class PaiementService
 
                 $this->em->persist($user);
                 $this->em->flush();
+
+                //on met a jour les stocks des jeux d'occasion achetés
+                $this->stockService->updateOccasionStock($document);
             }
     }
     public function notificationUrlWithStripe($token)

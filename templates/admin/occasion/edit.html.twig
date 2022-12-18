@@ -1,13 +1,17 @@
-<!DOCTYPE html>
+{% extends 'admin/base.html.twig' %}
 
-<title>Edit Occasion</title>
+{% block title %}Occasion{% endblock %}
 
 {% block body %}
-    <h1>Edit Occasion</h1>
+    <h1 class="col-12 text-center my-5">Édition d'un occasion</h1>
 
-    {{ include('occasion/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="col-2 text-center my-5">
+        <a class="btn btn-warning" href="{{ path('admin_occasion_liste', {'id': occasion.boite.id ,'slug': occasion.boite.slug}) }}">< Retour à la liste / boite</a>
+    </div>
 
-    <a href="{{ path('app_occasion_index') }}">back to list</a>
+    {{ include('admin/occasion/_form.html.twig', {'button_label': 'Update'}) }}
 
-    {{ include('occasion/_delete_form.html.twig') }}
+    <a href="{{ path('admin_occasion_index') }}">back to list</a>
+
+    {{ include('admin/occasion/_delete_form.html.twig') }}
 {% endblock %}

@@ -120,6 +120,11 @@ class Occasion
      */
     private $rvj2Id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Document::class, inversedBy="occasions")
+     */
+    private $document;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
@@ -403,6 +408,18 @@ class Occasion
     public function setRvj2Id(?int $rvj2Id): self
     {
         $this->rvj2Id = $rvj2Id;
+
+        return $this;
+    }
+
+    public function getDocument(): ?Document
+    {
+        return $this->document;
+    }
+
+    public function setDocument(?Document $document): self
+    {
+        $this->document = $document;
 
         return $this;
     }

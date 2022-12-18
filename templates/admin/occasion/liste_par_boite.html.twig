@@ -44,16 +44,19 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if occasion.donation == true %}
+                    {% if occasion.isDonation == true %}
                         Donner le {{ occasion.donation|date("d-m-Y") }}.
                     {% endif %}
-                    {% if occasion.sale == true %}
-                        {% set donnees = occasion.sale| split("|") %}
-                        Vendu en {{ donnees[0] }} le {{ donnees[1]|date("d-m-Y") }}
+                    {% if occasion.isSale == true %}
+                        Vendu le {{ occasion.document.paiement.timeTransaction|date("d-m-Y") }}
                     {% endif %}
                 </td>
                 <td>
-                    <a class="btn btn-warning" href="{{ path('admin_occasion_edit', {'id': occasion.id}) }}">Modifier</a>
+                    {% if occasion.isSale == true %}
+                        <a class="btn btn-info" href="{{ path('visualisation_document', {'token': occasion.document.token}) }}">Voir le document</a>
+                    {% else %}
+                        <a class="btn btn-warning" href="{{ path('admin_occasion_edit', {'id': occasion.id}) }}">Modifier</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
