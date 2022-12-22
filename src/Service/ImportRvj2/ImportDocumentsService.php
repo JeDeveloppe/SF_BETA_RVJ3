@@ -5,6 +5,7 @@ namespace App\Service\ImportRvj2;
 use DateTimeImmutable;
 use League\Csv\Reader;
 use App\Entity\Document;
+use App\Entity\Paiement;
 use App\Repository\PaysRepository;
 use App\Repository\UserRepository;
 use App\Repository\BoiteRepository;
@@ -13,6 +14,7 @@ use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\MethodeEnvoiRepository;
 use App\Repository\InformationsLegalesRepository;
+use App\Repository\PaiementRepository;
 use App\Service\Utilities;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -27,7 +29,8 @@ class ImportDocumentsService
         private InformationsLegalesRepository $informationsLegalesRepository,
         private UserRepository $userRepository,
         private OccasionRepository $occasionRepository,
-        private BoiteRepository $boiteRepository
+        private BoiteRepository $boiteRepository,
+        private PaiementRepository $paiementRepository
         ){
     }
 
@@ -42,6 +45,7 @@ class ImportDocumentsService
         foreach($docs as $arrayDoc){
             $io->progressAdvance();
             $document= $this->createOrUpdateDocument($arrayDoc);
+
             $this->em->persist($document);
         }
 
@@ -68,8 +72,6 @@ class ImportDocumentsService
             $document = new Document();
         }
 
-        $infosLegales = $this->informationsLegalesRepository->findAll();
-
         $document
         ->setToken($arrayDoc['validKey'])
         ->setRvj2Id($arrayDoc['idDocument'])
@@ -87,7 +89,7 @@ class ImportDocumentsService
         ->setIsDeleteByUser(false)
         ->setPaiement(null)
         ->setMessage($arrayDoc['commentaire'])
-        ->setTauxTva($infosLegales[0]->getTauxTva())
+        ->setTauxTva(0)
         ->setCost($arrayDoc['prix_preparation']);
 
         if($arrayDoc['expedition'] == "poste"){

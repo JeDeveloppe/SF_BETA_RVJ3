@@ -68,7 +68,7 @@ class ImportRVJ2 extends Command
         // $this->importPartenairesService->importPartenaires($io);
 
         // //on importe les clients
-        $this->importClientsService->importClients($io);
+        //$this->importClientsService->importClients($io);
 
 
 
@@ -79,7 +79,7 @@ class ImportRVJ2 extends Command
         // $this->creationAdministrateurAdresseService->creationAdminAdresse($io);
 
         // //on importe les documents
-        // $this->importDocumentsService->importDocuments($io);
+        $this->importDocumentsService->importDocuments($io);
 
         // //on importe les ligne boite des documents
         // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);

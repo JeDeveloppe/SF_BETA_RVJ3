@@ -1,0 +1,25 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Graphiques{% endblock %}
+
+{% block body %}
+    <h1 class="col-12 text-center my-5">Liste des graphiques disponibles</h1>
+
+    <table>
+        <tr>
+            <td colspan="2">Ventes</td>
+        </tr>
+        <tr>
+            <td>Ventes de l'année en cours: </td><td><a href="{{ path('admin_graphique_ca-annuel', {'annee': annee}) }}" class="btn btn-info">Voir l'évolution en {{ annee }}</td>
+        </tr>
+        <tr>
+            <td>Comparaison des ventes entre: </td>
+            <td>
+                <form method="post" action="{{ path('admin_graphique_ca-annuel-comparaison') }}">
+                    <input type="text" name="annee1"  placeholder="2021"/> et <input type="text" name="annee2" placeholder="2022" />
+                    <button class="btn btn-info">Voir</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

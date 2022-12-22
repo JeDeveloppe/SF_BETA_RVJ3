@@ -156,8 +156,35 @@ class DocumentRepository extends ServiceEntityRepository
         ->setParameter('deleted', false)
         ->getQuery()
         ->getResult()
-    ;  
-}
+        ;  
+    }
+
+    public function sumFactureByMonth($month,$year)
+    {
+        return $this->createQueryBuilder('d')
+            ->join('d.paiement','p')
+            ->where('d.paiement IS NOT NULL')
+            ->select('SUM(d.totalHT) as totalHTmois')
+            ->andWhere('MONTH(p.timeTransaction) = :month')
+            ->setParameter('month', $month)
+            ->andWhere('YEAR(p.timeTransaction) = :year')
+            ->setParameter('year', $year)
+            ->getQuery()->getSingleScalarResult();
+    }
+    // public function countFactureByMonth($month,$year)
+    // {
+    //     return $this->createQueryBuilder('d')
+    //         ->join('d.paiement','p')
+    //         ->where('d.numeroFacture IS NOT NULL')
+    //         ->andWhere('MONTH("p.timeTransaction") = :month')
+    //         ->setParameter('month', $month)
+    //         ->andWhere('YEAR("p.timeTransaction") = :year')
+    //         ->setParameter('year', $year)
+    //         ->select('SUM(d.totalHt) as totalHTmois')
+    //         ->getQuery()
+    //         ->getSingleScalarResult();
+    // }
+
     /*
     public function findOneBySomeField($value): ?Document
     {
