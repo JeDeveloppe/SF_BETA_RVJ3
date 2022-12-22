@@ -90,7 +90,8 @@ class ImportDocumentsService
         ->setPaiement(null)
         ->setMessage($arrayDoc['commentaire'])
         ->setTauxTva(0)
-        ->setCost($arrayDoc['prix_preparation']);
+        ->setCost($arrayDoc['prix_preparation'])
+        ->setTokenPaiementRvj2($arrayDoc['num_transaction']);
 
         if($arrayDoc['expedition'] == "poste"){
             $expedition = $this->methodeEnvoiRepository->find(1);

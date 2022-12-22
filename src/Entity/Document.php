@@ -131,6 +131,11 @@ class Document
      */
     private $occasions;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tokenPaiementRvj2;
+
 
 
     
@@ -441,6 +446,18 @@ class Document
                 $occasion->setDocument(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTokenPaiementRvj2(): ?string
+    {
+        return $this->tokenPaiementRvj2;
+    }
+
+    public function setTokenPaiementRvj2(?string $tokenPaiementRvj2): self
+    {
+        $this->tokenPaiementRvj2 = $tokenPaiementRvj2;
 
         return $this;
     }

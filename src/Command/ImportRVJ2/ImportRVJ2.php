@@ -18,6 +18,7 @@ use App\Service\ImportRvj2\ImportDepartementsService;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Service\ImportRvj2\ImportDocumentsLignesService;
 use App\Service\ImportRvj2\CreationAdministrateurAdresseService;
+use App\Service\ImportRvj2\ImportPaiementService;
 
 #[AsCommand(name: 'app:importRVJ2')]
 
@@ -34,7 +35,8 @@ class ImportRVJ2 extends Command
         private ImportVillesService $importVillesService,
         private CreationAdministrateurAdresseService $creationAdministrateurAdresseService,
         private ImportDocumentsService $importDocumentsService,
-        private ImportDocumentsLignesService $importDocumentsLignesService
+        private ImportDocumentsLignesService $importDocumentsLignesService,
+        private ImportPaiementService $importPaiementService
         )
     {
         parent::__construct();
@@ -80,6 +82,8 @@ class ImportRVJ2 extends Command
 
         // //on importe les documents
         $this->importDocumentsService->importDocuments($io);
+        $this->importPaiementService->importPaiements($io);
+
 
         // //on importe les ligne boite des documents
         // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
