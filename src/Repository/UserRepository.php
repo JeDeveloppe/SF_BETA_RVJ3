@@ -89,6 +89,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ->getResult()
     ;
     }
+
+    public function findActiveMembership($month,$year){
+        return $this->createQueryBuilder('u')
+            ->where('MONTH(u.membership) = :month')
+            ->setParameter('month', $month)
+            ->andWhere('YEAR(u.membership) = :year')
+            ->setParameter('year', $year+1)
+            ->getQuery()->getScalarResult();
+    }
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

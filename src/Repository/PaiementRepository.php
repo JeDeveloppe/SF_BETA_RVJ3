@@ -45,6 +45,14 @@ class PaiementRepository extends ServiceEntityRepository
         }
     }
 
+    public function findPaiements($month,$year){
+        return $this->createQueryBuilder('p')
+            ->where('MONTH(p.timeTransaction) = :month')
+            ->setParameter('month', $month)
+            ->andWhere('YEAR(p.timeTransaction) = :year')
+            ->setParameter('year', $year)
+            ->getQuery()->getScalarResult();
+    }
     // /**
     //  * @return Paiement[] Returns an array of Paiement objects
     //  */

@@ -5,21 +5,52 @@
 {% block body %}
     <h1 class="col-12 text-center my-5">Liste des graphiques disponibles</h1>
 
-    <table>
-        <tr>
-            <td colspan="2">Ventes</td>
-        </tr>
-        <tr>
-            <td>Ventes de l'année en cours: </td><td><a href="{{ path('admin_graphique_ca-annuel', {'annee': annee}) }}" class="btn btn-info">Voir l'évolution en {{ annee }}</td>
-        </tr>
-        <tr>
-            <td>Comparaison des ventes entre: </td>
-            <td>
-                <form method="post" action="{{ path('admin_graphique_ca-annuel-comparaison') }}">
-                    <input type="text" name="annee1"  placeholder="2021"/> et <input type="text" name="annee2" placeholder="2022" />
-                    <button class="btn btn-info">Voir</button>
-                </form>
-            </td>
-        </tr>
-    </table>
+    <div class="row my-3">
+        <div class="col-3 mx-auto">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Année</span>
+                </div>
+                <input type="text" name="annee" id="inputAnnee" class="form-control">
+            </div>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <table class="col-6 mx-auto">
+            <tr>
+                <td class="text-end pe-5">CA - Ventes de l'année: </td><td><a href="{{ path('admin_graphique_ca-annuel', {'annee': annee }) }}" class="graphiqueLink btn btn-info disabled">Voir l'évolution du CA</td>
+            </tr>
+            <tr>
+                <td class="text-end pe-5">CA - Comparaison N et N-1: </td><td><a href="{{ path('admin_graphique_ca-annuel-comparaison', {'annee': annee }) }}" class="graphiqueLink btn btn-info disabled">Voir la comparaison de CA avec N-1</td>
+            </tr>
+             <tr>
+                <td class="text-end pe-5">Quantités de ventes</td><td><a href="{{ path('admin_graphique_annuel_ventes', {'annee': annee }) }}" class="graphiqueLink btn btn-info disabled">Voir quantités de vente</td>
+            </tr>
+            <tr>
+                <td class="text-end pe-5">Adhésions</td><td><a href="{{ path('admin_graphique_adhesions', {'annee': annee }) }}" class="graphiqueLink btn btn-info disabled">Evolution des adhésions</td>
+            </tr>
+        </table>
+    </div>
+
+<script>
+    inputAnnee = document.getElementById('inputAnnee');
+
+    inputAnnee.addEventListener('input', function() {
+
+        links = document.querySelectorAll('.graphiqueLink');
+
+        if(inputAnnee.value.length == 4 && inputAnnee.value.match(/^\d{4}$/) && inputAnnee.value > 2020){
+            links.forEach(element => {
+                element.classList.remove("disabled");
+                link = element.href.slice(0, -4);
+                element.href = link+inputAnnee.value;
+            });
+        }else{
+            links.forEach(element => {
+                element.classList.add("disabled");
+            });
+        }
+    })
+</script>
 {% endblock %}
