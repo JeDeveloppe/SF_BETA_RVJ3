@@ -15,13 +15,12 @@
 
     <div class="col-11 mx-auto display-6 mt-5">Les dernières boites ajoutées:</div>
 
-    <div class="row mb-5 justify-content-start flex-nowrap overflow-auto">
-
-        {% include "site/components/catalogues/card-pieces-detachees.html.twig"  
-            with {
-                boites: lastEntries,
-            }
-        %}
+    <div class="row mb-5">
+            {% include "site/components/catalogues/card-pieces-detachees.html.twig"  
+                with {
+                    boites: lastEntries,
+                }
+            %}
     </div>
 
     <div class="row mt-2 mb-5">

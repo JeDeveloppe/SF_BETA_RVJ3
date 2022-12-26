@@ -19,7 +19,7 @@ class SearchOccasionType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Nom du jeu ou éditeur...',
-                    'pattern' => "\S{3}"
+                    'pattern' => "\S{3}+"
                 ]
             ])
             ->add('age', ChoiceType::class, [
