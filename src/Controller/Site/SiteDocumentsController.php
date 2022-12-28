@@ -35,7 +35,7 @@ class SiteDocumentsController extends AbstractController
         ): Response
     {
        //on cherche le devis par le token et s'il n'est pas deja annuler par l'utilisateur
-        $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => null]);
+        $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => false]);
 
         if($devis == null){
 

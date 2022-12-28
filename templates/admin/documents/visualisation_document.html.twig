@@ -147,15 +147,12 @@
                 {% endif %}
             </div>
             <div class="col-6 d-flex flex-column justify-content-around align-items-center">
-                {% if devis.numeroFacture is null %}
-                    <a class="btn btn-lg btn-outline-danger col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}" >Supprimer définitivement le devis</a>
-                {% else %}
+                {% if devis.numeroFacture is not null %}
                     <a class="btn btn-lg btn-outline-danger disabled col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}">Facturé: suppression impossible</a>
                 {% endif %}
                 {% if devis.isDeleteByUser == false and devis.numeroFacture is null %}
                     <a class="btn btn-primary col-8 mx-auto" href="{{ path('admin_relance_devis', {'token': devis.token }) }}">Relancer l'utilisateur (+ {{ delaiDevis }} jours)</a>                
                 {% endif %}
-
             </div>
         </div>
 
