@@ -171,6 +171,7 @@ class DocumentRepository extends ServiceEntityRepository
             ->setParameter('year', $year)
             ->getQuery()->getSingleScalarResult();
     }
+
     // public function countFactureByMonth($month,$year)
     // {
     //     return $this->createQueryBuilder('d')

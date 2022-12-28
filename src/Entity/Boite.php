@@ -213,9 +213,7 @@ class Boite
     public function getImageblob()
     {
         //return $this->imageblob;
-        if(!is_null($this->imageblob)){
-            return stream_get_contents($this->imageblob,-1,0);
-        }
+        return stream_get_contents($this->imageblob,-1,0);
     }
 
     public function setImageblob($imageblob): self

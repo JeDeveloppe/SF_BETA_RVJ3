@@ -3,6 +3,7 @@
 namespace App\Controller\Site;
 
 use App\Entity\Panier;
+use App\Entity\PanierImage;
 use DateTimeImmutable;
 use App\Repository\BoiteRepository;
 use App\Repository\PanierRepository;
@@ -45,7 +46,8 @@ public function __construct(
     {
 
         $panier = new Panier();
-        $idBoite = $request->request->get('idDuJeu');
+        $idBoite = $request->request->get('boite');
+        $files = $request->files->get('photo');
 
         //ici on ajoute les differentes infos
         $panier->setMessage($request->request->get('message'))
@@ -57,8 +59,18 @@ public function __construct(
         $this->em->persist($panier);
         $this->em->flush($panier);
 
-         //on signal le changement
-         $this->addFlash('success', 'Demande ajoutée au panier!');
+        //pour chaque image on met dans la base
+        if(count($files) > 0){
+            foreach($files as $file){
+                $imagePanier = new PanierImage();
+                $imagePanier->setPanier($panier)->setImage(base64_encode(file_get_contents($file)));
+                $this->em->persist($imagePanier);
+            }
+            $this->em->flush($imagePanier);
+        }
+
+        //on signal le changement
+        $this->addFlash('success', 'Demande ajoutée au panier!');
         return $this->redirectToRoute('catalogue_pieces_detachees');
     }
 

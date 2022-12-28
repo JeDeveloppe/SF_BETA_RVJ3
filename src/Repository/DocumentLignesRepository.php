@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\DocumentLignes;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -43,6 +44,16 @@ class DocumentLignesRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    public function findBoitesGroupeBy(){
+
+        return $this->createQueryBuilder('dl')
+            ->select('dl.boite, COUNT(dl.boite)')
+            ->innerJoin('dl.boite', 'b')
+            ->groupBy('b.id')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     // /**

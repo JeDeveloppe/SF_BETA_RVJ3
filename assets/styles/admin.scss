@@ -7,3 +7,77 @@
     width: 30%;
     object-fit: cover;
 }
+.divImgPresentation {
+    .zoom {
+      overflow: hidden;
+      position: relative;
+      display: inline-block;
+      width: 300px;
+      height: 280px;
+      cursor: move;
+      & > div {
+        height: 33.33%;
+        width: 33.333%;
+        z-index: 1;
+        float: left;
+        display: inline-block;
+        position: relative;
+      }
+      //  top
+      &__top {
+        //  left
+        &.zoom__left:hover ~ .zoom__image {
+          transform: translate(20%, 20%) scale(1.5);
+        }
+        //  centre
+        &.zoom__centre:hover ~ .zoom__image {
+          transform: translate(0%, 20%) scale(1.5);
+        }
+        //  right
+        &.zoom__right:hover ~ .zoom__image {
+          transform: translate(-20%, 20%) scale(1.5);
+        }
+      }
+      //  middle
+      &__middle {
+        //  left
+        &.zoom__left:hover ~ .zoom__image {
+          transform: translate(20%, 0) scale(1.5);
+        }
+        //  centre
+        &.zoom__centre:hover ~ .zoom__image {
+          transform: translate(0, 0) scale(1.5);
+        }
+        //  right
+        &.zoom__right:hover ~ .zoom__image {
+          transform: translate(-20%, 0) scale(1.5);
+        }
+      }
+      //  middle
+      &__bottom {
+        //  left
+        &.zoom__left:hover ~ .zoom__image {
+          transform: translate(20%, -20%) scale(1.5);
+        }
+        //  centre
+        &.zoom__centre:hover ~ .zoom__image {
+          transform: translate(0, -20%) scale(1.5);
+        }
+        //  right
+        &.zoom__right:hover ~ .zoom__image {
+          transform: translate(-20%, -20%) scale(1.5);
+        }
+      }
+      &__image {
+        transition: all 0.5s ease;
+        display: block;
+        max-width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+      }
+    }
+  }

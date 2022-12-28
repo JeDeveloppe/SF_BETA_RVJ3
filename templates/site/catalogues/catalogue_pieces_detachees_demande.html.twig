@@ -123,7 +123,7 @@
 						</div>
 
 						<div class="col-12 text-center">
-							<input type="hidden" name="idDuJeu" value="{{ boite.id }}">
+							<input type="hidden" name="boite" value="{{ boite.id }}">
 							<input type="hidden" id="recaptchaResponse" name="recaptcha-response">
 							{% if is_granted('ROLE_USER') %}
 								<button type="submit" class="btn btn-success mt-3 mb-2">Ajouter au panier</button>

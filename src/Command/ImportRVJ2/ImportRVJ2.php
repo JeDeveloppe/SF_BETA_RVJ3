@@ -86,10 +86,10 @@ class ImportRVJ2 extends Command
 
 
         // //on importe les ligne boite des documents
-        // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
+        $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
 
         // //on importe les lignes occasion des documents
-        // $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
+        $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
 
         return Command::SUCCESS;
     }

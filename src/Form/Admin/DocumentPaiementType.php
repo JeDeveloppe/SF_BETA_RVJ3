@@ -36,7 +36,8 @@ class DocumentPaiementType extends AbstractType
                 'required' => true,
                 'placeholder' => 'Moyen de paiement...'
             ])
-            ->add('Enregistrer', SubmitType::class, [
+            ->add('enregistrer', SubmitType::class, [
+                'label' => 'Enregistrer un paiement manuel',
                 'attr' => ['class' => 'btn btn-lg btn-outline-success'],
             ])
         ;

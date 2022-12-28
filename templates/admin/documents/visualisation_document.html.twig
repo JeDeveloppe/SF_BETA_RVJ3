@@ -3,7 +3,7 @@
 {% block title %}Devis{% endblock %}
 
 {% block body %}
-    {% set tva = devis.tauxTva + 100 / 100 %}
+    {% set tva = tauxTva %}
     {% set totalDetachees = totalDetachees %}
 
     {% if devis.paiement is not null %}
@@ -52,7 +52,6 @@
                                 {% else %}
                                     <i class="fa-solid fa-rotate-right text-danger"></i> (non relancer) -
                                 {% endif %}
-
                                 {% if devis.envoiEmailDevis is not null %}
                                     <i class="fa-solid fa-paper-plane text-success"></i> (email envoyé) le {{ devis.envoiEmailDevis|date('d/m/Y') }} -
                                 {% else %}
@@ -112,23 +111,27 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>Occasions:</td>
-                        <td>{{ (totalOccasions / 100) |number_format(2, '.', ',') }}</td>
+                        <td>{{ (totalOccasions / 100 * tva) | number_format(2, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td>Pièces détachées:</td>
-                        <td>{{ (totalDetachees / 100) |number_format(2, '.', ',') }}</td>
+                        <td>{{ (totalDetachees / 100 * tva) | number_format(2, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td>Livraison:</td>
-                        <td>{{ (devis.totalLivraison / 100) |number_format(2, '.', ',') }}</td>
+                        <td>{{ (devis.totalLivraison / 100 * tva) | number_format(2, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td>Total HT:</td>
-                        <td>{{ (devis.totalHt / 100) |number_format(2, '.', ',') }}</td>
+                        <td>{{ (devis.totalHt / 100) | number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td>TVA:</td>
+                        <td>{{ ((devis.totalTtc - devis.totalHt) / 100) | number_format(2, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td>Total TTC:</td>
-                        <td>{{ (devis.totalTtc / 100) |number_format(2, '.', ',')}}</td>
+                        <td>{{ (devis.totalTtc / 100) | number_format(2, '.', ',')}}</td>
                     </tr>
                 </table>
             </div>
@@ -149,8 +152,8 @@
                 {% else %}
                     <a class="btn btn-lg btn-outline-danger disabled col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}">Facturé: suppression impossible</a>
                 {% endif %}
-                {% if devis.isDeleteByUser is null and devis.numeroFacture is null %}
-                    <a class="btn btn-primary col-8 mx-auto" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token, 'days': 2 }) }}">Envoyer par email (dispo +2j)</a>                
+                {% if devis.isDeleteByUser == false and devis.numeroFacture is null %}
+                    <a class="btn btn-primary col-8 mx-auto" href="{{ path('admin_relance_devis', {'token': devis.token }) }}">Relancer l'utilisateur (+ {{ delaiDevis }} jours)</a>                
                 {% endif %}
 
             </div>

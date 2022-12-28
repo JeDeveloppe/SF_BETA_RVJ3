@@ -5,9 +5,34 @@
                 <div class="card p-0">
                     <div class="card-header">[{{ boite.boite.id }}] {{ boite.boite.nom }} {{ boite.boite.editeur }} {{ boite.boite.annee }}</div>
                         <div class="card-body bg-secondary">
- 
-                            <div class="card-text my-2">{{ boite.message }}</div>
-                            <div class="card-text"><input class="col-12" name="reponse[]" type="text" maxlength="80" value="{% if boite.reponse is defined %}{{ boite.reponse}}{% endif %}" required /></div>
+                            <div class="card-text my-2">Question:<br/>{{ boite.message }}</div>
+                                {# si on est en mode lecture demande et s'il y a des images de présentation #}
+                                {% if devis is not defined and boite.panierImages | length > 0 %}
+                                    <div class="card-text my-4 d-flex flex-wrap">
+                                        Images:<br/>
+                                        {% for image in boite.panierImages %}
+                                            <!-- image de la boite -->
+                                            <div class="col text-center p-0">
+                                                <div class="divImgPresentation mt-4">
+                                                    <div class="zoom">
+                                                        <div class="zoom__top zoom__left"></div>
+                                                        <div class="zoom__top zoom__centre"></div>
+                                                        <div class="zoom__top zoom__right"></div>
+                                                        <div class="zoom__middle zoom__left"></div>
+                                                        <div class="zoom__middle zoom__centre"></div>
+                                                        <div class="zoom__middle zoom__right"></div>
+                                                        <div class="zoom__bottom zoom__left"></div>
+                                                        <div class="zoom__bottom zoom__centre"></div>
+                                                        <div class="zoom__bottom zoom__right"></div>
+                                                        {# <img class="zoom__image" src="data:image/png;base64,{{ images[key] }}"/> #}
+                                                        <img class="zoom__image" src="data:image/png;base64,{{ image.image }}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            <div class="card-text">Réponse:<br/><input class="col-12" name="reponse[]" type="text" maxlength="80" value="{% if boite.reponse is defined %}{{ boite.reponse}}{% endif %}" required /></div>
                         </div>
                     <div class="card-footer text-center">Prix de vente:  <input class="text-center" name="prix[]" type="text" pattern="^\d+(?:[.]\d{2})$" size="6" placeholder="0.00" onkeyup="calculDevis()" value="{% if boite.prixVente is defined %}{{ (boite.prixVente / 100 * tva) | number_format(2, '.', ',') }}{% endif %}" required> € TTC</div>
                 </div>

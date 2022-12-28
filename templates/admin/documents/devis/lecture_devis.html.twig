@@ -100,12 +100,15 @@
 
                 {# PARTIE BOUTONS #}
                 {# si le devis n'est pas echu on affiche les boutons #}
-                {% if devis.endValidationDevis|date("m/d/Y") > "now"|date("m/d/Y") %}
+                {% set endDevis = devis.endValidationDevis %}
+                {% set difference = date(endDevis).diff(date(now)) %}
+                {% set leftDays = difference.days %}
+                {% if leftDays >= 0 %}
                     <div class="col-6">
                         <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Sauvegarder</button>
                         <input type="hidden" name="user" value="{{ devis.user.id }}">
                         <input type="hidden" name="demande" value="{{ devis.numeroDevis }}">
-                        <a class="btn btn-success" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token, 'days': 0 }) }}">Envoyer par email</a>
+                        <a class="btn btn-success" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token, 'days': 0 }) }}">Envoyer email => Devis mise à disposition</a>
                     </div>
                 {% endif %}
             </div>

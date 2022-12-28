@@ -1,0 +1,31 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Statistiques: les demandes de boite{% endblock %}
+
+{% block body %}
+
+    <div class="row justify-content-center mb-5">
+        <h3 class="col-12 text-center mb-5">Les boites avec le plus de demandes</h3>
+
+        <table class="table table-striped">
+            <thead>
+                <th>Classement</th>
+                <th>Nom - éditeur - année</th>
+                <th>Nombre de demandes</th>
+            </thead>
+            <tbody>
+                {% set classement = 0 %}
+                {% for boite in boites %}
+                    <tr>
+                        <td></td>
+                        <td>{{ boite.boite.nom }}</td>
+                        <td></td>
+                    </tr>
+                    {% set classememnt = classement + 1 %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}

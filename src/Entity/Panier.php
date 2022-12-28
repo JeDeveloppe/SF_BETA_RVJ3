@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PanierRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -67,6 +69,16 @@ class Panier
      * @ORM\ManyToOne(targetEntity=MethodeEnvoi::class)
      */
     private $methodeEnvoi;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PanierImage::class, mappedBy="panier", orphanRemoval=true)
+     */
+    private $panierImages;
+
+    public function __construct()
+    {
+        $this->panierImages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -189,6 +201,36 @@ class Panier
     public function setMethodeEnvoi(?MethodeEnvoi $methodeEnvoi): self
     {
         $this->methodeEnvoi = $methodeEnvoi;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PanierImage>
+     */
+    public function getPanierImages(): Collection
+    {
+        return $this->panierImages;
+    }
+
+    public function addPanierImage(PanierImage $panierImage): self
+    {
+        if (!$this->panierImages->contains($panierImage)) {
+            $this->panierImages[] = $panierImage;
+            $panierImage->setPanier($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanierImage(PanierImage $panierImage): self
+    {
+        if ($this->panierImages->removeElement($panierImage)) {
+            // set the owning side to null (unless already changed)
+            if ($panierImage->getPanier() === $this) {
+                $panierImage->setPanier(null);
+            }
+        }
 
         return $this;
     }

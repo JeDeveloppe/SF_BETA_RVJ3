@@ -167,6 +167,7 @@ class AdminDocumentsController extends AbstractController
                 'totalOccasions' => $totalOccasions,
                 'totalDetachees' => $totalDetachees / 100,
                 'suppressionDevis' => $suppressionDevis,
+                'now' => new DateTimeImmutable('now'),
                 'form' => $form->createView()
             ]);
         }
@@ -269,8 +270,13 @@ class AdminDocumentsController extends AbstractController
         $devis = $this->documentRepository->findOneBy(['token' => $token]);
         $numeroFacture = $devis->getNumeroFacture();
 
+        $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
+        $delaiDevis = $infosAndConfig['config']->getDevisDelayBeforeDelete();
+
         $occasions = $this->documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
         $boites = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
+
+        $tauxTva = $this->utilities->calculTauxTva($devis->getTauxTva());
 
         //ON FAIT LE TOTAL DES OCCASIONS
         $totalOccasions = 0;
@@ -318,7 +324,9 @@ class AdminDocumentsController extends AbstractController
         return $this->renderForm('admin/documents/visualisation_document.html.twig', [
             'devis' => $devis,
             'occasions' => $occasions,
+            'delaiDevis' => $delaiDevis,
             'boites' => $boites,
+            'tauxTva' => $tauxTva,
             'totalOccasions' => $totalOccasions,
             'totalDetachees' => $totalDetachees,
             'toDelete' => $numeroFacture ? $numeroFacture : null,
@@ -335,10 +343,6 @@ class AdminDocumentsController extends AbstractController
         Request $request
         ): Response
     {
-
-        if($value == 0){
-            $value = null;
-        }
 
         //on cherche le devis par le token
         $devis = $this->documentRepository->findOneBy(['token' => $token]);
@@ -376,23 +380,24 @@ class AdminDocumentsController extends AbstractController
     {
 
         $compteSmtp = $this->getParameter('COMPTESMTP');
-        $configurations = $configurationRepository->findAll();
+        $configurations = $configurationRepository->findOneBy([]);
+        $daysFromConfiguration = $configurations->getDevisDelayBeforeDelete();
+        $now = new DateTimeImmutable();
 
         $devis = $this->documentRepository->findOneBy(['token' => $token]);
 
-        if($days > 0){
-            $now = new DateTimeImmutable();
-            $endDevis = $now->add(new DateInterval('P'.$days.'D'));
+        $endDevis = $now->add(new DateInterval('P'.$daysFromConfiguration.'D'));
+        $isRelanceDevis = false;
 
-            $devis->setEndValidationDevis($endDevis)
-            ->setIsDeleteByUser(false)
-            ->setIsRelanceDevis(true)
-            ->setEnvoiEmailDevis($now);
+        $devis->setEndValidationDevis($endDevis)
+                ->setIsDeleteByUser(false)
+                ->setIsRelanceDevis($isRelanceDevis)
+                ->setEnvoiEmailDevis($now);
 
-            //on met a jour le document
-            $this->em->persist($devis);
-            $this->em->flush();
-        }
+        //on met a jour le document
+        $this->em->persist($devis);
+        $this->em->flush();
+        
 
         $host = $request->getSchemeAndHttpHost();
         $link = $request->getSchemeAndHttpHost().$this->generateUrl('lecture_devis_avant_paiement', ['token' => $token]);
@@ -401,7 +406,7 @@ class AdminDocumentsController extends AbstractController
             $mailerService->sendEmailDevisDisponible(
                 $devis->getUser()->getEmail(),
                 $compteSmtp,
-                "Devis ".$configurations[0]->getPrefixeDevis().$devis->getNumeroDevis()." disponible jusqu'au ".$devis->getEndValidationDevis()->format('d-m-Y'),
+                "Devis ".$configurations->getPrefixeDevis().$devis->getNumeroDevis()." disponible jusqu'au ".$devis->getEndValidationDevis()->format('d-m-Y'),
                 'email/devis_disponible.html.twig',
                 [
                     'link' => $link,

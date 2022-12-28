@@ -1,0 +1,15 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block body %}
+    <h1 class="col-12 text-center my-5">Les statistiques disponibles</h1>
+
+    <div class="row my-3">
+        <table class="col-6 mx-auto">
+            <tr>
+                <td class="text-end pe-5">Les demandes de boites: </td><td><a href="{{ path('admin_statistiques_boites') }}" class="btn btn-info">Les demandes de boites...</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
