@@ -16,11 +16,14 @@
 			<div class="col-12 col-md-6">
 				{% if app.request.headers.get('referer') is null %}
 					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catalogue général</a>
+				{% elseif app.request.headers.get('referer') == app.request.getSchemeAndHttpHost() %}
+					<a class="btn btn-secondary" href="{{ path('accueil') }}">Retour a l'accueil</a>
 				{% else %}
 					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catalogue</a>
 				{% endif %}
 			</div>
 		</div>
+
 		<!-- BLOC PRESENTATION DU JEU  -->
 		<div class="row mb-5" id="">
 			<div class="card col-11 mx-auto col-md-10 col-lg-8 p-0 border shadow">
@@ -84,7 +87,7 @@
 					<!-- question pre-formulaire -->
 					<div class="col-11 mx-auto mt-4">
 						Vous souhaitez faire une demande de pièces pour ce jeu ?
-						<a href="{{ path('comment_ca_marche_passer_une_commande') }}" target="_blank" data-html="true" data-toggle="tooltip" data-placement="top" title="Aide">
+						<a href="{{ path('informations-comment-ca-marche') }}" target="_blank" data-html="true" data-toggle="tooltip" data-placement="top" title="Aide">
 							<i class="fas fa-question-circle text-info p-2"></i>
 						</a><br/>
 						Remplissez ce formulaire et ajoutez cette demande à votre panier !

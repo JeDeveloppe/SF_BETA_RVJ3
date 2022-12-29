@@ -54,7 +54,7 @@ class SiteController extends AbstractController
     }
 
     /**
-     * @Route("/conditions-generale-de-vente", name="cgv")
+     * @Route("mentions-legales/conditions-generale-de-vente", name="cgv")
      */
     public function cgv(): Response
     {
@@ -66,7 +66,7 @@ class SiteController extends AbstractController
     }
 
     /**
-     * @Route("/mentions-legales", name="mentions-legales")
+     * @Route("/mentions-legales/", name="mentions-legales")
      */
     public function mentionsLegales(): Response
     {
@@ -128,29 +128,6 @@ class SiteController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/comment-ca-marche/", name="comment_ca_marche_passer_une_commande")
-     */
-    public function ccm_passer_cmd(): Response
-    {
-
-        return $this->render('site/informations/comment-ca-marche/passer-commande.html.twig', [
-            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
-            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
-        ]);
-    }
-
-    /**
-     * @Route("/informations-legales/", name="informations-legales")
-     */
-    public function informations_legales(): Response
-    {
-
-        return $this->render('site/informations/legale/legale.html.twig', [
-            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
-            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
-        ]);
-    }
     /**
      * @Route("/informations/comment-ca-marche", name="informations-comment-ca-marche")
      */
