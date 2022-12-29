@@ -24,6 +24,9 @@
         {% endblock %}
     </head>
     <body>
+            <div id="fb-root"></div>
+            <script async defer crossorigin="anonymous" src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v15.0" nonce="8opvHqhv"></script>
+            
             {% include "site/nav.html.twig" %}
 
             {% if infosAndConfig.config.holiday is not null %}

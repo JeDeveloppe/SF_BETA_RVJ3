@@ -104,74 +104,74 @@ class AdminDocumentsController extends AbstractController
         }else{
 
             //on sauvegarde dans la base
-            $newNumero = $documentService->saveDevisInDataBase($user, $request, $paniers, $demande);
+            $token = $documentService->saveDevisInDataBase($user, $request, $paniers, $demande);
 
             //on supprime les entree du panier
             $documentService->deletePanierFromUser($paniers);
 
-            return $this->redirectToRoute('lecture_devis', [
-                'numeroDevis' => $newNumero
+            return $this->redirectToRoute('admin_visualisation_document', [
+                'token' => $token
             ]);
         }
 
     }
 
-    /**
-     * @Route("/admin/document/devis/lecture-devis/{numeroDevis}/", name="lecture_devis")
-     */
-    public function lectureDevis(
-        $numeroDevis,
-        Request $request
-        ): Response
-    {
+    // /**
+    //  * @Route("/admin/document/devis/lecture-devis/{numeroDevis}/", name="lecture_devis")
+    //  */
+    // public function lectureDevis(
+    //     $numeroDevis,
+    //     Request $request
+    //     ): Response
+    // {
 
-        $devis = $this->documentRepository->findOneBy(['numeroDevis' => $numeroDevis]);
+    //     $devis = $this->documentRepository->findOneBy(['numeroDevis' => $numeroDevis]);
 
-        if($devis == null){
-            //on signal le changement
-            $this->addFlash('warning', 'Devis inconnu!');
-            return $this->redirectToRoute('admin_accueil');
-        }else{
+    //     if($devis == null){
+    //         //on signal le changement
+    //         $this->addFlash('warning', 'Devis inconnu!');
+    //         return $this->redirectToRoute('admin_accueil');
+    //     }else{
 
-            $form = $this->createForm(MethodeEnvoiType::class, ['methodeEnvoi' => $devis->getEnvoi()]);
-            $form->handleRequest($request);
-            $moreRecentDevis = $this->documentRepository->findAMoreRecentDevis($numeroDevis);
+    //         $form = $this->createForm(MethodeEnvoiType::class, ['methodeEnvoi' => $devis->getEnvoi()]);
+    //         $form->handleRequest($request);
+    //         $moreRecentDevis = $this->documentRepository->findAMoreRecentDevis($numeroDevis);
 
-            if(count($moreRecentDevis) == 1){
-                $suppressionDevis = true;
-            }else{
-                $suppressionDevis = false;
-            }
+    //         if(count($moreRecentDevis) == 1){
+    //             $suppressionDevis = true;
+    //         }else{
+    //             $suppressionDevis = false;
+    //         }
 
-            $occasions = $this->documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
-            $boites = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
+    //         $occasions = $this->documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
+    //         $boites = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
 
-            //ON FAIT LE TOTAL DES OCCASIONS
-            $totalOccasions = 0;
-            foreach($occasions as $occasion){
-                $totalOccasions = $totalOccasions + $occasion->getOccasion()->getPriceHt();
-            }
+    //         //ON FAIT LE TOTAL DES OCCASIONS
+    //         $totalOccasions = 0;
+    //         foreach($occasions as $occasion){
+    //             $totalOccasions = $totalOccasions + $occasion->getOccasion()->getPriceHt();
+    //         }
 
-            //ON FAIT LE TOTAL DES PIECES DETACHEES
-            $totalDetachees = 0;
-            foreach($boites as $boite){
-                $totalDetachees = $totalDetachees + $boite->getPrixVente();
-            }
+    //         //ON FAIT LE TOTAL DES PIECES DETACHEES
+    //         $totalDetachees = 0;
+    //         foreach($boites as $boite){
+    //             $totalDetachees = $totalDetachees + $boite->getPrixVente();
+    //         }
 
-            return $this->render('admin/documents/devis/lecture_devis.html.twig', [
-                'devis' => $devis,
-                'occasions' => $occasions,
-                'boites' => $boites,
-                'tva' => $this->utilities->calculTauxTva($devis->getTauxTva()),
-                'cost' => $devis->getCost(),
-                'totalOccasions' => $totalOccasions,
-                'totalDetachees' => $totalDetachees / 100,
-                'suppressionDevis' => $suppressionDevis,
-                'now' => new DateTimeImmutable('now'),
-                'form' => $form->createView()
-            ]);
-        }
-    }
+    //         return $this->render('admin/documents/devis/lecture_devis.html.twig', [
+    //             'devis' => $devis,
+    //             'occasions' => $occasions,
+    //             'boites' => $boites,
+    //             'tva' => $this->utilities->calculTauxTva($devis->getTauxTva()),
+    //             'cost' => $devis->getCost(),
+    //             'totalOccasions' => $totalOccasions,
+    //             'totalDetachees' => $totalDetachees / 100,
+    //             'suppressionDevis' => $suppressionDevis,
+    //             'now' => new DateTimeImmutable('now'),
+    //             'form' => $form->createView()
+    //         ]);
+    //     }
+    // }
 
     /**
      * @Route("/admin/document/devis/delete-devis/{numeroDevis}", name="delete_devis")
@@ -257,7 +257,7 @@ class AdminDocumentsController extends AbstractController
     }
 
     /**
-     * @Route("/admin/document/visualisation/{token}", name="visualisation_document")
+     * @Route("/admin/document/visualisation/{token}", name="admin_visualisation_document")
      */
     public function visualisationDocument(
         $token,
@@ -277,6 +277,14 @@ class AdminDocumentsController extends AbstractController
         $boites = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
 
         $tauxTva = $this->utilities->calculTauxTva($devis->getTauxTva());
+
+        $moreRecentDevis = $this->documentRepository->findAMoreRecentDevis($devis->getNumeroDevis());
+
+        if(count($moreRecentDevis) == 0){
+            $suppressionDevis = false;
+        }else{
+            $suppressionDevis = true;
+        }
 
         //ON FAIT LE TOTAL DES OCCASIONS
         $totalOccasions = 0;
@@ -320,15 +328,16 @@ class AdminDocumentsController extends AbstractController
             $this->em->flush();
 
         }
-
         return $this->renderForm('admin/documents/visualisation_document.html.twig', [
             'devis' => $devis,
             'occasions' => $occasions,
             'delaiDevis' => $delaiDevis,
             'boites' => $boites,
             'tauxTva' => $tauxTva,
+            'suppressionDevis' => $suppressionDevis,
             'totalOccasions' => $totalOccasions,
             'totalDetachees' => $totalDetachees,
+            'now' => new DateTimeImmutable('now'),
             'toDelete' => $numeroFacture ? $numeroFacture : null,
             'form' => $form
         ]);

@@ -31,9 +31,9 @@
                             </td>
                             <td>
                                 {% if devis.isDeleteByUser == true %}
-                                    <a class="btn btn-success {{disabled}}" href="{{ path('changement_disponibilite_en_ligne', {'value': 0, 'token': devis.token }) }}"> OUI</a>
+                                    <a class="btn btn-danger {{disabled}}" href="{{ path('changement_disponibilite_en_ligne', {'value': 0, 'token': devis.token }) }}"> OUI</a>
                                 {% else %}
-                                    <a class="btn btn-danger {{disabled}}" href="{{ path('changement_disponibilite_en_ligne', {'value': 1, 'token': devis.token }) }}"> NON</a>
+                                    <a class="btn btn-success {{disabled}}" href="{{ path('changement_disponibilite_en_ligne', {'value': 1, 'token': devis.token }) }}"> NON</a>
                                 {% endif %}
                             </td>
                             <td>{{ devis.numeroFacture ? devis.numeroFacture : "PAS DE PAIEMENT" }}</td>
@@ -147,10 +147,26 @@
                 {% endif %}
             </div>
             <div class="col-6 d-flex flex-column justify-content-around align-items-center">
+                {% if devis.isDeleteByUser == false %}
+                    {# si le devis n'est pas echu on affiche les boutons #}
+                    {% set endDevis = devis.endValidationDevis %}
+                    {% set difference = date(endDevis).diff(date(now)) %}
+                    {% set leftDays = difference.days %}
+                    {% if leftDays >= 0 and devis.envoiEmailDevis is null %}
+                        <div class="col-6">
+                            <a class="btn btn-success" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token, 'days': 0 }) }}">Envoyer email => Devis mise à disposition</a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+
+
                 {% if devis.numeroFacture is not null %}
                     <a class="btn btn-lg btn-outline-danger disabled col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}">Facturé: suppression impossible</a>
+                {% else %}
+                     {% include "admin/documents/devis/_delete_form.html.twig" %}
                 {% endif %}
-                {% if devis.isDeleteByUser == false and devis.numeroFacture is null %}
+                {% if devis.isDeleteByUser == false and devis.numeroFacture is null and devis.envoiEmailDevis is not null %}
                     <a class="btn btn-primary col-8 mx-auto" href="{{ path('admin_relance_devis', {'token': devis.token }) }}">Relancer l'utilisateur (+ {{ delaiDevis }} jours)</a>                
                 {% endif %}
             </div>

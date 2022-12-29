@@ -156,8 +156,8 @@ class DocumentService
         //on met en BDD les differentes lignes
         $this->em->flush();
 
-        //et on return le numero du devis
-        return $newNumero;
+        //et on return le token du document
+        return $document->getToken();
     }
 
     public function fromPanierSaveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande){

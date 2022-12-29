@@ -1,6 +1,10 @@
 <form method="post" action="{{ path('delete_devis', {'numeroDevis': devis.numeroDevis}) }}" onsubmit="return confirm('Occasions et pièces détachées bien rangées ...?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ devis.numeroDevis) }}">
-    <button class="btn btn-outline-danger btn-lg {% if suppressionDevis == false %}{{ disabled }}{% endif %}">Supprimer</button>
+    {% if suppressionDevis == false %}
+        <button class="btn btn-outline-danger btn-lg disabled">Dernier devis, suppression impossible</button>
+    {% else %}
+        <button class="btn btn-outline-danger btn-lg">Supprimer dévinitivement</button>
+    {% endif %}
 </form>
 
 

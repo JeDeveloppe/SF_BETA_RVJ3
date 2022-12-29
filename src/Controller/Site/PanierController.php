@@ -216,13 +216,14 @@ public function __construct(
     }
 
     /**
-     * @Route("/panier/demande-de-devis/fin", name="panier-soumis")
+     * @Route("/panier/demande-de-devis-terminer/", name="panier-soumis")
      */
     public function panierDemandeDevisEnd(): Response
     {
         return $this->render('site/panier/demandeTerminee.html.twig', [
             'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
-            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier']),
+            'emailRvj' => $this->getParameter('COMPTESMTP')
         ]);
     }
 

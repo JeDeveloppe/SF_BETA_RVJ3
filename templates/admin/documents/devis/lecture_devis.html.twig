@@ -15,11 +15,10 @@
         {% include "admin/documents/devis/_delete_form.html.twig" %}
     </div>
     <div class="col-12 text-end my-2">
-        Supprimer par l'utilisateur: 
         {% if devis.isDeleteByUser == true %}
-            <a class="btn btn-success" href="{{ path('changement_disponibilite_en_ligne', {'value': 0, 'token': devis.token }) }}"> OUI</a>
+            <a class="btn btn-danger" href="{{ path('changement_disponibilite_en_ligne', {'value': 0, 'token': devis.token }) }}"> Supp. par l'utilisateur</a>
         {% else %}
-            <a class="btn btn-danger" href="{{ path('changement_disponibilite_en_ligne', {'value': 1, 'token': devis.token }) }}"> NON</a>
+            <a class="btn btn-success" href="{{ path('changement_disponibilite_en_ligne', {'value': 1, 'token': devis.token }) }}"> NON supp. par utilisateur</a>
         {% endif %}
     </div>
 
@@ -107,20 +106,20 @@
                 </div>
 
                 {# PARTIE BOUTONS #}
-            {% if devis.isDeleteByUser == false %}
-                {# si le devis n'est pas echu on affiche les boutons #}
-                {% set endDevis = devis.endValidationDevis %}
-                {% set difference = date(endDevis).diff(date(now)) %}
-                {% set leftDays = difference.days %}
-                {% if leftDays >= 0 %}
-                    <div class="col-6">
-                        <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Sauvegarder</button>
-                        <input type="hidden" name="user" value="{{ devis.user.id }}">
-                        <input type="hidden" name="demande" value="{{ devis.numeroDevis }}">
-                        <a class="btn btn-success" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token, 'days': 0 }) }}">Envoyer email => Devis mise à disposition</a>
-                    </div>
+                {% if devis.isDeleteByUser == false %}
+                    {# si le devis n'est pas echu on affiche les boutons #}
+                    {% set endDevis = devis.endValidationDevis %}
+                    {% set difference = date(endDevis).diff(date(now)) %}
+                    {% set leftDays = difference.days %}
+                    {% if leftDays >= 0 %}
+                        <div class="col-6">
+                            <button type="submit" class="btn btn-lg btn-outline-success" id="buttonCreer">Sauvegarder</button>
+                            <input type="hidden" name="user" value="{{ devis.user.id }}">
+                            <input type="hidden" name="demande" value="{{ devis.numeroDevis }}">
+                            <a class="btn btn-success" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token, 'days': 0 }) }}">Envoyer email => Devis mise à disposition</a>
+                        </div>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
             </div>
         </div>
     </form>

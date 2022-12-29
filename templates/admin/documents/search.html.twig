@@ -46,9 +46,9 @@
                                 <td>({{ data.endValidationDevis | date('d-m-Y') }})</td>
                                 <td>
                                     {% if data.isDeleteByUser == true %}
-                                        <span class="badge bg-success"> OUI</span>
+                                        <span class="badge bg-danger"> OUI</span>
                                     {% else %}
-                                        <span class="badge bg-danger"> NON</span>
+                                        <span class="badge bg-success"> NON</span>
                                     {% endif %}
                                 </td>
                             {% else %}
@@ -58,7 +58,7 @@
                             <td>{{ data.adresseLivraison | raw }}</td>
                             <td>{{ (data.totalTtc / 100) |number_format(2, '.', ',') }}</td>
                             <td>
-                                <a class="btn btn-primary" href="{{ path('visualisation_document', {'token': data.token }) }}">Voir</a>
+                                <a class="btn btn-primary" href="{{ path('admin_visualisation_document', {'token': data.token }) }}">Voir</a>
                                 {# <a class="btn btn-secondary" href="{{ path('admin_prevenir_devis_disponible', {'token': data.token }) }}" target="_blank">Imprimer</a> #}
                             </td>
                         </tr>
