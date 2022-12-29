@@ -1,6 +1,12 @@
+{% set nbrJeuxCompletesAvantCreationDuSite = 120 %}
+
 <div class="col-11 mx-auto display-6">Quelques statistiques:</div>
+
 <div class="col-11 col-md-8 col-lg-6 mx-auto">
 	<ul class="list-group list-group-flush">
+		<li class="list-group-item d-flex justify-content-center align-items-center">
+			{{ boitesSolded | length + nbrJeuxCompletesAvantCreationDuSite }} jeux complétés depuis la création du service.
+		</li>
 		<li class="list-group-item d-flex justify-content-between align-items-center">
 			<span>{{ boites | length }} boites dans le catalogue des pièces détachées</span>
 			<span> <a class="btn btn-warning" href="{{ path('catalogue_pieces_detachees') }}">Voir le catalogue</a></span>
@@ -12,6 +18,10 @@
 		<li class="list-group-item d-flex justify-content-between align-items-center">
 			<span>{{ partenaires | length - 1}} partenaires du réemploi</span>
 			<span><a class="btn btn-warning" href="{{ path('carte_partenaires', {'pays': infosAndConfig.legales.country.name }) }}">Voir les partenaires</a><span>
+        </li>
+		<li class="list-group-item d-flex justify-content-between align-items-center">
+			<span>Suivez nous sur Facebook...</span>
+			<span><div class="fb-share-button" data-href="https://www.facebook.com/refaitesvosjeux/" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2Frefaitesvosjeux%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Partager</a></div><span>
         </li>
 	</ul>
 </div>

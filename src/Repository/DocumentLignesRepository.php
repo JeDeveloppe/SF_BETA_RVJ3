@@ -46,14 +46,14 @@ class DocumentLignesRepository extends ServiceEntityRepository
         }
     }
 
-    public function findBoitesGroupeBy(){
+    public function findBoitesSolded(){
 
         return $this->createQueryBuilder('dl')
-            ->select('dl.boite, COUNT(dl.boite)')
-            ->innerJoin('dl.boite', 'b')
-            ->groupBy('b.id')
+            ->join('dl.document', 'd')
+            ->where('d.paiement IS NOT NULL')
+            ->andWhere('dl.boite IS NOT NULL')
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 
     // /**

@@ -5,6 +5,7 @@ namespace App\Controller\Site;
 use App\Form\Site\ContactType;
 use App\Repository\BoiteRepository;
 use App\Repository\ConfigurationRepository;
+use App\Repository\DocumentLignesRepository;
 use App\Service\MailerService;
 use App\Repository\PanierRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,20 +38,17 @@ class SiteController extends AbstractController
         PartenaireRepository $partenaireRepository,
         BoiteRepository $boiteRepository,
         PaysRepository $paysRepository,
-        OccasionRepository $occasionRepository): Response
+        OccasionRepository $occasionRepository,
+        DocumentLignesRepository $documentLignesRepository): Response
     {
-
-        $lastEntries = $boiteRepository->findBy(['isOnLine' => true], ['createdAt' => 'DESC'], 8);
-        //pays par DEFAULT
-        $country = $paysRepository->findBy(['isoCode' => "FR"]);
 
         return $this->render('site/index.html.twig', [
             'boites' => $boiteRepository->findBy(['isOnLine' => true]),
             'occasions' => $occasionRepository->findBy(['isOnLine' => true]),
-            'partenaires' => $partenaireRepository->findPartenairesFullVisibility($country),
-            'controller_name' => 'SiteController',
+            'partenaires' => $partenaireRepository->findPartenairesFullVisibility($paysRepository->findBy(['isoCode' => "FR"])),
+            'boitesSolded' => $documentLignesRepository->findBoitesSolded(),
             'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
-            'lastEntries' => $lastEntries,
+            'lastEntries' => $boiteRepository->findBy(['isOnLine' => true], ['createdAt' => 'DESC'], 8),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }
