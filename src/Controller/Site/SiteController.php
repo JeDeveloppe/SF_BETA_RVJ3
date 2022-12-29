@@ -48,7 +48,7 @@ class SiteController extends AbstractController
             'partenaires' => $partenaireRepository->findPartenairesFullVisibility($paysRepository->findBy(['isoCode' => "FR"])),
             'boitesSolded' => $documentLignesRepository->findBoitesSolded(),
             'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
-            'lastEntries' => $boiteRepository->findBy(['isOnLine' => true], ['createdAt' => 'DESC'], 8),
+            'lastEntries' => $boiteRepository->findBy(['isOnLine' => true], ['createdAt' => 'DESC'], 10),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }

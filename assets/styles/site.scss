@@ -207,6 +207,36 @@ body{
       }
     }
   
+
+  //slider page d'accueil
+.slider{
+  position: relative;
+  height: 50vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.slider-lastEntry{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.slider-lastEntry.active{
+  opacity: 1;
+}
+
+.suivant, .precedent{
+  color: rgb(9,9,121);
+  font-size: 3rem;
+  cursor: pointer;
+}
+
+
     // Small devices (landscape phones, 576px and up)
   @media (min-width: 576px) {
 
