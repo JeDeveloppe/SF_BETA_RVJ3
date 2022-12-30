@@ -25,14 +25,9 @@
       </ul>
       <ul class="navbar-nav">
         {% if app.user %}
-          {% if is_granted('ROLE_ADMIN') %}
-            <li class="nav-item me-2">
-                <a class="nav-link" href="{{ path('admin_accueil') }}">Adm.</a>
-            </li>
-          {% endif %}
-          <li class="nav-item dropdown me-2">
+          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mon compte</a>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu me-4">
               <a class="dropdown-item" href="{{ path('app_member') }}">Mon espace</a>
               {% if is_granted('ROLE_ADMIN') %}
                 <div class="dropdown-divider"></div>
@@ -43,9 +38,9 @@
           </li>
           <li class="nav-item">
             {% if panier | length > 0 %}
-              <a class="nav-link" href="{{ path('app_panier') }}">Panier ({{ panier | length }})</a>
+              <a class="nav-link ms-3" href="{{ path('app_panier') }}">Panier ({{ panier | length }})</a>
             {% else %}
-              <a class="nav-link disabled" href="#">Panier</a>
+              <a class="nav-link disabled ms-5" href="#">Panier</a>
             {% endif %}
           </li>
         {% else %}

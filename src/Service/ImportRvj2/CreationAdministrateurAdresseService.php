@@ -57,8 +57,8 @@ class CreationAdministrateurAdresseService
 
             //on rentre l'adresse de retrait
             $adresse = new Adresse();
-            $adresse->setLastName("COOP")
-            ->setFirstName("100%")
+            $adresse->setLastName("100%")
+            ->setFirstName("Retrait à COOP")
             ->setAdresse("33 route de Trouville")
             ->setVille($this->villeRepository->findOneBy(['villeCodePostal' => 14000, 'villeNom' => 'CAEN']))
             ->setUser($user)

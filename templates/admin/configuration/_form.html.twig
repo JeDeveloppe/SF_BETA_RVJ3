@@ -1,4 +1,7 @@
 {{ form_start(form) }}
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        {{ form_row(form.versionSite) }}
+    {% endif %}
     {{ form_widget(form) }}
     <button class="btn btn-lg btn-success">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}

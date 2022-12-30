@@ -59,6 +59,7 @@ class AppFixtures extends Fixture
             ->setAutrePiece("De 0,30 à 0,50")
             ->setEnveloppeSimple(120)
             ->setEnveloppeBulle(160)
+            ->setVersionSite("3.00")
             ->setCost(200);
         $manager->persist($conf);
 

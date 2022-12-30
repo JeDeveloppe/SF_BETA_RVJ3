@@ -14,6 +14,10 @@ class ConfigurationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('versionSite', TextType::class, [
+                'label' => 'Version actuelle du site:',
+                'required' => false,
+            ])
             ->add('DevisDelayBeforeDelete', NumberType::class, [
                 'label' => 'Nombre de jours avant relance d\'un devis (x2 avant suppression):'
             ])

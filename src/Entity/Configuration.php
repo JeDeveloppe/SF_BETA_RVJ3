@@ -111,6 +111,11 @@ class Configuration
      */
     private $holiday;
 
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $versionSite;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -292,6 +297,18 @@ class Configuration
     public function setHoliday(?string $holiday): self
     {
         $this->holiday = $holiday;
+
+        return $this;
+    }
+
+    public function getVersionSite(): ?string
+    {
+        return $this->versionSite;
+    }
+
+    public function setVersionSite(?string $versionSite): self
+    {
+        $this->versionSite = $versionSite;
 
         return $this;
     }

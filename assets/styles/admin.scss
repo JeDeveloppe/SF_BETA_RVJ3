@@ -7,6 +7,11 @@
     width: 30%;
     object-fit: cover;
 }
+.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0; // remove the gap so it doesn't close
+}
+
 .divImgPresentation {
     .zoom {
       overflow: hidden;

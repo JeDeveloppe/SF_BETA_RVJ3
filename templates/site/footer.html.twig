@@ -1,21 +1,9 @@
 <footer class="col-12 border-top border-primary pt-4 bg-dark">
     <ul class="mt-2 col-12 mx-auto d-flex flex-column flex-md-row justify-content-around align-items-center list-unstyled">
-        <li class="nav-item dropup text-white">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Informations légales</a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="{{ path('mentions-legales') }}">Mentions / CGU</a>
-            <a class="dropdown-item" href="{{ path('cgv') }}">CGV</a>
-          </div>
-        </li>
-        <li class="nav-item dropup text-white">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Le service</a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="{{ path('nous-soutenir') }}">Nous soutenir</a>
-            <a class="dropdown-item" href="{{ path('informations-comment-ca-marche') }}">Comment ça marche ?</a>
-          </div>
-        </li>
-        {# <li><a class="text-white text-decoration-none" href="{{ path('mentions-legales') }}">Mentions légales et CGU</a></li>
-        <li><a class="text-white text-decoration-none" href="{{ path('cgv') }}">CGV</a></li> #}
+        <li><a class="text-white text-decoration-none" href="{{ path('mentions-legales') }}">Mentions / CGU</a></li>
+        <li><a class="text-white text-decoration-none" href="{{ path('cgv') }}">CGV</a></li>
+        <li><a class="text-white text-decoration-none" href="{{ path('nous-soutenir') }}">Nous soutenir</a></li>
+        <li><a class="text-white text-decoration-none" href="{{ path('informations-comment-ca-marche') }}">Comment ça marche ?</a></li>
         <li><a class="text-white text-decoration-none" href="{{ path('contact') }}">Contact</a></li>
         <li><a class="text-white text-decoration-none" href="{{ path('carte_partenaires', {'pays': infosAndConfig.legales.country.name }) }}">Partenaires</a></li>
         <li>
@@ -26,6 +14,6 @@
     </ul>
     <div class="col-12 text-center">
         <a class="text-warning text-decoration-none" href="https://www.je-developpe.fr/" target="_blank">Sité créé par: Je-Développe</a><br/>
-        <small>Version 3.00</small>
+        <small>Version {{ infosAndConfig['config'].versionSite }}</small>
     </div>
 </footer>
