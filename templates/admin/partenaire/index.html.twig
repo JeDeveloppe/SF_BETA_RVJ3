@@ -5,12 +5,15 @@
 {% block body %}
     <h1 class="col-12 text-center my-5">Liste des partenaires</h1>
 
+    <div class="col-3 text-center my-5">
+        <a class="btn btn-info" href="{{ path('app_admin_partenaire_new') }}">Créer un nouveau partenaire +</a>
+    </div>
+
     <table class="table table-responsive text-center align-middle">
         <thead>
             <tr>
                 <th>Image</th>
                 <th>Nom</th>
-                <th>Url</th>
                 <th>Accepte les dons</th>
                 <th>Vend des pièces détachées</th>
                 <th>Vend des jeux complet</th>
@@ -25,7 +28,6 @@
             <tr>
                 <td><img class="img-admin-liste" src="data:image/png;base64,{{ partenaire.imageblob }}"/></td>
                 <td>{{ partenaire.name }}</td>
-                <td>{{ partenaire.url }}</td>
                 <td>{{ partenaire.isDon ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
                 <td>{{ partenaire.isDetachee ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
                 <td>{{ partenaire.isComplet ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
@@ -33,7 +35,7 @@
                 <td>{{ partenaire.isOnLine ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
                 <td>{{ partenaire.isAfficherWhenRechercheCatalogueIsNull ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ path('app_admin_partenaire_edit', {'id': partenaire.id}) }}">Voir / Éditer</a>
+                    <a class="btn btn-warning" href="{{ path('app_admin_partenaire_edit', {'id': partenaire.id}) }}">Voir / Éditer</a>
                 </td>
             </tr>
         {% else %}
@@ -43,9 +45,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-
-    <div class="col-3 text-center my-5">
-        <a class="btn btn-primary" href="{{ path('app_admin_partenaire_new') }}">Créer un nouveau partenaire +</a>
-    </div>
 {% endblock %}

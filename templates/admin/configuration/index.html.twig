@@ -78,13 +78,11 @@
                             {% endif %}
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <a class="btn btn-warning" href="{{ path('app_configuration_edit', {'id': configuration.id}) }}">Éditer</a>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
+            
+            <a class="btn btn-warning mt-3" href="{{ path('app_configuration_edit', {'id': configuration.id}) }}">Éditer</a>
+
         {% else %}
             <table class="table">
                 <tbody>

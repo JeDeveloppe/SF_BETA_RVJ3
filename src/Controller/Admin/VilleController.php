@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Ville;
 use App\Form\Admin\VilleType;
 use App\Repository\VilleRepository;
+use App\Form\Admin\AdminSearchVilleType;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,20 +18,42 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class VilleController extends AbstractController
 {
     /**
-     * @Route("/", name="app_ville_index", methods={"GET"})
+     * @Route("/", name="app_ville_index", methods={"GET", "POST"})
      */
     public function index(VilleRepository $villeRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        $donnees = $villeRepository->findBy([], ['villeNom' => 'ASC']);
+        
+        $form = $this->createForm(AdminSearchVilleType::class);
+        $form->handleRequest($request);
 
-        $villes = $paginator->paginate(
-            $donnees, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            100 /*limit per page*/
-        );
+        //si on faite une recherche
+        if(!is_null($form->get('search')->getData())){
+            $recherche = str_replace(" ","%",$form->get('search')->getData());
+            $donnees = $villeRepository->findVilleInDatabase($recherche);
+
+            $villes = $paginator->paginate(
+                $donnees, /* query NOT result */
+                1, /*page number*/
+                50 /*limit per page*/
+            );
+
+            unset ($form);
+            $form = $this->createForm(AdminSearchVilleType::class);
+            
+        }else{
+
+            $donnees = $villeRepository->findBy([], ['villeNom' => 'ASC']);
+
+            $villes = $paginator->paginate(
+                $donnees, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                100 /*limit per page*/
+            );
+        }
 
         return $this->render('admin/ville/index.html.twig', [
             'villes' => $villes,
+            'form' => $form->createView()
         ]);
     }
 

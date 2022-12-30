@@ -1,0 +1,11 @@
+{% for adresse in adresses %}
+    {% if loop.index == adresses | length %}
+        {% if adresse == 'FR' %}
+            <img class="flagIcone" src="{{ asset('build/images/admin/icon-france.png') }}" />
+        {% elseif adresse == 'BE' %}
+            <img class="flagIcone" src="{{ asset('build/images/admin/icon-belgique.png') }}" />
+        {% endif %}
+    {% else %}
+        {{ adresse }}
+    {% endif %}
+{% endfor %}

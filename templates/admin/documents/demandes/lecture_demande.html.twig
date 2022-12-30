@@ -20,7 +20,13 @@
             <h3>Utilisateur:</h3>
             <div class="card p-0 col-11">
                 <div class="card-header text-center">
+                
                     {{ paniers[0].user.email }} - {{ paniers[0].user.phone }} - Pays: {{ paniers[0].user.country.name }} - Département: {{ paniers[0].user.department }}
+                </div>
+                <div class="card-body text-center">
+                    {% set adresses = paniers[0].facturation|split('<br/>') %}
+                    Facturation:
+                        {% include "admin/documents/demandes/_explodeAdresses.html.twig" %}
                 </div>
             </div>
         </div>
@@ -41,10 +47,8 @@
             <div class="card p-0">
                 <div class="card-header">
                     <div class="col-12 text-center">
-                        {% set adresseLivraisons = paniers[0].livraison | split('<br/>') %}
-                        {% for adresse in adresseLivraisons %}
-                            {{ adresse }}
-                        {% endfor %}
+                        {% set adresses = paniers[0].livraison|split('<br/>') %}
+                        {% include "admin/documents/demandes/_explodeAdresses.html.twig" %}
                     </div>
                     <div class="my-3 col-12 d-flex justify-content-around align-items-center">
                         <div class="col-6 text-center">

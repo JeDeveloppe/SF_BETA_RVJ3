@@ -5,6 +5,10 @@
 {% block body %}
     <h1 class="col-12 text-center my-5">Liste des pays dans la base</h1>
 
+    <div class="col-6 my-5">
+        <a class="btn btn-info" href="{{ path('app_pays_new') }}">Créer un nouveau pays +</a>
+     </div>
+
     <table class="table table-responsive text-center align-middle">
 
         <thead>
@@ -22,8 +26,7 @@
                 <td>{{ pay.name }}</td>
                 <td>{{ pay.isoCode }}</td>
                 <td>
-                    <a href="{{ path('app_pays_show', {'id': pay.id}) }}">show</a>
-                    <a href="{{ path('app_pays_edit', {'id': pay.id}) }}">edit</a>
+                    <a class="btn btn-warning" href="{{ path('app_pays_edit', {'id': pay.id}) }}">Editer</a>
                 </td>
             </tr>
         {% else %}
@@ -34,5 +37,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_pays_new') }}">Create new</a>
 {% endblock %}

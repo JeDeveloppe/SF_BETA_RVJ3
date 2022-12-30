@@ -8,23 +8,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class AdminSearchBoiteType extends AbstractType
+class AdminSearchVilleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('searchBoite', TextType::class, [
+            ->add('search', TextType::class, [
                 'label' => false,
-                'required' => true,
                 'attr' => [
-                    'placeholder' => 'Rechercher un jeu...'
+                    'placeholder' => 'Rechercher une ville ou un code postal...'
                 ]
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => "CHERCHER",
-                'attr' => [
-                    'class' => 'btn btn-success'
-                ]
+            ->add('rechercher', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-sm btn-outline-success'],
             ])
         ;
     }
@@ -32,7 +28,6 @@ class AdminSearchBoiteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
         ]);
     }
 }

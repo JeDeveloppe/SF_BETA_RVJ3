@@ -34,6 +34,19 @@ class VilleRepository extends ServiceEntityRepository
         }
     }
 
+    public function findVilleInDatabase($recherche)
+    {
+        return $this->createQueryBuilder('v')
+            ->where('v.villeNom LIKE :val')
+            ->orWhere('v.villeDepartement LIKE :val')
+            ->orWhere('v.villeCodePostal LIKE :val')
+            ->setParameter('val', '%'.$recherche.'%')
+            ->orderBy('v.villeNom', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     /**
      * @throws ORMException
      * @throws OptimisticLockException

@@ -39,13 +39,11 @@
                     <tr>
                         <td>Pays: </td><td>{{ informations_legale.country.name }}</td>
                     </tr>
-                    <tr>
-                        <td>
-                            <a class="btn btn-warning" href="{{ path('admin_informations_legales_edit', {'id': informations_legale.id}) }}">Éditer</a>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
+            
+            <a class="btn btn-warning mt-4" href="{{ path('admin_informations_legales_edit', {'id': informations_legale.id}) }}">Éditer</a>
+
         {% else %}
             <table class="table">
                 <tbody>

@@ -5,6 +5,22 @@
 {% block body %}
     <h1 class="col-12 text-center my-5">Liste des villes</h1>
 
+
+    <div class="row mb-4 d-flex justify-content-between align-items-center">
+        <div class="col-6 mt-5">
+            <a class="btn btn-info" href="{{ path('app_ville_new') }}">Créer une nouvelle ville +</a>
+        </div>
+        <div class="col-5 mt-5">
+            {{ form_start(form) }}
+                {{ form_row(form.search)}}
+            {{ form_end(form)}}
+        </div>
+        <div class="col-1">
+            <a class="btn btn-warning" href="{{ path('app_ville_index') }}">Reset</a>
+        </div>
+    </div>
+
+
     <table class="table table-responsive text-center align-middle">
         <thead>
             <tr>
@@ -28,11 +44,10 @@
                 <td>{{ ville_france.lng }}</td>
                 <td>{{ ville_france.lat }}</td>
                 <td>
-                    <a href="{{ path('app_ville_show', {'id': ville_france.id}) }}">show</a>
-                    <a href="{{ path('app_ville_edit', {'id': ville_france.id}) }}">edit</a>
+                    <a class="btn btn-warning" href="{{ path('app_ville_edit', {'id': ville_france.id}) }}">Éditer</a>
                 </td>
                 <td>
-                    <a href="https://www.google.fr/maps/place/{{ville_france.villeCodePostal}}+{{ville_france.villeNom}}" target="_blank">Google Maps</a>
+                    <a class="btn btn-sm btn-info" href="https://www.google.fr/maps/place/{{ville_france.villeCodePostal}}+{{ville_france.villeNom}}" target="_blank">Google Maps</a>
                 </td>
             </tr>
         {% else %}
@@ -51,5 +66,4 @@
         </div>
     {% endif %}
 
-    <a href="{{ path('app_ville_new') }}">Create new</a>
 {% endblock %}
