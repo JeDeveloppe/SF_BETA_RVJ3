@@ -92,7 +92,7 @@ class CataloguesController extends AbstractController
         }
 
         //dans tous les cas on cherches les partenaires avec un site web
-        $partenaires = $partenaireRepository->findBy(['isDetachee' => true, 'isOnLine' => true]);
+        $partenaires = $partenaireRepository->findBy(['isDetachee' => true, 'isEcommerce' => true, 'isAfficherWhenRechercheCatalogueIsNull' => true, 'isOnLine' => true]);
 
         return $this->render('site/catalogues/catalogue_pieces_detachees.html.twig', [
             'boites' => $boites,
@@ -186,7 +186,7 @@ class CataloguesController extends AbstractController
         }
 
         //dans tous les cas on cherches les partenaires avec un site web
-        $partenaires = $partenaireRepository->findBy(['isComplet' => true, 'isOnLine' => true]);
+        $partenaires = $partenaireRepository->findBy(['isComplet' => true, 'isEcommerce' => true, 'isAfficherWhenRechercheCatalogueIsNull' => true, 'isOnLine' => true]);
         $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
 
         return $this->render('site/catalogues/catalogue_jeux_occasion.html.twig', [

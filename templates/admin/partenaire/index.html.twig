@@ -15,7 +15,8 @@
                 <th>Vend des pièces détachées</th>
                 <th>Vend des jeux complet</th>
                 <th>Site E-commerce</th>
-                <th>En ligne</th>
+                <th>Actif</th>
+                <th>Afficher dans recherche catalogues</th>
                 <th></th>
             </tr>
         </thead>
@@ -30,6 +31,7 @@
                 <td>{{ partenaire.isComplet ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
                 <td>{{ partenaire.isEcommerce ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
                 <td>{{ partenaire.isOnLine ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
+                <td>{{ partenaire.isAfficherWhenRechercheCatalogueIsNull ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-minus-circle text-danger"></i>' }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ path('app_admin_partenaire_edit', {'id': partenaire.id}) }}">Voir / Éditer</a>
                 </td>

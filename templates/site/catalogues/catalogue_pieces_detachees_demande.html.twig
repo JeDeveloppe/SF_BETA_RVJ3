@@ -13,15 +13,7 @@
 	<h1 class="col-12 text-center mt-5 pt-3 mb-3">{{ boite.nom }} - {{ boite.editeur }} - <span class="small">{{ boite.annee }}</span></h1>
 
 		<div class="row mb-3">
-			<div class="col-12 col-md-6">
-				{% if app.request.headers.get('referer') is null %}
-					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catalogue général</a>
-				{% elseif app.request.headers.get('referer') == app.request.getSchemeAndHttpHost() %}
-					<a class="btn btn-secondary" href="{{ path('accueil') }}">Retour a l'accueil</a>
-				{% else %}
-					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catalogue</a>
-				{% endif %}
-			</div>
+			{% include "site/components/catalogues/_retour-button.html.twig" %}
 		</div>
 
 		<!-- BLOC PRESENTATION DU JEU  -->
@@ -140,13 +132,7 @@
 		</div>
 
 		<div class="row mb-3">
-			<div class="col-12 col-md-6">
-				{% if app.request.headers.get('referer') is null %}
-					<a class="btn btn-secondary" href="{{ path('catalogue_pieces_detachees') }}">Retour au catalogue général</a>
-				{% else %}
-					<a class="btn btn-secondary" href="{{ app.request.headers.get('referer') }}">Retour au catlaogue</a>
-				{% endif %}
-			</div>
+			{% include "site/components/catalogues/_retour-button.html.twig" %}
 		</div>
 
 

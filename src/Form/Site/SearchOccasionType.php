@@ -17,8 +17,9 @@ class SearchOccasionType extends AbstractType
         $builder
             ->add('nom', TextType::class, [
                 'label' => false,
+                'help' => 'Recherche partir de 3 caractères...',
                 'attr' => [
-                    'placeholder' => 'Nom du jeu ou éditeur...',
+                    'placeholder' => 'Nom de jeu, éditeur,...',
                     'pattern' => "\S{3}+"
                 ]
             ])

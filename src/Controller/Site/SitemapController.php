@@ -38,30 +38,18 @@ class SitemapController extends AbstractController
                 'changefreq' => "monthly", //monthly,daily
                 'priority'   => 0.8
                 ];
-        // $urls[] = [
-        //     'loc'        => $this->generateUrl('app_panier'),
-        //     'changefreq' => "monthly", //monthly,daily
-        //     'priority'   => 0.8
-        //     ];
-        // $urls[] = [
-        //     'loc'        => $this->generateUrl('cgv'),
-        //     'changefreq' => "monthly", //monthly,daily
-        //     'priority'   => 0.8
-        //     ];
-        // $urls[] = [
-        //     'loc'        => $this->generateUrl('mentions-legales'),
-        //     'changefreq' => "monthly", //monthly,daily
-        //     'priority'   => 0.8
-        //     ];
-
-        
         $urls[] = [
-            'loc'        => $this->generateUrl('informations-comment-ca-marche'),
+            'loc'        => $this->generateUrl('cgv'),
             'changefreq' => "monthly", //monthly,daily
             'priority'   => 0.8
             ];
         $urls[] = [
-            'loc'        => $this->generateUrl('informations-legales'),
+            'loc'        => $this->generateUrl('mentions-legales'),
+            'changefreq' => "monthly", //monthly,daily
+            'priority'   => 0.8
+            ];
+        $urls[] = [
+            'loc'        => $this->generateUrl('informations-comment-ca-marche'),
             'changefreq' => "monthly", //monthly,daily
             'priority'   => 0.8
             ];

@@ -13,15 +13,16 @@
     </div>
 
     <div class="row my-4">
-    <p>Critères de recherche:<br/>(à partir de 3 caractères)</p>
         {{ form_start(form) }}
             <div class="col-12 d-flex flex-wrap">
-                <div class="col-9 col-sm-5 col-md-2 mx-auto">{{ form_row(form.nom) }}</div>
+                <div class="col-9 col-sm-5 col-md-3 mx-auto"> {{ form_row(form.nom) }}</div>
                 <div class="col-9 col-sm-5 col-md-2 mx-auto">{{ form_row(form.nbrJoueurs) }}</div>
                 <div class="col-9 col-sm-5 col-md-2 mx-auto">{{ form_row(form.age) }}</div>
-                <div class="btn-group col-9 col-sm-5 col-md-2 mx-auto">
-                    <button class="btn btn-success" type="submit" class="btn btn-primary">Recherche</button>
-                    <a class="btn btn-warning pt-sm-3" href="{{ path('catalogue_jeux_occasion') }}">Remise à zéro</a>
+                <div class="col-9 col-sm-5 col-md-2 mx-auto">
+                    <div class="btn-group">
+                        <button class="btn btn-success" type="submit" class="btn btn-primary">Recherche</button>
+                        <a class="btn btn-warning" href="{{ path('catalogue_jeux_occasion') }}">Remise à zéro</a>
+                    </div>
                 </div>
             </div>
         {{ form_end(form) }}
@@ -30,7 +31,6 @@
     <div class="row">
         {% for occasion in occasions %}
             <div class="col-9 col-sm-6 mx-auto col-md-6 p-1 p-md-4 p-lg-1 col-xl-4 my-3">
-
                 <div class="card col-12 h-100 p-0">
                     <div class="card-header bg-secondary text-white col-12 p-1 d-flex flex-column justify-content-center align-items-center">
                         <div class="">{{ occasion.boite.nom }}</div>
@@ -43,12 +43,13 @@
                         </div>
                         {# image #}
                         <div class="col-12 col-lg-6">
-                            <div class="col-12 p-0 d-flex flex-column justify-content-center align-items-center h-100">
-                                <img class="full-width" src="data:image/png;base64,{{ occasion.boite.imageblob }}"/>
-                                  <span class="text-muted small text-center">
+                            <div class="d-flex flex-column justify-content-center align-items-center mb-2 h-100">
+                                <img class="img_full-width" src="data:image/png;base64,{{ occasion.boite.imageblob }}"/>
+                                <span class="text-muted small text-center mt-2">
                                     Photo non contractuelle
                                 </span>
                             </div>
+                   
                         </div>
                         {# informations #}
                         <div class="col-12 mt-3 col-lg-6">

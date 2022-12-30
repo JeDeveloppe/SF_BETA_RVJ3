@@ -77,6 +77,13 @@ class PartenaireType extends AbstractType
                     ],
                 'required' => false
             ])
+            ->add('isAfficherWhenRechercheCatalogueIsNull', CheckboxType::class, [
+                'label' => 'Afficher lors d\'unerecherche null en catalogue',
+                'label_attr' => [
+                    'class' => 'switch-custom'
+                    ],
+                'required' => false
+            ])
 
             // ->add('country', EntityType::class, [
             //     'placeholder' => 'Choisir un pays...',

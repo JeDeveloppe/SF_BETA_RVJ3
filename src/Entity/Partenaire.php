@@ -85,6 +85,11 @@ class Partenaire
      */
     private $ville;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isAfficherWhenRechercheCatalogueIsNull;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -245,6 +250,18 @@ class Partenaire
     public function setVille(?Ville $ville): self
     {
         $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function isIsAfficherWhenRechercheCatalogueIsNull(): ?bool
+    {
+        return $this->isAfficherWhenRechercheCatalogueIsNull;
+    }
+
+    public function setIsAfficherWhenRechercheCatalogueIsNull(?bool $isAfficherWhenRechercheCatalogueIsNull): self
+    {
+        $this->isAfficherWhenRechercheCatalogueIsNull = $isAfficherWhenRechercheCatalogueIsNull;
 
         return $this;
     }
