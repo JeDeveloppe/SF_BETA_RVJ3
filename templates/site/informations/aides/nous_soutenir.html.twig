@@ -15,7 +15,7 @@
                 </p> 
                 
                 <article class="my-4">
-                    <h4 class="text-info">Acheter des jeux :</h4>
+                    <h4 class="text-dark">Acheter des jeux :</h4>
 
                     <p class="mt-2 text-justify">
                         Le service propose aux particuliers et aux professionnels du bassin caennais  d’acquérir des jeux complets d’occasion à petits prix ! 
@@ -24,7 +24,7 @@
                 </article>
 
                 <article class="my-5">
-                    <h4 class="text-info">Donner des jeux :</h4>
+                    <h4 class="text-dark">Donner des jeux :</h4>
 
                     <ul>
                         <li>Le service récupère les jeux complets et incomplets ainsi que les pièces détachées (pions, dés, sabliers…).
@@ -49,18 +49,18 @@
                 </article>
 
                 <article class="my-5">
-                    <h4 class="text-info">Agrandir le réseau:</h4>
+                    <h4 class="text-dark">Agrandir le réseau:</h4>
 
                     <p class="mt-2 text-justify">
                         Le service cherche à développer le réseau autour du réemploi du jouet: vendeurs de pièces détachées, de jeux complets ou points de collecte.<br/>
-                        Vous souhaitez devenir l'un de nos <a class="text-info" href="{{ path('carte_partenaires', {'pays': infosAndConfig.legales.country.name }) }}">partenaires</a> ? N'hésitez pas à nous contacter !
+                        Vous souhaitez devenir l'un de nos <a class="text-dark" href="{{ path('carte_partenaires', {'pays': infosAndConfig.legales.country.name }) }}">partenaires</a> ? N'hésitez pas à nous contacter !
                     </p>
 
                     <div class="row mt-3 justify-content-center">
                         <div class="col-8 col-md-4 card mt-4 shadow">
-                            <video controls autoplay loop>
-                                <source src="/images/photos/animationFrance.mp4" type="video/mp4">
-                            </video> 
+                            <video controls autoplay loop muted>
+                                <source src="{{ asset('build/images/design/animationFrance.mp4') }}" type="video/mp4">
+                            </video>
                         </div>
                     </div>
                 </article>
@@ -68,13 +68,13 @@
     
 
                 <p class="text-center my-5">
-                    Pour toute question merci d'utiliser le <a href="/contact/" class="text-info">formulaire en ligne</a>. 
+                    Pour toute question merci d'utiliser le <a href="{{ path('contact') }}" class="text-dark">formulaire en ligne</a>. 
                 </p>
 
-                <div class="col-12 mt-5 text-center">
+                <div class="col-12 my-5 text-center">
                     <figure class="figure col-11 col-sm-8 col-md-6">
-                        <img src="/images/photos/donOuverture.JPG" class="figure-img img-fluid rounded" alt="photo exemple de dons">
-                        <figcaption class="figure-caption text-center">Exemple de dons.</figcaption>
+                        <img src="{{ asset('build/images/design/dons_rangements/exemple-don-de-jeux.jpg') }}" class="figure-img img-fluid rounded" alt="photo exemple de dons">
+                        <figcaption class="figure-caption text-center text-white">Exemple de dons.</figcaption>
                     </figure>
                 </div>
             </div>

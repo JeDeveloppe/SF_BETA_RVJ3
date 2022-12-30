@@ -134,9 +134,12 @@ class SiteController extends AbstractController
     public function informations_comment_ca_marche(): Response
     {
 
+        $module_paiement = $_ENV["PAIEMENT_MODULE"];
+        
         return $this->render('site/informations/comment-ca-marche/ccm.html.twig', [
             'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
-            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
+            'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier']),
+            'module_paiement' => $module_paiement
         ]);
     }
 }

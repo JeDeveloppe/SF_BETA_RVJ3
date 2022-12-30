@@ -97,7 +97,8 @@
     {# PARTIE BOUTONS #}
         <div class="row my-5">
             <div class="col-6 text-center">
-                <a href="{{ path('app_paiement', {'token': devis[0].token}) }}" class="btn btn-lg btn-success" >Payer</a>
+                <a href="{{ path('app_paiement', {'token': devis[0].token}) }}" class="btn btn-lg btn-success" >Payer</a><br/>
+                <img class="img-thumbnail col-9 col-md-6 col-lg-4 mt-4" src="{{ asset('build/images/design/paiement/logo-' ~ module_paiement ~ '.png') }}" alt="Paiement avec {{ module_paiement }}"/>
             </div>
             <div class="col-6 text-center">
                 <a href="{{ path('suppression_devis_par_utilisateur', {'token': devis[0].token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>

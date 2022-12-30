@@ -56,6 +56,15 @@ class DocumentLignesRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findBoitesGroupeBy(){
+        return $this->createQueryBuilder('dl')
+            ->select('dl.boite, COUNT(dl.boite)')
+            ->innerJoin('dl.boite', 'b')
+            ->groupBy('b.id')
+            ->orderBy('COUNT(dl.boite)', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
+    }
     // /**
     //  * @return DocumentLignes[] Returns an array of DocumentLignes objects
     //  */

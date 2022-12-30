@@ -113,12 +113,14 @@ class SiteDocumentsController extends AbstractController
             }
 
             $tauxTva = $this->utilities->calculTauxTva($devis[0]->getTauxTva());
+            $module_paiement = $_ENV["PAIEMENT_MODULE"];
 
             return $this->render('site/devis/lecture_devis.html.twig', [
                 'devis' => $devis,
                 'occasions' => $occasions,
                 'boites' => $boites,
                 'tauxTva' => $tauxTva,
+                'module_paiement' => $module_paiement,
                 'totalOccasions' => $totalOccasions * $tauxTva,
                 'totalDetachees' => $totalDetachees * $tauxTva,
                 'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),

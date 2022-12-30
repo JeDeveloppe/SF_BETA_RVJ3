@@ -47,18 +47,18 @@
                 </div>
                 <div class="col-12 mt-4 d-flex justify-content-around">
                     <figure class="figure col-4 col-sm-3 col-md-2 col-lg-2">
-                        <img src="/images/photos/rangement1-min.JPG" class="figure-img img-fluid img-thumbnail border-primary" alt="photo rangement jeux">
-                        <figcaption class="figure-caption text-center">En pile...</figcaption>
+                        <img src="{{ asset('build/images/design/dons_rangements/exemple-rangement-pieces-detachees-1.jpg') }}" class="figure-img img-fluid img-thumbnail border-primary" alt="photo rangement jeux">
+                        <figcaption class="figure-caption text-center text-white">En pile...</figcaption>
                     </figure>
 
                     <figure class="figure col-4 col-sm-3 col-md-2 col-lg-2">
-                        <img src="/images/photos/rangement2-min.JPG" class="figure-img img-fluid img-thumbnail border-primary" alt="photo rangement jeux">
-                        <figcaption class="figure-caption text-center">En pile...</figcaption>
+                        <img src="{{ asset('build/images/design/dons_rangements/exemple-rangement-pieces-detachees-2.jpg') }}" class="figure-img img-fluid img-thumbnail border-primary" alt="photo rangement jeux">
+                        <figcaption class="figure-caption text-center text-white">En pile...</figcaption>
                     </figure>
 
                     <figure class="figure col-4 col-sm-3 col-md-2 col-lg-2">
-                        <img src="/images/photos/rangement3-min.JPG" class="figure-img img-fluid img-thumbnail border-primary" alt="photo rangement jeux">
-                        <figcaption class="figure-caption text-center">En pile...</figcaption>
+                        <img src="{{ asset('build/images/design/dons_rangements/exemple-rangement-pieces-detachees-3.jpg') }}" class="figure-img img-fluid img-thumbnail border-primary" alt="photo rangement jeux">
+                        <figcaption class="figure-caption text-center text-white">En pile...</figcaption>
                     </figure>
                 </div>
             </div>
@@ -228,14 +228,15 @@
                         <div class="col-10">En fonction du nombre des pièces achetées, un prix forfaitaire avantageux pourra être proposé (exemples : lot de cartes ou de jetons).</div>
                     </div>
                 </div>
+        </section>
+        <section id="paiement">
                 <!-- PAIEMENTS -->
                 <div class="row my-5">
-                    <h2 class="col-12 text-center">Paiements</h2>
+                    <h2 class="col-12 text-center">Paiement</h2>
                     <div class="col-11 col-md-9 col-xl-6 mx-auto text-justify my-4">
                         <div class="col-12">Les paiements sont effectués par carte bancaire via des pages sécurisées.</div> 
-                        <div class="col-12 text-center mt-3">
-                            <img class="img-thumbnail" src="/PAIEMENT/<?php echo $GLOBAL['servicePaiement']; ?>/logo-<?php echo $GLOBAL['servicePaiement'];?>.png" alt="Paiement avec <?php echo $GLOBAL['servicePaiement']; ?>"/>
-                        
+                        <div class="col-9 col-md-6 text-center mt-3 mx-auto">
+                            <img class="img-thumbnail" src="{{ asset('build/images/design/paiement/logo-' ~ module_paiement ~ '.png') }}" alt="Paiement avec {{ module_paiement }}"/>
                         </div>
                         <div class="col-12 mt-5">Après le paiement de la commande il vous est possible de demander une facture.</div>
                     </div>
