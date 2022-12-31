@@ -200,7 +200,7 @@ class CataloguesController extends AbstractController
     }
 
     /**
-     * @Route("/catalogue-jeux-occasion/boite-{id}/{slug}/{editeur}", name="catalogue_jeux_occasion_details")
+     * @Route("/catalogue-jeux-occasion/occasion-{id}/{slug}/{editeur}", name="catalogue_jeux_occasion_details")
      */
     public function catalogueJeuxOccasionDetails(EntityManagerInterface $entityManager, $id, $slug): Response
     {

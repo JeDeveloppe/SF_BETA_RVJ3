@@ -77,7 +77,7 @@ class ImportOccasionsService
                     ->setReference($arrayOccasion['reference'])
                     ->setPriceHt($arrayOccasion['prixHT'])
                     ->setOldPriceHt($arrayOccasion['ancienPrixHT'])
-                    ->setInformation($arrayOccasion['information'])
+                    ->setInformation($this->stringToNull($arrayOccasion['information']))
                     ->setIsNeuf($arrayOccasion['isNeuf'])
                     ->setEtatBoite($arrayOccasion['etatBoite'])
                     ->setEtatMateriel($arrayOccasion['etatMateriel'])
@@ -96,5 +96,14 @@ class ImportOccasionsService
             }
 
         $this->em->persist($occasion);
+    }
+
+    private function stringToNull($value){
+        
+        if($value == "NULL"){
+            $value = NULL;
+        }
+
+        return $value;
     }
 }
