@@ -4,28 +4,33 @@
 
 {% block body %}
 
-    <div class="row justify-content-center mb-5">
-        <h3 class="col-12 text-center mb-5">Les boites avec le plus de demandes</h3>
+    <h3 class="col-12 text-center mb-5">Les boites avec le plus de demandes (TOP 10)</h3>
 
-        <table class="table table-striped">
-            <thead>
-                <th>Classement</th>
-                <th>Nom - éditeur - année</th>
-                <th>Nombre de demandes</th>
-            </thead>
-            <tbody>
-                {% set classement = 0 %}
-                {% for boite in boites %}
-                    <tr>
-                        <td></td>
-                        <td>{{ boite.boite.nom }}</td>
-                        <td></td>
-                    </tr>
-                    {% set classememnt = classement + 1 %}
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="col-3 text-center my-5">
+        <a class="btn btn-warning" href="{{ path('admin_statistiques') }}">Retour au menu des statistiques</a>
     </div>
 
+    <table class="table table-striped text-center align-middle">
+        <thead>
+            <th>Classement</th>
+            <th>Nom / éditeur / année</th>
+            <th>Image</th>
+            <th>Nombre de demandes</th>
+            <th>Lien catalogue</th>
+        </thead>
+        <tbody>
+            {% set classement = 1 %}
+            {% for boite in boites %}
+                <tr>
+                    <td>{{ classement }}</td>
+                    <td>{{ boite.boite[0].nom }} / {{ boite.boite[0].editeur }} / {{ boite.boite[0].annee }}</td>
+                    <td><img class="img-admin-liste" src="data:image/png;base64,{{ boite.boite[0].imageblob }}"/></td>
+                    <td>{{ boite.total }}</td>
+                    <td><a class="btn btn-primary" target="_blanck" href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.boite[0].id, 'slug':boite.boite[0].nom | lower | slug, 'editeur': boite.boite[0].editeur | lower | slug }) }}">Voir sur le site</a></td>
+                </tr>
+                {% set classement = classement + 1 %}
+            {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}

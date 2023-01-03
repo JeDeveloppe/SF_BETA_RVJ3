@@ -56,15 +56,28 @@ class DocumentLignesRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findBoitesGroupeBy(){
+    public function findSoldedBoitesGroupeBy(){
         return $this->createQueryBuilder('dl')
-            ->select('dl.boite, COUNT(dl.boite)')
-            ->innerJoin('dl.boite', 'b')
-            ->groupBy('b.id')
-            ->orderBy('COUNT(dl.boite)', 'DESC')
-            ->getQuery()
-            ->getArrayResult();
-    }
+         ->select('b.id as idBoite, COUNT(dl.boite) as totalBoites')
+         ->innerJoin('dl.boite', 'b')
+         ->where('dl.occasion IS NULL')
+         ->groupBy('b.id')
+         ->orderBy('COUNT(dl.boite)', 'DESC')
+         ->getQuery()
+         ->setMaxResults(10)
+         ->getArrayResult();
+     }
+
+     public function findSoldedOccasionGroupeBy(){
+        return $this->createQueryBuilder('dl')
+         ->select('o.id as idOccasion, COUNT(dl.occasion) as totalBoites')
+         ->innerJoin('dl.occasion', 'o')
+         ->where('dl.boite IS NULL')
+         ->groupBy('o.id')
+         ->orderBy('COUNT(dl.occasion)', 'DESC')
+         ->getQuery()
+         ->getArrayResult();
+     }
     // /**
     //  * @return DocumentLignes[] Returns an array of DocumentLignes objects
     //  */

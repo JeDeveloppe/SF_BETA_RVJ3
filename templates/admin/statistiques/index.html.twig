@@ -5,11 +5,19 @@
 {% block body %}
     <h1 class="col-12 text-center my-5">Les statistiques disponibles</h1>
 
-    <div class="row my-3">
-        <table class="col-6 mx-auto">
-            <tr>
-                <td class="text-end pe-5">Les demandes de boites: </td><td><a href="{{ path('admin_statistiques_boites') }}" class="btn btn-info">Les demandes de boites...</td>
-            </tr>
-        </table>
+    <div class="col-3 text-center my-5">
+        <a class="btn btn-warning" href="{{ path('admin_statistiques') }}">Retour au menu des statistiques</a>
     </div>
+
+    <table class="table text-center align-middle">
+        <tr>
+            <td>Top 10 des demandes de pièces détachées:</td>
+            <td><a href="{{ path('admin_statistiques_boites') }}" class="btn btn-info">Voir</td>
+        </tr>
+        <tr>
+            <td>Les occasions les plus vendus:</td>
+            <td><a href="{{ path('admin_statistiques_occasions') }}" class="btn btn-info">Voir</td>
+        </tr>
+    </table>
+
 {% endblock %}

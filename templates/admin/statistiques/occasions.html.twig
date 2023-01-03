@@ -1,0 +1,39 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Statistiques: les occasions les plus vendus{% endblock %}
+
+{% block body %}
+
+        <h3 class="col-12 text-center mb-5">Les occasions vendus</h3>
+
+        <div class="col-3 text-center my-5">
+            <a class="btn btn-warning" href="{{ path('admin_statistiques') }}">Retour au menu des statistiques</a>
+        </div>
+
+        <table class="table table-striped text-center align-middle">
+            <thead>
+                <th>Nom / éditeur / année</th>
+                <th>Image</th>
+                <th>Nombre de vente(s)</th>
+            </thead>
+            <tbody>
+                {% for occasion in occasions %}
+                    <tr>
+                        <td>{{ occasion.boite.nom }} / {{ occasion.boite.editeur }} / {{ occasion.boite.annee }}</td>
+                        <td><img class="img-admin-liste" src="data:image/png;base64,{{ occasion.boite.imageblob }}"/></td>
+                        <td>{{ occasion.total }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+    {% if occasions | length > 0 %}
+        <div class="row my-5">
+            <div class="col-12 d-flex justify-content-center">
+                {{ knp_pagination_render(occasions, 'admin/pagination.html.twig') }}
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
