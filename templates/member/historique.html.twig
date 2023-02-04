@@ -31,7 +31,7 @@
                         </td>
                         <td>
                            {% if document.numeroFacture is not null %}
-                              <a href="{{ path('app_member_facture_download', {'token': document.token }) }}" data-toggle="tooltip" data-html="true" title="<em>Tooltip</em> <u>with</u> <b>HTML</b>"><i class="fas fa-print fa-2x"></i></a>
+                              <a href="{{ path('app_member_facture_download', {'token': document.token }) }}" data-toggle="tooltip" data-html="true" title="Facture"><i class="fas fa-print fa-2x"></i></a>
                            {% endif %}
                         </td>
                         

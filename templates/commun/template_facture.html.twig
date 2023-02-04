@@ -1,0 +1,61 @@
+{% set adresseFacturations = doc.adresseFacturation|split('<br/>') %}
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-5"></div>
+                <div class="col-5">
+                    {% for adresse in adresseFacturations %}
+                        {{ adresse }}</br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row my-5">
+                <h3 class="col-12 text-start">Totaux:</h3>
+                <div class="col-11 col-md-6 card">
+                    <table class="table align-middle">
+                        {% if totalOccasions > 0 %}
+                            <tr>
+                                <td>Jeux d'occasion:</td>
+                                <td>{{ (totalOccasions / 100 * doc.tauxTva) |number_format(2, '.', ',') }} €</td>
+                            </tr>
+                        {% endif %}
+                        {% if totalDetachees > 0 %}
+                            <tr>
+                                <td>Pièces détachées:</td>
+                                <td>{{ (totalDetachees / 100 * doc.tauxTva) |number_format(2, '.', ',') }} €</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td>Livraison/ Retrait:</td>
+                            <td>{{ (doc.totalLivraison / 100 * doc.tauxTva) |number_format(2, '.', ',') }} €</td>
+                        </tr>
+                        <tr>
+                            <td>Adhésion au service:</td>
+                            <td>{{ (doc.cost / 100) |number_format(2, '.', ',') }} €</td>
+                        </tr>
+                        <tr>
+                            <td>Total HT:</td>
+                            <td>{{ (doc.totalHt / 100) |number_format(2, '.', ',') }} €</td>
+                        </tr>
+                        <tr>
+                            <td>Total TVA:</td>
+                            <td>{{ ((doc.totalTtc - doc.totalHt) / 100) |number_format(2, '.', ',') }} €</td>
+                        </tr>
+                        <tr>
+                            <td>Total TTC:</td>
+                            <td class="display-6">{{ (doc.totalTtc / 100) |number_format(2, '.', ',')}} €</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
