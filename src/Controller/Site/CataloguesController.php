@@ -58,7 +58,7 @@ class CataloguesController extends AbstractController
 
             $boites = $this->paginator->paginate(
                 $donnees, /* query NOT result */
-                1, /*page number*/
+                $request->query->getInt('page', 1), /*page number*/
                 50 /*limit per page*/
             );
         }

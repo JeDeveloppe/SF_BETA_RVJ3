@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\Pays;
+use App\Entity\User;
+use DateTimeImmutable;
 use App\Entity\MethodeEnvoi;
 use App\Entity\Configuration;
 use App\Repository\PaysRepository;
@@ -73,10 +75,23 @@ class AppFixtures extends Fixture
                     ->setNomSociete('Refaites vos jeux')
                     ->setSiteUrl('www.refaitesvosjeux.fr')
                     ->setHebergeurSite('IONOS SARL, 7 PLACE DE LA GARE, 57200 SARREGUEMINES')
-                    ->setTauxTva(1.00)
+                    ->setTauxTva(0.00)
                     ->setCountry($this->paysRepository->findOneBy(['isoCode' => 'FR']));
         $manager->persist($infosLegales);
 
+        $manager->flush();
+
+        //on inject l'administrateur
+        $password = "$2y$12\$Bn1rYoKUgw54wz2VjCZ4tOrqxlYrSZ1NMYZDyw4X/wZl.zwmji1na";
+        $admin = new User();
+        $admin->setCreatedAt(new DateTimeImmutable('now'))
+            ->setEmail("jedeveloppe.contact@gmail.com")
+            ->setPassword($password)
+            ->setRoles(["ROLE_SUPER_ADMIN"])
+            ->setPhone(0000000000)
+            ->setCountry($this->paysRepository->findOneBy(['isoCode' => 'FR']))
+            ->setDepartment(14);
+        $manager->persist($admin);
         $manager->flush();
     }
 }
