@@ -24,9 +24,12 @@
         {% endblock %}
     </head>
     <body>
-            {% include "site/nav.html.twig" %}
 
-            {% if infosAndConfig.config.holiday is not null %}
+            {% if infosAndConfig.config.holiday is defined %}
+                {% include "site/nav.html.twig" %}
+            {% endif %}
+
+            {% if infosAndConfig.config.holiday is defined and infosAndConfig.config.holiday is not null %}
                 {% include "site/marquee.html.twig" %}
             {% endif %}
             
@@ -36,7 +39,9 @@
                 {% block body %}{% endblock %}
             </div>
 
-            {% include "site/footer.html.twig" %}
+            {% if infosAndConfig.config.holiday is defined %}
+                {% include "site/footer.html.twig" %}
+            {% endif %}
 
             {% block javascripts %}
                 {{ encore_entry_script_tags('site') }}
