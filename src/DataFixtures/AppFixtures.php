@@ -82,16 +82,16 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         //on inject l'administrateur
-        $password = "$2y$12\$Bn1rYoKUgw54wz2VjCZ4tOrqxlYrSZ1NMYZDyw4X/wZl.zwmji1na";
-        $admin = new User();
-        $admin->setCreatedAt(new DateTimeImmutable('now'))
-            ->setEmail("jedeveloppe.contact@gmail.com")
-            ->setPassword($password)
-            ->setRoles(["ROLE_SUPER_ADMIN"])
-            ->setPhone(0000000000)
-            ->setCountry($this->paysRepository->findOneBy(['isoCode' => 'FR']))
-            ->setDepartment(14);
-        $manager->persist($admin);
-        $manager->flush();
+        // $password = "$2y$12\$Bn1rYoKUgw54wz2VjCZ4tOrqxlYrSZ1NMYZDyw4X/wZl.zwmji1na";
+        // $admin = new User();
+        // $admin->setCreatedAt(new DateTimeImmutable('now'))
+        //     ->setEmail("jedeveloppe.contact@gmail.com")
+        //     ->setPassword($password)
+        //     ->setRoles(["ROLE_SUPER_ADMIN"])
+        //     ->setPhone(0000000000)
+        //     ->setCountry($this->paysRepository->findOneBy(['isoCode' => 'FR']))
+        //     ->setDepartment(14);
+        // $manager->persist($admin);
+        // $manager->flush();
     }
 }

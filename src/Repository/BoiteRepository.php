@@ -50,6 +50,8 @@ class BoiteRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('b')
             ->where('b.nom LIKE :val')
             ->setParameter('val', '%'.$recherche.'%')
+            ->andWhere('isOnLine = :onLine')
+            ->setParameter('onLine', true)
             ->orderBy('b.nom', 'ASC')
             ->getQuery()
             ->getResult()

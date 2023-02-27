@@ -162,11 +162,17 @@ class Boite
      */
     private $rvj2Id;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Article::class, mappedBy="boite")
+     */
+    private $articles;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
         $this->paniers = new ArrayCollection();
         $this->documentLignes = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -481,4 +487,32 @@ class Boite
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+            $article->addBoite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): self
+    {
+        if ($this->articles->removeElement($article)) {
+            $article->removeBoite($this);
+        }
+
+        return $this;
+    }
+
 }

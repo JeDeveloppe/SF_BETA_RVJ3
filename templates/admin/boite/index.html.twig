@@ -29,8 +29,7 @@
                 <th>Livrable</th>
                 <th>Jeu complet</th>
                 <th>En ligne</th>
-                <th>Date de création</th>
-                <th>Actions</th>
+                <th>Gestion</th>
             </tr>
         </thead>
         <tbody>
@@ -43,9 +42,9 @@
                 <td>{{ boite.isLivrable ? '<i class="fa-solid fa-truck text-success"></i>' : '<i class="fa-solid fa-truck text-danger"></i>' }}</td>
                 <td>{{ boite.isComplet ? '<i class="fa-solid fa-square-full text-success"></i>' : '<i class="fa-solid fa-square-full text-danger"></i>' }}</td>
                 <td>{{ boite.isOnLine ? '<i class="fa-solid fa-earth-europe text-success"></i>' : '<i class="fa-solid fa-earth-europe text-danger"></i>' }}</td>
-                <td>{{ boite.createdAt ? boite.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a class="btn btn-warning" href="{{ path('admin_boite_edit', {'id': boite.id}) }}">Édition</a>
+                    <a class="btn btn-warning" href="{{ path('admin_boite_edit', {'id': boite.id}) }}">Boite</a>
+                    <a class="btn btn-warning" href="{{ path('app_article_index', {'boite': boite.id}) }}">Articles</a>
                 </td>
             </tr>
         {% else %}
