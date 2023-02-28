@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+{% extends 'admin/base.html.twig' %}
 
-<title>New Article</title>
+{% block title %}Création d'un article{% endblock %}
 
 {% block body %}
-    <h1>Create new Article</h1>
+    <h1 class="col-12 text-center my-5">Création d'un article</h1>
 
-    {{ include('article/_form.html.twig') }}
+    {{ include('admin/article/_form.html.twig') }}
 
-    <a href="{{ path('app_article_index') }}">back to list</a>
+    <a href="{{ path('app_article_index', {'boite': boite.id}) }}">back to list</a>
 {% endblock %}

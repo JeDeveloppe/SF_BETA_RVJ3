@@ -39,6 +39,19 @@ class ArticleRepository extends ServiceEntityRepository
         }
     }
 
+    public function findArticlesFromBoiteInDatabase($boite)
+    {
+        return $this->createQueryBuilder('a')
+            // ->where('a.boite IN :val')
+            // ->setParameter('val',$boite)
+            ->innerJoin('a.boite', 'b')
+            ->where('b.id = :boite')
+            ->setParameter('boite', $boite)
+            ->orderBy('a.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */
