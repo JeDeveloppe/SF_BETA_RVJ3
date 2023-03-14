@@ -44,8 +44,8 @@ class AdminBoiteController extends AbstractController
 
             $boites = $paginator->paginate(
                 $donnees, /* query NOT result */
-                1, /*page number*/
-                50 /*limit per page*/
+                $request->query->getInt('page', 1), /*page number*/
+                25 /*limit per page*/
             );
 
             unset ($form);

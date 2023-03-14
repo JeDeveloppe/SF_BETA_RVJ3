@@ -34,7 +34,7 @@ class AdminArticleType extends AbstractType
                     return $boite->getNom().' - '.$boite->getEditeur().' - '.$boite->getAnnee();
                 },
                 'multiple' => true,
-                'expanded' => false,
+                'expanded' => true,
             ]);
     }
 

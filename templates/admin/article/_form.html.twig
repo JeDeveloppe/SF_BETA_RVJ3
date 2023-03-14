@@ -9,10 +9,12 @@
             <label class="form-label">{{ form_label(form.quantity) }}</label>
             {{ form_widget(form.quantity) }}
         </div>
-        <div class="col-12 d-flex">
+        <div class="col-12 d-flex justify-content-around flex-wrap">
             {% for boite in form.boite %}
+                <div class="col-2 card m-1 p-2">
                     {{ form_label(boite) }}
                     {{ form_widget(boite)}}
+                </div>
             {% endfor %}
         </div>
     </div>

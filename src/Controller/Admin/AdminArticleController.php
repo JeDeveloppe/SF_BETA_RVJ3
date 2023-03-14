@@ -6,21 +6,39 @@ use App\Entity\Article;
 use App\Form\Admin\AdminArticleType;
 use App\Repository\ArticleRepository;
 use App\Repository\BoiteRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin/boite-{boite}/articles')]
+#[Route('/admin/articles')]
 class AdminArticleController extends AbstractController
 {
     public function __construct(
-        private BoiteRepository $boiteRepository
+        private BoiteRepository $boiteRepository,
+        private PaginatorInterface $paginator
     )
     {
     }
 
-    #[Route('/', name: 'app_article_index', methods: ['GET'])]
+    #[Route('/', name: 'app_article_index_liste_total', methods: ['GET'])]
+    public function indexListeTotal(ArticleRepository $articleRepository, Request $request): Response
+    {
+        $donnees = $articleRepository->findAll();
+ 
+        $articles = $this->paginator->paginate(
+            $donnees, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            25 /*limit per page*/
+        );
+
+        return $this->render('admin/article/index_liste_total.html.twig', [
+            'articles' => $articles,
+        ]);
+    }
+
+    #[Route('-boite-{boite}/', name: 'app_article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository, $boite): Response
     {
         $boite = $this->boiteRepository->findOneBy(['id' => $boite]);
@@ -32,7 +50,7 @@ class AdminArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
+    #[Route('-boite-{boite}/new', name: 'app_article_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ArticleRepository $articleRepository, $boite): Response
     {
         $article = new Article();
@@ -67,7 +85,7 @@ class AdminArticleController extends AbstractController
     //     ]);
     // }
 
-    #[Route('/{id}/edit', name: 'app_article_edit', methods: ['GET', 'POST'])]
+    #[Route('-boite-{boite}/edit/{id}', name: 'app_article_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Article $article, ArticleRepository $articleRepository, $boite): Response
     {
         $form = $this->createForm(AdminArticleType::class, $article);
@@ -87,13 +105,13 @@ class AdminArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_article_delete', methods: ['POST'])]
-    public function delete(Request $request, Article $article, ArticleRepository $articleRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
-            $articleRepository->remove($article, true);
-        }
+    // #[Route('/{id}', name: 'app_article_delete', methods: ['POST'])]
+    // public function delete(Request $request, Article $article, ArticleRepository $articleRepository): Response
+    // {
+    //     if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
+    //         $articleRepository->remove($article, true);
+    //     }
 
-        return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
-    }
+    //     return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+    // }
 }
