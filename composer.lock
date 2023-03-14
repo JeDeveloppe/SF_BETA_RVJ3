@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "62e3f0f888c966d314b4b7473ff63c52",
+    "content-hash": "c2ec1cce18060e1ca3e7ce557b678de1",
     "packages": [
         {
             "name": "amenadiel/jpgraph",
@@ -7825,16 +7825,16 @@
         },
         {
             "name": "symfony/ux-autocomplete",
-            "version": "v2.4.0",
+            "version": "v2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-autocomplete.git",
-                "reference": "89b37ed23022dc1529845987ad59f6a203a13047"
+                "reference": "41b9d8d2462536c84a50d8f1155ea9ed45ad39fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/89b37ed23022dc1529845987ad59f6a203a13047",
-                "reference": "89b37ed23022dc1529845987ad59f6a203a13047",
+                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/41b9d8d2462536c84a50d8f1155ea9ed45ad39fd",
+                "reference": "41b9d8d2462536c84a50d8f1155ea9ed45ad39fd",
                 "shasum": ""
             },
             "require": {
@@ -7844,9 +7844,12 @@
                 "symfony/http-kernel": "^5.4|^6.0",
                 "symfony/string": "^5.4|^6.0"
             },
+            "conflict": {
+                "doctrine/orm": "2.9.0 || 2.9.1"
+            },
             "require-dev": {
-                "doctrine/doctrine-bundle": "^2.0",
-                "doctrine/orm": "^2.7",
+                "doctrine/doctrine-bundle": "^2.4",
+                "doctrine/orm": "^2.9",
                 "mtdowling/jmespath.php": "2.6.x-dev",
                 "symfony/form": "^5.4|^6.0",
                 "symfony/framework-bundle": "^5.4|^6.0",
@@ -7856,6 +7859,7 @@
                 "symfony/security-bundle": "^5.4|^6.0",
                 "symfony/security-csrf": "^5.4|^6.0",
                 "symfony/twig-bundle": "^5.4|^6.0",
+                "symfony/uid": "^5.4|^6.0",
                 "zenstruck/browser": "^1.1",
                 "zenstruck/foundry": "^1.19"
             },
@@ -7887,7 +7891,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.4.0"
+                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.7.1"
             },
             "funding": [
                 {
@@ -7903,7 +7907,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-14T12:14:59+00:00"
+            "time": "2023-01-24T15:40:19+00:00"
         },
         {
             "name": "symfony/validator",
@@ -8269,16 +8273,16 @@
         },
         {
             "name": "symfony/webpack-encore-bundle",
-            "version": "v1.16.0",
+            "version": "v1.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/webpack-encore-bundle.git",
-                "reference": "bb399930c0299866258b616a74a27b50b94c5d45"
+                "reference": "1862d71e483769b40278548a30e756ce13ef9d4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/webpack-encore-bundle/zipball/bb399930c0299866258b616a74a27b50b94c5d45",
-                "reference": "bb399930c0299866258b616a74a27b50b94c5d45",
+                "url": "https://api.github.com/repos/symfony/webpack-encore-bundle/zipball/1862d71e483769b40278548a30e756ce13ef9d4c",
+                "reference": "1862d71e483769b40278548a30e756ce13ef9d4c",
                 "shasum": ""
             },
             "require": {
@@ -8322,7 +8326,7 @@
             "description": "Integration with your Symfony app & Webpack Encore!",
             "support": {
                 "issues": "https://github.com/symfony/webpack-encore-bundle/issues",
-                "source": "https://github.com/symfony/webpack-encore-bundle/tree/v1.16.0"
+                "source": "https://github.com/symfony/webpack-encore-bundle/tree/v1.16.1"
             },
             "funding": [
                 {
@@ -8338,7 +8342,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-18T15:21:06+00:00"
+            "time": "2023-01-18T19:37:55+00:00"
         },
         {
             "name": "symfony/yaml",

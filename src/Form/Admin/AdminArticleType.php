@@ -26,16 +26,19 @@ class AdminArticleType extends AbstractType
             ->add('boite', EntityType::class, [
                 'label' => 'Boites de jeu:',
                 'class' => Boite::class,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('b')
-                        ->orderBy('b.nom', 'ASC');
-                },
+                // 'query_builder' => function (EntityRepository $er) {
+                //     return $er->createQueryBuilder('b')
+                //         ->orderBy('b.nom', 'ASC');
+                // },
                 'choice_label' => function ($boite) {
-                    return $boite->getNom().' - '.$boite->getEditeur().' - '.$boite->getAnnee();
+                    return '['.$boite->getId().'] '.$boite->getNom().' - '.$boite->getEditeur().' - '.$boite->getAnnee();
                 },
                 'multiple' => true,
-                'expanded' => true,
-            ]);
+                // 'expanded' => true,
+                'autocomplete' => true,
+                // 'mapped' => false
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
