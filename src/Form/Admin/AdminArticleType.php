@@ -31,7 +31,7 @@ class AdminArticleType extends AbstractType
                 //         ->orderBy('b.nom', 'ASC');
                 // },
                 'choice_label' => function ($boite) {
-                    return '['.$boite->getId().'] '.$boite->getNom().' - '.$boite->getEditeur().' - '.$boite->getAnnee();
+                    return $boite->getNom().' - '.$boite->getEditeur().' - '.$boite->getAnnee();
                 },
                 'multiple' => true,
                 // 'expanded' => true,
