@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Security;
 use App\Form\Site\CatalogueSearchBoiteType;
 use App\Form\Site\SearchOccasionType;
+use App\Repository\ArticleRepository;
 use App\Repository\ConfigurationRepository;
 use App\Repository\PartenaireRepository;
 use App\Service\Utilities;
@@ -94,7 +95,7 @@ class CataloguesController extends AbstractController
         //dans tous les cas on cherches les partenaires avec un site web
         $partenaires = $partenaireRepository->findBy(['isDetachee' => true, 'isEcommerce' => true, 'isAfficherWhenRechercheCatalogueIsNull' => true, 'isOnLine' => true]);
 
-        return $this->render('site/catalogues/catalogue_pieces_detachees.html.twig', [
+        return $this->render('site/catalogues/catalogue_pieces_detachees-direct.html.twig', [
             'boites' => $boites,
             'catalogueFiltersForm' => $formFilters->createView(),
             'tri' => $tri,
@@ -110,6 +111,7 @@ class CataloguesController extends AbstractController
      */
     public function cataloguePiecesDetacheesDemande(
         EntityManagerInterface $entityManager,
+        ArticleRepository $articleRepository,
         $id,
         $slug
         ): Response
@@ -124,8 +126,10 @@ class CataloguesController extends AbstractController
             return $this->redirectToRoute('catalogue_pieces_detachees');
         }else{
 
-            return $this->render('site/catalogues/catalogue_pieces_detachees_demande.html.twig', [
+            return $this->render('site/catalogues/catalogue_pieces_detachees_demande-direct.html.twig', [
                 'boite' => $boite,
+                'articles' => $articleRepository->findBy(['boiteOrigine' => $boite]),
+                'articlesDesAutresBoites' => $boite->getArticles(),
                 'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);

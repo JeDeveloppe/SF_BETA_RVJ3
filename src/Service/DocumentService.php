@@ -457,11 +457,11 @@ class DocumentService
             'totalDetachees' => $totalDetachees
         ]);
 
-        $html .= '<style>'.file_get_contents("../public/build/site.95d9ef6a.css").'</style>';
+        // $html .= '<style>'.file_get_contents("../public/build/site.95d9ef6a.css").'</style>';
    
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
-
+        $dompdf->set_base_path("/www/public/build/");
         $dompdf->loadHtml($html);
 
         // (Optional) Setup the paper size and orientation

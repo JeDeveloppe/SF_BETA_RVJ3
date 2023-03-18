@@ -42,7 +42,8 @@ class AdminArticleController extends AbstractController
     public function index(ArticleRepository $articleRepository, $boite): Response
     {
         $boite = $this->boiteRepository->findOneBy(['id' => $boite]);
-        $articles = $articleRepository->findArticlesFromBoiteInDatabase($boite);
+        // $articles = $articleRepository->findArticlesFromBoiteInDatabase($boite);
+        $articles = $articleRepository->findBy(['boiteOrigine' => $boite]);
  
         return $this->render('admin/article/index.html.twig', [
             'articles' => $articles,
@@ -62,11 +63,11 @@ class AdminArticleController extends AbstractController
 
             $article->setReference('en_cours')
                     ->setCreatedAt(new \DateTimeImmutable('now'))
-                    ->setUser($this->getUser());
+                    ->setUser($this->getUser())
+                    ->setBoiteOrigine($boite);
             $articleRepository->add($article, true);
 
-            $article->setReference(time().'-'.$boite->getId().'-'.$article->getId())
-                    ->addBoite($boite);
+            $article->setReference(time().'-'.$boite->getId().'-'.$article->getId());
 
             $articleRepository->add($article, true);
 

@@ -45,15 +45,16 @@ class ImportRVJ2 extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input,$output);
-
+        
+        ini_set('memory_limit', '512M');
         // //on importe les boites
-        //$this->importBoitesService->importBoites($io);
+        $this->importBoitesService->importBoites($io);
 
         // ////on importe le detail des boites
-        //$this->importPiecesService->importPieces($io);
+        $this->importPiecesService->importPieces($io);
 
         // // //on importe les jeux complet (occasions)
-        //$this->importOccasionsService->importOccasions($io);
+        $this->importOccasionsService->importOccasions($io);
 
         // //on importe les departementss
         //$this->importDepartementsService->importDepartements($io);
@@ -70,26 +71,24 @@ class ImportRVJ2 extends Command
         //$this->importPartenairesService->importPartenaires($io);
 
         // //on importe les clients
-        $this->importClientsService->importClients($io);
-
-
+        // $this->importClientsService->importClients($io);
 
         // //on importe les adresses (facturation et livraison)
-        $this->importAdressesService->importAdresses($io);
+        // $this->importAdressesService->importAdresses($io);
 
         //on crée user administrateur et adresse de retrait
-        $this->creationAdministrateurAdresseService->creationAdminAdresse($io);
+        // $this->creationAdministrateurAdresseService->creationAdminAdresse($io);
 
         // //on importe les documents
-        $this->importDocumentsService->importDocuments($io);
-        $this->importPaiementService->importPaiements($io);
+        // $this->importDocumentsService->importDocuments($io);
+        // $this->importPaiementService->importPaiements($io);
 
 
         // //on importe les ligne boite des documents
-        $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
+        // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
 
         // //on importe les lignes occasion des documents
-        $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
+        // $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
 
         return Command::SUCCESS;
     }

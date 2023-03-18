@@ -50,6 +50,12 @@ class Article
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Boite::class, inversedBy="articlesOrigine")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $boiteOrigine;
+
     public function __construct()
     {
         $this->boite = new ArrayCollection();
@@ -140,6 +146,18 @@ class Article
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getBoiteOrigine(): ?Boite
+    {
+        return $this->boiteOrigine;
+    }
+
+    public function setBoiteOrigine(?Boite $boiteOrigine): self
+    {
+        $this->boiteOrigine = $boiteOrigine;
 
         return $this;
     }

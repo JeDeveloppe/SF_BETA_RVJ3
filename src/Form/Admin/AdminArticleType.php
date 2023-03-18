@@ -24,7 +24,7 @@ class AdminArticleType extends AbstractType
                 'label' => 'Quantité total en stock:'
             ])
             ->add('boite', EntityType::class, [
-                'label' => 'Boites de jeu:',
+                'label' => 'Autres boites de jeu:',
                 'class' => Boite::class,
                 // 'query_builder' => function (EntityRepository $er) {
                 //     return $er->createQueryBuilder('b')
@@ -36,6 +36,7 @@ class AdminArticleType extends AbstractType
                 'multiple' => true,
                 // 'expanded' => true,
                 'autocomplete' => true,
+                'required' => false
                 // 'mapped' => false
             ])
             ;

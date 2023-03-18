@@ -167,12 +167,18 @@ class Boite
      */
     private $articles;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="boiteOrigine")
+     */
+    private $articlesOrigine;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
         $this->paniers = new ArrayCollection();
         $this->documentLignes = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->articlesOrigine = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -510,6 +516,36 @@ class Boite
     {
         if ($this->articles->removeElement($article)) {
             $article->removeBoite($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticlesOrigine(): Collection
+    {
+        return $this->articlesOrigine;
+    }
+
+    public function addArticlesOrigine(Article $articlesOrigine): self
+    {
+        if (!$this->articlesOrigine->contains($articlesOrigine)) {
+            $this->articlesOrigine[] = $articlesOrigine;
+            $articlesOrigine->setBoiteOrigine($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticlesOrigine(Article $articlesOrigine): self
+    {
+        if ($this->articlesOrigine->removeElement($articlesOrigine)) {
+            // set the owning side to null (unless already changed)
+            if ($articlesOrigine->getBoiteOrigine() === $this) {
+                $articlesOrigine->setBoiteOrigine(null);
+            }
         }
 
         return $this;

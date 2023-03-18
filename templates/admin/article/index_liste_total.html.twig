@@ -19,7 +19,6 @@
         </thead>
         <tbody>
         {% for article in articles %}
-            {% set lastBoite = article.boite | last %}
             <tr>
                 <td>{{ article.name }}</td>
                 <td>{{ article.quantity }}</td>
@@ -27,7 +26,8 @@
                 <td>{{ article.createdAt | date("d-m-Y") }}</td>
                 <td>{{ article.user.nickname }}</td>
                 <td>
-                    <a class="btn btn-sm btn-warning" href="{{ path('app_article_edit', {'id': article.id, 'boite': lastBoite.id }) }}">Éditer</a>
+            {% set lastBoite = article.boite | last %}
+                    <a class="btn btn-sm btn-warning" href="{{ path('app_article_edit', {'id': article.id, 'boite': article.boiteOrigine.id }) }}">Éditer</a>
                 </td>
             </tr>
         {% else %}
