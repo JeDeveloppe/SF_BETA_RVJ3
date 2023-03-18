@@ -155,7 +155,7 @@ class DocumentRepository extends ServiceEntityRepository
         ->andWhere('d.isDeleteByUser = :deleted')
         ->setParameter('deleted', false)
         ->getQuery()
-        ->getResult()
+        ->getOneOrNullResult()
         ;  
     }
 

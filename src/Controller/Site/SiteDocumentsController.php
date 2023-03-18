@@ -112,7 +112,7 @@ class SiteDocumentsController extends AbstractController
                 $totalDetachees = $totalDetachees + $boite->getPrixVente();
             }
 
-            $tauxTva = $this->utilities->calculTauxTva($devis[0]->getTauxTva());
+            $tauxTva = $this->utilities->calculTauxTva($devis->getTauxTva());
             $module_paiement = $_ENV["PAIEMENT_MODULE"];
 
             return $this->render('site/devis/lecture_devis.html.twig', [

@@ -9,20 +9,25 @@
     <table class="table table-responsive text-center align-middle">
         <thead>
             <tr>
-                <th>Nom</th>
-                <th>Quantité en stock</th>
-                <th>Référence</th>
+                <th>Nom:</th>
+                <th>Quantité en stock:</th>
+                <th>Référence:</th>
+                <th>Créé le:</th>
+                <th>Par:</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
         {% for article in articles %}
+            {% set lastBoite = article.boite | last %}
             <tr>
                 <td>{{ article.name }}</td>
                 <td>{{ article.quantity }}</td>
                 <td>{{ article.reference }}</td>
+                <td>{{ article.createdAt | date("d-m-Y") }}</td>
+                <td>{{ article.user.nickname }}</td>
                 <td>
-                    {# <a class="btn btn-sm btn-warning" href="{{ path('app_article_edit', {'id': article.id, 'boite': article.boite.id}) }}">Éditer</a> #}
+                    <a class="btn btn-sm btn-warning" href="{{ path('app_article_edit', {'id': article.id, 'boite': lastBoite.id }) }}">Éditer</a>
                 </td>
             </tr>
         {% else %}

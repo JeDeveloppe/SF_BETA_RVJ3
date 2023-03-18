@@ -13,7 +13,6 @@
     {% endif %}
 
     <h3 class="col-12 text-center my-5">Visualisation d'un document</h3>
-
         <div class="row justify-content-center my-5">
             <div class="col-11">
                 <table class="table text-center align-middle">
@@ -120,6 +119,11 @@
                     <tr>
                         <td>Livraison / Retrait:</td>
                         <td>{{ (devis.totalLivraison / 100 * tva) | number_format(2, '.', ',') }}</td>
+                    </tr>
+
+                     <tr>
+                        <td>Adhésion annuelle:</td>
+                        <td>{{ (devis.cost / 100 * tva) | number_format(2, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td>Total HT:</td>

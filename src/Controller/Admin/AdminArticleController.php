@@ -58,12 +58,15 @@ class AdminArticleController extends AbstractController
         $form->handleRequest($request);
         $boite = $this->boiteRepository->findOneBy(['id' => $boite]);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $article->setReference('en_cours');
+
+            $article->setReference('en_cours')
+                    ->setCreatedAt(new \DateTimeImmutable('now'))
+                    ->setUser($this->getUser());
             $articleRepository->add($article, true);
 
-            $article->setReference('RVJA_'.$boite->getId().'_'.$article->getId())->addBoite($boite);
+            $article->setReference(time().'-'.$boite->getId().'-'.$article->getId())
+                    ->addBoite($boite);
 
             $articleRepository->add($article, true);
 
@@ -85,12 +88,14 @@ class AdminArticleController extends AbstractController
     //     ]);
     // }
 
-    #[Route('-boite-{boite}/edit/{id}', name: 'app_article_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Article $article, ArticleRepository $articleRepository, $boite): Response
+    #[Route('-boite/{boite}/edit/{id}/', name: 'app_article_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Article $article, ArticleRepository $articleRepository, $boite = null): Response
     {
         $form = $this->createForm(AdminArticleType::class, $article);
         $form->handleRequest($request);
+
         $boite = $this->boiteRepository->findOneBy(['id' => $boite]);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $articleRepository->add($article, true);

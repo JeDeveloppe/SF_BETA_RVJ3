@@ -9,9 +9,9 @@
     {% set disabled = "disabled" %}
 
     <h3 class="col-12 text-center my-5">
-        Devis numéro {{ infosAndConfig['config'].prefixeDevis }}{{ devis[0].numeroDevis }} <br>
-        du {{ devis[0].createdAt|date('d-m-Y') }} <br/>
-        <span class="small">(valable jusqu'au {{ devis[0].endValidationDevis|date('d-m-Y') }})</span>
+        Devis numéro {{ infosAndConfig['config'].prefixeDevis }}{{ devis.numeroDevis }} <br>
+        du {{ devis.createdAt|date('d-m-Y') }} <br/>
+        <span class="small">(valable jusqu'au {{ devis.endValidationDevis|date('d-m-Y') }})</span>
     </h3>
 
         {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
@@ -36,13 +36,13 @@
                     </tr>
                     <tr>
                         <td>
-                            {% set facturations = devis[0].adresseFacturation|split('<br/>') %}
+                            {% set facturations = devis.adresseFacturation|split('<br/>') %}
                             {% for facturation in facturations %}
                                 {{ facturation }}<br/>
                             {% endfor %}
                         </td>
                         <td>
-                            {% set livraisons = devis[0].adresseLivraison|split('<br/>') %}
+                            {% set livraisons = devis.adresseLivraison|split('<br/>') %}
                             {% for livraison in livraisons %}
                                 {{ livraison }}<br/>
                             {% endfor %}
@@ -52,56 +52,53 @@
             </div>
         </div>
 
+        {# PARITE TOTAUX #}
+        <div class="row justify-content-center my-5">
+            <h3 class="col-12 text-start">Totaux:</h3>
 
-    <div class="row justify-content-center my-5">
-        <h3 class="col-12 text-start">Totaux:</h3>
-        <div class="col-11 col-md-6 card">
-            <table class="table text-center align-middle">
-                {% if totalOccasions > 0 %}
+            <div class="col-11 col-md-8 card">
+                <table class="table table-striped">
                     <tr>
-                        <td>Jeux d'occasion:</td>
-                        <td>{{ (totalOccasions / 100 ) |number_format(2, '.', ',') }} €</td>
+                        <td>Occasions:</td>
+                        <td>{{ (totalOccasions / 100 * tva) | number_format(2, '.', ',') }}</td>
                     </tr>
-                {% endif %}
-                {% if totalDetachees > 0 %}
                     <tr>
                         <td>Pièces détachées:</td>
-                        <td>{{ (totalDetachees / 100 ) |number_format(2, '.', ',') }} €</td>
+                        <td>{{ (totalDetachees / 100 * tva) | number_format(2, '.', ',') }}</td>
                     </tr>
-                {% endif %}
-                <tr>
-                    <td>Livraison/ Retrait:</td>
-                    <td>{{ (devis[0].totalLivraison / 100 * tauxTva) |number_format(2, '.', ',') }} €</td>
-                </tr>
-                <tr>
-                    <td>Adhésion au service:</td>
-                    <td>{{ (devis[0].cost / 100) |number_format(2, '.', ',') }} €</td>
-                </tr>
-                <tr>
-                    <td>Total HT:</td>
-                    <td>{{ (devis[0].totalHt / 100) |number_format(2, '.', ',') }} €</td>
-                </tr>
-                <tr>
-                    <td>Total TVA:</td>
-                    <td>{{ ((devis[0].totalTtc -devis[0].totalHt) / 100) |number_format(2, '.', ',') }} €</td>
-                </tr>
-                <tr>
-                    <td>Total TTC:</td>
-                    <td class="display-6">{{ (devis[0].totalTtc / 100) |number_format(2, '.', ',')}} €</td>
-                </tr>
-            </table>
-        </div>
-    </div>
+                    <tr>
+                        <td>Livraison / Retrait:</td>
+                        <td>{{ (devis.totalLivraison / 100 * tva) | number_format(2, '.', ',') }}</td>
+                    </tr>
 
+                     <tr>
+                        <td>Adhésion annuelle:</td>
+                        <td>{{ (devis.cost / 100 * tva) | number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total HT:</td>
+                        <td>{{ (devis.totalHt / 100) | number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td>TVA:</td>
+                        <td>{{ ((devis.totalTtc - devis.totalHt) / 100) | number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total TTC:</td>
+                        <td>{{ (devis.totalTtc / 100) | number_format(2, '.', ',')}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
     {# PARTIE BOUTONS #}
         <div class="row my-5">
             <div class="col-6 text-center">
-                <a href="{{ path('app_paiement', {'token': devis[0].token}) }}" class="btn btn-lg btn-success" >Payer</a><br/>
+                <a href="{{ path('app_paiement', {'token': devis.token}) }}" class="btn btn-lg btn-success" >Payer</a><br/>
                 <img class="img-thumbnail col-9 col-md-6 col-lg-4 mt-4" src="{{ asset('build/images/design/paiement/logo-' ~ module_paiement ~ '.png') }}" alt="Paiement avec {{ module_paiement }}"/>
             </div>
             <div class="col-6 text-center">
-                <a href="{{ path('suppression_devis_par_utilisateur', {'token': devis[0].token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
+                <a href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
             </div>
         </div>
 

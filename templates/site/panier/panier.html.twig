@@ -96,9 +96,9 @@
 
         {% if app.user.membership < date('now') %}
             <div class="col-12 h5 text-center text-danger mb-4">
-                Pour toute première commande, une adhésion au service de {{ (infosAndConfig['config'].cost) | number_format(2, ',', '.') }} € vous sera facturée.<br/> 
+                Pour toute première commande, une adhésion au service de {{ (infosAndConfig['config'].cost / 100) | number_format(2, ',', '.') }} € vous sera facturée.<br/> 
                 Cette adhésion est valable 1 an.
-                <a href="{{ path('informations-legales') }}#cgvAdhesion" data-html="true" data-toggle="tooltip" data-placement="top">
+                <a href="{{ path('cgv') }}#cgvAdhesion" data-html="true" data-toggle="tooltip" data-placement="top">
                     <i class="fas fa-question-circle text-info p-2"></i>
                 </a>
             </div>
