@@ -97,8 +97,9 @@ class SiteDocumentsController extends AbstractController
 
         }else{
 
-            $occasions = $documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
-            $boites = $documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
+            $occasions = $documentLignesRepository->findBy(['document' => $devis, 'boite' => null, 'article' => null]);
+            $boites = $documentLignesRepository->findBy(['document' => $devis, 'occasion' => null, 'article' => null]);
+            $articles = $documentLignesRepository->findBy(['document' => $devis, 'occasion' => null, 'boite' => null]);
 
             //ON FAIT LE TOTAL DES OCCASIONS
             $totalOccasions = 0;
@@ -112,6 +113,12 @@ class SiteDocumentsController extends AbstractController
                 $totalDetachees = $totalDetachees + $boite->getPrixVente();
             }
 
+            //ON FAIT LE TOTAL DES ARTICLES
+            $totalArticles = 0;
+            foreach($articles as $article){
+                $totalArticles = $totalArticles + $article->getPrixVente();
+            }
+
             $tauxTva = $this->utilities->calculTauxTva($devis->getTauxTva());
             $module_paiement = $_ENV["PAIEMENT_MODULE"];
 
@@ -119,10 +126,12 @@ class SiteDocumentsController extends AbstractController
                 'devis' => $devis,
                 'occasions' => $occasions,
                 'boites' => $boites,
+                'articles' => $articles,
                 'tauxTva' => $tauxTva,
                 'module_paiement' => $module_paiement,
                 'totalOccasions' => $totalOccasions * $tauxTva,
                 'totalDetachees' => $totalDetachees * $tauxTva,
+                'totalArticles' => $totalArticles * $tauxTva,
                 'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);

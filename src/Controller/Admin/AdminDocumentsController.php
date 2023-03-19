@@ -273,8 +273,9 @@ class AdminDocumentsController extends AbstractController
         $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
         $delaiDevis = $infosAndConfig['config']->getDevisDelayBeforeDelete();
 
-        $occasions = $this->documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
-        $boites = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
+        $occasions = $this->documentLignesRepository->findBy(['document' => $devis, 'boite' => null, 'article' => null]);
+        $boites = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null, 'article' => null]);
+        $articles = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null, 'boite' => null]);
 
         $tauxTva = $this->utilities->calculTauxTva($devis->getTauxTva());
 
@@ -288,14 +289,26 @@ class AdminDocumentsController extends AbstractController
 
         //ON FAIT LE TOTAL DES OCCASIONS
         $totalOccasions = 0;
-        foreach($occasions as $occasion){
-            $totalOccasions = $totalOccasions + $occasion->getOccasion()->getPriceHt();
+        if(count($occasions) > 0){
+            foreach($occasions as $occasion){
+                $totalOccasions = $totalOccasions + $occasion->getOccasion()->getPriceHt();
+            }
         }
 
         //ON FAIT LE TOTAL DES PIECES DETACHEES
         $totalDetachees = 0;
-        foreach($boites as $boite){
-            $totalDetachees = $totalDetachees + $boite->getPrixVente();
+        if(count($boites) > 0){
+            foreach($boites as $boite){
+                $totalDetachees = $totalDetachees + $boite->getPrixVente();
+            }
+        }
+
+        //ON FAIT LE TOTAL DES ARTICLES
+        $totalArticles = 0;
+        if(count($articles) > 0){
+            foreach($articles as $article){
+                $totalArticles = $totalArticles + $article->getPrixVente();
+            }
         }
 
         $form = $this->createForm(DocumentPaiementType::class);
@@ -323,7 +336,7 @@ class AdminDocumentsController extends AbstractController
             $newNumero = $documentService->generateNewNumberOf('numeroFacture', 'getNumeroFacture');
             //on enregistre dans la BDD
             $devis->setNumeroFacture($newNumero)
-                  ->setPaiement($paiement);
+                    ->setPaiement($paiement);
             $this->em->persist($devis);
             $this->em->flush();
 
@@ -332,6 +345,7 @@ class AdminDocumentsController extends AbstractController
             'devis' => $devis,
             'occasions' => $occasions,
             'delaiDevis' => $delaiDevis,
+            'articles' => $articles,
             'boites' => $boites,
             'tauxTva' => $tauxTva,
             'suppressionDevis' => $suppressionDevis,

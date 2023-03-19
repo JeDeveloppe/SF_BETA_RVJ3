@@ -218,11 +218,17 @@ public function __construct(
         }
 
         //si c'est un occasion
-        if(is_null($lignePanier->getBoite())){
-
+        if(is_null($lignePanier->getBoite()) && is_null($lignePanier->getArticle())){
             $occasion = $lignePanier->getOccasion();
             $occasion->setIsOnLine(true);
             $this->em->persist($occasion);
+            $this->em->flush();
+        }
+        //si c'est un article
+        if(!is_null($lignePanier->getArticle())){
+            $article = $lignePanier->getArticle();
+            $article->setQuantity($article->getQuantity() + $lignePanier->getArticleQuantity());
+            $this->em->persist($article);
             $this->em->flush();
         }
 

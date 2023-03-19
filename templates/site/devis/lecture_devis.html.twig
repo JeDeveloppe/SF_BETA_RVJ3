@@ -16,12 +16,26 @@
 
         {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
         {% if occasions | length > 0 %}
-            {% include "site/devis/table_occasions.html.twig" %}
+            {% set visibilityOfTrTotalOccasions = '' %}
+            {% include "components/table_occasions.html.twig" %}
+        {% else %}
+            {% set visibilityOfTrTotalOccasions = 'd-none' %}
         {% endif %}
 
         {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
         {% if boites | length > 0 %}
-            {% include "site/devis/table_pieces_detachees.html.twig" %}
+            {% set visibilityOfTrTotalBoites = '' %}
+            {% include "components/table_pieces_detachees.html.twig" %}
+        {% else %}
+            {% set visibilityOfTrTotalBoites = 'd-none' %}
+        {% endif %}
+
+        {# SI Y A DES DEMANDES D'ARTICLES DANS LE PANIER #}
+        {% if articles | length > 0 %}
+            {% set visibilityOfTrTotalArticles = '' %}
+            {% include "components/table_articles.html.twig" %}
+        {% else %}
+            {% set visibilityOfTrTotalArticles = 'd-none' %}
         {% endif %}
 
         {# PARITE LIVRAISON #}
@@ -57,14 +71,18 @@
             <h3 class="col-12 text-start">Totaux:</h3>
 
             <div class="col-11 col-md-8 card">
-                <table class="table table-striped">
-                    <tr>
+                <table class="table">
+                    <tr class="{{ visibilityOfTrTotalOccasions}}">
                         <td>Occasions:</td>
                         <td>{{ (totalOccasions / 100 * tva) | number_format(2, '.', ',') }}</td>
                     </tr>
-                    <tr>
+                    <tr class="{{ visibilityOfTrTotalBoites}}">
                         <td>Pièces détachées:</td>
                         <td>{{ (totalDetachees / 100 * tva) | number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr class="{{ visibilityOfTrTotalArticles}}">
+                        <td>Articles:</td>
+                        <td>{{ (totalArticles / 100 * tva) | number_format(2, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td>Livraison / Retrait:</td>

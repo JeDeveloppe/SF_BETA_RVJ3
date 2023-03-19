@@ -66,12 +66,17 @@
 
         {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
         {% if occasions | length > 0 %}
-            {% include "site/devis/table_occasions.html.twig" %}
+            {% include "components/table_occasions.html.twig" %}
         {% endif %}
 
         {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
         {% if boites | length > 0 %}
-            {% include "site/devis/table_pieces_detachees.html.twig" %}
+            {% include "components/table_pieces_detachees.html.twig" %}
+        {% endif %}
+
+        {# SI Y A DES DEMANDES D'ARTICLES DANS LE PANIER #}
+        {% if articles | length > 0 %}
+            {% include "components/table_articles.html.twig" %}
         {% endif %}
 
         {# PARITE LIVRAISON #}

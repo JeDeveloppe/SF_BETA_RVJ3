@@ -23,12 +23,12 @@
                         {% for key,panier_occasion in panier_occasions %}
                             <tr>
                                 <td></td>
-                                <td>
+                                <td class="align-middle">
                                     {{ panier_occasion.occasion.boite.nom }} <br/>
                                     {{ panier_occasion.occasion.boite.editeur }} <br />
                                     {{ panier_occasion.occasion.boite.annee }}
                                 </td>
-                                <td>
+                                <td class="align-middle">
                                     État de la boite: {{ panier_occasion.occasion.etatBoite }} <br/>
                                     État du matériel: {{ panier_occasion.occasion.etatMateriel }} <br/>
                                     Règle du jeu: {{ panier_occasion.occasion.regleJeu }}
@@ -79,7 +79,7 @@
                         {% for key,panier_boite in panier_boites %}
                             <tr>
                                 <td></td>
-                                <td>
+                                <td class="align-middle">
                                     {{ panier_boite.boite.nom }} <br/>
                                     {{ panier_boite.boite.editeur }} <br />
                                     {{ panier_boite.boite.annee }}
@@ -108,8 +108,8 @@
                         {% for panier_article in panier_articles %}
                             <tr>
                                 <td></td>
-                                <td>{{ panier_article.article.name }} </td>
-                                <td>{{ panier_article.articleQuantity }}</td>
+                                <td class="align-middle">{{ panier_article.article.name }} </td>
+                                <td class="align-middle">{{ panier_article.articleQuantity }}</td>
                                 <td class="align-middle">{{ (panier_article.articleQuantity * panier_article.article.priceHt * tva / 100) | number_format(2, '.', ',') }}</td>
                                 <td class="align-middle"><a class="btn btn-danger" href="{{ path('app_panier_delete', {'id': panier_article.id}) }}">Sup</a></td>
                             </tr>
@@ -128,11 +128,11 @@
                         <tbody>
                             <tr>
                                 {% if app.user.membership > date('now') %}
-                                    <td>Votre adhésion est valable jusqu' au {{ app.user.membership| date('d-m-Y à H:m') }}</td>
-                                    <td>0.00 €</td>
+                                    <td class="align-middle">Votre adhésion est valable jusqu' au {{ app.user.membership| date('d-m-Y à H:m') }}</td>
+                                    <td class="align-middle">0.00 €</td>
                                 {% else %}
-                                    <td>Nouvelle adhésion.</td>
-                                    <td>{{ (infosAndConfig['config'].cost) | number_format(2, ',', '.') }} €</td>  
+                                    <td class="align-middle">Nouvelle adhésion.</td>
+                                    <td class="align-middle">{{ (infosAndConfig['config'].cost) | number_format(2, ',', '.') }} €</td>  
                                 {% endif %}
                             </tr>
                         </tbody>

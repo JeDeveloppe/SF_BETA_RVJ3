@@ -230,7 +230,6 @@ class DocumentService
         //on met en BDD les differentes lignes
         $this->em->flush();
 
-        dd('OK END'.$document->getId());
         //on supprime les lignes dans le panier
         $this->deletePanierFromUser($paniers);
 
