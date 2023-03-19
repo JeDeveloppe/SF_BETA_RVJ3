@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button class="btn btn-success" type="submit" class="btn btn-primary">Recherche</button>
-                    <a class="btn btn-warning" href="{{ path('catalogue_pieces_detachees') }}">Remise à zéro</a>
+                    <a class="btn btn-warning" href="{{ path('catalogue_pieces_detachees_direct') }}">Remise à zéro</a>
                 </div>
             </div>
         {{ form_end(boiteSearch) }}
@@ -40,7 +40,7 @@
                 </div>
             {% endif %}
 
-            {% include "site/components/catalogues/card-pieces-detachees-direct.html.twig" %}
+            {% include "site/components/catalogues/card-pieces-detachees_direct.html.twig" %}
 
         </div>
         

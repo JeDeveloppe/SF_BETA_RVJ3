@@ -22,7 +22,7 @@ use App\Repository\ConfigurationRepository;
 use App\Repository\PartenaireRepository;
 use App\Service\Utilities;
 
-class CataloguesController extends AbstractController
+class CataloguesControllerDirect extends AbstractController
 {
     public function __construct(
         private InformationsLegalesRepository $informationsLegalesRepository,
@@ -36,9 +36,9 @@ class CataloguesController extends AbstractController
     }
 
     /**
-     * @Route("/catalogue-pieces-detachees/", name="catalogue_pieces_detachees")
+     * @Route("/catalogue-pieces-detachees-en-vente/", name="catalogue_pieces_detachees_direct")
      */
-    public function cataloguePiecesDetachees(
+    public function cataloguePiecesDetacheesDirect(
         EntityManagerInterface $entityManager,
         Request $request,
         BoiteRepository $boiteRepository,
@@ -55,7 +55,7 @@ class CataloguesController extends AbstractController
         //si on faite une recherche
         if(!is_null($formBoiteSearch->get('searchBoite')->getData()) && strlen($formBoiteSearch->get('searchBoite')->getData()) > 2){
             $recherche = str_replace(" ","%",$formBoiteSearch->get('searchBoite')->getData());
-            $donnees = $boiteRepository->findBoiteInDatabase($recherche);
+            $donnees = $boiteRepository->findBoiteInDatabaseDirect($recherche);
 
             $boites = $this->paginator->paginate(
                 $donnees, /* query NOT result */
@@ -81,7 +81,7 @@ class CataloguesController extends AbstractController
 
         $donnees = $entityManager
         ->getRepository(Boite::class)
-        ->findBy(['isOnLine' => true], $tri);
+        ->findBy(['isOnLine' => true, 'venteDirecte' => true], $tri);
 
         //si finalement pas eu de recherche ($boites == NULL)
         if(is_null($boites)){
@@ -95,7 +95,7 @@ class CataloguesController extends AbstractController
         //dans tous les cas on cherches les partenaires avec un site web
         $partenaires = $partenaireRepository->findBy(['isDetachee' => true, 'isEcommerce' => true, 'isAfficherWhenRechercheCatalogueIsNull' => true, 'isOnLine' => true]);
 
-        return $this->render('site/catalogues/catalogue_pieces_detachees.html.twig', [
+        return $this->render('site/catalogues/direct/catalogue_pieces_detachees_direct.html.twig', [
             'boites' => $boites,
             'catalogueFiltersForm' => $formFilters->createView(),
             'tri' => $tri,
@@ -107,9 +107,9 @@ class CataloguesController extends AbstractController
     }
 
     /**
-     * @Route("/catalogue-pieces-detachees/boite-{id}/{slug}/{editeur}", name="catalogue_pieces_detachees_demande")
+     * @Route("/catalogue-pieces-detachees-en-vente/boite-{id}/{slug}/{editeur}", name="catalogue_pieces_detachees_demande_direct")
      */
-    public function cataloguePiecesDetacheesDemande(
+    public function cataloguePiecesDetacheesDemandeDirect(
         EntityManagerInterface $entityManager,
         ArticleRepository $articleRepository,
         $id,
@@ -121,15 +121,23 @@ class CataloguesController extends AbstractController
         ->getRepository(Boite::class)
         ->findOneBy(['id' => $id, 'slug' => $slug, 'isOnLine' => true ]);
 
-        if(empty($boite)){
+        if(is_null($boite)){
             $this->addFlash('warning', 'MERCI DE NE PAS JOUER AVEC L\'URL...');
-            return $this->redirectToRoute('catalogue_pieces_detachees');
+            return $this->redirectToRoute('catalogue_pieces_detachees_direct');
         }else{
 
-            return $this->render('site/catalogues/catalogue_pieces_detachees_demande.html.twig', [
+            $articlesDesAutresBoites = [];
+            $listeArticlesDesAutresBoites = $boite->getArticles();
+            foreach($listeArticlesDesAutresBoites as $article){
+                if($article->getQuantity() > 0){
+                    $articlesDesAutresBoites[] = $article;
+                }
+            }
+
+            return $this->render('site/catalogues/direct/catalogue_pieces_detachees_demande_direct.html.twig', [
                 'boite' => $boite,
-                'articles' => $articleRepository->findBy(['boiteOrigine' => $boite]),
-                'articlesDesAutresBoites' => $boite->getArticles(),
+                'articles' => $articleRepository->findArticlesWithQuantityMoreThanZero($boite),
+                'articlesDesAutresBoites' => $articlesDesAutresBoites,
                 'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);

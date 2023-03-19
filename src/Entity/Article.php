@@ -56,9 +56,26 @@ class Article
      */
     private $boiteOrigine;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Panier::class, mappedBy="article")
+     */
+    private $paniers;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $priceHt;
+
+    /**
+     * @ORM\OneToMany(targetEntity=DocumentLignes::class, mappedBy="article")
+     */
+    private $documentLignes;
+
     public function __construct()
     {
         $this->boite = new ArrayCollection();
+        $this->paniers = new ArrayCollection();
+        $this->documentLignes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -158,6 +175,78 @@ class Article
     public function setBoiteOrigine(?Boite $boiteOrigine): self
     {
         $this->boiteOrigine = $boiteOrigine;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Panier>
+     */
+    public function getPaniers(): Collection
+    {
+        return $this->paniers;
+    }
+
+    public function addPanier(Panier $panier): self
+    {
+        if (!$this->paniers->contains($panier)) {
+            $this->paniers[] = $panier;
+            $panier->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanier(Panier $panier): self
+    {
+        if ($this->paniers->removeElement($panier)) {
+            // set the owning side to null (unless already changed)
+            if ($panier->getArticle() === $this) {
+                $panier->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPriceHt(): ?int
+    {
+        return $this->priceHt;
+    }
+
+    public function setPriceHt(int $priceHt): self
+    {
+        $this->priceHt = $priceHt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DocumentLignes>
+     */
+    public function getDocumentLignes(): Collection
+    {
+        return $this->documentLignes;
+    }
+
+    public function addDocumentLigne(DocumentLignes $documentLigne): self
+    {
+        if (!$this->documentLignes->contains($documentLigne)) {
+            $this->documentLignes[] = $documentLigne;
+            $documentLigne->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentLigne(DocumentLignes $documentLigne): self
+    {
+        if ($this->documentLignes->removeElement($documentLigne)) {
+            // set the owning side to null (unless already changed)
+            if ($documentLigne->getArticle() === $this) {
+                $documentLigne->setArticle(null);
+            }
+        }
 
         return $this;
     }

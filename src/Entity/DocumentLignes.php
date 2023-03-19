@@ -48,6 +48,16 @@ class DocumentLignes
      */
     private $reponse;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="documentLignes")
+     */
+    private $article;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $quantity;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +131,30 @@ class DocumentLignes
     public function setReponse(?string $reponse): self
     {
         $this->reponse = $reponse;
+
+        return $this;
+    }
+
+    public function getArticle(): ?Article
+    {
+        return $this->article;
+    }
+
+    public function setArticle(?Article $article): self
+    {
+        $this->article = $article;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?int $quantity): self
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }

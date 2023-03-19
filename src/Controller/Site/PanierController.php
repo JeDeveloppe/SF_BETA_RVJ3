@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use App\Repository\BoiteRepository;
 use App\Repository\PanierRepository;
 use App\Repository\AdresseRepository;
+use App\Repository\ArticleRepository;
 use App\Repository\ConfigurationRepository;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,7 +33,9 @@ public function __construct(
     private OccasionRepository $occasionRepository,
     private AdresseRepository $adresseRepository,
     private DocumentService $documentService,
-    private Utilities $utilities
+    private Utilities $utilities,
+    private ArticleRepository $articleRepository,
+    private BoiteRepository $boiteRepository
 )
 {
 }
@@ -112,6 +115,51 @@ public function __construct(
         return $this->redirectToRoute('catalogue_jeux_occasion');
     }
 
+        /**
+     * @Route("/panier/ajout-article", name="panier-ajout-article")
+     */
+    public function addpanierArticle(
+        Request $request
+        ): Response
+    {
+
+        $article = $this->articleRepository->findArticleDirect($request->request->get('article'), $request->request->get('qte') );
+        $boite = $this->boiteRepository->findOneBy(['id' => $request->request->get('boite')]) ;
+        $qte = $request->request->get('qte');
+
+        //si l'occasion est disponible à la vente
+        if(!is_null($article)){
+
+            $panier = new Panier();
+            //ici on ajoute les differentes infos
+            $panier->setUser($this->security->getUser())
+            ->setCreatedAt( new DateTimeImmutable('now'))
+            ->setArticle($article)
+            ->setArticleQuantity($qte)
+            ->setEtat("panier");
+
+            $this->em->persist($panier);
+            $this->em->flush($panier);
+
+            $newQte = $article->getQuantity() - $request->request->get('qte');
+            $article->setQuantity($newQte);
+            $this->em->persist($article);
+            $this->em->flush();
+
+            //on signal le changement
+            $this->addFlash('success', 'Article mis dans votre panier!');
+        }else{
+            //on signal le changement
+            $this->addFlash('danger', 'Article réservé à l\'instant par un autre utilisateur!');
+        }
+
+        return $this->redirectToRoute('catalogue_pieces_detachees_demande_direct', [
+            'id' => $boite->getId(),
+            'slug' => $boite->getSlug(),
+            'editeur' => $boite->getEditeur()
+        ]);
+    }
+
     /**
      * @Route("/panier", name="app_panier")
      */
@@ -122,6 +170,7 @@ public function __construct(
         $user = $this->security->getUser();
         $panier_occasions = $this->panierRepository->findByUserAndNotNullColumn('occasion',$user);
         $panier_boites = $this->panierRepository->findByUserAndNotNullColumn('boite', $user);
+        $panier_articles = $this->panierRepository->findByUserAndNotNullColumn('article', $user);
 
         $livraison_adresses = $this->adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
         $facturation_adresses = $this->adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
@@ -130,7 +179,7 @@ public function __construct(
         $userRetrait = $userRepository->findOneBy(['email' => 'ADMINISTRATION@ADMINISTRATION.FR']);
         $adresseRetrait = $this->adresseRepository->findOneBy(['user' => $userRetrait, 'isFacturation' => false]);
 
-        if(count($panier_boites) < 1 && count($panier_occasions) < 1){
+        if(count($panier_boites) < 1 && count($panier_occasions) < 1 && count($panier_articles) < 1){
             //on signal le changement
             $this->addFlash('warning', 'Votre panier semble vide!');
             return $this->redirectToRoute('accueil');
@@ -141,6 +190,7 @@ public function __construct(
             return $this->render('site/panier/panier.html.twig', [
                 'panier_occasions' => $panier_occasions,
                 'panier_boites' => $panier_boites,
+                'panier_articles' => $panier_articles,
                 'infosAndConfig' => $infosAndConfig,
                 'tva' => $this->utilities->calculTauxTva($infosAndConfig['legales']->getTauxTva()),
                 'token' => $this->documentService->generateRandomString(),
@@ -237,10 +287,11 @@ public function __construct(
         Request $request)
     {
         $user = $this->security->getUser();
+        $paniers = [];
+        $paniers['panier_occasions'] = $this->panierRepository->findByUserAndNotNullColumn('occasion',$user);
+        $paniers['panier_articles'] = $this->panierRepository->findByUserAndNotNullColumn('article', $user);
 
-        $paniers = $this->panierRepository->findBy(['user' => $user, 'etat' => $demande]);
-
-        if(!$paniers){
+        if(count($paniers) < 1){
             //si y a rien
             $this->addFlash('warning', 'Demande inconnue!');
             return $this->redirectToRoute('accueil');
@@ -248,13 +299,22 @@ public function __construct(
 
         $setup = [];
         $totalOccasionsHT = 0;
+        $totalArticlesHT = 0;
         $setup['adresseFacturation'] = $this->adresseRepository->findOneBy(['id' => $request->request->get('adresse_facturation')]);
         $setup['adresseLivraison'] = $this->adresseRepository->findOneBy(['id' => $request->request->get('adresse_livraison')]);
         $setup['token'] = $token;
 
-        foreach($paniers as $panier){
-            $totalOccasionsHT += $panier->getOccasion()->getPriceHt();
+        if(count($paniers['panier_occasions']) > 0){
+            foreach($paniers['panier_occasions'] as $panier){
+                $totalOccasionsHT += $panier->getOccasion()->getPriceHt();
+            }
         }
+        if(count($paniers['panier_articles']) > 0){
+            foreach($paniers['panier_articles'] as $panier){
+                $totalArticlesHT += $panier->getArticle()->getPriceHt() * $panier->getArticleQuantity();
+            }
+        }
+
 
         //on regarde si le user doit payer l'adhésion
         if($user->getMembership() < new DateTimeImmutable('now')){
@@ -265,10 +325,10 @@ public function __construct(
             $setup['cost'] = 0;
         }
 
-        $setup['totalOccasionsHT'] = $totalOccasionsHT;
+        $setup['totalHT'] = $totalOccasionsHT + $totalArticlesHT;
 
         //on sauvegarde dans la base
-        $token = $this->documentService->fromPanierSaveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande);
+        $token = $this->documentService->fromPanierSaveDevisInDataBaseWithoutPiecesDetachees($user, $setup, $paniers, $demande);
 
         return $this->redirectToRoute('app_paiement', [
             'token' => $token

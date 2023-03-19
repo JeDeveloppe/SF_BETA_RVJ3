@@ -11,13 +11,13 @@
                 </div>
                 {% if is_granted('ROLE_ADMIN') %}
                     <p class="card-text">
-                        <a class="btn btn-primary mr-3" href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.slug | lower, 'editeur': boite.editeur | lower | slug }) }}">Voir les pièces disponibles</a>
+                        <a class="btn btn-primary mr-3" href="{{ path('catalogue_pieces_detachees_demande_direct', {'id': boite.id, 'slug':boite.slug | lower, 'editeur': boite.editeur | lower | slug }) }}">Voir les pièces disponibles</a>
                         <a href="{{ path('admin_boite_edit', {'id': boite.id }) }}"><i class="fa-solid fa-gear" data-toggle="tooltip" data-html="true" data-placement="top" title="Créer par {{ boite.creator }}<br/>le {{ boite.createdAt|date("d/m/Y à h:m") }}"></i></a>
                     </p>
                 {% else %}
                     <p class="card-text">
                     		{% if is_granted('ROLE_USER') %}
-                                <a class="btn btn-primary" href="{{ path('catalogue_pieces_detachees_demande', {'id': boite.id, 'slug':boite.nom | lower | slug, 'editeur': boite.editeur | lower | slug }) }}">Voir les pièces disponibles</a>
+                                <a class="btn btn-primary" href="{{ path('catalogue_pieces_detachees_demande_direct', {'id': boite.id, 'slug':boite.nom | lower | slug, 'editeur': boite.editeur | lower | slug }) }}">Voir les pièces disponibles</a>
 							{% else %}
 								<a href="{{ path('app_login') }}" class="btn btn-warning mt-3 mb-2">Merci de vous identifier !</a>
 							{% endif %}

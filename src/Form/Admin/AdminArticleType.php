@@ -23,6 +23,9 @@ class AdminArticleType extends AbstractType
             ->add('quantity', NumberType::class, [
                 'label' => 'Quantité total en stock:'
             ])
+            ->add('priceHt', NumberType::class, [
+                'label' => 'Prix unitaire HT en cents:'
+            ])
             ->add('boite', EntityType::class, [
                 'label' => 'Autres boites de jeu:',
                 'class' => Boite::class,

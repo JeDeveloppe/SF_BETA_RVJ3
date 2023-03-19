@@ -52,6 +52,29 @@ class ArticleRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findArticleDirect($article, $qte)
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.id = :article')
+            ->setParameter('article', $article)
+            ->andWhere('a.quantity >= :quantite')
+            ->setParameter('quantite', $qte)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findArticlesWithQuantityMoreThanZero($boite)
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.quantity > 0')
+            ->andWhere('a.boiteOrigine = :boite')
+            ->setParameter('boite', $boite)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */

@@ -58,6 +58,21 @@ class BoiteRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findBoiteInDatabaseDirect($recherche)
+    {
+        return $this->createQueryBuilder('b')
+            ->where('b.nom LIKE :val')
+            ->setParameter('val', '%'.$recherche.'%')
+            ->andWhere('b.venteDirecte = :venteDirecte')
+            ->setParameter('venteDirecte', true)
+            ->andWhere('b.isOnLine = :onLine')
+            ->setParameter('onLine', true)
+            ->orderBy('b.nom', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findOccasionsInDatabase($recherche)
     {
         return $this->createQueryBuilder('b')

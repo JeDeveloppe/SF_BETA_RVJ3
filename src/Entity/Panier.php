@@ -75,6 +75,16 @@ class Panier
      */
     private $panierImages;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="paniers")
+     */
+    private $article;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $articleQuantity;
+
     public function __construct()
     {
         $this->panierImages = new ArrayCollection();
@@ -231,6 +241,30 @@ class Panier
                 $panierImage->setPanier(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getArticle(): ?Article
+    {
+        return $this->article;
+    }
+
+    public function setArticle(?Article $article): self
+    {
+        $this->article = $article;
+
+        return $this;
+    }
+
+    public function getArticleQuantity(): ?int
+    {
+        return $this->articleQuantity;
+    }
+
+    public function setArticleQuantity(?int $articleQuantity): self
+    {
+        $this->articleQuantity = $articleQuantity;
 
         return $this;
     }

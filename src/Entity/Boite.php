@@ -172,6 +172,11 @@ class Boite
      */
     private $articlesOrigine;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $venteDirecte;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -547,6 +552,18 @@ class Boite
                 $articlesOrigine->setBoiteOrigine(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isVenteDirecte(): ?bool
+    {
+        return $this->venteDirecte;
+    }
+
+    public function setVenteDirecte(bool $venteDirecte): self
+    {
+        $this->venteDirecte = $venteDirecte;
 
         return $this;
     }

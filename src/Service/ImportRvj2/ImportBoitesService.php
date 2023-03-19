@@ -119,6 +119,11 @@ class ImportBoitesService
             $boite = new Boite();
         }
 
+        if($arrayBoite['actif'] == 0 || $arrayBoite['actif'] == ""){
+            $actif = false;
+        }else{
+            $actif = true;
+        }
         if($arrayBoite['v3'] == "NON" || $arrayBoite['nom'] == ""){
             $isV3 = false;
         }else{
@@ -139,7 +144,8 @@ class ImportBoitesService
             ->setCreator($arrayBoite['createur'])
             ->setIsDeee($arrayBoite['deee'])
             ->setCreatedAt(new DateTimeImmutable($arrayBoite['created_at']))
-            ->setIsOnLine($isV3)
+            ->setIsOnLine($actif)
+            ->setVenteDirecte($isV3)
             ->setRvj2Id($arrayBoite['idCatalogue']);
 
         return $boite;

@@ -63,22 +63,30 @@
 					</div>
 
 					<!-- formulaire de demande -->
-					<form class="col-12 p-0 d-flex flex-wrap" method="post" class="border-primary pt-3" action="{{ path('panier-ajout-pieces-detachees') }}" name="formulaireDemandePiece">
-						<select class="form-select" aria-label="Default select example">
-							<option value="">Choisir un article...</option>
-							{% for article in articles %}
-								<option value="{{ article.id }}">{{ article.name }} (Disponible: {{ article.quantity }})</option>
-							{% endfor %}
-							{% if articlesDesAutresBoites | length > 0 %}
-								<optgroup label="Articles d'autres boite correspondantes:">
-									{% for article in articlesDesAutresBoites %}
-										<option value="{{ article.id }}">{{ article.name }} (Disponible: {{ article.quantity }})</option>
-									{% endfor %}
-								</optgroup>
-							{% endif %}
-						</select>
-
-						{# <div class="col-12 text-center">
+					<form class="col-12 p-0 border-primary pt-3 d-flex flex-wrap justify-content-around" method="post" action="{{ path('panier-ajout-article') }}" name="formulaireDemandePiece">
+						<div class="col-11 col-md-9 col-xl-6">
+							<select class="form-select" name="article" required>
+								<option value="">Choisir un article...</option>
+								{% for article in articles %}
+									<option value="{{ article.id }}">{{ article.name }} (Disponible: {{ article.quantity }})</option>
+								{% endfor %}
+								{% if articlesDesAutresBoites | length > 0 %}
+									<optgroup label="Articles d'autres boite correspondantes:">
+										{% for article in articlesDesAutresBoites %}
+											<option value="{{ article.id }}">{{ article.name }} (Disponible: {{ article.quantity }})</option>
+										{% endfor %}
+									</optgroup>
+								{% endif %}
+							</select>
+						</div>
+						<div class="col-2 mt-2 col-xl-1 mt-md-0">
+							<select name="qte" class="form-select">
+								{% for i in 1..10 %}
+									<option value="{{ i }}">{{ i }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="col-12 text-center">
 							<input type="hidden" name="boite" value="{{ boite.id }}">
 							<input type="hidden" id="recaptchaResponse" name="recaptcha-response">
 							{% if is_granted('ROLE_USER') %}
@@ -86,7 +94,7 @@
 							{% else %}
 								<a href="{{ path('app_login') }}" class="btn btn-warning mt-3 mb-2">Merci de vous identifier !</a>
 							{% endif %}
-						</div> #}
+						</div>
 					</form>
 				</div>
 			</div>

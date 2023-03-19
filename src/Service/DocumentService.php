@@ -164,7 +164,8 @@ class DocumentService
         return $document->getToken();
     }
 
-    public function fromPanierSaveDevisInDataBaseOnlyOccasions($user, $setup, $paniers, $demande){
+    public function fromPanierSaveDevisInDataBaseWithoutPiecesDetachees($user, $setup, $paniers, $demande){
+
         $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
         $tva = $this->utilities->calculTauxTva($informationsLegales->getTauxTva());
         $methodeEnvoi = $this->methodeEnvoiRepository->findOneBy(['id' => 3]);
@@ -182,8 +183,8 @@ class DocumentService
 
         $document->setUser($user)
                 ->setCreatedAt($now)
-                ->setTotalTTC(($setup['totalOccasionsHT'] * $tva) + ($setup['cost'] * 100)) //on ajoute le cout adhésion
-                ->setTotalHT($setup['totalOccasionsHT'] + ($setup['cost'] / $tva * 100)) //on ajoute le cout adhésion
+                ->setTotalTTC(($setup['totalHT'] * $tva) + ($setup['cost'] * 100)) //on ajoute le cout adhésion
+                ->setTotalHT($setup['totalHT'] + ($setup['cost'] / $tva * 100)) //on ajoute le cout adhésion
                 ->setTauxTva($informationsLegales->getTauxTva())
                 ->setCost($setup['cost'] * 100)
                 ->setTotalLivraison(0)
@@ -200,19 +201,36 @@ class DocumentService
 
         // $panier_occasions = $this->panierRepository->findBy(['etat' => $demande,'user' => $user, 'boite' => null]);
 
-        foreach($paniers as $panier){
-            $documentLigne = new DocumentLignes();
-
-            $documentLigne->setBoite($panier->getBoite())
-                            ->setDocument($document)
-                            ->setOccasion($panier->getOccasion())
-                            ->setPrixVente($panier->getOccasion()->getPriceHt());
-            $this->em->persist($documentLigne);
+        if(count($paniers['panier_occasions']) > 0){
+            foreach($paniers['panier_occasions'] as $panier){
+                $documentLigne = new DocumentLignes();
+    
+                $documentLigne->setBoite($panier->getBoite())
+                                ->setDocument($document)
+                                ->setQuantity(1) //par defaut
+                                ->setOccasion($panier->getOccasion())
+                                ->setPrixVente($panier->getOccasion()->getPriceHt());
+                $this->em->persist($documentLigne);
+            }
         }
+        if(count($paniers['panier_articles']) > 0){
+            foreach($paniers['panier_articles'] as $panier){
+                $documentLigne = new DocumentLignes();
+    
+                $documentLigne->setArticle($panier->getArticle())
+                                ->setDocument($document)
+                                ->setQuantity($panier->getArticleQuantity()) //par defaut
+                                ->setPrixVente($panier->getArticle()->getPriceHt() * $panier->getArticleQuantity());
+                $this->em->persist($documentLigne);
+            }
+        }
+
+
 
         //on met en BDD les differentes lignes
         $this->em->flush();
 
+        dd('OK END'.$document->getId());
         //on supprime les lignes dans le panier
         $this->deletePanierFromUser($paniers);
 
