@@ -39,7 +39,7 @@
                 <td>{{ boite.nom }}</td>
                 <td>{{ boite.editeur }}</td>
                 <td>{{ boite.annee }}</td>
-                <td>{{ boite.articles | length > 0 ? '<i class="fas fa-puzzle-piece text-success"></i>' : '<i class="fas fa-puzzle-piece text-danger"></i>' }}</td>
+                <td>{{ boite.articles | length > 0 or boite.venteDirecte ? '<i class="fas fa-puzzle-piece text-success"></i>' : '<i class="fas fa-puzzle-piece text-danger"></i>' }}</td>
                 {# <td>{{ boite.isLivrable ? '<i class="fa-solid fa-truck text-success"></i>' : '<i class="fa-solid fa-truck text-danger"></i>' }}</td> #}
                 <td>{{ boite.isComplet ? '<i class="fa-solid fa-square-full text-success"></i>' : '<i class="fa-solid fa-square-full text-danger"></i>' }}</td>
                 <td>{{ boite.isOnLine ? '<i class="fa-solid fa-earth-europe text-success"></i>' : '<i class="fa-solid fa-earth-europe text-danger"></i>' }}</td>

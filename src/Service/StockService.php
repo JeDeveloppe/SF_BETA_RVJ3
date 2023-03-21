@@ -21,14 +21,17 @@ class StockService
 
     public function updateOccasionStock($document)
     {
-        $lignes = $this->documentLignesRepository->findBy(['document' => $document, 'boite' => null]);
-        foreach($lignes as $ligne){
-            $occasion = $this->occasionRepository->findOneBy(['id' => $ligne->getOccasion()]);
+        $lignes = $this->documentLignesRepository->findBy(['document' => $document, 'boite' => null, 'article' => null]);
 
-            $occasion->setIsSale(true)->setIsOnLine(false)
-                    ->setPrixDeVente($ligne->getPrixVente())
-                    ->setDocument($document);
-            $this->em->persist($occasion);
+        if(count($lignes) > 0){
+            foreach($lignes as $ligne){
+                $occasion = $this->occasionRepository->findOneBy(['id' => $ligne->getOccasion()]);
+
+                $occasion->setIsSale(true)->setIsOnLine(false)
+                        ->setPrixDeVente($ligne->getPrixVente())
+                        ->setDocument($document);
+                $this->em->persist($occasion);
+            }
         }
         $this->em->flush();
     }

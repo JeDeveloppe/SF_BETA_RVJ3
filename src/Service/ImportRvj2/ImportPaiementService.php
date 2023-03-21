@@ -54,9 +54,9 @@ class ImportPaiementService
             $document->setPaiement($paiement);
 
             $this->em->persist($document);
-            $this->em->flush();
-
+            
         }
+        $this->em->flush();
 
 
         $io->progressFinish();

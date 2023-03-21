@@ -93,7 +93,9 @@ class DocumentService
     public function deletePanierFromUser($paniers){
         
         foreach($paniers as $panier){
-            $this->em->remove($panier);
+            foreach($panier as $ligne){
+                $this->em->remove($ligne);
+            }
         }
         $this->em->flush();
     }

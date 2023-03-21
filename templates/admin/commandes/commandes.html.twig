@@ -1,0 +1,32 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Accueil, les demandes{% endblock %}
+
+{% block body %}
+
+    <div class="row justify-content-center mb-5">
+        <h3 class="col-12 text-center mb-5">Les demandes de devis</h3>
+
+        {% for demande in commandesApreparer %}
+            <div class="card col-9 my-2 p-0">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        #{{ demande.user.id }} / {{ demande.user.email }} - {{ demande.user.phone }} - 
+                        <span class="fw-bolder text-warning">[{{ demande.user.documents | length }} commande{% if demande.user.documents | length  > 1 %}s{% endif %}]</span>
+                    </div>
+                    <div>
+                        Facture {{ demande.numeroFacture}}<br/> Total TTC: {{ demande.totalHT}}
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <a href="#" class="btn btn-secondary">Left</a>
+                        <a href="#" class="btn btn-secondary">Middle</a>
+                        <a href="#" class="btn btn-secondary">Right</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+
+{% endblock %}

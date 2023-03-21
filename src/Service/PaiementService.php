@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use App\Entity\Paiement;
 use Stripe\Checkout\Session;
 use App\Repository\DocumentRepository;
+use App\Repository\EtatDocumentRepository;
 use App\Repository\PaiementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\BrowserKit\Response;
@@ -30,7 +31,7 @@ class PaiementService
         private Security $security,
         private FlashBagInterface $flashBagInterface,
         private RouterInterface $router,
-        private StockService $stockService
+        private StockService $stockService,
         ){
     }
 
@@ -206,7 +207,8 @@ class PaiementService
                 $this->em->flush();
                 
                 //on met a jour le document en BDD
-                $document->setNumeroFacture($newNumero)->setPaiement($paiement);
+                $etat = $this->etatDocumentRepository->findOneBy(['name' => 'A préparer']);
+                $document->setNumeroFacture($newNumero)->setPaiement($paiement)->setEtatDocument($etat);
                 $this->em->persist($document);
                 $this->em->flush();
     
@@ -266,9 +268,10 @@ class PaiementService
 
                 //il faut creer le numero de facture
                 $newNumero = $this->documentService->generateNewNumberOf('numeroFacture', 'getNumeroFacture');
-                //on met a jour le document en BDD
 
-                $document->setNumeroFacture($newNumero)->setPaiement($paiement);
+                //on met a jour le document en BDD
+                $etat = $this->etatDocumentRepository->findOneBy(['name' => 'A préparer']);
+                $document->setNumeroFacture($newNumero)->setPaiement($paiement)->setEtatDocument($etat);
                 $this->em->persist($document);
 
                 //il faut mettre le membership de l'utilisateur + 1an

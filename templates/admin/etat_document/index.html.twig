@@ -1,0 +1,35 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Liste des états document{% endblock %}
+
+{% block body %}
+    <h1 class="col-12 text-center my-5">Liste des états document</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for etat_document in etat_documents %}
+            <tr>
+                <td>{{ etat_document.id }}</td>
+                <td>{{ etat_document.name }}</td>
+                <td>
+                    <a href="{{ path('app_etat_document_show', {'id': etat_document.id}) }}">show</a>
+                    <a href="{{ path('app_etat_document_edit', {'id': etat_document.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_etat_document_new') }}">Create new</a>
+{% endblock %}

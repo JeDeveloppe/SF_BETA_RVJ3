@@ -163,7 +163,7 @@
                     {% set leftDays = difference.days %}
                     {% if leftDays >= 0 and devis.envoiEmailDevis is null %}
                         <div class="col-6">
-                            <a class="btn btn-success" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token, 'days': 0 }) }}">Envoyer email => Devis mise à disposition</a>
+                            <a class="btn btn-success disabled" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token, 'days': 0 }) }}">Envoyer email => Devis mis à disposition</a>
                         </div>
                     {% endif %}
                 {% endif %}

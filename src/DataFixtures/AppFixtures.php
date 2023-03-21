@@ -7,6 +7,7 @@ use App\Entity\User;
 use DateTimeImmutable;
 use App\Entity\MethodeEnvoi;
 use App\Entity\Configuration;
+use App\Entity\EtatDocument;
 use App\Repository\PaysRepository;
 use App\Entity\InformationsLegales;
 use Doctrine\Persistence\ObjectManager;
@@ -64,6 +65,15 @@ class AppFixtures extends Fixture
             ->setVersionSite("3.00")
             ->setCost(200);
         $manager->persist($conf);
+
+        //les etats des documents
+        $etats = ['A préparer','Mettre de côté', 'Expédiée / Terminée'];
+        foreach($etats as $etat){
+            $etatDocument = new EtatDocument();
+            $etatDocument->setName($etat);
+            $manager->persist($etatDocument);
+        }
+        $manager->flush($etatDocument);
 
         //les informations legales
         $infosLegales = new InformationsLegales();

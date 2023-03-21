@@ -136,7 +136,10 @@ class Document
      */
     private $tokenPaiementRvj2;
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity=EtatDocument::class, inversedBy="documents")
+     */
+    private $etatDocument;
 
     
     public function __construct()
@@ -462,6 +465,16 @@ class Document
         return $this;
     }
 
+    public function getEtatDocument(): ?EtatDocument
+    {
+        return $this->etatDocument;
+    }
 
+    public function setEtatDocument(?EtatDocument $etatDocument): self
+    {
+        $this->etatDocument = $etatDocument;
+
+        return $this;
+    }
 
 }

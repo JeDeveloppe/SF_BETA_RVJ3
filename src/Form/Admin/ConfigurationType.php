@@ -28,37 +28,37 @@ class ConfigurationType extends AbstractType
                 'label' => 'Préfixe des devis:'
             ])
             ->add('cost', NumberType::class, [
-                'label' => 'Prix de l\' adhésion (TTC):'
+                'label' => 'Prix de l\' adhésion (en cents HT):'
             ])
             ->add('grandPlateauBois', TextType::class, [
-                'label' => 'Prix du grand plateau / support en bois (TTC):'
+                'label' => 'Prix du grand plateau / support en bois (en cents HT):'
             ])
             ->add('grandPlateauPlastique', TextType::class, [
-                'label' => 'Prix du grand plateau / support en plastique (TTC):'
+                'label' => 'Prix du grand plateau / support en plastique (en cents HT):'
             ])
             ->add('petitPlateauBois', TextType::class, [
-                'label' => 'Prix du petit plateau / support en bois (TTC):'
+                'label' => 'Prix du petit plateau / support en bois (en cents HT):'
             ])
             ->add('petitPlateauPlastique', TextType::class, [
-                'label' => 'Prix du petit plateau / support en plastique (TTC):'
+                'label' => 'Prix du petit plateau / support en plastique (en cents HT):'
             ])
             ->add('pieceUnique', TextType::class, [
-                'label' => 'Prix de la pièce unique dans un jeu:'
+                'label' => 'Prix de la pièce unique dans un jeu (en cents HT):'
             ])
             ->add('pieceMultiple', TextType::class, [
-                'label' => 'Prix de la pièce en grande quantité:'
+                'label' => 'Prix de la pièce en grande quantité (en cents HT):'
             ])
             ->add('pieceMetalBois', TextType::class, [
-                'label' => 'Prix de la pièce en métal / bois:'
+                'label' => 'Prix de la pièce en métal / bois (en cents HT):'
             ])
             ->add('autrePiece', TextType::class, [
-                'label' => 'Prix des autres pièces:'
+                'label' => 'Prix des autres pièces (en cents HT):'
             ])
             ->add('enveloppeSimple', NumberType::class, [
-                'label' => 'Prix de l\' enveloppe simple (TTC):'
+                'label' => 'Prix de l\' enveloppe simple (en cents HT):'
             ])
             ->add('enveloppeBulle', NumberType::class, [
-                'label' => 'Prix de l\' enveloppe à bulles (TTC):'
+                'label' => 'Prix de l\' enveloppe à bulles (en cents HT):'
             ])
             ->add('holiday', TextType::class, [
                 'label' => 'Texte vacances:',

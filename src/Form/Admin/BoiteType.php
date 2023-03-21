@@ -106,7 +106,7 @@ class BoiteType extends AbstractType
                 ]
             ])
             ->add('isOnLine', CheckboxType::class, [
-                'label' => 'En ligne (cocher)',
+                'label' => 'En ligne',
                 'required' => false
             ])
             ->add('isLivrable', CheckboxType::class, [
@@ -115,6 +115,10 @@ class BoiteType extends AbstractType
             ])
             ->add('isComplet', CheckboxType::class, [
                 'label' => 'Disponible en jeu d\'occasion',
+                'required' => false
+            ])
+            ->add('venteDirecte', CheckboxType::class, [
+                'label' => 'Disponible en ventes directes',
                 'required' => false
             ])
             ->add('isDeee', CheckboxType::class, [

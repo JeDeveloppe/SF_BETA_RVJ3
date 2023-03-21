@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Repository\ConfigurationRepository;
 use App\Repository\DocumentRepository;
+use App\Repository\EtatDocumentRepository;
 use App\Repository\PanierRepository;
 use App\Service\Utilities;
 use DateTimeImmutable;
@@ -16,7 +17,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin", name="admin_accueil")
      */
-    public function index(
+    public function adminIndex(
         PanierRepository $panierRepository,
         DocumentRepository $documentRepository,
         ConfigurationRepository $configurationRepository,
@@ -43,6 +44,27 @@ class AdminController extends AbstractController
             'devisSupprimerParUtilisateurs' => $devisSupprimerParUtilisateurs,
             'infosAndConfig' => $utilities->importConfigurationAndInformationsLegales(),
             'delaiDevis' => $delaiDevis
+        ]);
+    }
+
+     /**
+     * @Route("/admin/commandes", name="admin_commandes")
+     */
+    public function adminCommandes(
+        DocumentRepository $documentRepository,
+        EtatDocumentRepository $etatDocumentRepository,
+        Utilities $utilities
+        ): Response
+    {
+
+        $etatApreparer = $etatDocumentRepository->findOneBy(['name' => 'A préparer']);
+        // $etatDeCote = $etatDocumentRepository->findOneBy(['name' => 'Mettre de côté']);
+
+        $commandesApreparer = $documentRepository->findBy(['etatDocument' => $etatApreparer]);
+
+        return $this->render('admin/commandes/commandes.html.twig', [
+            'commandesApreparer' => $commandesApreparer
+            // 'commandesDeCote' => $documentRepository->findBy(['etatDocument' => $etatDeCote])
         ]);
     }
 }
