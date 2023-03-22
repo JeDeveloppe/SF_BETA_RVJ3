@@ -53,18 +53,18 @@ class AdminController extends AbstractController
     public function adminCommandes(
         DocumentRepository $documentRepository,
         EtatDocumentRepository $etatDocumentRepository,
-        Utilities $utilities
         ): Response
     {
 
         $etatApreparer = $etatDocumentRepository->findOneBy(['name' => 'A préparer']);
-        // $etatDeCote = $etatDocumentRepository->findOneBy(['name' => 'Mettre de côté']);
+        $etatDeCote = $etatDocumentRepository->findOneBy(['name' => 'Mise de côté']);
 
         $commandesApreparer = $documentRepository->findBy(['etatDocument' => $etatApreparer]);
+        $commandesDeCote = $documentRepository->findBy(['etatDocument' => $etatDeCote]);
 
         return $this->render('admin/commandes/commandes.html.twig', [
-            'commandesApreparer' => $commandesApreparer
-            // 'commandesDeCote' => $documentRepository->findBy(['etatDocument' => $etatDeCote])
+            'commandesApreparer' => $commandesApreparer,
+            'commandesDeCote' => $commandesDeCote
         ]);
     }
 }

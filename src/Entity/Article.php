@@ -71,6 +71,11 @@ class Article
      */
     private $documentLignes;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $weight;
+
     public function __construct()
     {
         $this->boite = new ArrayCollection();
@@ -247,6 +252,18 @@ class Article
                 $documentLigne->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWeight(): ?int
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(?int $weight): self
+    {
+        $this->weight = $weight;
 
         return $this;
     }

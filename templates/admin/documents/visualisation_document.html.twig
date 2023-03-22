@@ -8,8 +8,10 @@
 
     {% if devis.paiement is not null %}
         {% set disabled = "disabled" %}
+        {% set disabled_facture = "" %}
     {% else %}
         {% set disabled = "" %}
+        {% set disabled_facture = "disabled" %}
     {% endif %}
 
     <h3 class="col-12 text-center my-5">Visualisation d'un document</h3>
@@ -46,6 +48,7 @@
                         </tr>
                         <tr>
                             <td colspan="4">
+                                Devis:
                                {% if devis.isRelanceDevis %}
                                     <i class="fa-solid fa-rotate-right text-success"></i> (relancer au moins une fois) -
                                 {% else %}
@@ -59,6 +62,22 @@
                                 Fin de validitée: {{ devis.endValidationDevis|date('d/m/Y') }}
                             </td>
                         </tr>
+                        {% if devis.numeroFacture is not null %}
+                            <tr>
+                                <td colspan="2">
+                                    <div>
+                                        État de la facture: <b class="btn btn-sm btn-success">{{ devis.etatDocument.name }}</b>
+                                    </div>
+                                </td>
+                                <td colspan="2">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <a href="{{ path('changement_etat', {'token': devis.token, 'etat': 1 }) }}" class="{{disabled_facture}} btn btn-sm btn-info">Mettre à préparer</a>
+                                        <a href="{{ path('changement_etat', {'token': devis.token, 'etat': 2 }) }}" class="{{disabled_facture}} btn btn-sm btn-info">Mettre de côté</a>
+                                        <a href="{{ path('changement_etat', {'token': devis.token, 'etat': 3 }) }}" class="{{disabled_facture}} btn btn-sm btn-info">Mettre en expédiée</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
@@ -171,7 +190,7 @@
 
 
                 {% if devis.numeroFacture is not null %}
-                    <a class="btn btn-lg btn-outline-danger disabled col-8 mx-auto" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}">Facturé: suppression impossible</a>
+                    <a class="btn btn-lg btn-outline-danger disabled col-8 mx-auto mt-2" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}">Facturé: suppression impossible</a>
                 {% else %}
                      {% include "admin/documents/devis/_delete_form.html.twig" %}
                 {% endif %}

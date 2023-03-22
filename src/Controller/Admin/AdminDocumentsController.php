@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ConfigurationRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\DocumentLignesRepository;
+use App\Repository\EtatDocumentRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -378,6 +379,32 @@ class AdminDocumentsController extends AbstractController
         //on signal le changement
         $this->addFlash('success', 'État du document mis à jour!');
         return $this->redirect($request->headers->get('referer'));
+    }
+
+       /**
+     * @Route("/admin/document/changement-etat/{etat}/{token}", name="changement_etat")
+     */
+    public function changementEtatDocument(
+        $token,
+        $etat,
+        Request $request,
+        EtatDocumentRepository $etatDocumentRepository,
+        ): Response
+    {
+
+        $etat = $etatDocumentRepository->findOneBy(['id' => $etat]);
+
+        //on cherche le devis par le token
+        $devis = $this->documentRepository->findOneBy(['token' => $token]);
+
+        $devis->setEtatDocument($etat);
+
+        $this->em->persist($devis);
+        $this->em->flush();
+
+        //on signal le changement
+        $this->addFlash('success', 'État du document mis à jour!');
+        return $this->redirectToRoute('admin_commandes');
     }
 
     /**

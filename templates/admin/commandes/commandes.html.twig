@@ -5,28 +5,62 @@
 {% block body %}
 
     <div class="row justify-content-center mb-5">
-        <h3 class="col-12 text-center mb-5">Les demandes de devis</h3>
+        <h3 class="col-12 text-center mb-5">Les commandes à préparées</h3>
 
-        {% for demande in commandesApreparer %}
-            <div class="card col-9 my-2 p-0">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <div>
-                        #{{ demande.user.id }} / {{ demande.user.email }} - {{ demande.user.phone }} - 
-                        <span class="fw-bolder text-warning">[{{ demande.user.documents | length }} commande{% if demande.user.documents | length  > 1 %}s{% endif %}]</span>
-                    </div>
-                    <div>
-                        Facture {{ demande.numeroFacture}}<br/> Total TTC: {{ demande.totalHT}}
-                    </div>
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                        <a href="#" class="btn btn-secondary">Left</a>
-                        <a href="#" class="btn btn-secondary">Middle</a>
-                        <a href="#" class="btn btn-secondary">Right</a>
+        {% if commandesApreparer | length > 0 %}
+            {% for demande in commandesApreparer %}
+                <div class="card col-11 my-2 p-0">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            #{{ demande.user.id }} / {{ demande.user.email }} - {{ demande.user.phone }} - 
+                            <span class="fw-bolder text-warning">[{{ demande.user.documents | length }} commande{% if demande.user.documents | length  > 1 %}s{% endif %}]</span>
+                        </div>
+                        <div>
+                            Facture {{ demande.numeroFacture}}<br/> Total TTC: {{ demande.totalTTC | number_format(2, '.', ',') }}
+                        </div>
+                        <div>
+                            <a class="btn btn-warning" href="{{ path('admin_visualisation_document', {'token': demande.token }) }}">Voir le document</a>
+                        </div>
                     </div>
                 </div>
+            {% endfor %}
+        {% else %}
+            <div class="card col-11 my-2 p-0">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    Aucun document pour le moment...
+                </div>
             </div>
-        {% endfor %}
+        {% endif %}
     </div>
 
+    <div class="row justify-content-center mb-5">
+        <h3 class="col-12 text-center mb-5">Les commandes misent de côtées</h3>
+
+        {% if commandesDeCote | length > 0 %}
+            {% for demande in commandesDeCote %}
+                <div class="card col-11 my-2 p-0">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            #{{ demande.user.id }} / {{ demande.user.email }} - {{ demande.user.phone }} - 
+                            <span class="fw-bolder text-warning">[{{ demande.user.documents | length }} commande{% if demande.user.documents | length  > 1 %}s{% endif %}]</span>
+                        </div>
+                        <div>
+                            Facture {{ demande.numeroFacture}}<br/> Total TTC: {{ demande.totalTTC | number_format(2, '.', ',') }}
+                        </div>
+                        <div>
+                            <a class="btn btn-warning" href="{{ path('admin_visualisation_document', {'token': demande.token }) }}">Voir le document</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="card col-11 my-2 p-0">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    Aucun document pour le moment...
+                </div>
+            </div>
+        {% endif %}
+    </div>
 
 
 {% endblock %}

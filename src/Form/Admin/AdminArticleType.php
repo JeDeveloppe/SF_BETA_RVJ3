@@ -24,7 +24,11 @@ class AdminArticleType extends AbstractType
                 'label' => 'Quantité total en stock:'
             ])
             ->add('priceHt', NumberType::class, [
-                'label' => 'Prix unitaire HT en cents:'
+                'label' => 'Prix HT en cents:'
+            ])
+            ->add('weight', NumberType::class, [
+                'label' => 'Poid en gramme:',
+                'required' => true
             ])
             ->add('boite', EntityType::class, [
                 'label' => 'Autres boites de jeu:',

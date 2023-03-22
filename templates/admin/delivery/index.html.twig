@@ -1,0 +1,39 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Gestion des frais de port{% endblock %}
+
+{% block body %}
+    <h1>Delivery index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>WeightStart</th>
+                <th>WeightStop</th>
+                <th>PriceHt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for delivery in deliveries %}
+            <tr>
+                <td>{{ delivery.id }}</td>
+                <td>{{ delivery.weightStart }}</td>
+                <td>{{ delivery.weightStop }}</td>
+                <td>{{ delivery.priceHt }}</td>
+                <td>
+                    <a href="{{ path('app_delivery_show', {'id': delivery.id}) }}">show</a>
+                    <a href="{{ path('app_delivery_edit', {'id': delivery.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_delivery_new') }}">Create new</a>
+{% endblock %}
