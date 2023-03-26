@@ -48,47 +48,47 @@ class ImportRVJ2 extends Command
         
         ini_set('memory_limit', '512M');
         //on importe les boites
-        $this->importBoitesService->importBoites($io);
+        // $this->importBoitesService->importBoites($io);
 
-        // ////on importe le detail des boites
-        $this->importPiecesService->importPieces($io);
+        // // ////on importe le detail des boites
+        // $this->importPiecesService->importPieces($io);
 
-        // // //on importe les jeux complet (occasions)
-        $this->importOccasionsService->importOccasions($io);
+        // // // //on importe les jeux complet (occasions)
+        // $this->importOccasionsService->importOccasions($io);
 
-        // //on importe les departementss
-        $this->importDepartementsService->importDepartements($io);
+        // // //on importe les departementss
+        // $this->importDepartementsService->importDepartements($io);
 
-        // //on importe les villes
-        // ini_set('memory_limit', '512M');
-        $this->importVillesService->importVilles1_5($io);
-        $this->importVillesService->importVilles2_5($io);
-        $this->importVillesService->importVilles3_5($io);
-        $this->importVillesService->importVilles4_5($io);
-        $this->importVillesService->importVilles5_5($io);
+        // // //on importe les villes
+        // // ini_set('memory_limit', '512M');
+        // $this->importVillesService->importVilles1_5($io);
+        // $this->importVillesService->importVilles2_5($io);
+        // $this->importVillesService->importVilles3_5($io);
+        // $this->importVillesService->importVilles4_5($io);
+        // $this->importVillesService->importVilles5_5($io);
 
-        // //on importe les partenaires
-        $this->importPartenairesService->importPartenaires($io);
+        // // //on importe les partenaires
+        // $this->importPartenairesService->importPartenaires($io);
 
-        // //on importe les clients
-        $this->importClientsService->importClients($io);
+        // // //on importe les clients
+        // $this->importClientsService->importClients($io);
 
-        // //on importe les adresses (facturation et livraison)
-        $this->importAdressesService->importAdresses($io);
+        // // //on importe les adresses (facturation et livraison)
+        // $this->importAdressesService->importAdresses($io);
 
-        //on crée user administrateur et adresse de retrait
-        $this->creationAdministrateurAdresseService->creationAdminAdresse($io);
+        // //on crée user administrateur et adresse de retrait
+        // $this->creationAdministrateurAdresseService->creationAdminAdresse($io);
 
         // //on importe les documents
         $this->importDocumentsService->importDocuments($io);
         $this->importPaiementService->importPaiements($io);
 
 
-        // //on importe les ligne boite des documents
-        $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
+        // // //on importe les ligne boite des documents
+        // $this->importDocumentsLignesService->importDocumentsLigneBoites($io);
 
-        // //on importe les lignes occasion des documents
-        $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
+        // // //on importe les lignes occasion des documents
+        // $this->importDocumentsLignesService->importDocumentsLigneOccasion($io);
 
         return Command::SUCCESS;
     }

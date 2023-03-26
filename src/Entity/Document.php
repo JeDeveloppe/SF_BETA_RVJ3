@@ -46,11 +46,6 @@ class Document
     private $totalHT;
 
     /**
-     * @ORM\Column(type="float")
-     */
-    private $totalLivraison;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $numeroDevis;
@@ -214,18 +209,6 @@ class Document
     public function setTotalHT(float $totalHT): self
     {
         $this->totalHT = $totalHT;
-
-        return $this;
-    }
-
-    public function getTotalLivraison(): ?float
-    {
-        return $this->totalLivraison;
-    }
-
-    public function setTotalLivraison(float $totalLivraison): self
-    {
-        $this->totalLivraison = $totalLivraison;
 
         return $this;
     }

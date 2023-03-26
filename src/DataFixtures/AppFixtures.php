@@ -67,7 +67,7 @@ class AppFixtures extends Fixture
         $manager->persist($conf);
 
         //les etats des documents
-        $etats = ['A préparer','Mise de côté', 'Expédiée / Terminée'];
+        $etats = ['A préparer','Mise de côté', 'Expédiée / Terminée', 'Non facturé'];
         foreach($etats as $etat){
             $etatDocument = new EtatDocument();
             $etatDocument->setName($etat);

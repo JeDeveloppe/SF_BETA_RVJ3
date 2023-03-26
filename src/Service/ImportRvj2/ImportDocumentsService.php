@@ -10,6 +10,7 @@ use App\Repository\PaysRepository;
 use App\Repository\UserRepository;
 use App\Repository\BoiteRepository;
 use App\Repository\DocumentRepository;
+use App\Repository\EtatDocumentRepository;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\MethodeEnvoiRepository;
@@ -30,7 +31,8 @@ class ImportDocumentsService
         private UserRepository $userRepository,
         private OccasionRepository $occasionRepository,
         private BoiteRepository $boiteRepository,
-        private PaiementRepository $paiementRepository
+        private PaiementRepository $paiementRepository,
+        private EtatDocumentRepository $etatDocumentRepository
         ){
     }
 
@@ -79,7 +81,7 @@ class ImportDocumentsService
         ->setNumeroFacture((int) substr($arrayDoc['numero_facture'],3))
         ->setTotalHT($arrayDoc['totalHT'])
         ->setTotalTTC($arrayDoc['totalTTC'])
-        ->setTotalLivraison($arrayDoc['prix_expedition'])
+        ->setDeliveryPriceHt($arrayDoc['prix_expedition'])
         ->setAdresseFacturation($arrayDoc['adresse_facturation'])
         ->setAdresseLivraison($arrayDoc['adresse_livraison'])
         ->setIsRelanceDevis($arrayDoc['relance_devis'])
@@ -106,6 +108,20 @@ class ImportDocumentsService
         }
 
         $document->setEnvoi($expedition);
+
+        if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] !== 0){
+            $etat = $this->etatDocumentRepository->findOneBy(['name' => 'Expédiée / Terminée']);
+        }else if($arrayDoc['etat'] == 3){ // 3 = mis de cote dans la version 2
+            $etat = $this->etatDocumentRepository->findOneBy(['name' => 'Mise de côté']); 
+        }else if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] == 0){
+            $etat = $this->etatDocumentRepository->findOneBy(['name' => 'A préparer']); 
+        }else if($arrayDoc['etat'] == 1 && $arrayDoc['envoyer'] !== 0){ // non facturer dans version 2
+            $etat = $this->etatDocumentRepository->findOneBy(['name' => 'Non facturé']);
+        }else{
+            dd("ETAT NON DEFINI DANS IMPORTATION DOCUMENT SERVICE ".$arrayDoc['etat']);
+        }
+
+        $document->setEtatDocument($etat);
 
         $user = $this->userRepository->findOneBy(['rvj2Id' => (int) $arrayDoc['idUser']]);
 

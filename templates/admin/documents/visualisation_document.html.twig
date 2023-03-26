@@ -66,7 +66,7 @@
                             <tr>
                                 <td colspan="2">
                                     <div>
-                                        État de la facture: <b class="btn btn-sm btn-success">{{ devis.etatDocument.name }}</b>
+                                        État du document: <b class="btn btn-sm btn-success">{{ devis.etatDocument ? devis.etatDocument.name : "V2"}}</b>
                                     </div>
                                 </td>
                                 <td colspan="2">
@@ -142,7 +142,7 @@
                     </tr>
                     <tr>
                         <td>Livraison / Retrait:</td>
-                        <td>{{ (devis.totalLivraison / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        <td>{{ devis.deliveryPriceHt ? (devis.deliveryPriceHt / 100 * tva) | number_format(2, '.', ',') : 0 }}</td>
                     </tr>
 
                      <tr>
@@ -152,10 +152,6 @@
                     <tr>
                         <td>Total HT:</td>
                         <td>{{ (devis.totalHt / 100) | number_format(2, '.', ',') }}</td>
-                    </tr>
-                    <tr>
-                        <td>Frais de livraison TTC:</td>
-                        <td>{{ (devis.deliveryPriceHt / 100 * tva) | number_format(2, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td>TVA:</td>
