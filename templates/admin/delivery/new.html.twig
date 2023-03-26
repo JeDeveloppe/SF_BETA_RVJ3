@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+{% extends 'admin/base.html.twig' %}
 
-<title>New Delivery</title>
+{% block title %}Configuration des prix de livraison{% endblock %}
 
 {% block body %}
-    <h1>Create new Delivery</h1>
+    <h1 class="col-12 text-center my-5">Configuration des prix de livraison</h1>
 
     {{ include('admin/delivery/_form.html.twig') }}
 

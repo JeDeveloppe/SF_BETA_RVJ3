@@ -39,6 +39,18 @@ class DeliveryRepository extends ServiceEntityRepository
         }
     }
 
+    public function findDelivery($value): array
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.weightStart < :start')
+            ->andWhere('d.weightStop > :stop')
+            ->setParameter('start', $value)
+            ->setParameter('stop', $value)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 //    /**
 //     * @return Delivery[] Returns an array of Delivery objects
 //     */

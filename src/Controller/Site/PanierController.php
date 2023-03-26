@@ -10,6 +10,7 @@ use App\Repository\PanierRepository;
 use App\Repository\AdresseRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\ConfigurationRepository;
+use App\Repository\DeliveryRepository;
 use App\Repository\OccasionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -164,7 +165,8 @@ public function __construct(
      * @Route("/panier", name="app_panier")
      */
     public function index(
-        UserRepository $userRepository): Response
+        UserRepository $userRepository,
+        DeliveryRepository $deliveryRepository): Response
     {
 
         $user = $this->security->getUser();
@@ -172,23 +174,63 @@ public function __construct(
         $panier_boites = $this->panierRepository->findByUserAndNotNullColumn('boite', $user);
         $panier_articles = $this->panierRepository->findByUserAndNotNullColumn('article', $user);
 
-        $livraison_adresses = $this->adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
-        $facturation_adresses = $this->adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
-
-        //on cherche l'user administrateur
-        $userRetrait = $userRepository->findOneBy(['email' => 'ADMINISTRATION@ADMINISTRATION.FR']);
-        $adresseRetrait = $this->adresseRepository->findOneBy(['user' => $userRetrait, 'isFacturation' => false]);
-
         if(count($panier_boites) < 1 && count($panier_occasions) < 1 && count($panier_articles) < 1){
             //on signal le changement
             $this->addFlash('warning', 'Votre panier semble vide!');
             return $this->redirectToRoute('accueil');
         }else{
 
+            $livraison_adresses = $this->adresseRepository->findBy(['user' => $user, 'isFacturation' => null]);
+            $facturation_adresses = $this->adresseRepository->findBy(['user' => $user, 'isFacturation' => true]);
+    
+            //on cherche l'user administrateur
+            $userRetrait = $userRepository->findOneBy(['email' => 'ADMINISTRATION@ADMINISTRATION.FR']);
+            $adresseRetrait = $this->adresseRepository->findOneBy(['user' => $userRetrait, 'isFacturation' => false]);
+
+            //variable totaux
+            $totaux = [];
+            //total du panier en poid
+            $shoppingCartTotalWeight = 0;
+            //total du panier en euro HT
+            $shoppingCartTotalHt = 0;
+
+            if(count($panier_boites) > 0){
+                foreach($panier_boites as $shoppingCartLigne){
+                    $shoppingCartTotalWeight += $shoppingCartLigne->getBoite()->getPoidBoite();
+                    $shoppingCartTotalHt += $shoppingCartLigne->getBoite->getPrixHt();
+                }
+            }
+
+            if(count($panier_occasions) > 0 ){
+                foreach($panier_occasions as $shoppingCartLigne){
+                    $shoppingCartTotalWeight += $shoppingCartLigne->getOccasion()->getBoite()->getPoidBoite();
+                    $shoppingCartTotalHt += $shoppingCartLigne->getOccasion()->getPriceHt();
+                }
+            }
+
+
+            if(count($panier_articles) > 0){
+                foreach($panier_articles as $shoppingCartLigne){
+                    $shoppingCartTotalWeight += $shoppingCartLigne->getArticle()->getWeight() * $shoppingCartLigne->getArticleQuantity();
+                    $shoppingCartTotalHt += $shoppingCartLigne->getArticle()->getPriceHt() * $shoppingCartLigne->getArticleQuantity();
+                }
+            }
+
+
+            $delivery = $deliveryRepository->findDelivery($shoppingCartTotalWeight);
+            $deliveryPriceHt = $delivery[0]->getPriceHt();
+
+            $totaux['delivery'] = $deliveryPriceHt;
+            $totaux['weight'] = $shoppingCartTotalWeight;
+            $totaux['totalHtWithoutDelivery'] = $shoppingCartTotalHt;
+            $totaux['totalHtWithDelivery'] = $deliveryPriceHt + $shoppingCartTotalHt;
+            
             $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
+            $totaux['totalTtc'] = $totaux['totalHtWithDelivery'] * $this->utilities->calculTauxTva($infosAndConfig['legales']->getTauxTva());
 
             return $this->render('site/panier/panier.html.twig', [
                 'panier_occasions' => $panier_occasions,
+                'totaux' => $totaux,
                 'panier_boites' => $panier_boites,
                 'panier_articles' => $panier_articles,
                 'infosAndConfig' => $infosAndConfig,

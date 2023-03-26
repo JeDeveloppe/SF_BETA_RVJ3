@@ -3,7 +3,7 @@
 {% block title %}Panier{% endblock %}
 
 {% block body %}
-
+{% dump(totaux) %}
     <h1 class="col-12 text-center my-5">Panier</h1>
 
     <div class="row justify-content-start">
@@ -127,6 +127,26 @@
                 </a>
             </div>
         {% endif %}
+
+        <div class="col-12">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Sous Total HT:</td><td>{{ (totaux.totalHtWithoutDelivery / 100) | number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Frais de livraison TTC:</td><td>{{ (totaux.delivery * tva / 100) | number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total HT:</td><td>{{ (totaux.totalHtWithDelivery / 100) | number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total TTC:</td><td>{{ (totaux.totalTtc / 100) | number_format(2, '.', ',') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
     {% if panier_boites | length > 0 %}
