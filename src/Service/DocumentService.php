@@ -116,10 +116,10 @@ class DocumentService
 
         $document->setUser($this->userRepository->find($user))
                 ->setCreatedAt($now)
-                ->setTotalTTC($request->request->get('totalGeneralTTC') * 100)
-                ->setTotalHT($request->request->get('totalGeneralHT') * 100)
+                ->setTotalTTC($request->request->get('totalGeneralTTC'))
+                ->setTotalHT($request->request->get('totalGeneralHT'))
                 ->setTauxTva($taux)
-                ->setTotalLivraison($this->utilities->prixTtcToCentsHt($request->request->get('totalLivraisonTTC'),$taux))
+                ->setDeliveryPriceHt($this->utilities->prixTtcToCentsHt($request->request->get('totalLivraisonTTC'),$taux))
                 ->setIsRelanceDevis(false)
                 ->setIsDeleteByUser(false)
                 ->setAdresseFacturation($paniers[0]->getFacturation())
@@ -131,6 +131,8 @@ class DocumentService
                 ->setEnvoi($this->methodeEnvoiRepository->find($request->request->get('envoi')));
 
         $this->em->persist($document);
+        dd($document);
+
         $this->em->flush();
 
         $lignesDemandeBoitePrix = $request->request->get('prix');
@@ -143,10 +145,10 @@ class DocumentService
             $documentLigne = new DocumentLignes();
 
             $documentLigne->setBoite($panier->getBoite())
-                          ->setDocument($document)
-                          ->setMessage($panier->getMessage())
-                          ->setPrixVente($this->utilities->prixTtcToCentsHt($lignesDemandeBoitePrix[$key],$taux))
-                          ->setReponse($lignesDemandeBoiteReponse[$key]);
+                            ->setDocument($document)
+                            ->setMessage($panier->getMessage())
+                            ->setPrixVente($this->utilities->prixTtcToCentsHt($lignesDemandeBoitePrix[$key],$taux))
+                            ->setReponse($lignesDemandeBoiteReponse[$key]);
             $this->em->persist($documentLigne);
         }
 
@@ -169,6 +171,7 @@ class DocumentService
     public function fromPanierSaveDevisInDataBaseWithoutPiecesDetachees($user, $setup, $paniers, $demande){
 
         $informationsLegales = $this->informationsLegalesRepository->findOneBy([]);
+
         $tva = $this->utilities->calculTauxTva($informationsLegales->getTauxTva());
         $methodeEnvoi = $this->methodeEnvoiRepository->findOneBy(['id' => 3]);
         $livraison = $setup['adresseLivraison'];
@@ -185,11 +188,10 @@ class DocumentService
 
         $document->setUser($user)
                 ->setCreatedAt($now)
-                ->setTotalTTC(($setup['totalHT'] * $tva) + ($setup['cost'] * 100)) //on ajoute le cout adhésion
-                ->setTotalHT($setup['totalHT'] + ($setup['cost'] / $tva * 100)) //on ajoute le cout adhésion
+                ->setTotalTTC(($setup['totalInCentsHT'] + $setup['costInCentsHt']) * $tva ) //on ajoute le cout adhésion
+                ->setTotalHT($setup['totalInCentsHT'] + $setup['costInCentsHt']) //on ajoute le cout adhésion
                 ->setTauxTva($informationsLegales->getTauxTva())
-                ->setCost($setup['cost'] * 100)
-                ->setTotalLivraison($setup['deliveryPriceHt'])
+                ->setCost($setup['costInCentsHt'])
                 ->setIsDeleteByUser(false)
                 ->setIsRelanceDevis(false)
                 ->setAdresseLivraison($livraison->getFirstName().' '.$livraison->getLastName().'<br/>'.$livraison->getAdresse().'<br/>'.$livraison->getVille()->getVilleCodePostal().' '.$livraison->getVille()->getVilleNom().'<br/>'.$livraison->getVille()->getDepartement()->getPays()->getIsoCode())
@@ -200,6 +202,7 @@ class DocumentService
                 ->setEnvoi($methodeEnvoi)
                 ->setDeliveryPriceHt($setup['deliveryPriceHt']);
         $this->em->persist($document);
+
         $this->em->flush();
 
         // $panier_occasions = $this->panierRepository->findBy(['etat' => $demande,'user' => $user, 'boite' => null]);

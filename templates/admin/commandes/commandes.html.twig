@@ -6,6 +6,7 @@
 
     <div class="row justify-content-center mb-5">
         <h3 class="col-12 text-center mb-5">Les commandes à préparées</h3>
+            {{ dump(commandesApreparer) }}
 
         {% if commandesApreparer | length > 0 %}
             {% for demande in commandesApreparer %}

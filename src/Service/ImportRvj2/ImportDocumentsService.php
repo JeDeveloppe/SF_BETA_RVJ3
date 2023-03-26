@@ -115,7 +115,7 @@ class ImportDocumentsService
             $etat = $this->etatDocumentRepository->findOneBy(['name' => 'Mise de côté']); 
         }else if($arrayDoc['etat'] == 2 && $arrayDoc['envoyer'] == 0){
             $etat = $this->etatDocumentRepository->findOneBy(['name' => 'A préparer']); 
-        }else if($arrayDoc['etat'] == 1 && $arrayDoc['envoyer'] !== 0){ // non facturer dans version 2
+        }else if($arrayDoc['etat'] == 1){ // non facturer dans version 2
             $etat = $this->etatDocumentRepository->findOneBy(['name' => 'Non facturé']);
         }else{
             dd("ETAT NON DEFINI DANS IMPORTATION DOCUMENT SERVICE ".$arrayDoc['etat']);

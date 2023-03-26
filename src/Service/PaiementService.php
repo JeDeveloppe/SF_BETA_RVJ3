@@ -2,22 +2,22 @@
 
 namespace App\Service;
 
-use App\Entity\EtatDocument;
 use Exception;
 use DateInterval;
 use Stripe\Stripe;
 use DateTimeImmutable;
 use App\Entity\Paiement;
-use Stripe\Checkout\Session;
+use App\Entity\EtatDocument;
 use App\Repository\DocumentRepository;
-use App\Repository\EtatDocumentRepository;
 use App\Repository\PaiementRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\EtatDocumentRepository;
 use Symfony\Component\BrowserKit\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class PaiementService
 {
@@ -44,7 +44,7 @@ class PaiementService
 
         if(!$document){
             //pas de devis
-            $this->flash->getFlashBag->add('warning', 'Devis inconnu!');
+            $this->addFlash('warning', 'Devis inconnu!');
             return $this->Router->redirectToRoute('accueil');
         }
 

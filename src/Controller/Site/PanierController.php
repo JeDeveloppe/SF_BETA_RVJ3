@@ -372,16 +372,16 @@ class PanierController extends AbstractController
         if($user->getMembership() < new DateTimeImmutable('now')){
             $configuration = $this->configurationRepository->findOneBy([]);
             $cost = $configuration->getCost();
-            $setup['cost'] = $cost;
+            $setup['costInCentsHt'] = $cost;
         }else{
-            $setup['cost'] = 0;
+            $setup['costInCentsHt'] = 0;
         }
 
         //on cherche le prix de livraison en fonction du total des pieces
         $deliveryPriceHt = $this->panierService->getPriceFromWeight($totalWeigth);
         $setup['deliveryPriceHt'] = $deliveryPriceHt;
 
-        $setup['totalHT'] = $totalOccasionsHT + $totalArticlesHT + $deliveryPriceHt;
+        $setup['totalInCentsHT'] = $totalOccasionsHT + $totalArticlesHT + $deliveryPriceHt;
 
         //on sauvegarde dans la base
         $token = $this->documentService->fromPanierSaveDevisInDataBaseWithoutPiecesDetachees($user, $setup, $paniers, $demande);
