@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\EtatDocument;
 use Exception;
 use DateInterval;
 use Stripe\Stripe;
@@ -32,6 +33,7 @@ class PaiementService
         private FlashBagInterface $flashBagInterface,
         private RouterInterface $router,
         private StockService $stockService,
+        private EtatDocumentRepository $etatDocumentRepository
         ){
     }
 

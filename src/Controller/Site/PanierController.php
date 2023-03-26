@@ -20,26 +20,29 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
 use App\Repository\UserRepository;
 use App\Service\DocumentService;
+use App\Service\PanierService;
 use App\Service\Utilities;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PanierController extends AbstractController
 {
-public function __construct(
-    private PanierRepository $panierRepository,
-    private InformationsLegalesRepository $informationsLegalesRepository,
-    private Security $security,
-    private ConfigurationRepository $configurationRepository,
-    private EntityManagerInterface $em,
-    private OccasionRepository $occasionRepository,
-    private AdresseRepository $adresseRepository,
-    private DocumentService $documentService,
-    private Utilities $utilities,
-    private ArticleRepository $articleRepository,
-    private BoiteRepository $boiteRepository
-)
-{
-}
+    public function __construct(
+        private PanierRepository $panierRepository,
+        private InformationsLegalesRepository $informationsLegalesRepository,
+        private Security $security,
+        private ConfigurationRepository $configurationRepository,
+        private EntityManagerInterface $em,
+        private OccasionRepository $occasionRepository,
+        private AdresseRepository $adresseRepository,
+        private DocumentService $documentService,
+        private Utilities $utilities,
+        private ArticleRepository $articleRepository,
+        private BoiteRepository $boiteRepository,
+        private PanierService $panierService,
+        private DeliveryRepository $deliveryRepository
+    )
+    {
+    }
 
     /**
      * @Route("/panier/ajout-pieces-detachees", name="panier-ajout-pieces-detachees")
@@ -165,8 +168,7 @@ public function __construct(
      * @Route("/panier", name="app_panier")
      */
     public function index(
-        UserRepository $userRepository,
-        DeliveryRepository $deliveryRepository): Response
+        UserRepository $userRepository): Response
     {
 
         $user = $this->security->getUser();
@@ -197,30 +199,28 @@ public function __construct(
             if(count($panier_boites) > 0){
                 foreach($panier_boites as $shoppingCartLigne){
                     $shoppingCartTotalWeight += $shoppingCartLigne->getBoite()->getPoidBoite();
-                    $shoppingCartTotalHt += $shoppingCartLigne->getBoite->getPrixHt();
                 }
             }
 
             if(count($panier_occasions) > 0 ){
                 foreach($panier_occasions as $shoppingCartLigne){
-                    $shoppingCartTotalWeight += $shoppingCartLigne->getOccasion()->getBoite()->getPoidBoite();
-                    $shoppingCartTotalHt += $shoppingCartLigne->getOccasion()->getPriceHt();
+                    $shoppingCartTotalWeight += $this->panierService->totalWeightOfOccasions($panier_occasions);
+                    $shoppingCartTotalHt += $this->panierService->totalHtOfOccasions($panier_occasions);
                 }
             }
 
 
             if(count($panier_articles) > 0){
-                foreach($panier_articles as $shoppingCartLigne){
-                    $shoppingCartTotalWeight += $shoppingCartLigne->getArticle()->getWeight() * $shoppingCartLigne->getArticleQuantity();
-                    $shoppingCartTotalHt += $shoppingCartLigne->getArticle()->getPriceHt() * $shoppingCartLigne->getArticleQuantity();
-                }
+
+                $shoppingCartTotalWeight += $this->panierService->totalWeightOfArticles($panier_articles);
+                $shoppingCartTotalHt += $this->panierService->totalHtOfArticles($panier_articles);
+                
             }
 
+            //on cherche le prix de livraison en fonction du total des pieces
+            $deliveryPriceHt = $this->panierService->getPriceFromWeight($shoppingCartTotalWeight);
 
-            $delivery = $deliveryRepository->findDelivery($shoppingCartTotalWeight);
-            $deliveryPriceHt = $delivery[0]->getPriceHt();
-
-            $totaux['delivery'] = $deliveryPriceHt;
+            $totaux['deliveryPriceHt'] = $deliveryPriceHt;
             $totaux['weight'] = $shoppingCartTotalWeight;
             $totaux['totalHtWithoutDelivery'] = $shoppingCartTotalHt;
             $totaux['totalHtWithDelivery'] = $deliveryPriceHt + $shoppingCartTotalHt;
@@ -339,7 +339,10 @@ public function __construct(
         $paniers['panier_occasions'] = $this->panierRepository->findByUserAndNotNullColumn('occasion',$user);
         $paniers['panier_articles'] = $this->panierRepository->findByUserAndNotNullColumn('article', $user);
 
-        if(count($paniers) < 1){
+        $panier_occasions = $this->panierRepository->findByUserAndNotNullColumn('occasion',$user);
+        $panier_articles = $this->panierRepository->findByUserAndNotNullColumn('article', $user);
+
+        if(count($panier_occasions) < 1 && count($panier_articles) < 1){
             //si y a rien
             $this->addFlash('warning', 'Demande inconnue!');
             return $this->redirectToRoute('accueil');
@@ -348,19 +351,20 @@ public function __construct(
         $setup = [];
         $totalOccasionsHT = 0;
         $totalArticlesHT = 0;
+        $totalWeigth = 0;
+
         $setup['adresseFacturation'] = $this->adresseRepository->findOneBy(['id' => $request->request->get('adresse_facturation')]);
         $setup['adresseLivraison'] = $this->adresseRepository->findOneBy(['id' => $request->request->get('adresse_livraison')]);
         $setup['token'] = $token;
 
         if(count($paniers['panier_occasions']) > 0){
-            foreach($paniers['panier_occasions'] as $panier){
-                $totalOccasionsHT += $panier->getOccasion()->getPriceHt();
-            }
+            $totalOccasionsHT = $this->panierService->totalHtOfOccasions($paniers['panier_occasions']);
+            $totalWeigth += $this->panierService->totalWeightOfOccasions($paniers['panier_occasions']);
         }
+
         if(count($paniers['panier_articles']) > 0){
-            foreach($paniers['panier_articles'] as $panier){
-                $totalArticlesHT += $panier->getArticle()->getPriceHt() * $panier->getArticleQuantity();
-            }
+            $totalArticlesHT = $this->panierService->totalHtOfArticles($paniers['panier_articles']);
+            $totalWeigth += $this->panierService->totalWeightOfArticles($paniers['panier_articles']);
         }
 
 
@@ -373,7 +377,11 @@ public function __construct(
             $setup['cost'] = 0;
         }
 
-        $setup['totalHT'] = $totalOccasionsHT + $totalArticlesHT;
+        //on cherche le prix de livraison en fonction du total des pieces
+        $deliveryPriceHt = $this->panierService->getPriceFromWeight($totalWeigth);
+        $setup['deliveryPriceHt'] = $deliveryPriceHt;
+
+        $setup['totalHT'] = $totalOccasionsHT + $totalArticlesHT + $deliveryPriceHt;
 
         //on sauvegarde dans la base
         $token = $this->documentService->fromPanierSaveDevisInDataBaseWithoutPiecesDetachees($user, $setup, $paniers, $demande);

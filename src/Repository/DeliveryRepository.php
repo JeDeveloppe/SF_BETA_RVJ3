@@ -39,7 +39,7 @@ class DeliveryRepository extends ServiceEntityRepository
         }
     }
 
-    public function findDelivery($value): array
+    public function findDelivery($value)
     {
         return $this->createQueryBuilder('d')
             ->where('d.weightStart < :start')
@@ -48,7 +48,7 @@ class DeliveryRepository extends ServiceEntityRepository
             ->setParameter('stop', $value)
             ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
 //    /**

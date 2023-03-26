@@ -154,6 +154,10 @@
                         <td>{{ (devis.totalHt / 100) | number_format(2, '.', ',') }}</td>
                     </tr>
                     <tr>
+                        <td>Frais de livraison TTC:</td>
+                        <td>{{ (devis.deliveryPriceHt / 100 * tva) | number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
                         <td>TVA:</td>
                         <td>{{ ((devis.totalTtc - devis.totalHt) / 100) | number_format(2, '.', ',') }}</td>
                     </tr>

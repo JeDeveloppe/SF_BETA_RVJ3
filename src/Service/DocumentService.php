@@ -189,7 +189,7 @@ class DocumentService
                 ->setTotalHT($setup['totalHT'] + ($setup['cost'] / $tva * 100)) //on ajoute le cout adhésion
                 ->setTauxTva($informationsLegales->getTauxTva())
                 ->setCost($setup['cost'] * 100)
-                ->setTotalLivraison(0)
+                ->setTotalLivraison($setup['deliveryPriceHt'])
                 ->setIsDeleteByUser(false)
                 ->setIsRelanceDevis(false)
                 ->setAdresseLivraison($livraison->getFirstName().' '.$livraison->getLastName().'<br/>'.$livraison->getAdresse().'<br/>'.$livraison->getVille()->getVilleCodePostal().' '.$livraison->getVille()->getVilleNom().'<br/>'.$livraison->getVille()->getDepartement()->getPays()->getIsoCode())
@@ -197,7 +197,8 @@ class DocumentService
                 ->setToken($setup['token'])
                 ->setNumeroDevis($newNumero)
                 ->setEndValidationDevis($endDevis)
-                ->setEnvoi($methodeEnvoi);
+                ->setEnvoi($methodeEnvoi)
+                ->setDeliveryPriceHt($setup['deliveryPriceHt']);
         $this->em->persist($document);
         $this->em->flush();
 

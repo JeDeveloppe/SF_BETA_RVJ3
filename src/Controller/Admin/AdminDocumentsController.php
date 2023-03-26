@@ -61,13 +61,16 @@ class AdminDocumentsController extends AbstractController
             $informationsLegales = $informationsLegalesRepository->findOneBy([]);
             $tva = $this->utilities->calculTauxTva($informationsLegales->getTauxTva());
 
-            $occasions = $panierRepository->findBy(['etat' => $slug, 'boite' => null]);
-            $boites = $panierRepository->findBy(['etat' => $slug, 'occasion' => null]);
+            $occasions = $panierRepository->findBy(['etat' => $slug, 'boite' => null, 'article' => null]);
+            $boites = $panierRepository->findBy(['etat' => $slug, 'occasion' => null, 'article' => null]);
 
             //ON FAIT LE TOTAL DES OCCASIONS
             $totalOccasions = 0;
-            foreach($occasions as $occasion){
-                $totalOccasions = $totalOccasions + $occasion->getOccasion()->getPriceHt();
+
+            if(count($occasions) > 0){
+                foreach($occasions as $occasion){
+                    $totalOccasions += $occasion->getOccasion()->getPriceHt();
+                }
             }
 
 

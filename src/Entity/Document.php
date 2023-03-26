@@ -141,6 +141,11 @@ class Document
      */
     private $etatDocument;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $deliveryPriceHt;
+
     
     public function __construct()
     {
@@ -473,6 +478,18 @@ class Document
     public function setEtatDocument(?EtatDocument $etatDocument): self
     {
         $this->etatDocument = $etatDocument;
+
+        return $this;
+    }
+
+    public function getDeliveryPriceHt(): ?int
+    {
+        return $this->deliveryPriceHt;
+    }
+
+    public function setDeliveryPriceHt(?int $deliveryPriceHt): self
+    {
+        $this->deliveryPriceHt = $deliveryPriceHt;
 
         return $this;
     }
