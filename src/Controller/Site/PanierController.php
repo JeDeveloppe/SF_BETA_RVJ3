@@ -119,7 +119,7 @@ class PanierController extends AbstractController
         return $this->redirectToRoute('catalogue_jeux_occasion');
     }
 
-        /**
+    /**
      * @Route("/panier/ajout-article", name="panier-ajout-article")
      */
     public function addpanierArticle(
@@ -131,20 +131,34 @@ class PanierController extends AbstractController
         $boite = $this->boiteRepository->findOneBy(['id' => $request->request->get('boite')]) ;
         $qte = $request->request->get('qte');
 
-        //si l'occasion est disponible à la vente
+        //si l'article est disponible à la vente
         if(!is_null($article)){
 
-            $panier = new Panier();
-            //ici on ajoute les differentes infos
-            $panier->setUser($this->security->getUser())
-            ->setCreatedAt( new DateTimeImmutable('now'))
-            ->setArticle($article)
-            ->setArticleQuantity($qte)
-            ->setEtat("panier");
+            //on verifie que l'article n'est pas deja dans le panier au quel cas on additionne
+            $panierWithThisArticle = $this->panierRepository->findBy(['article' => $article, 'user' => $this->security->getUser(), 'etat' => 'panier']);
 
-            $this->em->persist($panier);
-            $this->em->flush($panier);
+            if(count($panierWithThisArticle) > 0){
+                $panierWithThisArticle[0]
+                    ->setArticleQuantity($panierWithThisArticle[0]->getArticleQuantity() + $request->request->get('qte'))
+                    ->setCreatedAt( new DateTimeImmutable('now'));
 
+                $this->em->persist($panierWithThisArticle[0]);
+                $this->em->flush($panierWithThisArticle[0]);
+                
+            }else{
+                $panier = new Panier();
+                //ici on ajoute les differentes infos
+                $panier->setUser($this->security->getUser())
+                ->setCreatedAt( new DateTimeImmutable('now'))
+                ->setArticle($article)
+                ->setArticleQuantity($qte)
+                ->setEtat("panier");
+    
+                $this->em->persist($panier);
+                $this->em->flush($panier);
+            }
+
+            //on met à jour la quantité article dispo dans la base
             $newQte = $article->getQuantity() - $request->request->get('qte');
             $article->setQuantity($newQte);
             $this->em->persist($article);
@@ -382,6 +396,7 @@ class PanierController extends AbstractController
         $setup['deliveryPriceHt'] = $deliveryPriceHt;
 
         $setup['totalInCentsHT'] = $totalOccasionsHT + $totalArticlesHT + $deliveryPriceHt;
+
 
         //on sauvegarde dans la base
         $token = $this->documentService->fromPanierSaveDevisInDataBaseWithoutPiecesDetachees($user, $setup, $paniers, $demande);

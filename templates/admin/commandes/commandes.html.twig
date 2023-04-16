@@ -17,7 +17,7 @@
                             <span class="fw-bolder text-warning">[{{ demande.user.documents | length }} commande{% if demande.user.documents | length  > 1 %}s{% endif %}]</span>
                         </div>
                         <div>
-                            Facture {{ demande.numeroFacture}}<br/> Total TTC: {{ demande.totalTTC | number_format(2, '.', ',') }}
+                            Facture {{ demande.numeroFacture}}<br/> Total TTC: {{ demande.totalTTC / 100 | number_format(2, '.', ',') }}
                         </div>
                         <div>
                             <a class="btn btn-warning" href="{{ path('admin_visualisation_document', {'token': demande.token }) }}">Voir le document</a>
@@ -46,7 +46,7 @@
                             <span class="fw-bolder text-warning">[{{ demande.user.documents | length }} commande{% if demande.user.documents | length  > 1 %}s{% endif %}]</span>
                         </div>
                         <div>
-                            Facture {{ demande.numeroFacture}}<br/> Total TTC: {{ demande.totalTTC | number_format(2, '.', ',') }}
+                            Facture {{ demande.numeroFacture}}<br/> Total TTC: {{ demande.totalTTC / 100 | number_format(2, '.', ',') }}
                         </div>
                         <div>
                             <a class="btn btn-warning" href="{{ path('admin_visualisation_document', {'token': demande.token }) }}">Voir le document</a>

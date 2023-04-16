@@ -94,12 +94,13 @@ class CataloguesControllerDirect extends AbstractController
 
         //dans tous les cas on cherches les partenaires avec un site web
         $partenaires = $partenaireRepository->findBy(['isDetachee' => true, 'isEcommerce' => true, 'isAfficherWhenRechercheCatalogueIsNull' => true, 'isOnLine' => true]);
+        $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
 
         return $this->render('site/catalogues/direct/catalogue_pieces_detachees_direct.html.twig', [
             'boites' => $boites,
             'catalogueFiltersForm' => $formFilters->createView(),
             'tri' => $tri,
-            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
+            'infosAndConfig' => $infosAndConfig,
             'partenaires' => $partenaires,
             'boiteSearch' => $formBoiteSearch->createView(),
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
@@ -133,11 +134,13 @@ class CataloguesControllerDirect extends AbstractController
                     $articlesDesAutresBoites[] = $article;
                 }
             }
+            $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
 
             return $this->render('site/catalogues/direct/catalogue_pieces_detachees_demande_direct.html.twig', [
                 'boite' => $boite,
                 'articles' => $articleRepository->findArticlesWithQuantityMoreThanZero($boite),
                 'articlesDesAutresBoites' => $articlesDesAutresBoites,
+                'tva' => $this->utilities->calculTauxTva($infosAndConfig['legales']->getTauxTva()),
                 'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
             ]);

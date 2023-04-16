@@ -355,6 +355,7 @@ class AdminDocumentsController extends AbstractController
             'suppressionDevis' => $suppressionDevis,
             'totalOccasions' => $totalOccasions,
             'totalDetachees' => $totalDetachees,
+            'totalArticles' => $totalArticles,
             'now' => new DateTimeImmutable('now'),
             'toDelete' => $numeroFacture ? $numeroFacture : null,
             'form' => $form

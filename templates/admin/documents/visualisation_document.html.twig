@@ -59,7 +59,7 @@
                                 {% else %}
                                     <i class="fa-solid fa-paper-plane text-danger"></i> (non envoyé) -
                                 {% endif %}
-                                Fin de validitée: {{ devis.endValidationDevis|date('d/m/Y') }}
+                                Fin de validitée du devis: {{ devis.endValidationDevis|date('d/m/Y') }}
                             </td>
                         </tr>
                         {% if devis.numeroFacture is not null %}
@@ -138,7 +138,7 @@
                     </tr>
                     <tr>
                         <td>Pièces détachées:</td>
-                        <td>{{ (totalDetachees / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        <td>{{ (totalDetachees / 100 * tva) | number_format(2, '.', ',') }} - {{ (totalArticles / 100 * tva) | number_format(2, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td>Livraison / Retrait:</td>

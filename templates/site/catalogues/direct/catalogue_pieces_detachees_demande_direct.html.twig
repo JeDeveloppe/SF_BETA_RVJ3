@@ -61,19 +61,18 @@
 							</ul>
 						</div>
 					</div>
-
 					<!-- formulaire de demande -->
 					<form class="col-12 p-0 border-primary pt-3 d-flex flex-wrap justify-content-around" method="post" action="{{ path('panier-ajout-article') }}" name="formulaireDemandePiece">
 						<div class="col-11 col-md-9 col-xl-6">
 							<select class="form-select" name="article" required>
 								<option value="">Choisir un article...</option>
 								{% for article in articles %}
-									<option value="{{ article.id }}">{{ article.name }} (Disponible: {{ article.quantity }})</option>
+									<option value="{{ article.id }}">{{ article.name }} (Disponible: {{ article.quantity }}) => {{ (article.priceHT * tva / 100) | number_format(2, ',', '.')}} €</option>
 								{% endfor %}
 								{% if articlesDesAutresBoites | length > 0 %}
 									<optgroup label="Articles d'autres boite correspondantes:">
 										{% for article in articlesDesAutresBoites %}
-											<option value="{{ article.id }}">{{ article.name }} (Disponible: {{ article.quantity }})</option>
+											<option value="{{ article.id }}">{{ article.name }} (Disponible: {{ article.quantity }}) => {{ (article.priceHT * tva / 100) | number_format(2, ',', '.')}} €</option>
 										{% endfor %}
 									</optgroup>
 								{% endif %}
