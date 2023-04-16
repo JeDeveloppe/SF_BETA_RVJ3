@@ -11,6 +11,7 @@ use App\Form\Admin\SearchDocumentType;
 use App\Service\DocumentService;
 use App\Form\Admin\DocumentPaiementType;
 use App\Form\Admin\MethodeEnvoiType;
+use App\Repository\ArticleRepository;
 use App\Repository\PanierRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,7 +37,9 @@ class AdminDocumentsController extends AbstractController
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
         private PanierRepository $panierRepository,
-        private Utilities $utilities
+        private Utilities $utilities,
+        private ArticleRepository $articleRepository,
+        private DocumentService $documentService
     )
     {
     }
@@ -193,22 +196,36 @@ class AdminDocumentsController extends AbstractController
             return $this->redirectToRoute('admin_accueil');
         }else{
 
-            $occasions = $this->documentLignesRepository->findBy(['document' => $devis, 'boite' => null]);
-            $boites = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null]);
+            $occasions = $this->documentLignesRepository->findBy(['document' => $devis, 'boite' => null, 'article' => null]);
+            $boites = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null, 'article' => null]);
+            $articles = $this->documentLignesRepository->findBy(['document' => $devis, 'occasion' => null, 'boite' => null]);
 
- 
             //on supprime les demandes de piece
-            foreach($boites as $boite){
-                $this->documentLignesRepository->remove($boite);
+            if(count($boites) > 0){
+                foreach($boites as $boite){
+                    $this->documentLignesRepository->remove($boite);
+                }
             }
 
-            foreach($occasions as $Loccasion){
-                //on recupere la boite et on met en ligne
-                $occasion = $Loccasion->getOccasion();
-                $occasion->setIsOnLine(true);
-                $this->em->persist($occasion);
-                //on supprime la ligne
-                $this->documentLignesRepository->remove($Loccasion);
+            if(count($occasions) > 0){
+                foreach($occasions as $Loccasion){
+                    //on recupere la boite et on met en ligne
+                    $occasion = $Loccasion->getOccasion();
+                    $occasion->setIsOnLine(true);
+                    $this->em->persist($occasion);
+                    //on supprime la ligne
+                    $this->documentLignesRepository->remove($Loccasion);
+                }
+            }
+
+            if(count($articles) > 0){
+                foreach($articles as $article){
+                    $articleInDataBase = $this->articleRepository->findOneBy($article);
+                    $articleInDataBase->setQuantity($article->getQuantity());
+                    $this->em->flush($articleInDataBase);
+                    //on supprime la ligne
+                    $this->documentLignesRepository->remove($article);
+                }
             }
 
             //finalement on supprime le document qui est en devis

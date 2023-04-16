@@ -78,7 +78,11 @@
                     </tr>
                     <tr class="{{ visibilityOfTrTotalBoites}}">
                         <td>Pièces détachées:</td>
-                        <td>{{ (totalDetachees / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        {% if totalDetachees > 0 %}
+                            <td>{{ (totalDetachees / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        {% else %}
+                            <td>{{ (totalArticles / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        {% endif %}
                     </tr>
                     <tr class="{{ visibilityOfTrTotalArticles}}">
                         <td>Articles:</td>
@@ -86,9 +90,8 @@
                     </tr>
                     <tr>
                         <td>Livraison / Retrait:</td>
-                        <td>{{ (devis.totalLivraison / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        <td>{{ (devis.deliveryPriceHt / 100 * tva) | number_format(2, '.', ',') }}</td>
                     </tr>
-
                      <tr>
                         <td>Adhésion annuelle:</td>
                         <td>{{ (devis.cost / 100 * tva) | number_format(2, '.', ',') }}</td>

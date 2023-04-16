@@ -2,6 +2,8 @@
 
 namespace App\Controller\Member;
 
+use DateTimeImmutable;
+use App\Service\Utilities;
 use App\Form\Site\UserType;
 use App\Service\DocumentService;
 use App\Repository\UserRepository;
@@ -15,7 +17,6 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
-use App\Service\Utilities;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -73,9 +74,24 @@ class MemberController extends AbstractController
         ConfigurationRepository $configurationRepository): Response
     {
         $user = $this->security->getUser();
+        $devis = [];
+        $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
+        $now = new DateTimeImmutable('now');
 
         //on cherche les devis
-        $devis = $documentRepository->findDevisFromUser($user);
+        $allDevis = $documentRepository->findDevisFromUser($user);
+
+        //on va effacer les devis supperieur a X jours.
+        $endValidateDevis = $now->modify('-'.$infosAndConfig['config']->getDevisDelayBeforeDelete().' days');
+        foreach($allDevis as $devisOne){
+            if($devisOne->getEndValidationDevis() < $endValidateDevis){
+                
+            }else{
+                $devis[] = $devisOne;
+            }
+        }
+
+
         //on cherche les factures
         $factures = $documentRepository->findFacturesFromUser($user);
 
@@ -90,7 +106,7 @@ class MemberController extends AbstractController
         return $this->render('member/historique.html.twig', [
             'user' => $user,
             'documents' => $documents,
-            'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
+            'infosAndConfig' => $infosAndConfig,
             'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
         ]);
     }

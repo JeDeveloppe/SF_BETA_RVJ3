@@ -138,7 +138,11 @@
                     </tr>
                     <tr>
                         <td>Pièces détachées:</td>
-                        <td>{{ (totalDetachees / 100 * tva) | number_format(2, '.', ',') }} - {{ (totalArticles / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        {% if totalDetachees > 0 %}
+                            <td>{{ (totalDetachees / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        {% else %}
+                            <td>{{ (totalArticles / 100 * tva) | number_format(2, '.', ',') }}</td>
+                        {% endif %}
                     </tr>
                     <tr>
                         <td>Livraison / Retrait:</td>
@@ -168,9 +172,9 @@
         {# PARTIE BOUTONS #}
         <div class="row my-5">
             <div class="col-6 text-center">
-                {% if devis.numeroFacture  %}
+                {% if devis.numeroFacture and devis.isDeleteByUser == false %}
                     <span class="btn btn-lg btn-success disabled">DÉJA FACTURÉ</span>
-                {% else %}
+                {% elseif(devis.isDeleteByUser == false)%}
                     {{ form(form) }}
                 {% endif %}
             </div>
