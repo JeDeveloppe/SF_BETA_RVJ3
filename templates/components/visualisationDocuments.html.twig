@@ -4,12 +4,12 @@
     {% set card = '' %}
 {% else %}
     {% set path_base = 'site' %}
-    {% set title = 'Devis' %}
+    {% set title = 'Devis '~devis.numeroDevis %}
     {% set card = 'card' %}
 {% endif %}
 
 {% extends path_base ~'/base.html.twig' %}
-{% block title %}Devis{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block body %}
 
