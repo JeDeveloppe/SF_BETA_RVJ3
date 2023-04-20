@@ -1,5 +1,6 @@
 ###> symfony/framework-bundle ###
 /.env
+/import
 /.env.prod
 /.env.dev
 /.env.local

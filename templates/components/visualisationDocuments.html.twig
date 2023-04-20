@@ -1,0 +1,251 @@
+{% if is_granted('ROLE_ADMIN') and checkRole is not defined %}
+    {% set path_base = 'admin' %}
+    {% set title = 'Visualisation d\'un document' %}
+    {% set card = '' %}
+{% else %}
+    {% set path_base = 'site' %}
+    {% set title = 'Devis' %}
+    {% set card = 'card' %}
+{% endif %}
+
+{% extends path_base ~'/base.html.twig' %}
+{% block title %}Devis{% endblock %}
+
+{% block body %}
+
+    {% set tva = tauxTva %}
+    {% set totalDetachees = totalDetachees %}
+
+    {% if devis.paiement is not null %}
+        {% set disabled = "disabled" %}
+        {% set disabled_facture = "" %}
+    {% else %}
+        {% set disabled = "" %}
+        {% set disabled_facture = "disabled" %}
+    {% endif %}
+
+
+    {% if is_granted('ROLE_ADMIN') and checkRole is not defined %} 
+        <h3 class="col-12 text-center my-5">Visualisation d'un document</h3>
+            <div class="row justify-content-center my-5">
+                <div class="col-11">
+                    <table class="table text-center align-middle">
+                        <thead>
+                            <th>Numéro de devis</th>
+                            <th>Devis supprimer par l'utilisateur</th>
+                            <th>Numéro de facture</th>
+                            <th>Paiement</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {{ devis.numeroDevis }} <br>
+                                    Créé le: {{ devis.createdAt|date('d/m/Y') }} <br/>
+                                </td>
+                                <td>
+                                    {% if devis.isDeleteByUser == true %}
+                                        <a class="btn btn-danger {{disabled}}" href="{{ path('changement_disponibilite_en_ligne', {'value': 0, 'token': devis.token }) }}"> OUI</a>
+                                    {% else %}
+                                        <a class="btn btn-success {{disabled}}" href="{{ path('changement_disponibilite_en_ligne', {'value': 1, 'token': devis.token }) }}"> NON</a>
+                                    {% endif %}
+                                </td>
+                                <td>{{ devis.numeroFacture ? devis.numeroFacture : "PAS DE PAIEMENT" }}</td>
+                                <td>
+                                    {% if devis.paiement is not null %}
+                                        AUCUN
+                                    {% else %}
+                                        {{ devis.paiement.timeTransaction|date('d/m/Y') }} <br/>par {{ devis.paiement.moyenPaiement }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    Devis:
+                                {% if devis.isRelanceDevis %}
+                                        <i class="fa-solid fa-rotate-right text-success"></i> (relancer au moins une fois) -
+                                    {% else %}
+                                        <i class="fa-solid fa-rotate-right text-danger"></i> (non relancer) -
+                                    {% endif %}
+                                    {% if devis.envoiEmailDevis is not null %}
+                                        <i class="fa-solid fa-paper-plane text-success"></i> (email envoyé) le {{ devis.envoiEmailDevis|date('d/m/Y') }} -
+                                    {% else %}
+                                        <i class="fa-solid fa-paper-plane text-danger"></i> (non envoyé) -
+                                    {% endif %}
+                                    Fin de validitée du devis: {{ devis.endValidationDevis|date('d/m/Y') }}
+                                </td>
+                            </tr>
+                            {% if devis.numeroFacture is not null %}
+                                <tr>
+                                    <td colspan="2">
+                                        <div>
+                                            État du document: <b class="btn btn-sm btn-success">{{ devis.etatDocument ? devis.etatDocument.name : "V2"}}</b>
+                                        </div>
+                                    </td>
+                                    <td colspan="2">
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <a href="{{ path('changement_etat', {'token': devis.token, 'etat': 1 }) }}" class="{{disabled_facture}} btn btn-sm btn-info">Mettre à préparer</a>
+                                            <a href="{{ path('changement_etat', {'token': devis.token, 'etat': 2 }) }}" class="{{disabled_facture}} btn btn-sm btn-info">Mettre de côté</a>
+                                            <a href="{{ path('changement_etat', {'token': devis.token, 'etat': 3 }) }}" class="{{disabled_facture}} btn btn-sm btn-info">Mettre en expédiée</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    {% else %}
+        <h3 class="col-12 text-center my-5">
+            Devis numéro {{ infosAndConfig['config'].prefixeDevis }}{{ devis.numeroDevis }} <br>
+            du {{ devis.createdAt|date('d-m-Y') }} <br/>
+            <span class="small">(valable jusqu'au {{ devis.endValidationDevis|date('d-m-Y') }})</span>
+        </h3>
+    {% endif %}
+
+
+    {# SI Y A DES JEUX D'OCCASION DANS LE PANIER #}
+    {% if occasions | length > 0 %}
+        {% set visibilityOfTrTotalOccasions = '' %}
+        {% include "components/table_occasions.html.twig" %}
+    {% else %}
+        {% set visibilityOfTrTotalOccasions = 'd-none' %}
+    {% endif %}
+
+    {# SI Y A DES DEMANDES DE PIECES DETACHEES DANS LE PANIER #}
+    {% if boites | length > 0 %}
+        {% set visibilityOfTrTotalBoites = '' %}
+        {% include "components/table_pieces_detachees.html.twig" %}
+    {% else %}
+        {% set visibilityOfTrTotalBoites = 'd-none' %}
+    {% endif %}
+
+    {# SI Y A DES DEMANDES D'ARTICLES DANS LE PANIER #}
+    {% if articles | length > 0 %}
+        {% set visibilityOfTrTotalArticles = '' %}
+        {% include "components/table_articles.html.twig" %}
+    {% else %}
+        {% set visibilityOfTrTotalArticles = 'd-none' %}
+    {% endif %}
+
+    {# PARITE LIVRAISON #}
+    <div class="row justify-content-center my-5">
+        <h3 class="col-12 text-start">Facturation / Livraison / Retrait:</h3>
+
+        <div class="col-11 col-md-8 {{ card }}">
+            <table class="table text-center">
+                <tr>
+                    <td>Facturation:</td>
+                    <td>Livraison / retrait:</td>
+                </tr>
+                <tr>
+                    <td>
+                        {% set facturations = devis.adresseFacturation|split('<br/>') %}
+                        {% for facturation in facturations %}
+                            {{ facturation }}<br/>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% set livraisons = devis.adresseLivraison|split('<br/>') %}
+                        {% for livraison in livraisons %}
+                            {{ livraison }}<br/>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    {# PARITE TOTAUX #}
+    <div class="row justify-content-center my-5">
+        <h3 class="col-12 text-start">Totaux:</h3>
+
+        <div class="col-11 col-md-8 {{ card }}">
+            <table class="table">
+                <tr class="{{ visibilityOfTrTotalOccasions}}">
+                    <td>Occasions:</td>
+                    <td>{{ (totalOccasions / 100 * tva) | number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr class="{{ visibilityOfTrTotalBoites}}">
+                    <td>Pièces détachées:</td>
+                    {% if totalDetachees > 0 %}
+                        <td>{{ (totalDetachees / 100 * tva) | number_format(2, '.', ',') }}</td>
+                    {% else %}
+                        <td>{{ (totalArticles / 100 * tva) | number_format(2, '.', ',') }}</td>
+                    {% endif %}
+                </tr>
+                <tr class="{{ visibilityOfTrTotalArticles}}">
+                    <td>Articles:</td>
+                    <td>{{ (totalArticles / 100 * tva) | number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr>
+                    <td>Livraison / Retrait:</td>
+                    <td>{{ (devis.deliveryPriceHt / 100 * tva) | number_format(2, '.', ',') }}</td>
+                </tr>
+                    <tr>
+                    <td>Adhésion annuelle:</td>
+                    <td>{{ (devis.cost / 100 * tva) | number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr>
+                    <td>Total HT:</td>
+                    <td>{{ (devis.totalHt / 100) | number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr>
+                    <td>TVA:</td>
+                    <td>{{ ((devis.totalTtc - devis.totalHt) / 100) | number_format(2, '.', ',') }}</td>
+                </tr>
+                <tr>
+                    <td>Total TTC:</td>
+                    <td>{{ (devis.totalTtc / 100) | number_format(2, '.', ',')}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    {# PARTIE BOUTONS #}
+    {% if is_granted('ROLE_ADMIN') and checkRole is not defined  %}
+        <div class="row my-5">
+            <div class="col-6 text-center">
+                {% if devis.numeroFacture and devis.isDeleteByUser == false %}
+                    <span class="btn btn-lg btn-success disabled">DÉJA FACTURÉ</span>
+                {% elseif(devis.isDeleteByUser == false)%}
+                    {{ form(form) }}
+                {% endif %}
+            </div>
+            <div class="col-6 d-flex flex-column justify-content-around align-items-center">
+                {% if devis.isDeleteByUser == false %}
+                    {# si le devis n'est pas echu on affiche les boutons #}
+                    {% set endDevis = devis.endValidationDevis %}
+                    {% set difference = date(endDevis).diff(date(now)) %}
+                    {% set leftDays = difference.days %}
+                    {% if leftDays >= 0 and devis.envoiEmailDevis is null %}
+                        <div class="col-6">
+                            <a class="btn btn-success disabled" href="{{ path('admin_prevenir_devis_disponible', {'token': devis.token, 'days': 0 }) }}">Envoyer email => Devis mis à disposition</a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+
+
+                {% if devis.numeroFacture is not null %}
+                    <a class="btn btn-lg btn-outline-danger disabled col-8 mx-auto mt-2" href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}">Facturé: suppression impossible</a>
+                {% else %}
+                     {% include "admin/documents/devis/_delete_form.html.twig" %}
+                {% endif %}
+                {% if devis.isDeleteByUser == false and devis.numeroFacture is null and devis.envoiEmailDevis is not null %}
+                    <a class="btn btn-primary col-8 mx-auto" href="{{ path('admin_relance_devis', {'token': devis.token }) }}">Relancer l'utilisateur (+ {{ delaiDevis }} jours)</a>                
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <div class="row my-5">
+            <div class="col-6 text-center">
+                <a href="{{ path('app_paiement', {'token': devis.token}) }}" class="btn btn-lg btn-success" >Payer</a><br/>
+                <img class="img-thumbnail col-9 col-md-6 col-lg-4 mt-4" src="{{ asset('build/images/design/paiement/logo-' ~ module_paiement ~ '.png') }}" alt="Paiement avec {{ module_paiement }}"/>
+            </div>
+            <div class="col-6 text-center">
+                <a href="{{ path('suppression_devis_par_utilisateur', {'token': devis.token}) }}" class="btn btn-lg btn-outline-danger" >Annuler le devis</a>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

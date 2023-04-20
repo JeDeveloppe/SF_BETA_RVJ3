@@ -2,8 +2,10 @@
 
 namespace App\Controller\Site;
 
-use App\Repository\ArticleRepository;
+use App\Service\SecuriserService;
+use App\Service\Utilities;
 use App\Repository\PanierRepository;
+use App\Repository\ArticleRepository;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DocumentLignesRepository;
@@ -11,8 +13,6 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\InformationsLegalesRepository;
-use App\Service\Utilities;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SiteDocumentsController extends AbstractController
@@ -24,7 +24,8 @@ class SiteDocumentsController extends AbstractController
         private Utilities $utilities,
         private DocumentLignesRepository $documentLignesRepository,
         private EntityManagerInterface $em,
-        private ArticleRepository $articleRepository
+        private ArticleRepository $articleRepository,
+        private SecuriserService $securiserService
     )
     {
         
@@ -84,6 +85,7 @@ class SiteDocumentsController extends AbstractController
         // $devis = $documentRepository->findOneBy(['token' => $token, 'isDeleteByUser' => null, 'numeroFacture' => null]);
 
         $devis = $documentRepository->findActiveDevis($token);
+        $user = $this->security->getUser();
 
         if($devis == null){
 
@@ -126,9 +128,14 @@ class SiteDocumentsController extends AbstractController
             $tauxTva = $this->utilities->calculTauxTva($devis->getTauxTva());
             $module_paiement = $_ENV["PAIEMENT_MODULE"];
 
-            return $this->render('site/devis/lecture_devis.html.twig', [
+            if($this->securiserService->isGranted($user, 'ROLE_ADMIN')){
+                $checkRole = false;
+            }
+
+            return $this->render('components/visualisationDocuments.html.twig', [
                 'devis' => $devis,
                 'occasions' => $occasions,
+                'checkRole' => $checkRole,
                 'boites' => $boites,
                 'articles' => $articles,
                 'tauxTva' => $tauxTva,

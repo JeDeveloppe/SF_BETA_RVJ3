@@ -290,6 +290,7 @@ class AdminDocumentsController extends AbstractController
         //on cherche le devis par le token
         $devis = $this->documentRepository->findOneBy(['token' => $token]);
         $numeroFacture = $devis->getNumeroFacture();
+        $module_paiement = $_ENV["PAIEMENT_MODULE"];
 
         $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
         $delaiDevis = $infosAndConfig['config']->getDevisDelayBeforeDelete();
@@ -362,7 +363,7 @@ class AdminDocumentsController extends AbstractController
             $this->em->flush();
 
         }
-        return $this->renderForm('admin/documents/visualisation_document.html.twig', [
+        return $this->renderForm('components/visualisationDocuments.html.twig', [
             'devis' => $devis,
             'occasions' => $occasions,
             'delaiDevis' => $delaiDevis,
@@ -370,6 +371,7 @@ class AdminDocumentsController extends AbstractController
             'boites' => $boites,
             'tauxTva' => $tauxTva,
             'suppressionDevis' => $suppressionDevis,
+            'module_paiement' => $module_paiement,
             'totalOccasions' => $totalOccasions,
             'totalDetachees' => $totalDetachees,
             'totalArticles' => $totalArticles,
