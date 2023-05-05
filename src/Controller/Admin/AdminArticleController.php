@@ -59,12 +59,13 @@ class AdminArticleController extends AbstractController
         $form->handleRequest($request);
         $boite = $this->boiteRepository->findOneBy(['id' => $boite]);
 
+  
         if ($form->isSubmitted() && $form->isValid()) {
-
             $article->setReference('en_cours')
                     ->setCreatedAt(new \DateTimeImmutable('now'))
                     ->setUser($this->getUser())
                     ->setBoiteOrigine($boite);
+                  
             $articleRepository->add($article, true);
 
             $article->setReference(time().'-'.$boite->getId().'-'.$article->getId());

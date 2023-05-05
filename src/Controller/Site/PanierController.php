@@ -168,7 +168,7 @@ class PanierController extends AbstractController
             $this->addFlash('success', 'Article mis dans votre panier!');
         }else{
             //on signal le changement
-            $this->addFlash('danger', 'Article réservé à l\'instant par un autre utilisateur!');
+            $this->addFlash('danger', 'Article réservé à l\'instant par un autre utilisateur, ou quantité demandée indisponible!');
         }
 
         return $this->redirectToRoute('catalogue_pieces_detachees_demande_direct', [

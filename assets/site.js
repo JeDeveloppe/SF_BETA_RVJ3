@@ -23,3 +23,11 @@ import 'bootstrap/js/dist/tooltip';
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
+
+
+if(document.getElementsByClassName("alertRow")){
+  const element = document.getElementsByClassName("alertRow");
+  setTimeout(function() {
+    element[0].remove();
+  }, 5500);
+}
