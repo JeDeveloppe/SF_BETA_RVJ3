@@ -76,11 +76,18 @@ class Article
      */
     private $weight;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Boite::class, inversedBy="articlesRelative")
+     * @ORM\JoinTable(name="articleBoiteRelative")
+     */
+    private $BoiteRelative;
+
     public function __construct()
     {
         $this->boite = new ArrayCollection();
         $this->paniers = new ArrayCollection();
         $this->documentLignes = new ArrayCollection();
+        $this->BoiteRelative = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -264,6 +271,30 @@ class Article
     public function setWeight(?int $weight): self
     {
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Boite>
+     */
+    public function getBoiteRelative(): Collection
+    {
+        return $this->BoiteRelative;
+    }
+
+    public function addBoiteRelative(Boite $boiteRelative): self
+    {
+        if (!$this->BoiteRelative->contains($boiteRelative)) {
+            $this->BoiteRelative[] = $boiteRelative;
+        }
+
+        return $this;
+    }
+
+    public function removeBoiteRelative(Boite $boiteRelative): self
+    {
+        $this->BoiteRelative->removeElement($boiteRelative);
 
         return $this;
     }

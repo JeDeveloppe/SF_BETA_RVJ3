@@ -177,6 +177,11 @@ class Boite
      */
     private $venteDirecte;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Article::class, mappedBy="BoiteRelative")
+     */
+    private $articlesRelative;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -184,6 +189,7 @@ class Boite
         $this->documentLignes = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->articlesOrigine = new ArrayCollection();
+        $this->articlesRelative = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -564,6 +570,33 @@ class Boite
     public function setVenteDirecte(bool $venteDirecte): self
     {
         $this->venteDirecte = $venteDirecte;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticlesRelative(): Collection
+    {
+        return $this->articlesRelative;
+    }
+
+    public function addArticlesRelative(Article $articlesRelative): self
+    {
+        if (!$this->articlesRelative->contains($articlesRelative)) {
+            $this->articlesRelative[] = $articlesRelative;
+            $articlesRelative->addBoiteRelative($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticlesRelative(Article $articlesRelative): self
+    {
+        if ($this->articlesRelative->removeElement($articlesRelative)) {
+            $articlesRelative->removeBoiteRelative($this);
+        }
 
         return $this;
     }

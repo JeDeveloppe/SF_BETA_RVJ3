@@ -46,6 +46,22 @@ class AdminArticleType extends AbstractType
                 'required' => false
                 // 'mapped' => false
             ])
+            ->add('boiteRelative', EntityType::class, [
+                'label' => 'Boites similaires:',
+                'class' => Boite::class,
+                // 'query_builder' => function (EntityRepository $er) {
+                //     return $er->createQueryBuilder('b')
+                //         ->orderBy('b.nom', 'ASC');
+                // },
+                'choice_label' => function ($boite) {
+                    return $boite->getNom().' - '.$boite->getEditeur().' - '.$boite->getAnnee();
+                },
+                'multiple' => true,
+                // 'expanded' => true,
+                'autocomplete' => true,
+                'required' => false
+                // 'mapped' => false
+            ])
             ;
     }
 

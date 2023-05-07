@@ -42,7 +42,8 @@ class CataloguesControllerDirect extends AbstractController
         EntityManagerInterface $entityManager,
         Request $request,
         BoiteRepository $boiteRepository,
-        PartenaireRepository $partenaireRepository
+        PartenaireRepository $partenaireRepository,
+        ArticleRepository $articleRepository
         ): Response
     {
 
@@ -82,6 +83,25 @@ class CataloguesControllerDirect extends AbstractController
         $donnees = $entityManager
         ->getRepository(Boite::class)
         ->findBy(['isOnLine' => true, 'venteDirecte' => true], $tri);
+
+        //on verifie s'il y a des articles aux boites
+        $articles = [];
+        $articlesAutresBoites = [];
+        $articlesBoiteSimilaire = [];
+
+        foreach($donnees as $boite){
+            $articles[] = $articleRepository->findArticlesWithQuantityMoreThanZero($boite);
+            $articlesAutresBoites[] = $boite->getArticles();
+            $articlesBoiteSimilaire[] = $boite->getArticlesRelative();
+            $count = count($articles) + count($articlesAutresBoites) + count($articlesBoiteSimilaire);
+            dump($count);
+            if($count < 1 ){
+                unset($boite);
+            }
+        }
+
+
+
 
         //si finalement pas eu de recherche ($boites == NULL)
         if(is_null($boites)){
@@ -127,19 +147,29 @@ class CataloguesControllerDirect extends AbstractController
             return $this->redirectToRoute('catalogue_pieces_detachees_direct');
         }else{
 
-            $articlesDesAutresBoites = [];
+            $articles = $articleRepository->findArticlesWithQuantityMoreThanZero($boite);
+      
             $listeArticlesDesAutresBoites = $boite->getArticles();
             foreach($listeArticlesDesAutresBoites as $article){
                 if($article->getQuantity() > 0){
-                    $articlesDesAutresBoites[] = $article;
+                    $articles[] = $article;
                 }
             }
+
+            $articlesBoiteSimilaire = [];
+            $listeArticlesDesAutresBoitesSimilaire = $boite->getArticlesRelative();
+            foreach($listeArticlesDesAutresBoitesSimilaire as $article){
+                if($article->getQuantity() > 0){
+                    $articlesBoiteSimilaire[] = $article;
+                }
+            }
+
             $infosAndConfig = $this->utilities->importConfigurationAndInformationsLegales();
 
             return $this->render('site/catalogues/direct/catalogue_pieces_detachees_demande_direct.html.twig', [
                 'boite' => $boite,
-                'articles' => $articleRepository->findArticlesWithQuantityMoreThanZero($boite),
-                'articlesDesAutresBoites' => $articlesDesAutresBoites,
+                'articles' => $articles,
+                'articlesDesAutresBoites' => $articlesBoiteSimilaire,
                 'tva' => $this->utilities->calculTauxTva($infosAndConfig['legales']->getTauxTva()),
                 'infosAndConfig' => $this->utilities->importConfigurationAndInformationsLegales(),
                 'panier' => $this->panierRepository->findBy(['user' => $this->security->getUser(), 'etat' => 'panier'])
