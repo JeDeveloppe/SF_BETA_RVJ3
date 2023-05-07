@@ -182,6 +182,11 @@ class Boite
      */
     private $articlesRelative;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="boites")
+     */
+    private $categories;
+
     public function __construct()
     {
         $this->occasions = new ArrayCollection();
@@ -190,6 +195,7 @@ class Boite
         $this->articles = new ArrayCollection();
         $this->articlesOrigine = new ArrayCollection();
         $this->articlesRelative = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -597,6 +603,30 @@ class Boite
         if ($this->articlesRelative->removeElement($articlesRelative)) {
             $articlesRelative->removeBoiteRelative($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        $this->categories->removeElement($category);
 
         return $this;
     }

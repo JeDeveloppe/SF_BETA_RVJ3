@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Envelope</title>
+
+{% block body %}
+    <h1>Edit Envelope</h1>
+
+    {{ include('envelope/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_envelope_index') }}">back to list</a>
+
+    {{ include('envelope/_delete_form.html.twig') }}
+{% endblock %}

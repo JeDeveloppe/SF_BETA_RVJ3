@@ -200,7 +200,8 @@ class DocumentService
                 ->setNumeroDevis($newNumero)
                 ->setEndValidationDevis($endDevis)
                 ->setEnvoi($methodeEnvoi)
-                ->setDeliveryPriceHt($setup['deliveryPriceHt']);
+                ->setDeliveryPriceHt($setup['deliveryPriceHt'])
+                ->setEnveloppe($setup['envelope']);
         $this->em->persist($document);
 
         $this->em->flush();

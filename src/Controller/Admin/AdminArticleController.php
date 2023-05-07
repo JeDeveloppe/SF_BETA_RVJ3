@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Form\Admin\AdminArticleType;
+use App\Form\CategoryType;
 use App\Repository\ArticleRepository;
 use App\Repository\BoiteRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -55,9 +56,9 @@ class AdminArticleController extends AbstractController
     public function new(Request $request, ArticleRepository $articleRepository, $boite): Response
     {
         $article = new Article();
-        $form = $this->createForm(AdminArticleType::class, $article);
-        $form->handleRequest($request);
         $boite = $this->boiteRepository->findOneBy(['id' => $boite]);
+        $form = $this->createForm(AdminArticleType::class, $article, ['boite' => $boite]);
+        $form->handleRequest($request);
 
   
         if ($form->isSubmitted() && $form->isValid()) {

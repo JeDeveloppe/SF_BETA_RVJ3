@@ -82,6 +82,23 @@ class Article
      */
     private $BoiteRelative;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="articles")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Envelope::class, inversedBy="articles")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Envelope;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $Dimension;
+
     public function __construct()
     {
         $this->boite = new ArrayCollection();
@@ -295,6 +312,42 @@ class Article
     public function removeBoiteRelative(Boite $boiteRelative): self
     {
         $this->BoiteRelative->removeElement($boiteRelative);
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getEnvelope(): ?Envelope
+    {
+        return $this->Envelope;
+    }
+
+    public function setEnvelope(?Envelope $Envelope): self
+    {
+        $this->Envelope = $Envelope;
+
+        return $this;
+    }
+
+    public function getDimension(): ?string
+    {
+        return $this->Dimension;
+    }
+
+    public function setDimension(?string $Dimension): self
+    {
+        $this->Dimension = $Dimension;
 
         return $this;
     }

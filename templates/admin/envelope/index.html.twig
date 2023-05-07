@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<title>Envelope index</title>
+
+{% block body %}
+    <h1>Envelope index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Weight</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for envelope in envelopes %}
+            <tr>
+                <td>{{ envelope.id }}</td>
+                <td>{{ envelope.Name }}</td>
+                <td>{{ envelope.Weight }}</td>
+                <td>
+                    <a href="{{ path('app_envelope_show', {'id': envelope.id}) }}">show</a>
+                    <a href="{{ path('app_envelope_edit', {'id': envelope.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_envelope_new') }}">Create new</a>
+{% endblock %}

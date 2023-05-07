@@ -141,6 +141,11 @@ class Document
      */
     private $deliveryPriceHt;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $enveloppe;
+
     
     public function __construct()
     {
@@ -473,6 +478,18 @@ class Document
     public function setDeliveryPriceHt(?int $deliveryPriceHt): self
     {
         $this->deliveryPriceHt = $deliveryPriceHt;
+
+        return $this;
+    }
+
+    public function getEnveloppe(): ?string
+    {
+        return $this->enveloppe;
+    }
+
+    public function setEnveloppe(?string $enveloppe): self
+    {
+        $this->enveloppe = $enveloppe;
 
         return $this;
     }

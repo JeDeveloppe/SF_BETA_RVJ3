@@ -3,6 +3,8 @@
 namespace App\Form\Admin;
 
 use App\Entity\Boite;
+use App\Entity\Category;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -104,6 +106,22 @@ class BoiteType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Message s\'il manque une pièce ou autre...'
                 ]
+            ])
+            ->add('categories', EntityType::class, [
+                'label' => 'Catégories de la boite (pour la vente au détail):',
+                'class' => Category::class,
+                // 'query_builder' => function (EntityRepository $er) {
+                //     return $er->createQueryBuilder('b')
+                //         ->orderBy('b.nom', 'ASC');
+                // },
+                'choice_label' => function ($category) {
+                    return $category->getName();
+                },
+                'multiple' => true,
+                // 'expanded' => true,
+                'autocomplete' => true,
+                'required' => false
+                // 'mapped' => false
             ])
             ->add('isOnLine', CheckboxType::class, [
                 'label' => 'En ligne',

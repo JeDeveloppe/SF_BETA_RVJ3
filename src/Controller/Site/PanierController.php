@@ -229,6 +229,8 @@ class PanierController extends AbstractController
                 $shoppingCartTotalWeight += $this->panierService->totalWeightOfArticles($panier_articles);
                 $shoppingCartTotalHt += $this->panierService->totalHtOfArticles($panier_articles);
                 
+                $envelope = $this->panierService->weightEnvelopeFromBigestArticle($panier_articles);
+                $shoppingCartTotalWeight += $envelope->getWeight();                
             }
 
             //on cherche le prix de livraison en fonction du total des pieces
@@ -379,6 +381,9 @@ class PanierController extends AbstractController
         if(count($paniers['panier_articles']) > 0){
             $totalArticlesHT = $this->panierService->totalHtOfArticles($paniers['panier_articles']);
             $totalWeigth += $this->panierService->totalWeightOfArticles($paniers['panier_articles']);
+            $envelope = $this->panierService->weightEnvelopeFromBigestArticle($paniers['panier_articles']);
+            $totalWeigth += $envelope->getWeight();   
+            $setup['envelope'] = $envelope->getName();               
         }
 
 

@@ -3,11 +3,13 @@
 namespace App\Service;
 
 use App\Repository\DeliveryRepository;
+use App\Repository\EnvelopeRepository;
 
 class PanierService
 {
     public function __construct(
-        private DeliveryRepository $deliveryRepository
+        private DeliveryRepository $deliveryRepository,
+        private EnvelopeRepository $envelopeRepository
     )
     {
     }
@@ -28,7 +30,7 @@ class PanierService
         $total = 0;
 
         foreach($shoppingCartLignes as $ligne){
-            $total += $ligne->getArticle()->getPriceHt() * $ligne->getArticleQuantity();
+            $total += $ligne->getArticle()->getWeight() * $ligne->getArticleQuantity();
         }
 
         return $total;
@@ -63,5 +65,20 @@ class PanierService
         $delivery = $this->deliveryRepository->findDelivery($totalWeight);
         
         return $delivery->getPriceHt();
+    }
+
+    public function weightEnvelopeFromBigestArticle($shoppingCartLignes){
+
+        $envelopes = [];
+
+        foreach($shoppingCartLignes as $ligne){
+            $envelopes[] = $ligne->getArticle()->getEnvelope()->getId();
+        }
+        $envelopeMax = max($envelopes);
+
+        $envelope = $this->envelopeRepository->findOneBy(['id' => $envelopeMax]);
+
+        return $envelope;
+
     }
 }
