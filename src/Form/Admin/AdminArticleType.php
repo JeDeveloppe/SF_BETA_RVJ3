@@ -33,7 +33,6 @@ class AdminArticleType extends AbstractType
                 'label' => 'Poid en gramme:',
                 'required' => true
             ])
-
             ->add('envelope', EntityType::class, [
                 'label' => 'Enveloppe pour envoi:',
                 'class' => Envelope::class,
@@ -46,14 +45,22 @@ class AdminArticleType extends AbstractType
                 },
                 'multiple' => false,
                 // 'expanded' => true,
-                'required' => false
+                'required' => true
                 // 'mapped' => false
             ])
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'placeholder' => 'Choisir une catégorie...',
+                'choices' => $options['categories'],
+                'required' => true
+            ])
             ->add('dimension', TextType::class, [
-                'label' => 'Dimensions:',
+                'label' => 'Dimensions / commantaire:',
                 'attr' => [
                     'placeholder' => "Champs de texte libre"
-                ]
+                ],
+                'required' => false
             ])
             ->add('boite', EntityType::class, [
                 'label' => 'Autres boites de jeu:',
@@ -94,7 +101,8 @@ class AdminArticleType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Article::class,
-            'boite' => 'boite'
+            'categories' => []
         ]);
+
     }
 }

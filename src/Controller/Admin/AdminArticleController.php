@@ -57,9 +57,8 @@ class AdminArticleController extends AbstractController
     {
         $article = new Article();
         $boite = $this->boiteRepository->findOneBy(['id' => $boite]);
-        $form = $this->createForm(AdminArticleType::class, $article, ['boite' => $boite]);
+        $form = $this->createForm(AdminArticleType::class, $article, ['categories' => $boite->getCategories()]);
         $form->handleRequest($request);
-
   
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setReference('en_cours')
